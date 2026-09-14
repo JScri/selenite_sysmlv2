@@ -12,7 +12,10 @@ The SysML v2 (textual notation) model of the Selenite Programme,
 migrating the ~36-document engineering suite to MBSE. Baseline:
 **ECN-019 Rev C as amended by ECN-020**. ECN-021 (PKT process water) is
 drafted but unpropagated — do **not** model it until PROC-PKT-001,
-PROC-001, ISRU-001, MTL Guide and Strategy are revised. The novel *Selenite* and all course-admin material are
+PROC-001, ISRU-001, MTL Guide and Strategy are revised. The source is
+now in `docs/SEL-ECN-021_PKT_ProcessWater.md`; its presence is not
+permission. Note VC-15/16/17: its water arithmetic is out by 1000× and
+the supply chain does not close at P14 as written. The novel *Selenite* and all course-admin material are
 permanently out of scope. `mapping/document_map.csv` is the master
 migration index — update its `status` column whenever a wave item
 progresses.

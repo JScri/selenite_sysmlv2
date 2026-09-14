@@ -87,6 +87,10 @@ Rev A · Base Floor Plan v2.1 · LH₂ transport v4 · EVA contingency (correcte
 amendment doc; their content is folded into fleet v9 and Hauler/Catapult Rev B.
 
 ## Excluded / out of scope
+- `SEL-ECN-021_PKT_ProcessWater.md` — source recovered 14 Sep 2026, now in
+  `docs/`. Still **excluded from the baseline** pending its five source-document
+  revisions. Carries three arithmetic defects (VC-15/16/17) that must be
+  resolved before propagation.
 - `selenite_briefing_scene_v2.md` — novel. Never enters the repo.
 - `Cochlear_form-f17b.docx` — accidental.
 - Course admin PDFs, lecture slides, pitch decks, legal PDFs, HØW artefacts:

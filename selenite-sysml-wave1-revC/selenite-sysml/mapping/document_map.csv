@@ -2,7 +2,7 @@ source_document,revision,tier,target_package,target_file,wave,status,family
 49069 course PDFs / pitches / legal PDFs,-,-,-,-,-,out_of_scope,context for the final report only
 selenite_briefing_scene_v2.md,-,-,-,-,-,out_of_scope,novel — never enters repo
 ECN-019_Programme_Wide_Design_Revision.md,-,1,SeleniteRequirements,model/ProgrammeRequirements.sysml,3,skeleton,ecn-019
-SEL-ECN-021_PKT_ProcessWater.md,DRAFT,1,SeleniteProcessing,model/Processing.sysml,4,excluded_until_propagated,ecn-021 — do not model
+SEL-ECN-021_PKT_ProcessWater.md,DRAFT,1,SeleniteProcessing,model/Processing.sysml,4,excluded_until_propagated,ecn-021 — source recovered 14 Sep 2026; see VC-15/16/17 before any use
 W2_T1_1_JS_MTL_v8_5.html,v8.5,1,SelenitePhases,model/Phases.sysml,2,skeleton,mtl
 MTL_GUIDE_v18_revised.docx,v18+,1,SelenitePhases,model/Phases.sysml,2,skeleton,mtl_guide
 SEL-ECN-020_MassDriver_ParallelTracks.md,-,1,SeleniteTransport,model/Transport.sysml,2,skeleton,sel-ecn-020
@@ -81,3 +81,5 @@ SEL-CAD-SN-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-sn-001
 ECN-018_InSitu_Reagent_Fabrication_PGM.md,-,6,SeleniteProcessing,model/Processing.sysml,2,folded,ecn-018
 SEL-ECN-012_DrainPipeReroute_v1.docx,v1,6,SeleniteHabitat,model/PsrNetwork.sysml,2,folded,sel-ecn-012
 SEL-ECN-013_Navigation_ARMfix_RFconstruction_v1.docx,v1,6,SeleniteSoftware,model/Software.sysml,4,folded,sel-ecn-013
+W7_T6_5_VL_EnvironmentalCostComparison,v1,-,-,-,-,team_input,"Vincent — Bayan Obo vs Selenite environmental table, 13 refs; recovered 14 Sep 2026"
+Phase1_Economic_Evaluation_(team),-,-,-,-,5,team_input,"Phase 1 base setup US$51-73B, ISS analogue; basis differs from SEL-ECON-001 — see VC-18"
