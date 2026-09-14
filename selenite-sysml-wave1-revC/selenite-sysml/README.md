@@ -14,10 +14,10 @@ steady state (~Y180). Baseline: **ECN-019 Rev C + ECN-020**.
 > ECN-021 content until those source documents are revised.
 
 **State: Wave 2 complete (14 Sep 2026)** — architecture and temporal
-skeleton for P0–P14+; see `CHANGELOG_WAVE2.md`. Note: the `.github/workflows/`
-CI described in earlier revisions was not carried into this git repository
-(hidden directories were dropped on upload); CI must be re-added at the
-repository root if wanted.
+skeleton for P0–P14+; see `CHANGELOG_WAVE2.md`. CI lives at the git
+repository root (`../../.github/workflows/validate.yml`) and runs every step
+inside this folder; `.vscode/` (Syside recommendation, diagram-CLI project
+marker) is restored here.
 
 This repository is the MBSE migration target for the ~36-document engineering
 suite. The documents remain the historical record; the model becomes the
@@ -33,7 +33,8 @@ single source of truth as migration waves complete (see
 | `mapping/document_map.csv` | Master document→model migration index |
 | `diagrams/` | Generated SVGs (regenerate via `tools/render_diagrams.sh`) |
 | `tools/` | Validation, diagram export, stub scaffolding |
-| `.vscode/sysml/project.json` | Project marker the diagram CLI needs (restored Wave 2) |
+| `.vscode/` | Syside extension recommendation and the `sysml/project.json` marker the diagram CLI needs |
+| `../../.github/workflows/` | CI at the git root: validate + render on every push |
 | `CHANGELOG_WAVE*.md` | ECN-style change logs per wave |
 
 ## Quick start
