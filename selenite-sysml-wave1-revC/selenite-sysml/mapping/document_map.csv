@@ -9,7 +9,7 @@ SEL-ECN-020_MassDriver_ParallelTracks.md,-,1,SeleniteTransport,model/Transport.s
 SEL-ECON-001_RevA_revised.docx,Rev A+,1,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,planned,sel-econ-001
 SEL-ECON-001_Economic_Evaluation_Report__1_.md,-,1,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,planned,sel-econ-001-report
 SEL-T1_1-STRATEGY-v3_1.md,v3.1,1,SeleniteRequirements;SeleniteConfigurations,model/ProgrammeRequirements.sysml,3,skeleton,sel-t1_1-strategy
-SEL_FINAL_REPORT_v4.docx,v4,1,SeleniteProgramme,model/SeleniteProgramme.sysml,2,reference_integrator,sel_final_report
+SEL_FINAL_REPORT_v4.docx,v4,1,SeleniteProgramme,model/SeleniteProgramme.sysml,2,reference_integrator,sel_final_report — PDF read in full 14 Sep 2026; observations W2-N8..N17
 SEL_ROBOT_FLEET_v9.md,v9 (md),1,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel_robot_fleet — F2 resolved by diff 14 Sep 2026: v9-1.docx is an earlier v9.0 draft without ECN-020; v9.md is the winner (see CHANGELOG_WAVE2.md)
 SELENITE_DECISION_FRAMEWORK_v4.md,v4,1,SeleniteRequirements,model/ProgrammeRequirements.sysml,3,skeleton,selenite_decision_framework
 selenite_extended_timeline_v3_revised.html,v3+,1,SelenitePhases,model/Phases.sysml,2,architected,selenite_extended_timeline
@@ -62,7 +62,7 @@ SEL-PROC-PKT-001_RevB.docx,Rev B,4,SeleniteProcessing,model/Processing.sysml,2,a
 SEL-REAGENT-001_RevA.docx,Rev A,4,SeleniteProcessing,model/Processing.sysml,2,architected,sel-reagent-001
 SEL_EVA_CONTINGENCY_CORRECTED.docx,-+,4,SeleniteHabitat,model/Habitat.sysml,4,planned,sel_eva_contingency
 Selenite_Base_Floor_Plan_v2_1.pdf,v2.1,4,SeleniteHabitat,model/Habitat.sysml,2,reference_only,selenite_base_floor_plan
-selenite_lh2_transport_v4.pdf,v4,4,SeleniteTransport,model/Transport.sysml,2,planned,selenite_lh2_transport
+selenite_lh2_transport_v4.pdf,v4,4,SeleniteTransport,model/Transport.sysml,2,architected,selenite_lh2_transport — EarthReturnCapsuleLink P5–P8 (W2-N15); read via final report Fig. 54 (SEL-TRANSPORT-001C)
 SEL-CAD-AC-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-ac-001
 SEL-CAD-AD-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-ad-001
 SEL-CAD-DT-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-dt-001

@@ -272,6 +272,37 @@ package SeleniteTransport {
         attribute pktDeliveriesFrom = Phase::P8;
     }
 
+    part def EarthReturnCapsuleLink :> LogisticsLink {
+        doc /* ISRU LH2/LOX Earth-return capsule (SEL-TRANSPORT-001C, family
+             * "LH2 transport v4"): Fe-Ni-hull batch payload capsule on a
+             * Starship-class carrier, direct-descent trajectory, ISRU-fuelled,
+             * carrying REO/PGM concentrate SPA -> Earth from the first export
+             * (Y10, P5) until superseded by mass drivers at P9. Value chain
+             * v14.1 shows the same stream as "Starship return (P7-P9)".
+             * MISSING from ARCHITECTURE_BASELINE.md s.5 - added from the final
+             * report (Fig. 45, Fig. 54), W2-N15. Note the gap it leaves: MD-2 at
+             * P9 serves PKT->Earth, while SPA->Earth MD-4 is P11, so SPA exports
+             * P9-P11 have no named link in ECN-020 (recorded, not resolved). */
+        attribute redefines introducedIn = Phase::P5;
+        attribute redefines operationalFrom = Phase::P5;
+        attribute redefines retiredIn = Phase::P9;
+        attribute redefines fromNode = SiteId::spa;
+        attribute redefines toNode = SiteId::earth;
+    }
+
+    part def MassDriverDemonstrator :> PhaseGated {
+        doc /* Mass driver prototype / test track on the Shackleton rim: ECN-020
+             * s.5 carries a "Demo" YBCO line (23 t, included in the CATAPULT-001
+             * Rev B total); final report Fig. 27 lists "Mass driver prototype on
+             * crater rim (P9 test track, 100 m -> 500 m full track at P9-P10)"
+             * under Key P7 additions and ARCHITECTURE_BASELINE.md s.1 has "YBCO
+             * for MD-1 delivered" at P7. Bound P7 (first hardware); the P9-P10
+             * wording is recorded (W2-N17). Not one of the five drivers. */
+        attribute redefines introducedIn = Phase::P7;
+        attribute redefines retiredIn = null;
+        attribute rimLocation = SiteId::spa;
+    }
+
     part def ProbeReturnLink :> LogisticsLink {
         doc /* Asteroids -> SPA: Mk I/II land at the IZ (P3 onwards); Mk III
              * canisters to the EM catcher (P11 onwards). */

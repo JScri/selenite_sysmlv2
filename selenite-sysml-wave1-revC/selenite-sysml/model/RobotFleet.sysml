@@ -100,7 +100,12 @@ package SeleniteFleet {
         doc /* SURVEY geological prospector: one surface unit from P1 (SPA Basin
              * KREEP mapping) and a polar-LLO orbital unit from P5 (PKT target
              * ranking for DART). Source: fleet v9 s.6,
-             * SEL_SURVEY_DESIGN_RevA_updated. */
+             * SEL_SURVEY_DESIGN_RevA_updated. W2-N12 (recorded): the final
+             * report (Fig. 28 "polar low-lunar-orbit prospector, ~120 kg",
+             * Fig. 32 P5 "SURVEY-2 - dual orbital prospector coverage") and
+             * ARCHITECTURE_BASELINE.md s.3 treat SURVEY as orbital-only; fleet
+             * v9 s.6 describes a ~180 kg surface rover plus an orbital mission.
+             * Concept conflict, homeSite left at spa pending ruling. */
         attribute redefines introducedIn = Phase::P1;
         attribute redefines retiredIn = null;
         attribute redefines homeSite = SiteId::spa;
@@ -118,7 +123,8 @@ package SeleniteFleet {
              * FLAG F4 / VC-07 (recorded, not resolved): peak and decline -
              * "~355 at P12" (HAULER_SPEC_UPDATE_BRIEF, scope material-flow) vs
              * "320 -> ~50 during P11" (scope P11, fleet v9 s.4.3) vs ECON v1.3
-             * "357 at Y35 (P8/P9), decline Y60-Y80, 53 from Y100". No numeric
+             * "357 at Y35 (P8/P9), decline Y60-Y80, 53 from Y100"; final report
+             * Fig. 29 adds a fourth: "max ~355 (P10)". No numeric
              * attribute is bound; the Wave 5 vector settles it.
              * Source: SEL_MOLEI_DESIGN_v5 (+ECN-012/013), fleet v9 s.4.1. */
         attribute redefines introducedIn = Phase::P3;
@@ -280,7 +286,9 @@ package SeleniteFleet {
              * operational when crew are present (P4+). Fleet v9 s.13.5 titles
              * it "Phase 2+ Contingency" - both recorded; P4 is bound because
              * there is no crew to descend before P4. Does not solve floor EVA
-             * thermal limits. Source: SEL-CAP-001 Rev A updated, fleet v9 s.13.5. */
+             * thermal limits. The final report (Fig. 3) also uses "CAP" for the
+             * crew access points at rim and floor - see SelenitePsrNetwork.
+             * Source: SEL-CAP-001 Rev A updated, fleet v9 s.13.5. */
         attribute redefines introducedIn = Phase::P4;
         attribute redefines retiredIn = null;
         attribute redefines homeSite = (SiteId::spa, SiteId::psrFloor);

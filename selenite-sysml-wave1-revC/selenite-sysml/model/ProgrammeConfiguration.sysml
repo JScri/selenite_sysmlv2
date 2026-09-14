@@ -88,6 +88,8 @@ package SeleniteConfigurations {
             part cap : Cap;
 
             part skipHops : SkipHopLink;
+            part earthReturnCapsules : EarthReturnCapsuleLink;
+            part massDriverDemonstrator : MassDriverDemonstrator;
             part probeReturns : ProbeReturnLink;
             part psrAccess : PsrAccessLink;
 

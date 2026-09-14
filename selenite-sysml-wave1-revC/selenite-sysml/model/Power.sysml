@@ -29,10 +29,17 @@ package SelenitePower {
     }
 
     part def FissionSurfacePower :> PowerAsset {
-        doc /* Fission surface power unit at SPA: first units with Crew-1 at
-             * P4, five by P7 (count Wave 5); covers critical loads (pipeline
-             * heating, WEBs) through the 72 h eclipse case. */
+        doc /* Fission surface power unit at SPA; five by P7 (count Wave 5);
+             * covers critical loads (pipeline heating, WEBs) through the 72 h
+             * eclipse case. W2-N13 (recorded, not resolved): fleet v9 s.18.1
+             * shows P1-P3 as solar-only with FSP from P4, but the final report
+             * Gantt (Fig. 25, W5_T4_4 construction phasing) hauls FSP-1 from
+             * the ELZ to the power zone at ~M33 and commissions the power hub
+             * at M36 (Y3, P1/P2 boundary), and Fig. 32 has FSP-2 arriving with
+             * Crew-1 at P4, FSP-3/4/5 at P5/P6/P7. Bound P4 per fleet v9;
+             * early candidate P2 recorded. */
         attribute redefines introducedIn = Phase::P4;
+        attribute candidateIntroductionEarly = Phase::P2;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::spa;
     }

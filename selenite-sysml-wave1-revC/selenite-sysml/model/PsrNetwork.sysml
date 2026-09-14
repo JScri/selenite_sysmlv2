@@ -42,7 +42,10 @@ package SelenitePsrNetwork {
     }
 
     part def CapGuideCable :> PsrNetworkElement {
-        doc /* Dedicated CAP guide cable rim -> floor docking pad at the CLP. */
+        doc /* Dedicated CAP guide cable rim -> floor docking pad at the CLP.
+             * "CAP" names both the Crater Access Pod (SEL-CAP-001, fleet v9
+             * s.13.5) and, in the final report Fig. 3, the crew access points
+             * at rim and floor that the pod runs between. */
         attribute redefines introducedIn = Phase::P4;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::psrFloor;
@@ -70,11 +73,27 @@ package SelenitePsrNetwork {
         port clpEnd;
     }
 
+    part def RimLogisticsPoint :> PsrNetworkElement {
+        doc /* Rim CLP - central logistics point on the crater rim (final report
+             * Fig. 3: "one at crater rim and one at floor"): where the 1,000 VDC
+             * trunk cable and the heated pipeline leave the rim trench from the
+             * ISRU/power zone, the descent winches are anchored and the crew
+             * access point (rim CAP) sits. Report Gantt (Fig. 26): trunk descent
+             * from the CAP rim anchor, ~8.2 km, SATS+WEB lowered to the floor CLP. */
+        attribute redefines introducedIn = Phase::P3;
+        attribute redefines retiredIn = null;
+        attribute redefines location = SiteId::spa;
+        port rimPowerIn;
+        port trunkCableOut;
+        port pipelineRimEnd;
+    }
+
     part def ClpJunction :> PsrNetworkElement {
-        doc /* CLP: the point at the western wall base where the trunk cable
-             * and trunk pipe enter the crater floor; hosts the trunk water pump
-             * and the CAP floor docking pad. Name as used in fleet v9 s.4.1 and
-             * s.13.4. */
+        doc /* Floor CLP - central logistics point at the western wall base
+             * (final report Fig. 3 caption) where the trunk cable and trunk
+             * pipe enter the crater floor; hosts the trunk water pump and the
+             * CAP floor docking pad. Fleet v9 s.4.1 / s.13.4 use "CLP" without
+             * expansion. */
         attribute redefines introducedIn = Phase::P3;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::psrFloor;
@@ -175,6 +194,7 @@ package SelenitePsrNetwork {
         part crewWinch : CrewWinch;
         part capGuideCable : CapGuideCable;
         part tramway : CableTramway;
+        part rimClp : RimLogisticsPoint;
         part trunkCable : TrunkCable;
         part clp : ClpJunction;
         part spine : Spine;
@@ -187,6 +207,7 @@ package SelenitePsrNetwork {
         port moleIFleetTethers;
 
         // power and control path: rim -> trunk -> CLP -> spine -> branch -> substation
+        connect rimClp.trunkCableOut to trunkCable.rimFeed;
         connect trunkCable.clpEnd to clp.trunkCableIn;
         connect clp.spineOut to spine.clpIn;
         connect spine.branchTaps to branches.spineTap;

@@ -204,6 +204,12 @@ Enum defs cannot hold attributes (SSM036), so year windows live in
   (W2-N8), the F6 stale MD-3 label (W2-N9), ECN-021 process-water language
   (W2-N10) and a conditional P8 MSR prototype (W2-N11). Recorded, not modelled.
 - CI workflow restored at the git root; `.vscode/` restored in the model folder.
+- **Final report v4 read in full** (53 pages rendered). Two elements the
+  baseline lacked were added: `EarthReturnCapsuleLink` (ISRU LH₂/LOX capsule,
+  SPA→Earth, P5→P8, W2-N15) and `MassDriverDemonstrator` (SPA rim, P7,
+  W2-N17); `RimLogisticsPoint` added so the network has the rim CLP the
+  report names (W2-N16). Drifts recorded as W2-N12…N14 (SURVEY concept,
+  first-FSP phase, minor counts); F4 gains a fourth candidate (355 at P10).
 
 ## 4. Counts bound (the only numerics added this wave)
 

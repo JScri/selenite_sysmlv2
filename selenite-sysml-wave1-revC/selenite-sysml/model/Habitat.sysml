@@ -117,7 +117,10 @@ package SeleniteHabitat {
              * from P5, EM catcher from P11 (SeleniteTransport::EmCatcher,
              * placed in the configuration). Eight collars at P7 full
              * configuration is the IZ-001 Rev B design point, hence the
-             * enumerated multiplicity. Mk III PROBEs never dock here. */
+             * enumerated multiplicity. Mk III PROBEs never dock here. A
+             * provisional non-pressurised collar arrives with Cargo Launch 1
+             * (P1) for PROBE-Scout data receipt before the IZ proper (final
+             * report Fig. 26). */
         attribute redefines introducedIn = Phase::P3;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::spa;
