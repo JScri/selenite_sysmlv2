@@ -62,7 +62,7 @@ SEL-PROC-PKT-001_RevB.docx,Rev B,4,SeleniteProcessing,model/Processing.sysml,2,a
 SEL-REAGENT-001_RevA.docx,Rev A,4,SeleniteProcessing,model/Processing.sysml,2,architected,sel-reagent-001
 SEL_EVA_CONTINGENCY_CORRECTED.docx,-+,4,SeleniteHabitat,model/Habitat.sysml,4,planned,sel_eva_contingency
 Selenite_Base_Floor_Plan_v2_1.pdf,v2.1,4,SeleniteHabitat,model/Habitat.sysml,2,reference_only,selenite_base_floor_plan
-selenite_lh2_transport_v4.pdf,v4,4,SeleniteTransport,model/Transport.sysml,2,architected,selenite_lh2_transport — EarthReturnCapsuleLink P5–P8 (W2-N15); read via final report Fig. 54 (SEL-TRANSPORT-001C)
+selenite_lh2_transport_v4.pdf,v4,4,SeleniteTransport,model/Transport.sysml,2,architected,selenite_lh2_transport — StarshipReturnLink from P5, retirement derived from MD-4 (W2-N15); read via final report Fig. 54 (SEL-TRANSPORT-001C)
 SEL-CAD-AC-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-ac-001
 SEL-CAD-AD-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-ad-001
 SEL-CAD-DT-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-dt-001

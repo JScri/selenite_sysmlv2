@@ -272,20 +272,21 @@ package SeleniteTransport {
         attribute pktDeliveriesFrom = Phase::P8;
     }
 
-    part def EarthReturnCapsuleLink :> LogisticsLink {
-        doc /* ISRU LH2/LOX Earth-return capsule (SEL-TRANSPORT-001C, family
-             * "LH2 transport v4"): Fe-Ni-hull batch payload capsule on a
-             * Starship-class carrier, direct-descent trajectory, ISRU-fuelled,
-             * carrying REO/PGM concentrate SPA -> Earth from the first export
-             * (Y10, P5) until superseded by mass drivers at P9. Value chain
-             * v14.1 shows the same stream as "Starship return (P7-P9)".
-             * MISSING from ARCHITECTURE_BASELINE.md s.5 - added from the final
-             * report (Fig. 45, Fig. 54), W2-N15. Note the gap it leaves: MD-2 at
-             * P9 serves PKT->Earth, while SPA->Earth MD-4 is P11, so SPA exports
-             * P9-P11 have no named link in ECN-020 (recorded, not resolved). */
+    part def StarshipReturnLink :> LogisticsLink {
+        doc /* SPA -> Earth returns are Starship flights (Jason, 14 Sep 2026):
+             * ISRU-fuelled Starship-class carriers on a direct-descent
+             * trajectory carrying REO/PGM concentrate in the Fe-Ni batch
+             * capsule of SEL-TRANSPORT-001C ("LH2 transport v4"), from the first
+             * export at Y10 (P5). Value chain v14.1 shows the stream as
+             * "Starship return"; final report Fig. 54 said "superseded by mass
+             * drivers at P9", which is superseded in turn: retiredIn is NOT
+             * bound here - it is DERIVED in SeleniteConfigurations as the phase
+             * MD-4 SPA->Earth becomes operational, so the link retires exactly
+             * when its successor exists and never from a document label. This
+             * closes the P9-P11 SPA->Earth gap (W2-N15). Missing from
+             * ARCHITECTURE_BASELINE.md s.5; added from the final report. */
         attribute redefines introducedIn = Phase::P5;
         attribute redefines operationalFrom = Phase::P5;
-        attribute redefines retiredIn = Phase::P9;
         attribute redefines fromNode = SiteId::spa;
         attribute redefines toNode = SiteId::earth;
     }

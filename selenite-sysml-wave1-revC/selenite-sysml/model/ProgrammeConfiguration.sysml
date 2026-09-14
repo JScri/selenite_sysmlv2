@@ -88,7 +88,11 @@ package SeleniteConfigurations {
             part cap : Cap;
 
             part skipHops : SkipHopLink;
-            part earthReturnCapsules : EarthReturnCapsuleLink;
+            part starshipReturn : StarshipReturnLink {
+                doc /* Retirement derived, not transcribed: the Starship return
+                     * stream ends in the phase MD-4 (SPA->Earth) comes online. */
+                attribute redefines retiredIn = massDriverNetwork.md4.operationalFrom;
+            }
             part massDriverDemonstrator : MassDriverDemonstrator;
             part probeReturns : ProbeReturnLink;
             part psrAccess : PsrAccessLink;

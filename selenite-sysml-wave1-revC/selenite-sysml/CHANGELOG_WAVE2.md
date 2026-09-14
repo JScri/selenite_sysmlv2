@@ -205,8 +205,9 @@ Enum defs cannot hold attributes (SSM036), so year windows live in
   (W2-N10) and a conditional P8 MSR prototype (W2-N11). Recorded, not modelled.
 - CI workflow restored at the git root; `.vscode/` restored in the model folder.
 - **Final report v4 read in full** (53 pages rendered). Two elements the
-  baseline lacked were added: `EarthReturnCapsuleLink` (ISRU LH₂/LOX capsule,
-  SPA→Earth, P5→P8, W2-N15) and `MassDriverDemonstrator` (SPA rim, P7,
+  baseline lacked were added: `StarshipReturnLink` (SPA→Earth Starship
+  returns from P5, Jason's ruling; `retiredIn` derived from MD-4's
+  `operationalFrom` in the configuration, W2-N15) and `MassDriverDemonstrator` (SPA rim, P7,
   W2-N17); `RimLogisticsPoint` added so the network has the rim CLP the
   report names (W2-N16). Drifts recorded as W2-N12…N14 (SURVEY concept,
   first-FSP phase, minor counts); F4 gains a fourth candidate (355 at P10).
