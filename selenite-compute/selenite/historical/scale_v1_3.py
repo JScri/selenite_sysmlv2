@@ -5,8 +5,8 @@ Ported only so document figures can be traced; never the current scaling
 authority (that is ECON v1.3/v1.4). Known source defect: line 584 ``92%``
 unescaped in a printf (print only).
 
-STATUS: not ported. Blocked until the MATLAB source is placed in
-selenite-compute/matlab_sources/.
+STATUS: not ported. Source is in selenite-goldens-runner-v2_1/ (see
+README.md).
 """
 from __future__ import annotations
 
@@ -15,4 +15,4 @@ SOURCE_SCRIPT = "scaling_v1_3.m"
 
 
 def run(**params):
-    raise NotImplementedError("port pending: MATLAB source not in repository")
+    raise NotImplementedError("port pending: MATLAB source not yet ported")

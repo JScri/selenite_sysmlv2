@@ -33,15 +33,14 @@ zero hints. Open flags F3–F8 recorded in `doc` comments, none resolved; F2
 resolved by diff (`v9.md` is the fleet winner). F5 leaves `SpaThoriumMSR.
 introducedIn` unbound by design.
 
-## Python port — prerequisite track (blocked 14 Sep 2026)
+## Python port — prerequisite track (unblocked 14 Sep 2026, evening)
 
 `selenite-compute/` scaffold exists: golden loader, per-row regression
 suite (skips until each module is ported), invariants against the oracle,
-source-hash check, CI job. **Blocked:** the MATLAB scripts are not in the
-repository, only their outputs. Unblock by placing the six sources listed in
-`selenite-compute/README.md` in `selenite-compute/matlab_sources/`; then port
-bottom-up per `docs/SESSION_BRIEF_python_port.md`. Nothing derived can run
-before this.
+source-hash check, CI job. Sources (20 `.m`, hashes verified) and the runner
+v2.1 capture are in `selenite-goldens-runner-v2_1/`. Port bottom-up per
+`docs/SESSION_BRIEF_python_port.md` in its own session; it is the critical
+path for every derived phase.
 
 ## Wave 3 — Gates and the derived programme plan (reframed 14 Sep 2026)
 

@@ -1,22 +1,21 @@
 # selenite-compute — Python port of the Selenite computational layer
 
-**Status (14 Sep 2026): scaffold only. The port is BLOCKED on source scripts.**
+**Status (14 Sep 2026, evening): unblocked — sources and the canonical oracle are in the repository; no module ported yet.**
 
-The regression oracle is in the repository
-(`selenite-goldens-oracle/oracle/oracle/*.csv`, 1,016 tagged rows across six
-current-baseline scripts) but the MATLAB scripts that produced it are not:
-only `RUN_GOLDENS.m` and `gold_run_chain.m` were uploaded. A port cannot be
-written from outputs. To unblock, copy these into `selenite-compute/matlab_sources/`
-(their SHA-256 must match `selenite-goldens-oracle/oracle/matlab_r2025a/manifest.json`):
+- Sources: all 20 MATLAB scripts in `selenite-goldens-runner-v2_1/`, SHA-256 verified
+  against the goldens manifest by `tests/test_sources.py`.
+- Canonical oracle: `selenite-goldens-runner-v2_1/goldens_20260914_224703/` (runner v2.1,
+  MATLAB R2025a). It restores the vectors runner v2.0 dropped. The 8 Sep merged oracle
+  under `selenite-goldens-oracle/` is kept for its `platform_dependent_ode` tags and history.
 
-| Script | Port target | Oracle rows |
+| Script | Port target | Oracle rows (v2.1) |
 |---|---|---|
 | `sabatier.m` | `selenite/eclss.py` | 107 |
-| `SELENITE_VERIFY_v5_0.m` | `selenite/power.py`, `fleet.py`, `isru.py` | 214 |
-| `MOLEI_THERMAL_v1_3.m` | `selenite/thermal.py` | 240 (26 ODE rows compared at 0.05 K) |
-| `SELENITE_ECON_V1_3.m` + `SELENITE_ECON_V1_4.m` | `selenite/econ.py` (one module; v1.4 is `report()`) | 139 + 179 |
-| `scaling_v1_3.m` | `selenite/historical/scale_v1_3.py` (pre-ECN-019, historical) | 137 |
-| `SELENITE_VISUALIZE_v3_3.m` | `selenite/psr_layout.py` (geometry only) | 47 (raw `matlab_r2025a/` capture only; not in the merged oracle) |
+| `SELENITE_VERIFY_v5_0.m` | `selenite/verify.py` over `power.py`, `fleet.py`, `isru.py` | 237 |
+| `MOLEI_THERMAL_v1_3.m` | `selenite/thermal.py` | 274 (26 ODE rows compared at 0.05 K) |
+| `SELENITE_ECON_V1_3.m` + `SELENITE_ECON_V1_4.m` | `selenite/econ.py` (one module; v1.4 is `report()`) | 269 + 313 |
+| `scaling_v1_3.m` | `selenite/historical/scale_v1_3.py` (pre-ECN-019, historical) | 171 |
+| `SELENITE_VISUALIZE_v3_3.m` | `selenite/psr_layout.py` (geometry only) | 66 |
 
 ## What works today
 
@@ -27,9 +26,9 @@ written from outputs. To unblock, copy these into `selenite-compute/matlab_sourc
   test resolves the row's port module; while a module is unported the test
   **skips with the reason**, so the suite is green-by-skip today and turns
   into the real regression suite module by module as sources land.
-- `tests/test_invariants.py` checks the oracle against counts the SysML
-  model commits to. Known document-versus-golden conflicts are `xfail`
-  with their VC number, so the register in `docs/VALUE_CONFLICTS.md` is live.
+- `tests/test_invariants.py` pins the golden side of every document-versus-
+  golden conflict the model records (VC-01/07/08/09/10, F5), so the register
+  in `docs/VALUE_CONFLICTS.md` is live.
 
 ## Rules (from `docs/SESSION_BRIEF_python_port.md`)
 

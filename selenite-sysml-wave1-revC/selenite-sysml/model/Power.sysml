@@ -91,6 +91,15 @@ package SelenitePower {
         attribute candidateIntroductionEarly = Phase::P10;
         attribute candidateIntroductionLate = Phase::P13;
         attribute asteroidProcessingUnitsFrom = Phase::P12;
+        attribute econAssumedIntroductionYear : Integer = 105;
+        doc econDoc /* Transcribed from the computational authority (rule 3):
+             * SELENITE_ECON_V1_3/V1_4, runner v2.1 capture 14 Sep 2026,
+             * cargo_spa_msr first non-zero at Y105 (then Y125, Y140; 15 t
+             * each), spa_msr_count vector present. Y105 is P12 by the year
+             * table. Decision Framework Rev D also gates SPA MSR at Y50
+             * (DG-10.5) and Y70 (DG-11.3); the economics did not fund those.
+             * The Wave 5 planner must either reproduce Y105 from the demand
+             * gate or flag the difference as an ECN to the economics. */
     }
 
     part def PktFspField :> PowerAsset {

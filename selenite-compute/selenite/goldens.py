@@ -1,8 +1,15 @@
 """Golden oracle loader.
 
-Reads the merged, tagged oracle (``oracle/<script>.csv`` with columns
-``key,value,source,comparable``) into typed rows. Values are parsed from the
-MATLAB ``mat2str`` / ``num2str`` forms the capture runner wrote:
+Canonical oracle (14 Sep 2026): the runner v2.1 capture under MATLAB R2025a,
+``selenite-goldens-runner-v2_1/goldens_20260914_224703/<script>.csv``
+(columns ``key,value``). It restores the vectors runner v2.0 dropped. The
+8 Sep merged oracle (``selenite-goldens-oracle/oracle/oracle/<script>.csv``,
+columns ``key,value,source,comparable``) is read only for its tags: rows it
+marks ``platform_dependent_ode`` keep that tag; every other row is
+``comparable = yes`` with ``source = matlab_r2025a_v2.1``.
+
+Values are parsed from the MATLAB ``mat2str`` / ``num2str`` forms the capture
+runner wrote:
 
 * scalars ``347.679221721``  -> float (ints stay int-valued floats)
 * arrays  ``[19962 39924 66540]`` / ``[1 2;3 4]`` -> numpy array (1-D or 2-D)
@@ -20,9 +27,16 @@ from typing import Any, Iterator
 
 import numpy as np
 
-# Default oracle location relative to this repository layout; override with
-# SELENITE_ORACLE for a stand-alone checkout of the goldens.
-_DEFAULT_ORACLE = Path(__file__).resolve().parents[2] / "selenite-goldens-oracle" / "oracle" / "oracle"
+_REPO = Path(__file__).resolve().parents[2]
+# Override either with SELENITE_ORACLE / SELENITE_ORACLE_TAGS for a stand-alone checkout.
+_DEFAULT_ORACLE = _REPO / "selenite-goldens-runner-v2_1" / "goldens_20260914_224703"
+_DEFAULT_TAGS = _REPO / "selenite-goldens-oracle" / "oracle" / "oracle"
+
+#: current-baseline scripts (chains of RUN_GOLDENS.m); historical versions are not oracle targets
+CURRENT_SCRIPTS = (
+    "sabatier", "SELENITE_VERIFY_v5_0", "scaling_v1_3", "SELENITE_ECON_V1_3",
+    "SELENITE_ECON_V1_4", "MOLEI_THERMAL_v1_3", "SELENITE_VISUALIZE_v3_3",
+)
 
 #: oracle script stem -> python module that must reproduce it
 SCRIPT_TO_MODULE = {
@@ -62,10 +76,6 @@ class GoldenRow:
     @property
     def is_ode(self) -> bool:
         return self.comparable == "platform_dependent_ode"
-
-    @property
-    def octave_only(self) -> bool:
-        return self.source.startswith("octave_8_4_only")
 
     @property
     def module(self) -> str:
@@ -119,18 +129,37 @@ def oracle_dir() -> Path:
     return Path(os.environ.get("SELENITE_ORACLE", _DEFAULT_ORACLE))
 
 
-def load(script: str | None = None, root: Path | None = None) -> list[GoldenRow]:
-    root = root or oracle_dir()
-    files = sorted(root.glob("*.csv"))
-    if script is not None:
-        files = [f for f in files if f.stem == script]
-    rows: list[GoldenRow] = []
-    for f in files:
+def tags_dir() -> Path:
+    return Path(os.environ.get("SELENITE_ORACLE_TAGS", _DEFAULT_TAGS))
+
+
+def _load_tags(root: Path) -> dict[tuple[str, str], str]:
+    tags: dict[tuple[str, str], str] = {}
+    if not root.exists():
+        return tags
+    for f in sorted(root.glob("*.csv")):
         with f.open(newline="", encoding="utf-8") as fh:
             for rec in csv.DictReader(fh):
+                if rec.get("comparable") == "platform_dependent_ode":
+                    tags[(f.stem, rec["key"])] = "platform_dependent_ode"
+    return tags
+
+
+def load(script: str | None = None, root: Path | None = None, tags_root: Path | None = None) -> list[GoldenRow]:
+    root = root or oracle_dir()
+    tags = _load_tags(tags_root or tags_dir())
+    stems = [script] if script else list(CURRENT_SCRIPTS)
+    rows: list[GoldenRow] = []
+    for stem in stems:
+        f = root / f"{stem}.csv"
+        if not f.exists():
+            continue
+        with f.open(newline="", encoding="utf-8") as fh:
+            for rec in csv.DictReader(fh):
+                comparable = tags.get((stem, rec["key"]), "yes")
                 rows.append(GoldenRow(
-                    script=f.stem, key=rec["key"], value=parse_value(rec["value"]),
-                    raw=rec["value"], source=rec.get("source", ""), comparable=rec.get("comparable", ""),
+                    script=stem, key=rec["key"], value=parse_value(rec["value"]),
+                    raw=rec["value"], source="matlab_r2025a_v2.1", comparable=comparable,
                 ))
     return rows
 

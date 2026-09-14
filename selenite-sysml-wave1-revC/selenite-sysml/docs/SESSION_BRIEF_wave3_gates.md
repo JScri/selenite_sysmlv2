@@ -13,9 +13,10 @@ session on the repository; the model folder is
    (Wave 3 section), `docs/DOCUMENT_FAMILIES.md` (flags + W2-N1…N18),
    `CHANGELOG_WAVE2.md`, then `model/Gates.sysml`, `model/Parameters.sysml`,
    `model/ThroughputCalcs.sysml` (`SpaMsrIntroductionGate`).
-3. Sources needed **in the repo** before this wave can complete: `SELENITE_DECISION_FRAMEWORK_v4.md`
-   (the DG catalogue; F1 assumes it is "Rev D") and `SEL-T1_1-STRATEGY-v3_1.md`.
-   If absent, stop and ask Jason to add them; do the parts below that do not need them.
+3. Sources are in `docs/`: `SELENITE_DECISION_FRAMEWORK_v4.md` (SEL-DECISION-001 Rev D,
+   82 gates DG-0.1…DG-14.9 + DG-POST.1/2, with years), `SELENITE_DECISION_FRAMEWORK_v3_historical.md`
+   (Rev C, kept for the diff record), `SEL-T1_1-STRATEGY-v3_1.md`. Fourteen gates are
+   already in `Gates.sysml`; the rest are this wave's first job.
 
 ## Build (validate after each step)
 1. **Gate catalogue.** From the Decision Framework: every DG-x.y and DG-POST.x

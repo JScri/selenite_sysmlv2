@@ -11,7 +11,7 @@ def _module_results(module_name: str):
     """Run a port module once per session; returns (ported, results_or_reason)."""
     mod = importlib.import_module(module_name)
     if not getattr(mod, "PORTED", False):
-        return False, f"port pending: {getattr(mod, 'SOURCE_SCRIPT', module_name)} not in repository"
+        return False, f"port pending: {getattr(mod, 'SOURCE_SCRIPT', module_name)} not yet ported"
     try:
         return True, mod.run()
     except NotImplementedError as e:  # pragma: no cover - defensive

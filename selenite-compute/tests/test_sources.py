@@ -1,4 +1,4 @@
-"""Verifies MATLAB sources, once present, match the goldens' recorded hashes."""
+"""Verifies the MATLAB sources in the runner folder match the hashes recorded when the goldens were captured."""
 import hashlib
 import json
 from pathlib import Path
@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCES = ROOT / "selenite-compute" / "matlab_sources"
+SOURCES = ROOT / "selenite-goldens-runner-v2_1"
 MANIFEST = ROOT / "selenite-goldens-oracle" / "oracle" / "matlab_r2025a" / "manifest.json"
 
 
@@ -18,5 +18,5 @@ def _expected():
 def test_source_hash(name, sha):
     p = SOURCES / name
     if not p.exists():
-        pytest.skip(f"{name} not in repository (port blocked)")
+        pytest.fail(f"{name} missing from selenite-goldens-runner-v2_1/")
     assert hashlib.sha256(p.read_bytes()).hexdigest() == sha, f"{name} differs from the script that produced the goldens"

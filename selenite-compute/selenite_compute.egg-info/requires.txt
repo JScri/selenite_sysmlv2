@@ -1,7 +1,0 @@
-numpy>=1.26
-scipy>=1.11
-pandas>=2.0
-numpy-financial>=1.0
-
-[test]
-pytest>=8

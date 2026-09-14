@@ -49,7 +49,53 @@ declared), exogenous inputs (declared parameters).
 - `mapping/document_map.csv` — Decision Framework v4 and Strategy v3.1 rows
   flagged NOT IN REPO; Decision Framework retargeted to `Gates.sysml`.
 
-### Blocked (Jason to unblock)
+## Addendum — 14 September 2026, evening (Jason's uploads)
+
+**Unblocked.** All 20 MATLAB scripts are now in `selenite-goldens-runner-v2_1/`
+and every SHA-256 matches the 8 Sep goldens manifest. A runner v2.1 capture
+(`goldens_20260914_224703/`, MATLAB R2025a) is in the same folder and is the
+new **canonical oracle**: it restores the vectors runner v2.0 dropped
+(`circuits_needed`, `haulers_needed`, `conv_km_needed`, `msr_count`,
+`cargo_spa_msr`, `spa_msr_count`, the VERIFY `ph.*` fleet vectors), and adds
+VISUALIZE (66 rows). Rows: 107 / 237 / 171 / 269 / 313 / 274 / 66 = 1,437
+for the seven current-baseline scripts (was 1,016 in the merged oracle).
+`goldens_20260914_224604/` is an aborted run (manifest only) and can be deleted.
+`selenite/goldens.py` reads the v2.1 capture and takes only the
+`platform_dependent_ode` tags from the 8 Sep merged oracle. The two strict
+xfails became real tests.
+
+**Arbiters read from the goldens:**
+- **F5:** `cargo_spa_msr` is first non-zero at **Y105**, then Y125 and Y140 —
+  the economics assumed the SPA MSR #1/#2/#3 series (Decision Framework Rev D
+  DG-13.4 / 14.4 / 14.7), not the Y50 (DG-10.5) or Y70 (DG-11.3) gates the same
+  document also lists. Recorded as `SpaThoriumMSR.econAssumedIntroductionYear
+  = 105`; `introducedIn` stays demand-gated per Jason's rule.
+- **VC-09:** `msr_count` at Y200 = 8,334 and `circuits_needed` = 2,083,334 —
+  the golden side is pinned by `test_invariants.py`; the model still carries
+  the document's 6,890 pending Wave 5.
+- **VC-01 / 07 / 08 / 10:** pinned likewise (5/30/55/90/180; 357 → 53;
+  1.5 M haulers; 137,500 km).
+
+**Documents added to `docs/`:** `SEL-T1_1-STRATEGY-v3_1.md`,
+`SELENITE_DECISION_FRAMEWORK_v4.md` (SEL-DECISION-001 Rev D — F1 confirmed),
+`SELENITE_DECISION_FRAMEWORK_v3_historical.md` (Rev C, for the diff record).
+**Rev C → Rev D diff:** only the "Changes from" paragraph, §10.2 (PKT base
+positioning table, resource adequacy 220–660 Mt / 88–264 yr, tiered depth
+mining with DG-POST.1 ~Y280+ and DG-POST.2 ~Y380+), the "Beyond Y200"
+paragraph (400–1,300 yr reserve replacing "millions of years"), open item 4
+wording, open items 13–14. **No gate in §2 changed.**
+
+**Gates filled from Rev D:** DG-7.5 (terrestrial MSR BR > 1.0, ~2040 = Y15,
+inside the F7 gap), DG-13.2 (C-type redirect Y95, executed in P12 — W2-N19:
+the id is also used for the laser truss), DG-14.3 (S-type processing at SPA
+Y125; the Earth-independence gate is DG-14.6, "DG-14.3 from ECN-019"),
+DG-POST.1/2 (Y280+/Y380+, P14plus), DG-10.5 doc (three SPA MSR gates, W2-N20).
+Full catalogue (82 gates) remains Wave 3's first job.
+
+**Housekeeping:** `.gitignore` added; `__pycache__` and `egg-info` untracked;
+`selenite-compute/matlab_sources/` retired (sources stay with the runner).
+
+### Blocked (Jason to unblock) — superseded by the addendum above
 1. **MATLAB sources** are in the Claude.ai project knowledge, not in git. Copy
    `sabatier.m`, `SELENITE_VERIFY_v5_0.m`, `MOLEI_THERMAL_v1_3.m`,
    `SELENITE_ECON_V1_3.m`, `SELENITE_ECON_V1_4.m`, `scaling_v1_3.m`,
@@ -61,7 +107,7 @@ declared), exogenous inputs (declared parameters).
    so the dropped vectors (circuits, MSR count, `cargo_spa_msr`) are captured;
    two xfails in `test_invariants.py` turn green when they are.
 
-### Validation
+### Validation (after the addendum)
 `sysml-validate` 0.36.0: 15 files checked, no problems found. `pytest
-selenite-compute`: loader and invariant tests pass, 1,035 rows skipped with
-reasons, 2 expected failures (missing arbiters).
+selenite-compute`: loader, invariant and source-hash tests pass; per-row
+golden tests skip until each module is ported.
