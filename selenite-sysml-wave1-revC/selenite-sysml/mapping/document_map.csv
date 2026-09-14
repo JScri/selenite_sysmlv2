@@ -5,7 +5,7 @@ ECN-019_Programme_Wide_Design_Revision.md,-,1,SeleniteRequirements,model/Program
 SEL-ECN-021_PKT_ProcessWater.md,DRAFT,1,SeleniteProcessing,model/Processing.sysml,4,excluded_until_propagated,ecn-021 — source recovered 14 Sep 2026; see VC-15/16/17 before any use
 W2_T1_1_JS_MTL_v8_5.html,v8.5,1,SelenitePhases,model/Phases.sysml,2,skeleton,mtl
 MTL_GUIDE_v18_revised.docx,v18+,1,SelenitePhases,model/Phases.sysml,2,skeleton,mtl_guide
-SEL-ECN-020_MassDriver_ParallelTracks.md,-,1,SeleniteTransport,model/Transport.sysml,2,skeleton,sel-ecn-020
+SEL-ECN-020_MassDriver_ParallelTracks.md,-,1,SeleniteTransport,model/Transport.sysml,2,skeleton,"Applied to baseline. 5 drivers/8 tracks; 523 t YBCO; 694,444 canisters/yr. CATAPULT-001 Rev C outstanding (VC-21)"
 SEL-ECON-001_RevA_revised.docx,Rev A+,1,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,planned,sel-econ-001
 SEL-ECON-001_Economic_Evaluation_Report__1_.md,-,1,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,planned,sel-econ-001-report
 SEL-T1_1-STRATEGY-v3_1.md,v3.1,1,SeleniteRequirements;SeleniteConfigurations,model/ProgrammeRequirements.sysml,3,skeleton,sel-t1_1-strategy
@@ -23,7 +23,7 @@ scaling_v1_3.m,v1.3,2,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,python_port
 SELENITE_VERIFY_v5_0.m,v5.0,2,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,python_port,selenite_verify
 SELENITE_VISUALIZE_v3_3.m,v3.3,2,-,-,-,python_port_figures,selenite_visualize
 SEL-CAP-001_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,planned,sel-cap-001
-SEL-CATAPULT-001_RevB.docx,Rev B,3,SeleniteTransport,model/Transport.sysml,2,heritage_only,sel-catapult-001
+SEL-CATAPULT-001_RevB.docx,Rev B,3,SeleniteTransport,model/Transport.sysml,2,heritage_only,sel-catapult-001 | Rev C outstanding per ECN-020 §6 (VC-21)
 SEL-CONVEYOR-001_RevA.docx,Rev A,3,SeleniteTransport,model/Transport.sysml,2,skeleton,sel-conveyor-001
 SEL-HAULER-001_RevB.docx,Rev B,3,SeleniteFleet,model/RobotFleet.sysml,2,skeleton,sel-hauler-001
 SEL-MOLEI-MkII-001_RevA.docx,Rev A,3,SeleniteFleet,model/RobotFleet.sysml,2,skeleton,sel-molei-mkii-001

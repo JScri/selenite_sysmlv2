@@ -69,7 +69,7 @@ architecture (see `VALUE_CONFLICTS.md` VC-14).
 | CAP | `SEL-CAP-001_RevA_updated.docx` |
 | Substation | `SEL_SUBSTATION_DESIGN_v4.docx`, `SEL-SW-SUB-001_RevC.docx` |
 | MOLE-I software | `SEL-SW-MOLEI-001_RevD.docx`, `SEL-NAV-001_MOLEI_Navigation_RevA.docx` |
-| Catapult | `SEL-CATAPULT-001_RevB.docx` — **heritage for mass drivers only**; superseded for ore transport |
+| Catapult | `SEL-CATAPULT-001_RevB.docx` — **heritage for mass drivers only**; superseded for ore transport. **Rev C outstanding** — ECN-020 §6 requires a §5.1 parallel-track section (VC-21) |
 | Conveyor | `SEL-CONVEYOR-001_RevA.docx` |
 
 **Tier 4 — facilities and infrastructure**
