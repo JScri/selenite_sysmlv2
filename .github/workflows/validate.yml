@@ -1,0 +1,29 @@
+name: model
+on: [push, pull_request]
+
+# The SysML v2 project lives in a subfolder of this repository; every step
+# runs there. Restored Wave 2 from Jason's original workflow (which assumed
+# the model folder was the repository root).
+defaults:
+  run:
+    working-directory: selenite-sysml-wave1-revC/selenite-sysml
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install SysML v2 CLI tools
+        run: npm install -g sysml-validate@0.36.0 sysml-diagram
+      - name: Validate model
+        run: sysml-validate model --workspace . --all --format github
+      - name: Render diagrams
+        run: bash tools/render_diagrams.sh
+      - name: Upload diagrams
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagrams
+          path: selenite-sysml-wave1-revC/selenite-sysml/diagrams/*.svg

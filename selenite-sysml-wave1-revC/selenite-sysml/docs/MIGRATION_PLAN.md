@@ -14,7 +14,7 @@ power/habitat definition skeletons, six committed-principle requirements
 PKT), calc exemplars, toolchain, CI, diagrams. Everything validates at
 exit 0, zero hints.
 
-## Wave 2 — Architecture and temporal skeleton (revised 8 Sep 2026)
+## Wave 2 — Architecture and temporal skeleton ✅ COMPLETE (14 Sep 2026)
 
 Build the *what / how / when* before any *how much*. From
 `docs/ARCHITECTURE_BASELINE.md`: every element (sites, nodes, fleet classes
@@ -26,6 +26,12 @@ with `introducedIn` / `retiredIn` phase attributes, allocation to site, and
 No numeric attributes beyond counts that define structure (e.g. 5 mass
 drivers, 8 tracks). Exit: every `wave=2` row in `document_map.csv` at
 `skeleton` → `architected`; `sysml-validate` exit 0; diagrams regenerate.
+
+Delivered 14 Sep 2026 — see `CHANGELOG_WAVE2.md`. Phase-attribute idiom
+fixed (`abstract attribute x : Phase` + `attribute redefines x = Phase::Pn`),
+zero hints. Open flags F3–F8 recorded in `doc` comments, none resolved; F2
+resolved by diff (`v9.md` is the fleet winner). F5 leaves `SpaThoriumMSR.
+introducedIn` unbound by design.
 
 ## Wave 3 — Requirements and phase gates
 

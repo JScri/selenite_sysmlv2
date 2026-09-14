@@ -112,7 +112,7 @@ sel_harvest_design,SEL_HARVEST_DESIGN_RevA_updated.docx,Rev A+,2026-04-12,2,Rev 
 sel_molei_design,SEL_MOLEI_DESIGN_v5.docx,v5,2026-04-12,5,v1 v3,AUTHORITATIVE
 sel_moles_design,SEL_MOLES_DESIGN_RevA_updated.docx,Rev A+,2026-04-12,2,Rev A,AUTHORITATIVE
 sel_probe_design,SEL_PROBE_DESIGN_RevB.docx,Rev B,2026-04-12,4,Rev A Rev A+,AUTHORITATIVE
-sel_robot_fleet,SEL_ROBOT_FLEET_v9-1.docx,v9.1,2026-04-05,15,v2.1 v2.2 v2.6 v2.7 v3.1 v3.2 v4 v5 v6 v8 v9,AUTHORITATIVE
+sel_robot_fleet,SEL_ROBOT_FLEET_v9.md,v9,2026-04-12,15,v2.1 v2.2 v2.6 v2.7 v3.1 v3.2 v4 v5 v6 v8 v9-1(early v9.0 draft),AUTHORITATIVE
 sel_robot_fleet_ecn,SEL_ROBOT_FLEET_ECN019.docx,ECN-019,2026-04-05,2,ECN-016,AMENDMENT
 sel_sentinel_design,SEL_SENTINEL_DESIGN_RevB.docx,Rev B,2026-04-12,4,Rev A Rev A+,AUTHORITATIVE
 sel_sinter_design,SEL_SINTER_DESIGN_RevA_updated.docx,Rev A+,2026-04-12,3,Rev A,AUTHORITATIVE

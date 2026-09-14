@@ -254,10 +254,10 @@ SEL_PROBE_DESIGN_RevB.docx,sel_probe_design,Rev B,AUTHORITATIVE,B01,2026-04-12,a
 SEL_PROBE_DESIGN_RevA_updated.docx,sel_probe_design,Rev A+,SUPERSEDED,B01,2026-04-12,april 12th folder,
 SEL_PROBE_DESIGN_RevA_updated.docx,sel_probe_design,Rev A+,DUPLICATE,B22,2026-04-05,"downloads, early april",same file uploaded again
 SEL_PROBE_DESIGN_RevA.docx,sel_probe_design,Rev A,SUPERSEDED,B03,2026-03-11,11th march batch 2,
-SEL_ROBOT_FLEET_v9-1.docx,sel_robot_fleet,v9.1,AUTHORITATIVE,B22,2026-04-05,"downloads, early april",family winner
-SEL_ROBOT_FLEET_v9.docx,sel_robot_fleet,v9,SUPERSEDED,B01,2026-04-12,april 12th folder,
+SEL_ROBOT_FLEET_v9-1.docx,sel_robot_fleet,v9.1,HISTORICAL,B22,2026-04-05,"downloads, early april","F2 diff 14 Sep 2026: internally v9.0, created 15 min before v9.docx, no ECN-020; earlier draft, not a revision above v9"
+SEL_ROBOT_FLEET_v9.docx,sel_robot_fleet,v9,SUPERSEDED,B01,2026-04-12,april 12th folder,F2: intermediate v9.0 draft (no ECN-020; ~280 t YBCO); superseded by v9.md
 SEL_ROBOT_FLEET_v9.docx,sel_robot_fleet,v9,DUPLICATE,B08,2026-04-04,4th april batch 2,same file uploaded again
-SEL_ROBOT_FLEET_v9.md,sel_robot_fleet,v9,SUPERSEDED,B01,2026-04-12,april 12th folder,
+SEL_ROBOT_FLEET_v9.md,sel_robot_fleet,v9,AUTHORITATIVE,B01,2026-04-12,april 12th folder,family winner (F2 resolved by diff 14 Sep 2026: only copy carrying ECN-020 s.16)
 SEL_ROBOT_FLEET_v8.docx,sel_robot_fleet,v8,SUPERSEDED,B03,2026-03-11,11th march batch 2,
 SEL_ROBOT_FLEET_v8.docx,sel_robot_fleet,v8,DUPLICATE,B10,2026-03-10,10th march,same file uploaded again
 SEL_ROBOT_FLEET_v6.docx,sel_robot_fleet,v6,SUPERSEDED,B11,2026-03-09,9th march,
