@@ -1,0 +1,251 @@
+================================================================
+  MOLE-I THERMAL v1.3
+  108-conductor harness + substation thermal audit
+================================================================
+
+== S1: Constants. T_floor=40 T_wall=25 T_web=273 dT=233 K
+  WEB: A=1.015 m^2, C=223300 J/K (62 Wh/K)
+
+== S2: MOLE-I WEB heat loss paths ==
+  C: Harness (v1.3: 108 conductors, all Manganin 100mm)
+     AWG20:  5 x 0.518mm2 = 0.0962W
+     AWG22: 15 x 0.326mm2 = 0.1817W
+     AWG28: 76 x 0.081mm2 = 0.2287W
+     AWG30: 12 x 0.051mm2 = 0.0227W
+     TOTAL: 0.529W (was 0.359W in v1.2 with 49 cond)
+
+  Path                                    Q (W)
+  ------------------------------------------------
+  A: PEEK standoffs (4x)                  1.939
+  B: Drain pipe Ti+PEEK                   0.054
+  C: Cables (108 Mn, v1.3)                0.529
+  D: VEX tube PEEK                        0.038
+  E: MLI penetrations 5x                  2.500
+  F: Valve actuator                       1.794
+  G: Feed chute 50%                       1.674
+  H: MLI 20-layer                         0.391
+  ------------------------------------------------
+  SUBTOTAL                                8.919
+  30%% margin                             2.676
+  TOTAL                                  11.595
+
+  G_web = 0.04976 W/K
+
+== S3: MOLE-I conductor table (108 through WEB wall) ==
+  All 1000 VDC architecture. PDU inside WEB converts to 48/28/5V.
+  VEX heater: 1000V direct (SiC MOSFET switch), 833 ohm nichrome.
+
+  #        Function         Signal           Dir  Gauge  V      I      Destination
+  ------------------------------------------------------------------------------
+  1-2      Tether power     V+, V-           IN   AWG20  1000V  1.93A  PDU input
+  3-4      VEX heater       HTR+, HTR-       OUT  AWG22  1000V  1.2A   833ohm nichrome
+  5-7      Drill motor      phA,phB,phC      OUT  AWG20  48V    4.2A   SmCo BLDC 3ph
+  8-19     Wheel motors     W1-W6 +/-        OUT  AWG22  48V    1.0A   6x SmCo hub BLDC
+  20-31    Steering         W1-W6 +/-        OUT  AWG28  28V    0.5Apk 6x SmCo rotary
+  32-43    Gearbox htrs     W1-W6 +/-        OUT  AWG28  28V    0.18A  6x 5W kapton
+  44-45    Drill brg htr    +/-              OUT  AWG28  28V    0.54A  15W kapton
+  46-47    Recept htr       +/-              OUT  AWG28  28V    0.18A  5W band heater
+  48-59    Gearbox Pt100    W1-W6 +/-        IN   AWG28  sig    uA     6x Pt100 RTD
+  60-61    Drill Pt100      +/-              IN   AWG28  sig    uA     Pt100 bearing
+  62-63    Recept Pt100     +/-              IN   AWG28  sig    uA     Pt100 connector
+  64-65    VEX Pt100        +/-              IN   AWG28  sig    uA     Pt100 chamber
+  66-67    Drill torque     +/-              IN   AWG28  sig    mA     Strain gauge
+  68-69    Drill vibration  sig,gnd          IN   AWG28  sig    mA     Accelerometer
+  70-81    Wheel encoders   W1-W6 A/B        IN   AWG28  sig    uA     6x quadrature
+  82-83    PLC comms        TX,RX            BI   AWG28  sig    mA     Tether PLC
+  84       RF antenna       coax             OUT  AWG22  RF     mA     50ohm element
+  85-88    Prox sensors     1&2 sig/gnd      IN   AWG28  sig    mA     2x docking
+  89-92    VEX valves       intake+tail      OUT  AWG28  28V    0.3A   2x solenoid
+  93-94    VEX pressure     +/-              IN   AWG28  sig    mA     0-20kPa xducer
+  95-96    Strap TC         +/-              IN   AWG30  sig    uV     Type K midpoint
+  97-98    Condenser TC     +/-              IN   AWG30  sig    uV     Type K VEX
+  99-106   LWRHU TCs        TC1-4 +/-        IN   AWG30  sig    uV     4x Type K
+  107-108  Drain valve      pos +/-          IN   AWG28  sig    mA     Position switch
+  ------------------------------------------------------------------------------
+  TOTAL: 108 conductors | Harness Q = 0.529 W
+
+== S4: LWRHU sizing ==
+  N | Q_in | T_eq(40K) | T_eq(25K) | >250K fl | >250K wl
+  ------------------------------------------------------------
+  3 | 3.3W |  106.3K   |   91.3K   | no      | no 
+  4 | 4.4W |  128.4K   |  113.4K   | no      | no 
+  5 | 5.5W |  150.5K   |  135.5K   | no      | no 
+  6 | 6.6W |  172.6K   |  157.6K   | no      | no 
+  7 | 7.7W |  194.7K   |  179.7K   | no      | no 
+  8 | 8.8W |  216.8K   |  201.8K   | no      | no 
+  9 | 9.9W |  238.9K   |  223.9K   | no      | no 
+  10 | 11.0W |  261.1K   |  246.1K   | YES     | no 
+  Indefinite 250K: 11 LWRHU (12.1W)
+
+== S5: mini-VEX thermal strap ==
+  VEX loss at 200K: 3.07W | Strap cap: 7.24W | Residual htr: 0.00W
+  Strap draws 3.07W from WEB
+
+== S6: Tether connector ==
+  PEEK+Mn: 3.26W (spec 5W). Passive funnel dock.
+
+== S7: Wax-actuated thermal shunt ==
+  G_web=0.0498 | G_shunt(1.5x)=0.0754 | G_total=0.1251 W/K
+  No shunt: T_eq=518K | With shunt: T_eq=230K
+  Shunt: n-tetradecane, ON>278K, OFF<275K, ~50-80g, passive
+
+== S8: Keep-alive budget + power architecture ==
+
+  POWER ARCHITECTURE (1000 VDC end-to-end):
+  Trunk->Branch->Substation(passive bus)->Tether->MOLE-I WEB PDU
+  PDU: 1000V->48V (95%eff) | 1000V->28V (93%eff) | 28V->5V (90%eff)
+  VEX heater: 1000V direct via SiC MOSFET (no converter)
+
+  DC-DC conversion losses:
+    48V bus: 1730W load / 95% = 91W loss
+    28V bus: 90W load / 93% = 6.8W loss
+    5V bus:  13W load / 90% = 1.4W loss
+    TOTAL conversion loss: 99W
+    Battery trickle charge: 50W
+    MOLE-I TETHER DRAW: 1785W load + 99W conv + 50W batt = 1934W
+    At 1000V: 1.934A per MOLE-I
+
+  Subsystem                | Original | Realistic | Optimistic
+  ------------------------------------------------------------
+  WEB heater               |   57.0W |     14.7W |      14.7W
+  Gearbox 6x5W             |   30.0W |     30.0W |      30.0W
+  Drill bearing            |   15.0W |     15.0W |      15.0W
+  Receptacle               |    5.0W |      5.0W |       0.0W
+  VEX standby              |   25.0W |      0.0W |       0.0W
+  Thermal shunt            |    0.0W |      0.0W |       0.0W
+  ------------------------------------------------------------
+  TOTAL                    |    132W |       65W |        60W
+
+  Transit battery: 65W x 4.7hr x 1.10 = 334 Wh / 1.3 kg
+
+== S9: Multi-mode transient (with vs without shunt) ==
+
+  WITHOUT SHUNT:
+    DRILL: 273.0K -> 283.6K (max 283.6K)
+    DUMP: 283.6K -> 283.6K (max 283.6K)
+    DRILL: 283.6K -> 293.8K (max 293.8K)
+    DUMP: 293.8K -> 293.8K (max 293.8K)
+    DRILL: 293.8K -> 303.7K (max 303.7K)
+    FAIL: 303.7K -> 299.2K (max 303.7K)
+
+  WITH SHUNT (1.5x):
+    DRILL: 273.0K -> 278.0K (max 278.0K)
+    DUMP: 278.0K -> 277.8K (max 278.0K)
+    DRILL: 277.8K -> 278.0K (max 278.0K)
+    DUMP: 278.0K -> 277.8K (max 278.0K)
+    DRILL: 277.8K -> 278.0K (max 278.0K)
+    FAIL: 278.0K -> 274.4K (max 278.0K)
+
+  POWER FAILURE (LWRHU only, T_amb=40K, shunt present):
+  N  | T@24hr | T@72hr | T@200hr | t(253K)
+  --------------------------------------------------
+   0 | 269.6K | 262.9K | 246.1K  | 146hr
+   4 | 271.3K | 267.9K | 259.4K  | NEVER
+   6 | 272.1K | 270.4K | 266.0K  | NEVER
+   8 | 273.0K | 272.9K | 272.6K  | NEVER
+  10 | 273.8K | 275.0K | 275.0K  | NEVER
+
+================================================================
+  S10: SUBSTATION WEB — BOTTOM-UP THERMAL AUDIT (NEW v1.3)
+================================================================
+  WEB: 350x250x250 mm, A=0.4750 m2, C=25830 J/K
+
+  Path                                    Q (W)
+  ------------------------------------------------
+  A: Struct mounts (4x PEEK)              2.007
+  B: Bus bar trans (Mn 20mm)              1.928
+  C: Harness (49 non-bus Mn)              0.266
+  D: Riser pipe Ti+PEEK                   0.092
+  E: MLI penetrations 4x                  2.000
+  F: Funnel inlets (PEEK)                 1.587
+  G: MLI 20-layer                         0.183
+  ------------------------------------------------
+  SUBTOTAL                                8.063
+  30%% margin                             2.419
+  TOTAL                                  10.482
+  G_sub (heater sizing, w/ margin)      0.04499
+  G_sub (ODE, conductive only)          0.03382
+
+  Original spec: 80W. Audited: 10.5W. Was 8x too high.
+  Bus bar I2R losses: 0.92W (input) + 0.89W (ports) = 1.81W
+
+== S11: Substation conductor table (63 through WEB wall) ==
+  #        Function         Signal         Dir  Gauge  V      I      Destination
+  ------------------------------------------------------------------------------
+  1-2      Branch power     V+, V-         IN   AWG14  1000V  ~10A   Bus bar input
+  3-14     Port outputs     P1-P6 +/-      OUT  AWG14  1000V  ~2A    6x tether drums
+  15-24    Drum motors      D1-D5 +/-      OUT  AWG22  28V    ~1A    5x DC tension motor
+  25-34    Drum heaters     D1-D5 +/-      OUT  AWG28  28V    0.29A  5x 8W kapton
+  35-44    Funnel heaters   F1-F5 +/-      OUT  AWG28  28V    0.11A  5x 3W kapton
+  45-46    Transfer pump    pump +/-       OUT  AWG22  28V    0.36A  Peristaltic 10W
+  47-48    Riser heater     +/-            OUT  AWG28  28V    0.75A  21W trace heat
+  49       RF antenna       coax           OUT  AWG22  RF     mA     Relay element
+  50-59    Drum Pt100       D1-D5 +/-      IN   AWG28  sig    uA     5x temp sensor
+  60-61    Riser Pt100      +/-            IN   AWG28  sig    uA     Pipe temp
+  62-63    Pump feedback    +/-            IN   AWG28  sig    mA     RPM/status
+  ------------------------------------------------------------------------------
+  TOTAL: 63 conductors | Harness Q = 1.928 W (bus) + 0.266 W (signal)
+
+== S12: Substation LWRHU sizing + power failure survival ==
+
+  LWRHU equilibrium (T_amb=40K):
+  N | Q_in | T_eq | Heater needed | Survival note
+  -----------------------------------------------------------------
+  1 | 1.1W |    64K |     9.4W      | Below 250K
+  2 | 2.2W |    89K |     8.3W      | Below 250K
+  3 | 3.3W |   113K |     7.2W      | Below 250K
+  4 | 4.4W |   138K |     6.1W      | Below 250K
+  5 | 5.5W |   162K |     5.0W      | Below 250K
+
+  POWER FAILURE TRANSIENT (ODE45, starting at 273K):
+  N  | T@6hr  | T@12hr | T@24hr | T@48hr | t(253K)
+  ------------------------------------------------------------
+   1 | 267.3K | 261.7K | 251.1K | 231.7K | 22hr
+   2 | 268.2K | 263.5K | 254.5K | 238.2K | 26hr
+   3 | 269.1K | 265.3K | 258.0K | 244.7K | 33hr
+   4 | 270.0K | 267.1K | 261.5K | 251.3K | 44hr
+
+== S13: Substation power budget (audited) ==
+  Component                      Duty                   Power (W)
+  ----------------------------------------------------------------
+  WEB heater                     continuous                10.5W
+  Drum gbx heaters 5x8W          continuous                40.0W
+  Transfer pump                  intermittent              10.0W
+  Riser trace heat               continuous                21.0W
+  Funnel lip htrs 5x3W           dump only (~3W avg)        3.0W
+  Comms relay (PLC+RF)           continuous                 3.0W
+  Controller + sensors           continuous                 5.0W
+  Port solenoids (6x0.5W)        continuous                 3.0W
+  ----------------------------------------------------------------
+  TOTAL (substation own)         -                         95.5W
+
+  Original spec: 130W (continuous). Audited: 95W.
+  Note: 80W heater -> 10W is the biggest change (was 8x oversized)
+
+  NODE TOTAL (substation + 5 MOLE-I):
+    Substation own:  95W
+    5x MOLE-I tether draw: 5 x 1934W = 9671W
+    NODE TOTAL: 9767W (9.77A at 1000V)
+    P7+ (34 nodes): 332.1 kW
+
+================================================================
+  v1.3 CONCLUSIONS
+================================================================
+  MOLE-I WEB:
+    Harness: 108 conductors (was 49). Q = 0.529W (was 0.359W)
+    Total WEB loss: 11.6W (unchanged from v1.2 within 2%)
+    Keep-alive: 65W. Battery: 334 Wh / 1.3 kg
+    Tether draw: 1934W (load 1785 + DC-DC 99 + batt 50)
+    VEX heater: 1000V direct, SiC MOSFET, 833ohm nichrome
+  SUBSTATION WEB:
+    WEB heater: 80W -> 10W (8x oversized)
+    Conductors: 63 through wall
+    Substation own demand: 95W (was 130W)
+    LWRHU: recommend 3x (t_253K=44hr vs 1x)
+    Node total: 9767W (sub 95 + 5xMI 9671)
+    P7+ PSR total: 392.0 kW (34 nodes + pipeline 59.5 + pump 0.4)
+================================================================
+  Figures: same 8 as v1.2 + 2 new substation figures
+================================================================
+
+  10 figures generated.

@@ -1,0 +1,166 @@
+SELENITE_ECON v1.3 — 200-Year Model
+ECN-019 Rev B | 08-Sep-2026 22:48:03
+
+Circuit design: Optimised (1.2 t/yr)
+  1.2 t/yr REO, 28000 kg, 400 kW per circuit
+  Circuits for 1.25 Mt/yr: 1041667
+
+═══════════════════════════════════════════════
+  200-YEAR PROGRAMME METRICS
+═══════════════════════════════════════════════
+
+Total cost (200 yr):        $21.31 T
+  Earth launch:             $14.15 T
+  In-situ fabrication:      $6.68 T
+  Mk III PROBEs (LEO):      $0.01 T
+  Redirect tugs (LEO):      $0.00 T
+  DRO operations:           $0.02 T
+  Asteroid processing:      $0.11 T
+  R&D / programme mgmt:     $0.34 T
+Direct revenue:             $1.48 T
+  REO sales:                $1.21 T
+  PGM sales (all sources):  $0.27 T
+    Mk I/II PROBEs:         256 t total PGM
+    Mk III PROBEs:          893 t total PGM
+    Captured asteroids:     4234 t total PGM
+REO extern (mining):        $10.38 T
+H2 extern (Ir, 50% attr):   $2.57 T
+Geopolitical insurance:     $1.20 T
+Rocket emissions:           $-0.01 T
+Total rev + extern:         $15.62 T
+NPV (all extern):           $-0.49 T
+NPV (direct only):          $-0.93 T
+Earth cargo (200 yr):       5.6 Mt
+Lifetime rocket CO2:        52 Mt
+Breakeven (undiscounted):   NOT REACHED
+
+--- Infrastructure at Key Years ---
+Year      REO t/y   Circuits    Haulers    MSR  Conv km   MOLE-I  Cargo t/y
+Y25             0          1          1      0        0      247        212
+Y35           125        105        167      0        0      357        102
+Y45          1000        834       1267      4        5      287       2068
+Y60         10000       8334      10667     34      200      322       4970
+Y80        100000      83334      80001    334     4000       77      36566
+Y100       250000     208334     150000    834    13750       53      40277
+Y120       500000     416667     300000   1667    27500       53      32784
+Y140      1000000     833334     600000   3334    55000       53      45514
+Y160      1500000    1250001     900001   5001    82500       53      51177
+Y200      2500000    2083334    1500000   8334   137500       53      44484
+
+--- Status at Y160 (2.5 Mt/yr build-out: 1.5 Mt/yr at this point) ---
+  REO production:   1500000 t/yr (target: 2500000)
+  Annual cost:      $211.9B/yr
+    of which launch:  $127.9B
+    of which in-situ: $80.4B
+    of which Mk III:  $0.0B
+    of which tugs:    $0.0B
+    of which DRO ops: $0.2B
+    of which ast proc: $1.3B (C-type $0.5B + S-type $0.8B)
+  Direct revenue:   $16.4B/yr
+    REO sales:      $14.4B (1500000 t × $9600/t)
+    PGM sales:      $2.0B (39.6 t total)
+      Mk I/II:     0.5 t/yr
+      Mk III:      2.6 t/yr (300 active)
+      Asteroids:   36.5 t/yr PGM (1 M-type, processing since Y85)
+    Asteroid captures: M-type Y75, C-type Y95, S-type Y115
+    Circuit Earth frac: 0.8% (reduced by C-type carbon + S-type Si)
+  Externalities:    $145.8B/yr (REO $110.6 + H2 $20.3 + Geo $15.0 + Rockets $-0.1)
+  Total Ir:         5.9 t/yr (attributed: 3.0 t at 50%)
+  PEM installed:    59.5 GW
+  Rev+Ext / Cost:   0.77
+  Net annual:       $-49.7B/yr (negative)
+
+--- Environmental Balance at Y160 ---
+  CO2 avoided (REE): 45.0 Mt/yr
+  CO2 avoided (H2):  107.1 Mt/yr
+  CO2 rockets:       0.4 Mt/yr
+  NET CO2:           151.7 Mt/yr
+
+--- TRUE STEADY STATE at Y200 (2.5 Mt/yr, 20 years post build-out) ---
+  REO production:   2500000 t/yr
+  Annual cost:      $114.7B/yr
+  Direct revenue:   $17.0B/yr
+  Externalities:    $219.5B/yr
+  Rev+Ext / Cost:   2.06
+  Net annual:       $121.8B/yr (POSITIVE)
+  CO2 avoided:      181.7 Mt/yr (REE 75.0 + H2 107.1 - rockets 0.3)
+
+═══════════════════════════════════════════════
+  CIRCUIT THROUGHPUT SENSITIVITY
+═══════════════════════════════════════════════
+
+  Batch (0.4 t/yr):
+    Circuits for 1.25 Mt/yr: 6250000
+    Mass per circuit: 15000 kg (Earth: 1500 kg at 10%)
+    Total circuit mass: 93.8 Mt (Earth: 9.4 Mt)
+    200-yr cost: $70.19 T
+    NPV (all extern): $-1.98 T
+    NPV delta from batch: $-1.49 T
+
+  Continuous-flow (0.8 t/yr):
+    Circuits for 1.25 Mt/yr: 3125000
+    Mass per circuit: 22000 kg (Earth: 2200 kg at 10%)
+    Total circuit mass: 68.8 Mt (Earth: 6.9 Mt)
+    200-yr cost: $54.61 T
+    NPV (all extern): $-1.44 T
+    NPV delta from batch: $-0.95 T
+
+  Optimised (1.2 t/yr):
+    Circuits for 1.25 Mt/yr: 2083334
+    Mass per circuit: 28000 kg (Earth: 2800 kg at 10%)
+    Total circuit mass: 58.3 Mt (Earth: 5.8 Mt)
+    200-yr cost: $48.12 T
+    NPV (all extern): $-1.22 T
+    NPV delta from batch: $-0.73 T
+
+═══════════════════════════════════════════════
+  OTHER SENSITIVITIES
+═══════════════════════════════════════════════
+
+Discount rate:
+  Stern 1.4%: NPV $-1.40T
+  Flat 2.0%: NPV $-0.80T
+  Flat 3.0%: NPV $-0.34T
+  UK Green 3.5%: NPV $-0.23T
+
+Launch cost:
+  150%: NPV $-0.82T
+  100%: NPV $-0.49T
+  50%: NPV $-0.15T
+
+Geopolitical insurance:
+  $0B/yr: NPV $-0.53T
+  $15B/yr: NPV $-0.49T
+  $25B/yr: NPV $-0.47T
+
+═══════════════════════════════════════════════
+  COMMITTED TARGET vs STOP-EARLY ALTERNATIVE
+═══════════════════════════════════════════════
+
+                                     2.5 Mt/yr      1.25 Mt/yr
+                                   (committed)    (stop-early)
+Circuits needed                        2083334         1041667
+Haulers needed                         1500000          750000
+MSR count                                 8334            4167
+Conveyor km                             137500           68750
+Earth cargo (200 yr)                    5.6 Mt          4.3 Mt
+Total cost (200 yr)                   21.31 $T        15.42 $T
+REO extern (200 yr)                   10.38 $T         7.62 $T
+Geo insurance (200 yr)                 1.20 $T         1.25 $T
+Total rev+extern                      15.62 $T        12.84 $T
+NPV (all extern)                      -0.49 $T        -0.44 $T
+SS cost/yr                            114.7 $B         65.7 $B
+SS rev+ext/yr                         236.5 $B        142.5 $B
+SS net/yr                             121.8 $B         76.9 $B
+Steady-state reached                   Y180         Y140
+CO2 avoided at SS/yr                    182 Mt          145 Mt
+
+2.5 Mt/yr costs $5.9T more over 200 yr but generates $2.8T more benefit.
+SS net surplus: $121.8B/yr (2.5) vs $76.9B/yr (1.25)
+COMMITTED TARGET: 2.5 Mt/yr — full replacement of terrestrial REE mining.
+
+═══════════════════════════════════════════════
+  SELENITE_ECON v1.3 COMPLETE — 4 figures saved
+  200-year model, cadence-constrained, Optimised (1.2 t/yr) circuits
+  Diversified asteroid strategy: M-type + C-type + S-type
+═══════════════════════════════════════════════

@@ -1,0 +1,135 @@
+key,value
+"Isp",450
+"bene.recovery",0.04
+"bene.uplift",10
+"bene.line_cap",1000
+"canisters_in_flight",218016
+"catapult.range_km",100
+"catapult.v_launch",500
+"catapult.canister_kg",5000
+"catapult.canister_payload",4500
+"catapult.canister_empty",500
+"catapult.pwr_MW",5
+"catapult.pwr_return_MW",0.5
+"catapult.launches_hr",6
+"catapult.throughput_yr",189216
+"demand_kg",12765869.3971
+"earth_ree","[390000 550000 700000 850000 1000000 1200000]"
+"eclipse_kW",414
+"fab.hauler_earth_frac",0.08
+"fab.hauler_local_frac",0.92
+"fab.hauler_life_yr",10
+"fab.canister_life_cycles",10000
+"fab.canister_cycles_yr",11680
+"fleet_growth",267857.2
+"fleet_replace",148810
+"fsp.kW",40
+"g0",9.81
+"g_moon",1.62
+"grade",1000
+"grade_conc",0.01
+"h2_sw",125000
+"hab.crew_mod",4
+"hab.eclss_kW",1.2
+"hauler.payload",5000
+"hauler.avail",0.8
+"hauler.range_km",30
+"hauler.trip_hr",16.6666666667
+"hauler.trips_yr",420
+"hauler.throughput",2100
+"hauler.pwr_kW",5
+"i",6
+"ice.depth_m",10
+"ice.frac",0.0446
+"ice.rho",1550
+"ice_demand_kg",17681259.5527
+"kreep.spa_mid",140
+"kreep.pkt_mid",1000
+"kreep_per_skip",109.6
+"ls.prop_yr",266.790776153
+"md.tanker_eff",0.474158368895
+"md.retro_eff",0.63
+"md.catcher_eff",0.95
+"md.earth_canister_reo",3.5
+"mi.water_yr",7813.92
+"mi.prop_yield",5641.65024
+"mi.node",10
+"mi.pwr_kW",1.934
+"o2_ilm",7812500
+"other_crater.floor_km2",15
+"other_crater.ice_yr",207390000
+"pct","[0.000102564102564 0.0227272727273 0.142857142857 1.17647058824 10 83.3333333333]"
+"pgm_needed",5000
+"pgm_per_probe",17.5
+"ph.n",6
+"ph.reo_target","[0.4 125 1000 10000 100000 1000000]"
+"ph.concentrate","[357.142857143 15625 125000 1250000 12500000 125000000]"
+"ph.raw_kreep","[8928.57142857 390625 3125000 31250000 312500000 3125000000]"
+"ph.pkt_transport","Surface Hauler"
+"ph.proc_spa","[5 5 5 5 5 5]"
+"ph.proc_total","[5 313 2500 25000 250000 2500000]"
+"ph.bene_total","[9 391 3125 31250 312500 3125000]"
+"ph.ore_t1","[8482.14285714 351562.5 2656250 21875000 125000000 468750000]"
+"ph.ore_t2","[446.428571429 31250 375000 7812500 109375000 937500000]"
+"ph.n_probe","[30 96 30 30 58 286]"
+"ph.probe_prop_each","[6654 6654 40000 40000 40000 40000]"
+"ph.pgm_output","[0.001575 0.00504 0.525 0.525 1.015 5.005]"
+"ph.prop_probe","[199.62 638.784 1200 1200 2320 11440]"
+"ph.crew","[20 20 20 20 20 20]"
+"ph.ss_crew","[2 2 2 2 2 2]"
+"ph.prop_crew_return","[160 160 160 160 160 160]"
+"ph.prop_ls","[5.33581552306 5.33581552306 5.33581552306 5.33581552306 5.33581552306 5.33581552306]"
+"ph.prop_total","[922.125779727 251238.497289 2004254.0668 1365.33581552 2485.33581552 11605.3358155]"
+"ph.n_molei","[180 48990 390790 270 490 2270]"
+"ph.n_nodes","[18 4899 39079 27 49 227]"
+"ph.isru_supply","[1015.4970432 276384.445258 2204700.49729 1523.2455648 2764.4086176 12806.5460448]"
+"ph.margin","[93.3712634731 25145.9479689 200446.430492 157.909749277 279.072802077 1201.21022928]"
+"ph.n_pem","[3 789 6292 5 8 37]"
+"ph.pwr_elec","[155.4 40870.2 325925.6 259 414.4 1916.6]"
+"ph.pwr_cryo","[242.841660345 66163.6136473 527819.952586 359.560944569 654.512745685 3056.2631262]"
+"ph.pwr_psr","[348.12 94746.66 755787.86 522.18 947.66 4390.18]"
+"ph.pwr_hab","[74 74 74 74 74 74]"
+"ph.pwr_proc_spa","[900 900 900 900 900 900]"
+"ph.pwr_iz","[65 98 65 65 79 193]"
+"ph.pwr_spa","[2142.43399241 243422.968377 1932686.8951 2615.68913348 3683.48729482 12636.0517514]"
+"ph.solar_m2","[6716.09402011 763081.40557 6058579.60847 8199.65245606 11546.9821154 39611.4474967]"
+"ph.fsp_spa","[11 11 11 11 11 11]"
+"ph.hab_mod","[5 5 5 5 5 5]"
+"ph.elz_spa","[4 42 319 4 4 4]"
+"ph.ss_total","[5 157 1237 12252 122502 1225002]"
+"probe.prop",6654
+"probe.payload_current",1500
+"probe.pgm_grade",5e-05
+"probe.pgm_extraction",0.7
+"probe_big.prop",40000
+"probe_big.payload",10000
+"probe_big.insitu_conc",50
+"proc.eff",0.8
+"proc.circuit_cap",50
+"proc.pwr_kW",180
+"proc.reagent",49
+"raw_mi",2263
+"shack.floor_km2",33.2
+"shack.ice_total",22951160000
+"shack.ice_yr",459023200
+"skip.mf",700
+"skip.rng_spa",100
+"skip.rng_pkt",35
+"skip.dv_spa",1195.34095554
+"skip.dv_pkt",707.1732461
+"skip.fuel_spa",217.687027465
+"skip.fuel_pkt",121.616398514
+"skip.hops",274
+"skip.payload",400
+"solar.yield",0.319
+"ss.cap_t",100
+"ss.return_prop",80000
+"st","OK"
+"tanker.payload",6000
+"tanker.prop",6654
+"tanker.total",12654
+"tanker.trips_yr",12
+"tier.frac_t1","[0.95 0.9 0.85 0.7 0.4 0.15]"
+"tier.frac_t2","[0.05 0.08 0.12 0.25 0.35 0.3]"
+"ve",4414.5
+"water_kghr",1821.61378383

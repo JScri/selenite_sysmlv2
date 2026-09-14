@@ -1,0 +1,215 @@
+key,value,source,comparable
+A,347.679221721,matlab_r2025a;octave_agrees,yes
+CH4_sab,0.857296626984,matlab_r2025a;octave_agrees,yes
+CO2_GH,1.65,matlab_r2025a;octave_agrees,yes
+CO2_crew,4,octave_8_4_only(matlab_v2.0_dropped),yes
+CO2_sab,2.35222098214,matlab_r2025a;octave_agrees,yes
+GH_O2,1.2,matlab_r2025a;octave_agrees,yes
+H2O_OGA,3.85142113095,matlab_r2025a;octave_agrees,yes
+H2O_crew,20,matlab_r2025a;octave_agrees,yes
+H2O_deficit,3.77211056548,matlab_r2025a;octave_agrees,yes
+H2O_sab,1.92571056548,matlab_r2025a;octave_agrees,yes
+H2_OGA,0.431,matlab_r2025a;octave_agrees,yes
+I,431.149828523,matlab_r2025a;octave_agrees,yes
+Isp,450,matlab_r2025a;octave_agrees,yes
+M_CH4,16.04,matlab_r2025a;octave_agrees,yes
+M_CO2,44.01,matlab_r2025a;octave_agrees,yes
+M_H2,2.016,matlab_r2025a;octave_agrees,yes
+M_H2O,18.015,matlab_r2025a;octave_agrees,yes
+M_O2,32,matlab_r2025a;octave_agrees,yes
+O2_OGA,3.42063492063,matlab_r2025a;octave_agrees,yes
+O2_crew,3.36,matlab_r2025a;octave_agrees,yes
+R,0.115968966453,matlab_r2025a;octave_agrees,yes
+V,1000,matlab_r2025a;octave_agrees,yes
+WRS_out,18.1536,matlab_r2025a;octave_agrees,yes
+batt_Whkg,250,matlab_r2025a;octave_agrees,yes
+batt_margin,1.2,matlab_r2025a;octave_agrees,yes
+branch_km,[0.2 1.2 2.2 3.6 7.2],matlab_r2025a;octave_agrees,yes
+bs,FSP covers,matlab_r2025a;octave_agrees,yes
+ca,[0.92 0.65 0.15],matlab_r2025a;octave_agrees,yes
+cable_mass,[300 500 700 800 880],matlab_r2025a;octave_agrees,yes
+cap.mass_loaded,1360,matlab_r2025a;octave_agrees,yes
+cap.peak_kW,5,octave_8_4_only(matlab_v2.0_dropped),yes
+cap.stby_kW,1,octave_8_4_only(matlab_v2.0_dropped),yes
+cb,[0.18 0.55 0.82],matlab_r2025a;octave_agrees,yes
+cd,[0.18 0.42 0.72],matlab_r2025a;octave_agrees,yes
+cg,[0.3 0.65 0.3],matlab_r2025a;octave_agrees,yes
+conv_mass,[200 400 600 800 1000],matlab_r2025a;octave_agrees,yes
+cp,[0.55 0.27 0.68],matlab_r2025a;octave_agrees,yes
+cr,[0.85 0.32 0.24],matlab_r2025a;octave_agrees,yes
+crater.floor_area,33.1830724035,matlab_r2025a;octave_agrees,yes
+crater.floor_dia_km,6.5,matlab_r2025a;octave_agrees,yes
+crater.ice_frac,0.0446,matlab_r2025a;octave_agrees,yes
+crater.traverse_km,8.4,matlab_r2025a;octave_agrees,yes
+cs,925218.616172,matlab_r2025a;octave_agrees,yes
+cu_den,8960,matlab_r2025a;octave_agrees,yes
+cu_rho,2.4e-09,matlab_r2025a;octave_agrees,yes
+cy,[0.6 0.6 0.6],matlab_r2025a;octave_agrees,yes
+d6,459373.203841,matlab_r2025a;octave_agrees,yes
+dart.prop,12370,matlab_r2025a;octave_agrees,yes
+ecl.fsp_kW,[40 80 120 160 200],matlab_r2025a;octave_agrees,yes
+ecl.mi,[0.325 1.95 3.575 5.85 11.7],matlab_r2025a;octave_agrees,yes
+ecl.nd,[0.096 0.576 1.056 1.728 3.456],matlab_r2025a;octave_agrees,yes
+ecl.nfsp,[1 2 3 4 5],octave_8_4_only(matlab_v2.0_dropped),yes
+ecl.pipe,[16.4 34.3 51.9 70.1 79.525],matlab_r2025a;octave_agrees,yes
+ecl.sent,[1 1 1.5 2 2],octave_8_4_only(matlab_v2.0_dropped),yes
+ecl.tot,[17.821 52.846 75.051 100.698 130.701],matlab_r2025a;octave_agrees,yes
+eclipse_hr,72,matlab_r2025a;octave_agrees,yes
+fc,200,matlab_r2025a;octave_agrees,yes
+fsp.mass_kg,6600,matlab_r2025a;octave_agrees,yes
+fsp.pwr_kW,40,matlab_r2025a;octave_agrees,yes
+fsp_mass_cum,[6600 13200 19800 26400 33000],matlab_r2025a;octave_agrees,yes
+g0,9.81,matlab_r2025a;octave_agrees,yes
+g_moon,1.62,matlab_r2025a;octave_agrees,yes
+hab.CCAA,500,matlab_r2025a;octave_agrees,yes
+hab.CDRA,1000,matlab_r2025a;octave_agrees,yes
+hab.LED,12000,matlab_r2025a;octave_agrees,yes
+hab.OGA,940,matlab_r2025a;octave_agrees,yes
+hab.Sab,350,matlab_r2025a;octave_agrees,yes
+hab.TCCS,380,matlab_r2025a;octave_agrees,yes
+hab.WRS,500,matlab_r2025a;octave_agrees,yes
+hab.comms,150,matlab_r2025a;octave_agrees,yes
+hab.conv_loss,1000,matlab_r2025a;octave_agrees,yes
+hab.lighting,500,matlab_r2025a;octave_agrees,yes
+hab.no_GH,6020,matlab_r2025a;octave_agrees,yes
+hab.other,500,matlab_r2025a;octave_agrees,yes
+hab.thermal,200,matlab_r2025a;octave_agrees,yes
+hab.with_GH,18020,matlab_r2025a;octave_agrees,yes
+hub_mass,[500 500 500 500 500],matlab_r2025a;octave_agrees,yes
+i,5,octave_8_4_only(matlab_v2.0_dropped),yes
+isru_ride_hr,2,octave_8_4_only(matlab_v2.0_dropped),yes
+kc,35.072,matlab_r2025a;octave_agrees,yes
+kw_per_kghr,5.5,matlab_r2025a;octave_agrees,yes
+lh2,113640.968032,matlab_r2025a;octave_agrees,yes
+lox,901912.444696,matlab_r2025a;octave_agrees,yes
+ls.eff,0.722,matlab_r2025a;octave_agrees,yes
+ls.prop_crew,266.790776153,matlab_r2025a;octave_agrees,yes
+m,52335.4578872,matlab_r2025a;octave_agrees,yes
+mf,1.1,matlab_r2025a;octave_agrees,yes
+mi.batt_Wh,333.666666667,matlab_r2025a;octave_agrees,yes
+mi.batt_charge,50,matlab_r2025a;octave_agrees,yes
+mi.batt_kg,1.33466666667,matlab_r2025a;octave_agrees,yes
+mi.dcdc.eff_28v,0.93,matlab_r2025a;octave_agrees,yes
+mi.dcdc.eff_48v,0.95,matlab_r2025a;octave_agrees,yes
+mi.dcdc.eff_5v,0.9,matlab_r2025a;octave_agrees,yes
+mi.dcdc.load_28v,90,matlab_r2025a;octave_agrees,yes
+mi.dcdc.load_48v,1730,matlab_r2025a;octave_agrees,yes
+mi.dcdc.load_5v,13,matlab_r2025a;octave_agrees,yes
+mi.dcdc.loss_28v,6.77419354839,matlab_r2025a;octave_agrees,yes
+mi.dcdc.loss_48v,91.0526315789,matlab_r2025a;octave_agrees,yes
+mi.dcdc.loss_5v,1.44444444444,matlab_r2025a;octave_agrees,yes
+mi.dcdc.loss_total,99.2712695718,matlab_r2025a;octave_agrees,yes
+mi.descent_hr,4.66666666667,matlab_r2025a;octave_agrees,yes
+mi.mass_dry,360.35,matlab_r2025a;octave_agrees,yes
+mi.n_wheels,6,octave_8_4_only(matlab_v2.0_dropped),yes
+mi.prop_yield,5692,matlab_r2025a;octave_agrees,yes
+mi.pwr.comms,20,matlab_r2025a;octave_agrees,yes
+mi.pwr.drill,200,matlab_r2025a;octave_agrees,yes
+mi.pwr.drill_htr,15,matlab_r2025a;octave_agrees,yes
+mi.pwr.drive,300,matlab_r2025a;octave_agrees,yes
+mi.pwr.gbx_htr,30,matlab_r2025a;octave_agrees,yes
+mi.pwr.minivex,1200,matlab_r2025a;octave_agrees,yes
+mi.pwr.recept,5,octave_8_4_only(matlab_v2.0_dropped),yes
+mi.pwr.web,15,matlab_r2025a;octave_agrees,yes
+mi.pwr_ka,65,matlab_r2025a;octave_agrees,yes
+mi.pwr_op,1785,matlab_r2025a;octave_agrees,yes
+mi.pwr_tether,1934.27126957,matlab_r2025a;octave_agrees,yes
+mi.water_rate,1.115,matlab_r2025a;octave_agrees,yes
+mi.water_yr,7813.92,matlab_r2025a;octave_agrees,yes
+mn,81,matlab_r2025a;octave_agrees,yes
+mol_H2,213.78968254,matlab_r2025a;octave_agrees,yes
+node.angle_enc,0.5,matlab_r2025a;octave_agrees,yes
+node.comms,3,octave_8_4_only(matlab_v2.0_dropped),yes
+node.controller,5,octave_8_4_only(matlab_v2.0_dropped),yes
+node.drums,40,matlab_r2025a;octave_agrees,yes
+node.funnels,3,octave_8_4_only(matlab_v2.0_dropped),yes
+node.lwrhu,3,octave_8_4_only(matlab_v2.0_dropped),yes
+node.lwrhu_mass,0.126,matlab_r2025a;octave_agrees,yes
+node.mass,160,matlab_r2025a;octave_agrees,yes
+node.overhead,95.5,matlab_r2025a;octave_agrees,yes
+node.overhead_v5,96,matlab_r2025a;octave_agrees,yes
+node.pump,10,matlab_r2025a;octave_agrees,yes
+node.riser,21,matlab_r2025a;octave_agrees,yes
+node.solenoids,3,octave_8_4_only(matlab_v2.0_dropped),yes
+node.units,5,octave_8_4_only(matlab_v2.0_dropped),yes
+node.web,10.5,matlab_r2025a;octave_agrees,yes
+pg,45,matlab_r2025a;octave_agrees,yes
+ph.batt_total_kWh,[91.9554093811 481.732456286 875.509503192 1403.19736886 2720.39473772],matlab_r2025a;octave_agrees,yes
+ph.batt_total_t,[0.367821637524 1.92692982515 3.50203801277 5.61278947544 10.8815789509],matlab_r2025a;octave_agrees,yes
+ph.dP,[19962 39924 66540 99810 199620],matlab_r2025a;octave_agrees,yes
+ph.dT,[19962 130481.777901 258958.392697 459373.203841 924931.407683],matlab_r2025a;octave_agrees,yes
+ph.dur,[3 2 3 3 5],octave_8_4_only(matlab_v2.0_dropped),yes
+ph.h2hr,[0.499104079933 2.9946244796 5.49014487927 8.9838734388 17.9677468776],matlab_r2025a;octave_agrees,yes
+ph.isru,[28460 170760 313060 512280 1024560],matlab_r2025a;octave_agrees,yes
+ph.margin,[8498 40278.2220993 54101.6073032 52906.7961587 99628.5923175],matlab_r2025a;octave_agrees,yes
+ph.mi,[5 30 55 90 180],octave_8_4_only(matlab_v2.0_dropped),yes
+ph.n,5,octave_8_4_only(matlab_v2.0_dropped),yes
+ph.nARMC,[1 1 1 1 2],octave_8_4_only(matlab_v2.0_dropped),yes
+ph.nARMD,[1 2 4 6 8],octave_8_4_only(matlab_v2.0_dropped),yes
+ph.nMS,[4 4 4 6 6],octave_8_4_only(matlab_v2.0_dropped),yes
+ph.nP,[3 6 10 15 30],octave_8_4_only(matlab_v2.0_dropped),yes
+ph.nPEM,[1 3 6 9 18],octave_8_4_only(matlab_v2.0_dropped),yes
+ph.nSEN,[2 2 3 4 4],octave_8_4_only(matlab_v2.0_dropped),yes
+ph.nd,[1 6 11 18 36],octave_8_4_only(matlab_v2.0_dropped),yes
+ph.o2hr,[3.96114349153 23.7668609492 43.5725784069 71.3005828476 142.601165695],matlab_r2025a;octave_agrees,yes
+ph.p_base,[14 39.82 65.32 94.22 160.22],matlab_r2025a;octave_agrees,yes
+ph.p_comms,[0.2 0.5 0.5 0.5 0.5],matlab_r2025a;octave_agrees,yes
+ph.p_cont,[17.2290122077 74.7180732461 132.483134284 208.346219738 390.313439476],matlab_r2025a;octave_agrees,yes
+ph.p_cryo,[11.4477046905 68.6862281432 125.924751596 206.05868443 412.117368859],matlab_r2025a;octave_agrees,yes
+ph.p_elec,[24.53 147.18 269.83 441.54 883.08],matlab_r2025a;octave_agrees,yes
+ph.p_fleet,[9.67135634786 58.0281380872 106.384919826 174.084414261 348.168828523],matlab_r2025a;octave_agrees,yes
+ph.p_isru,[45.9777046905 240.866228143 437.754751596 701.59868443 1360.19736886],matlab_r2025a;octave_agrees,yes
+ph.p_isru_oth,[5 10 12 14 15],octave_8_4_only(matlab_v2.0_dropped),yes
+ph.p_iz,[5 20 40 60 108],octave_8_4_only(matlab_v2.0_dropped),yes
+ph.p_lh2,[7.486561199 44.919367194 82.352173189 134.758101582 269.516203164],matlab_r2025a;octave_agrees,yes
+ph.p_lox,[3.96114349153 23.7668609492 43.5725784069 71.3005828476 142.601165695],matlab_r2025a;octave_agrees,yes
+ph.p_nodes,[0.096 0.576 1.056 1.728 3.456],matlab_r2025a;octave_agrees,yes
+ph.p_pipe,[16.4 34.3 51.9 70.1 79.525],matlab_r2025a;octave_agrees,yes
+ph.p_psr,[26.1673563479 92.9041380872 159.340919826 245.912414261 431.149828523],matlab_r2025a;octave_agrees,yes
+ph.p_robots,[8.8 8.8 9.3 12.2 15.2],matlab_r2025a;octave_agrees,yes
+ph.p_sub,[86.1450610384 373.59036623 662.415671422 1041.73109869 1951.56719738],matlab_r2025a;octave_agrees,yes
+ph.p_tot,[103.374073246 448.308439476 794.898805707 1250.07731843 2341.88063686],matlab_r2025a;octave_agrees,yes
+ph.p_vex,[5 15 30 40 50],octave_8_4_only(matlab_v2.0_dropped),yes
+ph.panel_kg,[973.047922434 4219.87430643 7482.28842253 11766.8299157 22043.845393],matlab_r2025a;octave_agrees,yes
+ph.panel_m2,[324.349307478 1406.62476881 2494.09614084 3922.27663857 7347.94846434],matlab_r2025a;octave_agrees,yes
+ph.solar_cap,[121.61655676 527.421693502 935.175065537 1470.67919815 2755.15369042],matlab_r2025a;octave_agrees,yes
+ph.t2_kWh,[91.9554093811 481.732456286 875.509503192 1403.19736886 2720.39473772],matlab_r2025a;octave_agrees,yes
+ph.whr,[4.46 26.76 49.06 80.28 160.56],matlab_r2025a;octave_agrees,yes
+ph.wyr,[39069.6 234417.6 429765.6 703252.8 1406505.6],matlab_r2025a;octave_agrees,yes
+pipe.kW,[16.4 34 51.6 69.8 79.225],matlab_r2025a;octave_agrees,yes
+pipe.pump_kW,0.3,matlab_r2025a;octave_agrees,yes
+pipe.q_elev,1.5,matlab_r2025a;octave_agrees,yes
+pipe.q_ground,7,octave_8_4_only(matlab_v2.0_dropped),yes
+pipe.total,[16.4 34.3 51.9 70.1 79.525],matlab_r2025a;octave_agrees,yes
+pipe.trunk_m,8500,matlab_r2025a;octave_agrees,yes
+probe.prop,6654,matlab_r2025a;octave_agrees,yes
+ps,[4 7 9 12 15 20],octave_8_4_only(matlab_v2.0_dropped),yes
+pv,[300 200 1200 15 20 30 15 5],octave_8_4_only(matlab_v2.0_dropped),yes
+pz,[9.76735634786 58.6041380872 107.440919826 175.812414261 351.624828523 16.4 34.3 51.9 70.1 79.525 45.9777046905 240.866228143 437.754751596 701.59868443 1360.19736886 14 39.82 65.32 94.22 160.22 17.2290122077 74.7180732461 132.483134284 208.346219738 390.313439476],matlab_r2025a;octave_agrees,yes
+raw,179,matlab_r2025a;octave_agrees,yes
+skip.dv,1690.46739099,matlab_r2025a;octave_agrees,yes
+skip.fuel_hop,326.608083197,matlab_r2025a;octave_agrees,yes
+skip.fuel_yr,89490.6147961,matlab_r2025a;octave_agrees,yes
+skip.hops,274,matlab_r2025a;octave_agrees,yes
+skip.kreep_yr,109600,matlab_r2025a;octave_agrees,yes
+skip.mf,700,matlab_r2025a;octave_agrees,yes
+skip.rng,100,matlab_r2025a;octave_agrees,yes
+skip.v0,402.49223595,matlab_r2025a;octave_agrees,yes
+solar.dust,0.95,matlab_r2025a;octave_agrees,yes
+solar.eff,0.29,matlab_r2025a;octave_agrees,yes
+solar.eol,0.85,matlab_r2025a;octave_agrees,yes
+solar.illum,0.85,matlab_r2025a;octave_agrees,yes
+solar.irr,1.361,matlab_r2025a;octave_agrees,yes
+solar.yield_kWm2,0.318712175,matlab_r2025a;octave_agrees,yes
+sp,22,matlab_r2025a;octave_agrees,yes
+spine_km,[0.3 0.6 0.9 1.2 1.275],matlab_r2025a;octave_agrees,yes
+st2,[8.498 16.996 25.494 65.7722220993 106.050444199 160.152051502 214.253658805 268.355266108 321.262062267 374.168858426 427.075654584 526.704246902 626.332839219 725.961431537 825.590023854 925.218616172],matlab_r2025a;octave_agrees,yes
+stk,925218.616172,matlab_r2025a;octave_agrees,yes
+tm,8400,matlab_r2025a;octave_agrees,yes
+total_pwr_mass,[8.57304792243 19.8198743064 30.0822884225 41.2668299157 58.423845393],matlab_r2025a;octave_agrees,yes
+trunk_km,[2 4 6 8 8.5],octave_8_4_only(matlab_v2.0_dropped),yes
+ve,4414.5,matlab_r2025a;octave_agrees,yes
+x,[1 2 3 4 5],octave_8_4_only(matlab_v2.0_dropped),yes
+y,5,octave_8_4_only(matlab_v2.0_dropped),yes
+yrs,[4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19],octave_8_4_only(matlab_v2.0_dropped),yes
+ys,20,matlab_r2025a;octave_agrees,yes

@@ -1,0 +1,49 @@
+{
+ "built": "2026-09-09",
+ "canonical": "matlab_r2025a (R2025a Update 1, PCWIN64, 2026-09-08 22:47:57)",
+ "cross_check": "octave 8.4.0 + octave_shims; all common scalars bit-identical except ODE45 solution arrays",
+ "scripts": [
+  {
+   "script": "sabatier",
+   "rows": 107,
+   "matlab": 107,
+   "octave_only": 0,
+   "ode_tagged": 0
+  },
+  {
+   "script": "SELENITE_VERIFY_v5_0",
+   "rows": 214,
+   "matlab": 179,
+   "octave_only": 35,
+   "ode_tagged": 0
+  },
+  {
+   "script": "scaling_v1_3",
+   "rows": 137,
+   "matlab": 134,
+   "octave_only": 3,
+   "ode_tagged": 0
+  },
+  {
+   "script": "SELENITE_ECON_V1_3",
+   "rows": 139,
+   "matlab": 131,
+   "octave_only": 8,
+   "ode_tagged": 0
+  },
+  {
+   "script": "SELENITE_ECON_V1_4",
+   "rows": 179,
+   "matlab": 164,
+   "octave_only": 15,
+   "ode_tagged": 0
+  },
+  {
+   "script": "MOLEI_THERMAL_v1_3",
+   "rows": 240,
+   "matlab": 223,
+   "octave_only": 17,
+   "ode_tagged": 26
+  }
+ ]
+}

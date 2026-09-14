@@ -1,0 +1,148 @@
+SELENITE_ECON v1.2 — Bottom-Up Economic Model
+ECN-019 Rev B | 08-Sep-2026 22:48:17
+
+═══════════════════════════════════════════════
+  PROGRAMME METRICS (100-YEAR)
+═══════════════════════════════════════════════
+
+Total cost:                 $18.09 T
+Direct revenue:             $0.14 T
+REO extern (mining):        $0.68 T
+H2 extern (Ir→PEM):         $0.15 T
+Rocket emissions:           $-0.01 T
+Total revenue + extern:     $0.95 T
+NPV (all extern):           $-1.71 T
+NPV (direct only):          $-1.80 T
+Earth cargo (100 yr):       5402167 t (5.4 Mt)
+Starship flights (cargo):   ~54022
+Total launches (+ tankers): ~271222
+Lifetime rocket CO2:        54 Mt
+Breakeven (with extern):    NOT REACHED
+Breakeven (direct only):    NOT REACHED
+
+--- Infrastructure at Phase Boundaries ---
+Year    REO t/y Circuits  Haulers    MSR    FSP  Conv km   MOLE-I   PROBEs
+Y20           0        1        1      0      5        0      208       63
+Y25           0        1        1      0      5        0      247       96
+Y30         125      313      167      0   1409        0      302      143
+Y35         125      313      167      0   1409        0      357      190
+Y45        1000     2500     1267      5     20        5      287      230
+Y60       10000    25001    10667     46     20      200      322      260
+Y80      100000   250001    80001    451     20     4000      352      286
+Y100    1000000  2500000   600000   4500     20    55000      352      286
+
+--- Cost per tonne REO ---
+  Y25: $5219311480/t REO
+  Y30: $12952305/t REO
+  Y35: $14490388/t REO
+  Y45: $10417034/t REO
+  Y60: $2694079/t REO
+  Y80: $1950362/t REO
+  Y100: $1928377/t REO
+
+--- Earth Cargo Breakdown at Y30 (P8) ---
+  Circuits:      0 t
+  Haulers:       0 t
+  MSR:           0 t
+  FSP:           0 t
+  MOLE-I:        5 t
+  Reagent:       6 t
+  Maintenance:   81 t
+  SPA ops:       15 t
+  TOTAL:         115 t
+
+--- Earth Cargo Breakdown at Y90 (P12 midpoint) ---
+  Circuits:      128961 t (Earth frac 10%)
+  Haulers:       11951 t (Earth frac 43%)
+  Conveyors:     10007 t
+  Canisters:     2530 t
+  MSR:           2325 t (Earth frac 30%)
+  MOLE-I:        0 t
+  Reagent:       775 t (ISRU 98%)
+  Maint (all):   27078 t
+  SPA ops:       15 t
+  TOTAL:         183641 t = 1836 Starship flights
+
+--- Earth Cargo Breakdown at Y100 (1 Mt/yr target) ---
+  Circuits:      407808 t (Earth frac 10%)
+  Haulers:       40683 t (Earth frac 43%)
+  Conveyors:     29906 t
+  Canisters:     8000 t
+  MSR:           7335 t (Earth frac 30%)
+  MOLE-I:        0 t
+  Reagent:       2450 t (ISRU 98%)
+  Maint (all):   85150 t
+  SPA ops:       15 t
+  TOTAL:         581347 t = 5813 Starship flights
+
+--- Environmental Balance at Y90 (P12 midpoint) ---
+  REO production:               316228 t/yr
+  PGM production:               5.0 t/yr (286 PROBEs)
+  Ir production:                0.75 t/yr (15% of PGM)
+  Ir attributed (50%):          0.38 t/yr
+  REO extern:    $23.3B/yr
+  H2 extern:     $2.5B/yr (50% attribution)
+  Rockets:       $-0.2B/yr
+  NET:           $25.6B/yr
+  PEM installed: 7.4 GW (from attributed Ir)
+  CO2 avoided (REE mining): 9.5 Mt/yr
+  CO2 avoided (H2 via Ir):  13.4 Mt/yr
+  CO2 from rockets:         1.3 Mt/yr (fossil frac 5%)
+  NET CO2 balance:          21.6 Mt/yr
+
+--- Environmental Balance at Y100 (P12 target: 1 Mt/yr REO) ---
+  REO production:               1000000 t/yr
+  PGM production:               5.0 t/yr (286 PROBEs)
+  Ir production:                0.75 t/yr → attributed: 0.38 t/yr
+  NOTE: Ir and Fe-Ni are co-products (same M-type asteroid payload)
+  Fe-Ni to PKT foundry:         2860 t/yr
+  REO extern:    $73.7B/yr
+  H2 extern:     $2.6B/yr (50% attribution)
+  Rockets:       $-0.8B/yr
+  NET:           $75.5B/yr
+  PEM installed: 7.5 GW (from attributed Ir)
+  CO2 avoided (REE mining): 30.0 Mt/yr
+  CO2 avoided (H2 via Ir):  13.5 Mt/yr
+  CO2 from rockets:         4.0 Mt/yr (fossil frac 5%)
+  NET CO2 balance:          39.5 Mt/yr
+  Direct revenue at Y100:   $12.1B/yr (REO $11894/t × 1000000 t + PGM)
+  Annual cost at Y100:      $1928.4B/yr
+  Revenue/Cost ratio:       0.01 (direct), 0.05 (with extern)
+
+═══════════════════════════════════════════════
+  SENSITIVITY ANALYSIS
+═══════════════════════════════════════════════
+
+Canister recovery:
+  Full parachute: NPV $-1.74T (delta $-0.03T)
+  Minimal chute (baseline): NPV $-1.71T (delta $-0.00T)
+  Shuttlecock: NPV $-1.70T (delta $0.01T)
+  Stern 1.4%: NPV $-4.83T
+  Flat 2.0%: NPV $-2.85T
+  Flat 3.0%: NPV $-1.21T
+  UK Green 3.5%: NPV $-0.80T
+
+Launch cost:
+  150%: NPV $-2.40T
+  100%: NPV $-1.71T
+  50%: NPV $-1.03T
+
+H2 marginal attribution (Ir enabling):
+  25% (conservative): NPV $-1.73T (H2 extern $0.07T)
+  50% (baseline): NPV $-1.71T (H2 extern $0.15T)
+  100% (all marginal): NPV $-1.69T (H2 extern $0.30T)
+
+DG-11.6 PROBE Mk III SEP fleet (1,714 Mk III + 286 Mk I/II):
+  NPV: $-1.69T (delta $0.02T from baseline)
+  H2 extern: $0.35T | PGM revenue: $0.04T
+  Mk III fleet cost: $0.00T (LEO launch only, no lunar delivery)
+  PGM at P12: 20.0 t/yr (Mk I/II: 5.0 + Mk III: 15.0)
+  Ir at P12: 3.0 t/yr (attributed: 1.5 at 50%)
+  Fe-Ni to PKT: 11430 t/yr (Mk I/II land + Mk III EM catch)
+  MOLE-I: unchanged at ~355 (Mk III uses NO ISRU propellant)
+  Mk III never lands — EM catcher at SPA receives canisters from LLO
+
+═══════════════════════════════════════════════
+  SELENITE_ECON v1.2 COMPLETE — 4 figures saved
+  All cargo derived from unit specs × fleet deltas
+═══════════════════════════════════════════════

@@ -1,0 +1,188 @@
+================================================================
+  SELENITE v4.4 - Full Power Chain Model
+  6-Wheel MOLE-I | Hybrid Power | Bilateral Fishbone
+  Tether 1934W (load 1785 + DC-DC 99 + batt 50)
+  Substation 95.5W (was 130W) | 3x LWRHU (was 1x)
+  Ref: MOLEI_THERMAL v1.3
+================================================================
+
+== MOLE-I (6-WHEEL) ==
+  360 kg dry | 1785 W op | 65 W ka | 334 Wh batt
+  Tether draw: 1934W (load 1785 + DC-DC 99 + batt 50)
+  1000 VDC end-to-end. PDU inside WEB: 48/28/5V.
+  VEX heater: 1000V direct (SiC MOSFET, 833ohm nichrome)
+
+== CAP ==
+  5.0 kW peak | 1.0 kW standby | 1360 kg loaded
+
+== FLEET SIZING ==
+  Phase           Prb  SKP  DRT Crew |    MI   Nod |   Demand   Supply |   Margin                  
+  -----------------------------------------------------------------------------------------------
+  P3 Y4-7           3    0    0    0 |    10     2 |     0.0t    56.9t |   +56.9t  [PASS]
+  P4 Y7-9           6    1    0    4 |    25     5 |   124.1t   142.3t |   +18.2t  [PASS]
+  P5 Y9-12         10    2    1    4 |    50    10 |   237.9t   284.6t |   +46.7t  [PASS]
+  P6 Y12-15        15    4    1    6 |    85    17 |   433.8t   483.8t |   +50.0t  [PASS]
+  P7+ Y20+         30    8    0   12 |   170    34 |   867.6t   967.6t |  +100.0t  [PASS]
+
+  STOCKPILE:
+    P3: +56.9 t/yr x 3 yr -> 171 t
+    P4: +18.2 t/yr x 2 yr -> 207 t
+    P5: +46.7 t/yr x 3 yr -> 347 t
+    P6: +50.0 t/yr x 3 yr -> 497 t
+    P7+: +100.0 t/yr x 5 yr -> 997 t
+
+== NORMAL POWER BUDGET ==
+
+  Phase |   MI  Nod |     PSR    Pipe    ISRU |    Base |     Sub    Cont |   TOTAL |  Panels
+  -----------------------------------------------------------------------------------------------
+  P3    |   10    2 |   19.5     0.0    64.1  |    8.7  |     92      18  |   111 kW |   389 m2
+  P4    |   25    5 |   48.8    59.9   160.3  |   22.2  |    291      58  |   350 kW |  1226 m2
+  P5    |   50   10 |   97.7    59.9   320.6  |   25.6  |    504     101  |   605 kW |  2120 m2
+  P6    |   85   17 |  166.0    59.9   545.1  |   45.6  |    817     163  |   980 kW |  3436 m2
+  P7+   |  170   34 |  332.1    59.9  1090.1  |   51.6  |   1534     307  |  1840 kW |  6454 m2
+
+  NODE-LEVEL (v4.4):
+    Per MOLE-I at tether: 1934W (load 1785 + DC-DC 99 + batt 50)
+    Substation own: 95.5W (htr 10.5 + drums 40 + pump 10 + riser 21 + misc 14)
+    Node total: 5 MI x 1934W + 96W sub = 9767W (9.77A at 1000V)
+    P7+ PSR fleet+nodes: 332.1 kW | + pipe 59.5 + pump 0.4 = 392.0 kW
+
+== ECLIPSE POWER (CORRECTED) ==
+  During 1-3 day shadow (~2x/lunar yr):
+  MOLE-I -> keep-alive (65 W, NOT 1934 W tether draw)
+  Substations -> ON (distribute keep-alive via tethers)
+  Pipeline -> ON (freeze = replacement)
+  ISRU -> OFF | Beneficiation -> OFF
+
+  Phase |  MI ka  Nodes   Pipe    Hab  Other |   TOTAL |   FSP |      Battery
+  --------------------------------------------------------------------------------
+  P3    |   0.7    0.2    0.0    3.5    0.3  |    4.6 kW | 1x40kW | none
+  P4    |   1.6    0.5   59.5   14.0    0.4  |   76.0 kW | 2x40kW | none
+  P5    |   3.2    1.0   59.5   14.0    0.5  |   78.2 kW | 2x40kW | none
+  P6    |   5.5    1.6   59.5   14.0    1.7  |   82.3 kW | 2x40kW | 203 kWh (0.8t)
+  P7+   |  11.1    3.2   59.5   14.0    1.7  |   89.5 kW | 2x40kW | 821 kWh (3.3t)
+
+  COMPARISON (P7+ worst case):
+    0 FSP (solar-only): 7733 kWh battery (30.9 t)
+    2x FSP (hybrid):    821 kWh battery (3.3 t) - saves 27.6 t
+    FSP mass: 2x6600 kg = 13.2 t
+
+== ISRU PLANT ==
+  P3: 8.9 kg/hr | 1 PEM | 49+15 = 64 kW | LH2 6.3t LOX 50.1t
+  P4: 22.3 kg/hr | 3 PEM | 123+38 = 160 kW | LH2 15.7t LOX 125.4t
+  P5: 44.6 kg/hr | 5 PEM | 245+75 = 321 kW | LH2 31.3t LOX 250.7t
+  P6: 75.8 kg/hr | 9 PEM | 417+128 = 545 kW | LH2 53.3t LOX 426.3t
+  P7+: 151.6 kg/hr | 17 PEM | 834+256 = 1090 kW | LH2 106.6t LOX 852.5t
+
+== CAP (PHASE 2+) ==
+  800 kg dry | 1360 kg loaded | 5 kW peak | 1 kW stby
+  Transit: 45 min @ 3m/s | Floor EVA: 2 hr (40K suit limit)
+  Cable: 1102 N (5508 N at 5x SF)
+  Phase 1: reserve anchor points only
+
+== TRUNK CABLE ==
+  P3: 20 kW ->  20 A ->   16 mm2 ->   2.4 t
+  P4: 109 kW -> 109 A ->   88 mm2 ->  13.2 t
+  P5: 158 kW -> 158 A ->  127 mm2 ->  19.1 t
+  P6: 226 kW -> 226 A ->  182 mm2 ->  27.4 t
+  P7+: 392 kW -> 392 A ->  316 mm2 ->  47.6 t
+
+== MATERIAL OUTPUT ==
+  P3: 0.0t PGM + 0.0t KREEP = 0.0t/yr
+  P4: 9.0t PGM + 3.8t KREEP = 12.8t/yr
+  P5: 15.0t PGM + 7.7t KREEP = 22.7t/yr
+  P6: 22.5t PGM + 15.3t KREEP = 37.8t/yr
+  P7+: 45.0t PGM + 30.7t KREEP = 75.7t/yr
+
+== FAILURE ANALYSIS ==
+  P6: 434t -> min 77 MI | fleet 85 -> 8 buffer
+  Stockpile: 997 t (27.6 months P6 reserve)
+  Cold spares: 21 (12%)
+
+== BATTERY & CHARGING MODEL ==
+  SURPLUS DURING ILLUMINATION (17.6% of load):
+    P3: solar 130 kW - load 111 kW = 20 kW surplus -> battery
+    P4: solar 411 kW - load 350 kW = 62 kW surplus -> battery
+    P5: solar 711 kW - load 605 kW = 107 kW surplus -> battery
+    P6: solar 1153 kW - load 980 kW = 173 kW surplus -> battery
+    P7+: solar 2165 kW - load 1840 kW = 325 kW surplus -> battery
+
+  TIER 1 — CRITICAL (any shadow, any duration):
+    PSR keep-alive + substations + pipeline + habitat
+    Covered by 2x FSP (80 kW) + eclipse battery bank
+    P3: 4.6 kW critical | FSP 40 kW | batt supplement: 0 kWh (0.0t)
+    P4: 76.0 kW critical | FSP 80 kW | batt supplement: 0 kWh (0.0t)
+    P5: 78.2 kW critical | FSP 80 kW | batt supplement: 0 kWh (0.0t)
+    P6: 82.3 kW critical | FSP 80 kW | batt supplement: 203 kWh (0.8t)
+    P7+: 89.5 kW critical | FSP 80 kW | batt supplement: 821 kWh (3.3t)
+
+  TIER 2 — ISRU RIDE-THROUGH (shadows <= 2 hr):
+    P3: 64 kW ISRU x 2 hr = 128 kWh (0.5 t)
+    P4: 160 kW ISRU x 2 hr = 321 kWh (1.3 t)
+    P5: 321 kW ISRU x 2 hr = 641 kWh (2.6 t)
+    P6: 545 kW ISRU x 2 hr = 1090 kWh (4.4 t)
+    P7+: 1090 kW ISRU x 2 hr = 2180 kWh (8.7 t)
+
+  TIER 3 — ISRU SHUTDOWN (shadows > 2 hr):
+    ISRU gracefully shuts down. PEM membranes tolerate cycling.
+    Cryo cold mass maintains temperature for hours unpowered.
+    Production loss from occasional 4-8 hr shutdowns: ~1-2% annual yield.
+
+  TOTAL BATTERY INVENTORY:
+  Phase |    Eclipse |  ISRU ride |      TOTAL |    Mass
+  -------------------------------------------------------
+  P3    |        0 kWh |      128 kWh |      128 kWh |   0.5 t
+  P4    |        0 kWh |      321 kWh |      321 kWh |   1.3 t
+  P5    |        0 kWh |      641 kWh |      641 kWh |   2.6 t
+  P6    |      203 kWh |     1090 kWh |     1293 kWh |   5.2 t
+  P7+   |      821 kWh |     2180 kWh |     3001 kWh |  12.0 t
+
+  RECHARGE ANALYSIS:
+    P3: 128 kWh recharged in 6.6 hr (0.3 days) from 20 kW surplus
+    P4: 321 kWh recharged in 5.2 hr (0.2 days) from 62 kW surplus
+    P5: 641 kWh recharged in 6.0 hr (0.3 days) from 107 kW surplus
+    P6: 1293 kWh recharged in 7.5 hr (0.3 days) from 173 kW surplus
+    P7+: 3001 kWh recharged in 9.2 hr (0.4 days) from 325 kW surplus
+    Eclipse interval: ~180 days -> recharge margin: >100x at all phases
+
+================================================================
+  v4.4 SUMMARY (full power chain, ref: MOLEI_THERMAL v1.3)
+================================================================
+  MOLE-I: 6-wheel, 360kg, 1785W op / 1934W tether / 65W ka
+    v4.4: tether draw includes DC-DC losses (99W) + batt charge (50W)
+    WEB heater: 15W | VEX stby: 0W (thermal strap)
+    VEX heater: 1000V direct (SiC MOSFET, 833ohm nichrome)
+    108 conductors through WEB wall (all Manganin 100mm transition)
+    Transit battery: 334 Wh / 1.3 kg
+  SUBSTATION: 95.5W own (was 130W). WEB htr 10.5W (was 80W). 3x LWRHU.
+    Heater 10.5 + drums 40 + pump 10 + riser 21 + funnels 3 + comms 3 + ctrl 5 + sol 3
+    3x LWRHU: 33hr survival to 253K (was 1x/22hr). Mass: 126g/node.
+  Power: solar + 2x40kW FSP | CAP: 5kW peak (Phase 2+)
+  1000 VDC end-to-end: trunk->branch->substation(passive)->tether->MOLE-I
+
+  P3:  10 MI ( 2 nd) |    57t -     0t =   +57t [PASS]
+  P4:  25 MI ( 5 nd) |   142t -   124t =   +18t [PASS]
+  P5:  50 MI (10 nd) |   285t -   238t =   +47t [PASS]
+  P6:  85 MI (17 nd) |   484t -   434t =   +50t [PASS]
+  P7+: 170 MI (34 nd) |   968t -   868t =  +100t [PASS]
+
+  NORMAL POWER:                    ECLIPSE POWER:
+  P3:   111 kW |   389 m2         4.6 kW | 1x FSP + 0 kWh batt (0.0t)
+  P4:   350 kW |  1226 m2        76.0 kW | 2x FSP + 0 kWh batt (0.0t)
+  P5:   605 kW |  2120 m2        78.2 kW | 2x FSP + 0 kWh batt (0.0t)
+  P6:   980 kW |  3436 m2        82.3 kW | 2x FSP + 203 kWh batt (0.8t)
+  P7+:  1840 kW |  6454 m2        89.5 kW | 2x FSP + 821 kWh batt (3.3t)
+
+  BATTERY INVENTORY:        RECHARGE:
+  P3:    128 kWh ( 0.5t)     6.6 hr from 20 kW surplus
+  P4:    321 kWh ( 1.3t)     5.2 hr from 62 kW surplus
+  P5:    641 kWh ( 2.6t)     6.0 hr from 107 kW surplus
+  P6:   1293 kWh ( 5.2t)     7.5 hr from 173 kW surplus
+  P7+:   3001 kWh (12.0t)     9.2 hr from 325 kW surplus
+
+  Stockpile: 997t | Spares: 21 | Infra: ~115t
+
+  ** ALL PHASES BALANCED [PASS] **
+================================================================
+  9 figures generated.
+================================================================

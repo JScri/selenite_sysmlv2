@@ -1,0 +1,199 @@
+════════════════════════════════════════════════════════════════════════
+  SELENITE SCALE v1.1 — 100-Year Dual-Base Scaling Analysis
+  Shackleton (crewed) + PKT (fully autonomous)
+  Target: 1,000,000 t/yr REO by ~2100
+  Ref: SEL-PROC-001 Rev A, all subsystem specs (March 2026)
+════════════════════════════════════════════════════════════════════════
+
+== UNIT PARAMETERS ==
+  SKIP SPA: dV=1195 m/s, fuel=218 kg/hop, KREEP=400 kg/hop
+  SKIP PKT: dV=707 m/s, fuel=122 kg/hop, KREEP=400 kg/hop
+  MOLE-I: 5642 kg prop/yr (7814 kg water/yr)
+  Tanker: 6000 kg delivered, 6654 kg consumed per trip
+  Processing: 50 t/yr/circuit, 80% extraction eff
+
+== REO OUTPUT TARGETS ==
+  P7 (Y20):            0.4 t/yr REO
+  P8 (Y30):          125.0 t/yr REO
+  P9 (Y40):        1,000.0 t/yr REO
+  P10 (Y55):       10,000.0 t/yr REO
+  P11 (Y75):      100,000.0 t/yr REO
+  P12 (Y95):    1,000,000.0 t/yr REO
+
+══════════════════════════════════════════════════════════════════════
+  KREEP CHAIN: REO Target → Raw Ore → Fleet → Processing
+══════════════════════════════════════════════════════════════════════
+  Phase          REO t/yr  Conc t/yr   Raw t/yr  Sk_SP  Sk_PKT   Circ   Bene
+  ----------------------------------------------------------------------------------
+  P7 (Y20)            0.4        357      8,929      8       0      5      2
+  P8 (Y30)          125.0     15,625    390,625      8    3557    313    391
+  P9 (Y40)        1,000.0    125,000  3,125,000      8   28505   2500   3125
+  P10 (Y55)      10,000.0  1,250,000 31,250,000      8  285120  25000  31250
+  P11 (Y75)     100,000.0 12,500,000 312,500,000      8 2851270 250000 312500
+  P12 (Y95)    1,000,000.0 125,000,000 3,125,000,000      8 28512766 2500000 3125000
+
+══════════════════════════════════════════════════════════════════════
+  PROPELLANT DEMAND (t/yr) — All produced at Shackleton
+══════════════════════════════════════════════════════════════════════
+  Phase          Sk_SPA    PROBE Transfer     LS |  Total_SPA | ISRU_sup  Marg
+  ----------------------------------------------------------------------------------
+  P7 (Y20)          477      200        0    5.3 |        682 |      790    OK
+  P8 (Y30)          477      233  249,765    5.3 |    250,480 |  275,538    OK
+  P9 (Y40)          477      266 2,001,572    5.3 |  2,002,320 | 2,202,557    OK
+  P10 (Y55)         477      299 15,068,100    5.3 | 15,068,882 | 16,575,789    OK
+  P11 (Y75)         477      333 99,927,710    5.3 | 99,928,525 | 109,921,406    OK
+  P12 (Y95)         477      366 999,279,330    5.3 | 999,280,178 | 1,099,208,244    OK
+
+══════════════════════════════════════════════════════════════════════
+  ISRU + POWER (Shackleton)
+══════════════════════════════════════════════════════════════════════
+  Phase            MI Nodes   PEM  Elec_kW  Cryo_kW   PSR_kW   Total_kW Solar_m2  FSP
+  -----------------------------------------------------------------------------------------------
+  P7 (Y20)        140    14     3      155      249      271      2,122    6,651   11
+  P8 (Y30)      48840  4884  1090   56,462   91,363   94,457    292,052  915,524   11
+  P9 (Y40)     390410 39041  8707  451,023  730,347  755,053  2,325,025 7,288,480   11
+  P10 (Y55)    2938110 293811 65520 3,393,936 5,496,381 5,682,305 17,488,467 54,822,781   11
+  P11 (Y75)    19483910 1948391 434492 22,506,686 36,448,974 37,681,882 115,966,374 363,530,952   11
+  P12 (Y95)    194838070 19483807 4344889 225,065,250 364,487,891 376,816,827 1,159,645,289 3,635,251,691   11
+
+══════════════════════════════════════════════════════════════════════
+  PKT AUTONOMOUS BASE — Power + Infrastructure
+══════════════════════════════════════════════════════════════════════
+  Phase         Proc_kW   Bene  SkPad    ELZ   Total_kW   FSP
+  -----------------------------------------------------------------
+  P7 (Y20)            0      0      0      0          0     0
+  P8 (Y30)       55,440    389    890    200     80,455  1408
+  P9 (Y40)      449,100   3123   7127   1584    650,672 11387
+  P10 (Y55)    4,499,100  31248  71280  15071  6,517,004 114048
+  P11 (Y75)    44,999,100 312498 712818  99930 65,180,318 1140656
+  P12 (Y95)    449,999,100 3124998 7128192 999282 651,813,456 11406736
+
+═══════════════════════════════════════════════════════════════════════
+  PROGRAMME SCALING SUMMARY — PHASE BY PHASE
+═══════════════════════════════════════════════════════════════════════
+
+─── P7 (Y20) ─────────────────────────────────────────────
+  REO output:                    0.4 t/yr
+  Raw KREEP:                   8,929 t/yr
+  SKIP:              8 SPA +        0 PKT =        8 total
+  PROBE:            30
+  Transfer:             None | 0 (electric/yr, 0% eff)
+  PKT local:               0 t/yr propellant (solar wind H₂ + ilmenite O₂)
+  Proc circ:         5 SPA +        0 PKT =        5 total
+  Crew:             20 SPA +        0 PKT =       20 (PKT = autonomous)
+  MOLE-I:          140 (14 nodes, 1 ice sites)
+  Prop SPA:              682 t/yr
+  Power SPA:           2,122 kW
+  Power PKT:               0 kW
+  FSP:              11 SPA +        0 PKT =       11 total
+  Starship:          3 SPA +        2 crew +        0 PKT reagent +        0 REO prop
+  MassDriver:        0 Earth-return launches/yr (3.5 t REO each, no propellant)
+
+─── P8 (Y30) ─────────────────────────────────────────────
+  REO output:                  125.0 t/yr
+  Raw KREEP:                 390,625 t/yr
+  SKIP:              8 SPA +     3557 PKT =     3565 total
+  PROBE:            35
+  Transfer:         Transfer | 19,738 (1,645 tankers/yr, 47% eff)
+  PKT local:             102 t/yr propellant (solar wind H₂ + ilmenite O₂)
+  Proc circ:         5 SPA +      308 PKT =      313 total
+  Crew:             20 SPA +        0 PKT =       20 (PKT = autonomous)
+  MOLE-I:        48840 (4884 nodes, 31 ice sites)
+  Prop SPA:          250,480 t/yr
+  Power SPA:         292,052 kW
+  Power PKT:          80,455 kW
+  FSP:              11 SPA +     1408 PKT =     1419 total
+  Starship:          3 SPA +        2 crew +      151 PKT reagent +        2 REO prop
+  MassDriver:        0 Earth-return launches/yr (3.5 t REO each, no propellant)
+
+─── P9 (Y40) ─────────────────────────────────────────────
+  REO output:                1,000.0 t/yr
+  Raw KREEP:               3,125,000 t/yr
+  SKIP:              8 SPA +    28505 PKT =    28513 total
+  PROBE:            40
+  Transfer:         Transfer | 158,177 (13,182 tankers/yr, 47% eff)
+  PKT local:             812 t/yr propellant (solar wind H₂ + ilmenite O₂)
+  Proc circ:         5 SPA +     2495 PKT =     2500 total
+  Crew:             20 SPA +        0 PKT =       20 (PKT = autonomous)
+  MOLE-I:       390410 (39041 nodes, 242 ice sites)
+  Prop SPA:        2,002,320 t/yr
+  Power SPA:       2,325,025 kW
+  Power PKT:         650,672 kW
+  FSP:              11 SPA +    11387 PKT =    11398 total
+  Starship:          3 SPA +        2 crew +     1223 PKT reagent +       10 REO prop
+  MassDriver:        0 Earth-return launches/yr (3.5 t REO each, no propellant)
+
+─── P10 (Y55) ─────────────────────────────────────────────
+  REO output:               10,000.0 t/yr
+  Raw KREEP:              31,250,000 t/yr
+  SKIP:              8 SPA +   285120 PKT =   285128 total
+  PROBE:            45
+  Transfer:   MassDriver+Retro | 1,506,810 (electric/yr, 63% eff)
+  PKT local:           8,125 t/yr propellant (solar wind H₂ + ilmenite O₂)
+  Proc circ:         5 SPA +    24995 PKT =    25000 total
+  Crew:             20 SPA +        0 PKT =       20 (PKT = autonomous)
+  MOLE-I:      2938110 (293811 nodes, 1819 ice sites)
+  Prop SPA:       15,068,882 t/yr
+  Power SPA:      17,488,467 kW
+  Power PKT:       6,517,004 kW
+  FSP:              11 SPA +   114048 PKT =   114059 total
+  Starship:          3 SPA +        2 crew +    12248 PKT reagent +        0 REO prop
+  MassDriver:    2,858 Earth-return launches/yr (3.5 t REO each, no propellant)
+
+─── P11 (Y75) ─────────────────────────────────────────────
+  REO output:              100,000.0 t/yr
+  Raw KREEP:             312,500,000 t/yr
+  SKIP:              8 SPA +  2851270 PKT =  2851278 total
+  PROBE:            50
+  Transfer:   MassDriver+Catcher | 9,992,771 (electric/yr, 95% eff)
+  PKT local:          81,250 t/yr propellant (solar wind H₂ + ilmenite O₂)
+  Proc circ:         5 SPA +   249995 PKT =   250000 total
+  Crew:             20 SPA +        0 PKT =       20 (PKT = autonomous)
+  MOLE-I:     19483910 (1948391 nodes, 12061 ice sites)
+  Prop SPA:       99,928,525 t/yr
+  Power SPA:     115,966,374 kW
+  Power PKT:      65,180,318 kW
+  FSP:              11 SPA +  1140656 PKT =  1140667 total
+  Starship:          3 SPA +        2 crew +   122498 PKT reagent +        0 REO prop
+  MassDriver:   28,572 Earth-return launches/yr (3.5 t REO each, no propellant)
+
+─── P12 (Y95) ─────────────────────────────────────────────
+  REO output:            1,000,000.0 t/yr
+  Raw KREEP:           3,125,000,000 t/yr
+  SKIP:              8 SPA + 28512766 PKT = 28512774 total
+  PROBE:            55
+  Transfer:   MassDriver+Catcher | 99,927,933 (electric/yr, 95% eff)
+  PKT local:         812,500 t/yr propellant (solar wind H₂ + ilmenite O₂)
+  Proc circ:         5 SPA +  2499995 PKT =  2500000 total
+  Crew:             20 SPA +        0 PKT =       20 (PKT = autonomous)
+  MOLE-I:     194838070 (19483807 nodes, 120608 ice sites)
+  Prop SPA:      999,280,178 t/yr
+  Power SPA:   1,159,645,289 kW
+  Power PKT:     651,813,456 kW
+  FSP:              11 SPA + 11406736 PKT = 11406747 total
+  Starship:          3 SPA +        2 crew +  1224998 PKT reagent +        0 REO prop
+  MassDriver:  285,715 Earth-return launches/yr (3.5 t REO each, no propellant)
+
+═══════════════════════════════════════════════════════════════════════
+  GLOBAL REE DEMAND vs SELENITE SUPPLY
+═══════════════════════════════════════════════════════════════════════
+
+  Phase            Selenite Earth Demand      Share
+  ----------------------------------------------------
+  P7 (Y20)                0      390,000    0.0001%
+  P8 (Y30)              125      550,000    0.0227%
+  P9 (Y40)            1,000      700,000    0.1429%
+  P10 (Y55)          10,000      850,000    1.1765%
+  P11 (Y75)         100,000    1,000,000   10.0000%
+  P12 (Y95)       1,000,000    1,200,000   83.3333%
+
+  P12 target: 83% of projected 2100 demand
+  At P12: programme produces ~83% of projected global REE demand.
+  This is the threshold at which terrestrial REE mining becomes
+  economically uncompetitive — the mission objective is achieved.
+
+═══════════════════════════════════════════════════════════════════════
+  ANALYSIS COMPLETE — 6 phases, 6 figures
+  KEY FINDING: PKT autonomous base is MANDATORY for mission success.
+  Shackleton is the propellant engine. PKT is the REE factory.
+═══════════════════════════════════════════════════════════════════════
