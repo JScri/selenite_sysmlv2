@@ -81,7 +81,8 @@ def therm_ode_sub(T, Tc, Qlw, Gsub, Aw, mN, mE, mCs, mCr, mD, C):
     return (Qlw - Ql) / C
 
 
-def run(**params):
+def workspace(**params):
+    """The script's final workspace (raw Python objects, before capture)."""
     # ---- S1: material k(T) and constants -------------------------------------
     k_Ti = lambda T: np.maximum(0.1, -0.341 + 0.0327 * T - 4.16e-5 * T**2 + 2.17e-8 * T**3)
     k_Cu = lambda T: np.maximum(10, 500 - 1.2 * (T - 200) ** 2 / 500 + 50 * np.exp(-(T - 30) ** 2 / 200))
@@ -199,17 +200,22 @@ def run(**params):
     Qw_modes_val = np.array([15, 0, 15, 0, 15, 0.0]); Qe_modes_val = np.array([tR, tR, tR, tR, tR, 0])
     dur = np.array([44.8, 1.4, 44.8, 1.4, 44.8, 200]) * 3600
 
+    _mode_stats = []   # per case: [(T_start, T_end, T_max)] per mode, for the console report
+    _fail_rows = []    # MOLE-I power-failure table rows (Nl, T24, T72, T200, s253)
+    _sub_fail_rows = []  # substation power-failure rows (Nl, T6, T12, T24, T48, s253)
     for case_id in range(1, 3):
         if case_id == 1:
             Gs = 0; label = "WITHOUT SHUNT"
         else:
             Gs = shunt["G_margin"]; label = "WITH SHUNT (1.5x)"
         T0 = Tweb; tAll = np.array([]); TAll = np.array([]); tOff = 0
+        _mode_stats.append([])
         for m in range(1, 7):
             dTdt = lambda t, T, m=m, Gs=Gs: therm_ode_shunt(T, Tf, Qlw, Qe_modes_val[m - 1], Qw_modes_val[m - 1], Tweb,
                                                         Gc, wA, mN, mE, mCs, mCr, mDeg, wC, Gs, shunt["T_on"], shunt["T_off"])
             ts, Ts = _ode45(dTdt, (0, dur[m - 1]), T0)
             tAll = Summarised(np.concatenate([tAll, ts + tOff])); TAll = Summarised(np.concatenate([TAll, Ts]))
+            _mode_stats[-1].append((Ts[0], Ts[-1], Ts.max()))
             T0 = Ts[-1]; tOff = tOff + dur[m - 1]
         if case_id == 1:
             tNS = tAll; TNS = TAll
@@ -224,6 +230,7 @@ def run(**params):
         T24 = _interp1(tp / 3600, Tp, 24); T72 = _interp1(tp / 3600, Tp, 72); T200 = Tp[-1]
         i253 = _find_first(Tp < 253)
         s253 = "NEVER" if i253 is None else "%.0fhr" % (tp[i253 - 1] / 3600)
+        _fail_rows.append((Nl, T24, T72, T200, s253))
 
     # ---- S10: substation WEB thermal audit -------------------------------------
     sL = 0.35; sW = 0.25; sH = 0.25
@@ -268,6 +275,9 @@ def run(**params):
         T24 = _interp1(ts / 3600, Ts, 24); T48 = Ts[-1]
         i253 = _find_first(Ts < 253)
         s253 = "NEVER" if i253 is None else "%.0fhr" % (ts[i253 - 1] / 3600)
+        _sub_fail_rows.append((Nl, T6, T12, T24, T48, s253))
+    # S14 conclusions: interp1(Ts, ts/3600, 253, 'linear', 'extrap') on the last (Nl=4) run
+    _t253_last = _interp1_extrap(Ts, ts / 3600, 253)
 
     # ---- S13: substation power budget -------------------------------------------
     sub_pwr_W = [sQtot, 40, 10, 21, 3, 3, 5, 3]
@@ -315,4 +325,21 @@ def run(**params):
         dTdt_sp = lambda t, T, Qi=Qi: therm_ode_sub(T, Tf, Qi, sGc, sA, mN, mE, mCs, mCr, mDeg, sC)
         ts, Ts = _ode45(dTdt_sp, (0, 48 * 3600), Tweb)
 
-    return flatten(locals())
+    return dict(locals())
+
+
+def _interp1_extrap(x, y, xq):
+    """MATLAB interp1(x, y, xq, 'linear', 'extrap') for monotonic x (either direction)."""
+    x = np.asarray(x, dtype=float); y = np.asarray(y, dtype=float)
+    if x[0] > x[-1]:
+        x = x[::-1]; y = y[::-1]
+    if xq < x[0]:
+        return y[0] + (y[1] - y[0]) * (xq - x[0]) / (x[1] - x[0])
+    if xq > x[-1]:
+        return y[-1] + (y[-1] - y[-2]) * (xq - x[-1]) / (x[-1] - x[-2])
+    return float(np.interp(xq, x, y))
+
+
+def run(**params):
+    """Flattened workspace, keyed like the golden CSV."""
+    return flatten(workspace(**params))

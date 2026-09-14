@@ -6,6 +6,7 @@ Oracles: ``SELENITE_ECON_V1_3.csv`` (269 rows, the workspace after v1.3) and
 ``SELENITE_ECON_V1_4.csv`` (313 rows, the same workspace after v1.4 has
 overwritten some names and added its own). ``run_script`` returns the
 flattened workspace at either point; ``run`` returns the v1.4 (final) state.
+``workspace(script)`` returns the raw objects for ``selenite.report``.
 
 Every MATLAB variable is reproduced under the same name, including loop
 leftovers (``i``, ``y``, ``idx``, ``ef`` ...) whose final values the harness
@@ -32,9 +33,11 @@ def _pos_diff(x):
 
 
 def _fzero(f, x0: float) -> float:
-    """MATLAB ``fzero(f, x0)`` with a scalar start: expand an interval about
-    ``x0`` until the sign changes, erroring (ValueError) if a function value
-    is not finite, then Brent's method on the bracket."""
+    """MATLAB (R2025a) ``fzero(f, x0)`` with a scalar start: expand an interval
+    about ``x0`` until the sign changes, then Brent's method on the bracket.
+    When the search reaches a non-finite point or value, fzero prints
+    "Exiting fzero: aborting search ..." and returns NaN (it does not throw,
+    so the script's try/catch is not taken)."""
     fx = f(x0)
     if not math.isfinite(fx):
         raise ValueError("fzero: function value at start is not finite")
@@ -48,13 +51,13 @@ def _fzero(f, x0: float) -> float:
         a = x0 - dx
         fa = f(a)
         if not math.isfinite(fa) or not math.isfinite(a):
-            raise ValueError("fzero: aborting search, NaN/Inf encountered")
+            return float("nan")
         if (fa > 0) != (fb > 0):
             break
         b = x0 + dx
         fb = f(b)
         if not math.isfinite(fb) or not math.isfinite(b):
-            raise ValueError("fzero: aborting search, NaN/Inf encountered")
+            return float("nan")
     return float(brentq(f, a, b, xtol=1e-15, rtol=8.9e-16, maxiter=500))
 
 
@@ -806,14 +809,19 @@ def _v1_4(ws: dict) -> dict:
     return out
 
 
-def run_script(script: str) -> dict:
-    """Flattened workspace as captured after ``script`` ran."""
+def workspace(script: str = "SELENITE_ECON_V1_4") -> dict:
+    """Raw workspace after ``script`` ran (v1.4 includes the v1.3 state)."""
     ws = _v1_3()
     if script == "SELENITE_ECON_V1_3":
-        return flatten(ws)
+        return ws
     if script == "SELENITE_ECON_V1_4":
-        return flatten(_v1_4(ws))
+        return _v1_4(ws)
     raise KeyError(script)
+
+
+def run_script(script: str) -> dict:
+    """Flattened workspace as captured after ``script`` ran."""
+    return flatten(workspace(script))
 
 
 def run(**params):

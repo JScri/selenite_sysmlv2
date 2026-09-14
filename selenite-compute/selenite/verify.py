@@ -20,7 +20,8 @@ PORTED = True
 SOURCE_SCRIPT = "SELENITE_VERIFY_v5_0.m"
 
 
-def run(**params):
+def workspace(**params):
+    """The script's final workspace (raw Python objects, before capture)."""
     g0 = 9.81
     g_moon = 1.62
     Isp = 450
@@ -296,4 +297,9 @@ def run(**params):
     pv = np.array([mi["pwr"]["drive"], mi["pwr"]["drill"], mi["pwr"]["minivex"], mi["pwr"]["web"], mi["pwr"]["comms"],
                    mi["pwr"]["gbx_htr"], mi["pwr"]["drill_htr"], mi["pwr"]["recept"]], dtype=float)
 
-    return flatten(locals())
+    return dict(locals())
+
+
+def run(**params):
+    """Flattened workspace, keyed like the golden CSV."""
+    return flatten(workspace(**params))

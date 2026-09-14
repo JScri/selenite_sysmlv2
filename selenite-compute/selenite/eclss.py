@@ -19,7 +19,8 @@ PORTED = True
 SOURCE_SCRIPT = "sabatier.m"
 
 
-def run(**params):
+def workspace(**params):
+    """The script's final workspace (raw Python objects, before capture)."""
     # ---- Q8/Q9/Q10/Q12: ECLSS Sabatier + CO2 + water balance ---------------
     n_crew = 4
     CO2_per_CM = C.CO2_PER_CM
@@ -169,4 +170,9 @@ def run(**params):
     M_module_max = 23000
     M_starship_lunar = 50000
 
-    return flatten(locals())
+    return dict(locals())
+
+
+def run(**params):
+    """Flattened workspace, keyed like the golden CSV."""
+    return flatten(workspace(**params))

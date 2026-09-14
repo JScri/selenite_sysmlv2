@@ -202,6 +202,9 @@ def compare_rule(row: GoldenRow, module) -> tuple:
     Returns ('skip', reason) | ('exact',) | ('kelvin', tol) | ('hours', tol).
     """
     key = row.key
+    skips = getattr(module, "SKIP_KEYS", {})
+    if key in skips:
+        return ("skip", skips[key])
     if key in getattr(module, "ODE_SKIP_KEYS", ()):
         return ("skip", "ODE step-sequence dependent (index or figure auto-limit)")
     if key in getattr(module, "ODE_TEMPERATURE_KEYS", ()):

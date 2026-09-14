@@ -107,6 +107,18 @@ Full catalogue (82 gates) remains Wave 3's first job.
    so the dropped vectors (circuits, MSR count, `cargo_spa_msr`) are captured;
    two xfails in `test_invariants.py` turn green when they are.
 
+## Addendum 2 — 14 September 2026, night (Python port delivered)
+
+The port session ran on this branch after PR #2 merged: all six
+current-baseline scripts are in `selenite-compute/` and reproduce the v2.1
+goldens (1,404 rows, 33 declared skips) and the seven console captures.
+Details and the findings the port revealed (R2025a `fzero` returns NaN
+instead of throwing, ECON sensitivity-section inconsistencies, no
+undiscounted break-even within 200 years) are in
+`selenite-compute/CHANGELOG_PORT.md`. `docs/SESSION_BRIEF_python_port.md`,
+`docs/MIGRATION_PLAN.md` and `docs/CLAUDE_SYSML_CONTEXT.md` carry the new
+status. The model itself is unchanged by this addendum.
+
 ### Validation (after the addendum)
 `sysml-validate` 0.36.0: 15 files checked, no problems found. `pytest
 selenite-compute`: loader, invariant and source-hash tests pass; per-row
