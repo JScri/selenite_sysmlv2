@@ -14,4 +14,6 @@ sysml-diagram export --file model/RobotFleet.sysml --view gv \
     --workspace . --out diagrams/fleet_general_view.svg
 sysml-diagram export --file model/Software.sysml --view gv \
     --workspace . --out diagrams/software_view.svg
+sysml-diagram export --file model/Gates.sysml --view gv \
+    --workspace . --out diagrams/gates_view.svg
 echo "Diagrams written to diagrams/"

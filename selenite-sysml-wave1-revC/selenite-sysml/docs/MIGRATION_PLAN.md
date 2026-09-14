@@ -33,13 +33,41 @@ zero hints. Open flags F3–F8 recorded in `doc` comments, none resolved; F2
 resolved by diff (`v9.md` is the fleet winner). F5 leaves `SpaThoriumMSR.
 introducedIn` unbound by design.
 
-## Wave 3 — Requirements and phase gates
+## Python port — prerequisite track (unblocked 14 Sep 2026, evening)
 
-SEL-REQ-0xx from ECN-019 Rev C, ECN-020, Strategy v3.1, Decision Framework
-v4 (DG-8.0, DG-9.1, DG-9.3, DG-10.5, DG-11.6, DG-14.6 …) with concrete
-subjects and `satisfy` links. Hard constraints already machine-checkable
-(zero permanent crew at PKT; no SKIPs at PKT) stay; add "no ARM below the
-rim", "no catapult for ore", "no D2EHPA".
+`selenite-compute/` scaffold exists: golden loader, per-row regression
+suite (skips until each module is ported), invariants against the oracle,
+source-hash check, CI job. Sources (20 `.m`, hashes verified) and the runner
+v2.1 capture are in `selenite-goldens-runner-v2_1/`. Port bottom-up per
+`docs/SESSION_BRIEF_python_port.md` in its own session; it is the critical
+path for every derived phase.
+
+## Wave 3 — Gates and the derived programme plan (reframed 14 Sep 2026)
+
+Decision (Jason, 14 Sep 2026): timing is not gated on a predetermined phase
+where a condition on model data decides it. The documents are inconsistent
+with each other (W2-N1…N18); the model plus the Python layer become the
+single source of decisions, and documents become renderings.
+
+Three kinds of "when": **consequences** (derivable from quantities — SPA
+MSR, Mk III transition, SKIP retirement, conveyor deployment, MSR
+increments), **decision gates with criteria** (DG-x.y: breeding ratio,
+circuit throughput, site grade — the criterion and prerequisite chain are
+modelled, the pass/fail outcome is a declared assumption), and **exogenous
+inputs** (REO ramp, crew policy, capture years, launch cost, PSR capacity).
+
+Skeleton delivered at Wave 3 kick-off: `SeleniteParameters` (exogenous
+inputs with provenance; unbound where the Python layer supplies them),
+`SeleniteGates` (14 gates with criterion, evaluability, `declaredPhase`,
+`derivedPhase` unbound, prerequisites, gated elements), first derived
+bindings (`SpaThoriumMSR` via `SpaMsrIntroductionGate`; `StarshipReturnLink.
+retiredIn = md4.operationalFrom`). Remaining Wave 3 work: read
+`SELENITE_DECISION_FRAMEWORK_v4.md` and Strategy v3.1 (add both to the
+repo), complete the gate catalogue and milestones M0–M8, rebind every
+`introducedIn` to a gate or a parameter, write `tools/plan_check.py`
+(compares derived vs declared phases, prints the register automatically),
+and the SEL-REQ-0xx extraction with `satisfy` links as originally planned.
+Evaluation of derivable gates waits on the Python port.
 
 ## Wave 4 — Behaviour, interfaces, software
 
@@ -48,7 +76,15 @@ states and modes, ECN-014 valve auto-close logic as state machine and
 constraints, NAV-001 fusion as a behaviour. Th/U stage waits on the preprint.
 ECN-021 enters here once its source documents are revised.
 
-## Wave 5 — Quantities and parametrics (after the Python port)
+## Wave 5 — Quantities, parametrics and the first derived timeline (after the Python port)
+
+Adds to the original scope: the planner's first full run (every derivable
+gate evaluated on Python vectors, `derivedPhase` bound, phase year windows
+in `Phases.sysml` become outputs), and the derived-versus-document register
+replaces the hand-kept W2-N list. Timeline figures are then rendered from
+the model.
+
+### Wave 5 (original scope)
 
 Attributes populated from Python-generated data (fleet counts per phase,
 masses, power, throughput, economics), with the checker asserting model ==
