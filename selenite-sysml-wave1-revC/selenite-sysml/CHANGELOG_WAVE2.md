@@ -182,7 +182,7 @@ Enum defs cannot hold attributes (SSM036), so year windows live in
 | F2 | ledgers, this log | **Resolved by evidence** — `v9.md` wins; awaiting Jason's confirmation |
 | F3 | `HaulerRevB` | 92 % vs ~57 %; no fraction bound |
 | F4 | `MoleI` | 355@P12 vs 320→50 in P11 vs ECON v1.3 profile; no count bound |
-| F5 | `SpaThoriumMSR` | `introducedIn` unbound; P10 / P13 / Y105–140 candidates |
+| F5 | `SpaThoriumMSR` | **Bound P10** (follow-up commit, Jason's direction, documentation tally 4:2); P13 case and the ECON `cargo_spa_msr` arbiter recorded in the doc |
 | F6 | `MassDriverMd3` | ECN-020 numbering carried; scope label stale |
 | F7 | `ProgrammeTimeline` | gap explicit (`p6ToP7GapYears = 3`), checked |
 | F8 | `MoleS`, `Sinter`, `Skip`, `PemElectrolyserStack` | AUD-001/002/003/005–007 noted; no masses or powers bound |
