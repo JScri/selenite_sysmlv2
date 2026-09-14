@@ -62,16 +62,26 @@ package SelenitePower {
 
     part def SpaThoriumMSR :> PowerAsset {
         doc /* SPA thorium MSR fuelled by ThCl4 via MD-3.
-             * FLAG F5 (recorded, NOT resolved): scope P10 says commissioned at
-             * P10 (DG-10.5); scope P13 says "SPA MSR #1 at P13"; fleet v9
-             * s.18.1 says units at Y105 (P12/13 boundary), Y125 (P13/14) and
-             * Y140 (P14) with "SPA MSR (from Y50)" in the P10 row. Possibly
-             * two events (a DG-10.5 pilot and the P13 production units).
-             * introducedIn is deliberately UNBOUND until Jason rules. */
+             * FLAG F5 (bound P10 on 14 Sep 2026 at Jason's direction; reversible):
+             * evidence for P10 - scope P10 "commissioned at P10 (DG-10.5)" (the
+             * gate carries the phase number, as DG-8.0 / DG-9.1 / DG-11.6 do),
+             * fleet v9 s.18.1 P10 row "SPA MSR (from Y50)", fleet v9 App. C P10
+             * milestone "SPA MSR", and MD-3 (whose only cargo is ThCl4 for this
+             * reactor) operational P10. Evidence for P13 - scope P13 "SPA MSR #1
+             * at P13" and fleet v9 s.18.1 "1 unit Y105 (C-type, 50 MWe) + 1
+             * unit Y125 (S-type, 100 MWe) + 1 unit Y140", i.e. units sized to
+             * asteroid processing loads (SPA has no MW-scale load before
+             * Y105, which is the case for a late first unit; note Y105 is P12
+             * by the year table, W2-N7). Reading adopted: first unit at P10,
+             * the Y105/Y125/Y140 units are additions. ARBITER: ECON v1.3/v1.4
+             * carries a cargo_spa_msr vector that the v2.0 golden runner
+             * dropped; the v2.1 rerun or the Python port will show the year
+             * the model actually starts SPA MSR cargo, and that settles F5. */
+        attribute redefines introducedIn = Phase::P10;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::spa;
-        attribute candidateIntroductionEarly = Phase::P10;
         attribute candidateIntroductionLate = Phase::P13;
+        attribute asteroidProcessingUnitsFrom = Phase::P12;
     }
 
     part def PktFspField :> PowerAsset {
