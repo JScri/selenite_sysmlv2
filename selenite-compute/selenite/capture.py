@@ -85,7 +85,9 @@ def _flatten_into(flat: dict[str, Any], key: str, v: Any) -> None:
             flat[f"{key}.max"] = float(np.nanmax(a))
             flat[f"{key}.mean"] = float(nonan.mean()) if nonan.size else float("nan")
             return
-        if a.size == 1:
+        if a.size == 0:
+            flat[key] = "zeros(1,0)"  # mat2str of an empty row, e.g. find() with no hit
+        elif a.size == 1:
             flat[key] = float(a.reshape(-1)[0])
         elif a.size <= MAX_FULL:
             flat[key] = a.flatten(order="F")
