@@ -57,8 +57,9 @@ uploads) is read-only — copy it to `/home/claude/` before editing.
 5. **Source-of-truth hierarchy:** ECN-019 Rev C as amended by ECN-020 (mass driver parallel tracks) > named
    document revisions cited as authoritative > `.md` over `.docx` >
    prose estimates. Fleet questions: `SEL_ROBOT_FLEET_v9.md` is the
-   integrated authority; individual Rev A specs are manufacturing-level
-   detail.
+   integrated authority (confirmed by the F2 diff, Wave 2 — the file named
+   `v9-1.docx` is an earlier v9.0 draft); individual Rev A specs are
+   manufacturing-level detail.
    Precedence between document revisions is fixed in
    `docs/DOCUMENT_FAMILIES.md`: revision identifier beats folder date;
    markdown beats docx at equal revision; `SEL_FINAL_REPORT_v4.docx` is the
@@ -99,6 +100,15 @@ uploads) is read-only — copy it to `/home/claude/` before editing.
 - Requirement short names carry programme IDs: `<'SEL-REQ-NNN'>`.
   Every `requirement def` needs a `subject`; programme-wide ones use
   `ProgrammeContext` until Wave 3 binds them to checkable subjects.
+- **Phase-valued attributes** (decided Wave 2): `sysml-validate` 0.36.0
+  treats `enum def` as abstract, so any usage typed `: Phase` (or by any
+  other enum) raises hint SSM021. Declare them `abstract attribute x : Phase`
+  inside an `abstract part def` (`SelenitePhases::PhaseGated` for
+  `introducedIn` / `retiredIn`) and bind in concrete definitions with
+  `attribute redefines x = Phase::Pn`. Ad-hoc phase markers on a concrete def
+  are untyped value bindings: `attribute crewedFrom = Phase::P4;`.
+  `retiredIn = null` means "never retired within the programme". An open
+  flag may leave `introducedIn` deliberately unbound (F5, `SpaThoriumMSR`).
 - Fleet-scale counts stay as configuration **attributes**
   (`circuitCountAtP14`), not part multiplicities, until multiplicities
   earn their keep. Exception: genuinely enumerable assets
@@ -144,6 +154,9 @@ Map updates: <document_map.csv rows touched>
 | SEM006 | requirement def lacks subject | always declare a subject |
 | RES016 | name shadows standard library | subset with `:>` instead |
 | RES001 | unresolved reference | usually cross-directory — keep model/ flat |
+| SSM021 | usage typed only by an abstract definition (enum defs count) | phase idiom in §4; never type a usage `: Phase` directly |
+| SSM036 | enum def body may hold only enum values | year windows live in `ProgrammeTimeline`, not on `Phase` |
+| STYL007 | single-element body on one line | expand to multiple lines |
 
 Project root detection for the diagram CLI requires `.vscode/sysml/`
 (present, `project.json` = `{}`) or a git repo. `--view grv` emits CSV
@@ -151,7 +164,9 @@ tables, useful for requirement/attribute exports.
 
 ## 8. Wave roadmap
 
-See `docs/MIGRATION_PLAN.md`. Current state: **Wave 1 complete**
-(architecture skeleton, six committed-principle requirements, instance
-tree, toolchain, CI). Next: Wave 2, fleet and facility attribute
-migration from fleet v9 + Rev A/D specs.
+See `docs/MIGRATION_PLAN.md`. Current state: **Wave 2 complete**
+(architecture and temporal skeleton: every element of
+`ARCHITECTURE_BASELINE.md` §2–§7 is a phase-gated model element with
+provenance; F2 resolved; F3–F8 recorded). Next: Wave 3, requirements and
+phase gates (DG-x.y) with concrete subjects and `satisfy` links. Fleet
+authority is `SEL_ROBOT_FLEET_v9.md`, not the `v9-1.docx` file.

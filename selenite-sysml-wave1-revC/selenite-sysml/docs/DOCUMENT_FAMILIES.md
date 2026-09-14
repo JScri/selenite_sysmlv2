@@ -32,7 +32,7 @@ labels and exists nowhere else, which is why this was written down first.
 | ECN-020 | `SEL-ECN-020_MassDriver_ParallelTracks.md` | DRAFT, applied |
 | Decision Framework | `SELENITE_DECISION_FRAMEWORK_v4.md` | assumed = "Rev D" (see flags) |
 | Strategy | `SEL-T1_1-STRATEGY-v3_1.md` | |
-| Robot Fleet | `SEL_ROBOT_FLEET_v9-1.docx` | v9.md is last markdown (see flags) |
+| Robot Fleet | `SEL_ROBOT_FLEET_v9.md` | **Corrected 14 Sep 2026 (F2).** `v9-1.docx` is an earlier v9.0 draft, not a revision above v9 |
 | MTL Guide | `MTL_GUIDE_v18_revised.docx` | v18.md is last markdown |
 | Extended timeline | `selenite_extended_timeline_v3_revised.html` | P7–P14+ |
 | MTL interactive | `W2_T1_1_JS_MTL_v8_5.html` | P0–P7 |
@@ -101,7 +101,7 @@ amendment doc; their content is folded into fleet v9 and Hauler/Catapult Rev B.
 | # | Flag | My default until told otherwise |
 |---|---|---|
 | F1 | Is `SELENITE_DECISION_FRAMEWORK_v4.md` the document referred to as "Rev D" in earlier sessions? | Yes |
-| F2 | `SEL_ROBOT_FLEET_v9-1.docx` vs `v9.md`: does v9.1 contain ECN-020 propagation, or something else? Needs a diff (docx → text) in the next session. | v9.1 wins; diff before Wave 2 |
+| F2 | **Diffed 14 Sep 2026 (Wave 2).** `v9-1.docx` is internally titled v9.0, was created 15 minutes *before* `v9.docx` (docx metadata 13:12 vs 13:27, 5 Apr 2026), is the shortest of the three copies (237 / 295 / 730 extracted lines) and contains **no ECN-020 content** (no §16 mass driver network, no parallel tracks, no 523 t, no 694,444/yr; document history ends at v9/ECN-019). `v9.md` is the only copy carrying ECN-020 §16, PROBE-Scout §2.1, the Mk II retrofit §4.2, ISRU §12, crater access §13 incl. CAP, power §18 and IZ §19. Detail in `CHANGELOG_WAVE2.md`. | **`v9.md` wins; `v9-1.docx` reclassified HISTORICAL** (precedence rule 1 misfired on a filename that was never a revision label). Jason to confirm. |
 | F3 | Hauler in-situ fraction: fleet v9 / hauler brief say **92 %**; the update-session prompts and strategy items say **~57 %**. | Model as an attribute with both values flagged; do not pick |
 | F4 | MOLE-I peak and decline: **~355 at P12** (hauler brief, scope material-flow) vs **320→~50 during P11** (scope P11). Which phase does the Mk III–driven drop occur in? | Attribute per phase, conflict recorded |
 | F5 | SPA MSR: **commissioned at P10 (DG-10.5)** in scope P10 vs **SPA MSR #1 at P13** in scope P13. | Two events? Clarify |
@@ -111,6 +111,16 @@ amendment doc; their content is folded into fleet v9 and Hauler/Catapult Rev B.
 | F9 | `SEL_FINAL_REPORT_v4.docx` date not given. | Treat as April 2026, post-ECN-020 |
 | F11–F14 | See `VALUE_CONFLICTS.md` VC-01…VC-14 — goldens vs documents, surfaced by the MATLAB run. | Recorded, adjudicate at Wave 5 |
 | F10 | `scaling_v1_3.m` line 584 `92%` → `92%%`; `SELENITE_AUDIT_RESOLVE.m` P_OGA_B defect. | Fix in source before Python port |
+
+## Wave 2 observations (not F-flags; recorded in model `doc` comments)
+| # | Observation | Where |
+|---|---|---|
+| W2-N1 | MOLE-I Mk II retrofit start: baseline says "from P7"; fleet v9 §4.2 says rollover P8–P9, full fleet by end P9. Model binds Mk II `introducedIn = P7`, Mk I `retiredIn = P9`. | `RobotFleet.sysml` |
+| W2-N2 | MD-3 PKT→SPA: baseline P10; fleet v9 §16 "P9–P10 (Y43)" (Y43 is in P9). Model binds P10. | `Transport.sysml` |
+| W2-N3 | SPA EM catcher: baseline P11; fleet v9 §2.4 says the MD-3 receiver "built P9–P10 serves double duty". Model binds P11. | `Transport.sysml` |
+| W2-N4 | CAP: baseline "P4+ (anchors reserved P1)"; fleet v9 §13.5 heading "Phase 2+ Contingency". Model binds P4, `anchorsReservedFrom = P1`. | `RobotFleet.sysml` |
+| W2-N5 | P0 window: baseline Y1–3; fleet v9 App. C Y0–3. Model carries Y1–3. | `Phases.sysml` |
+| W2-N6 | The intermediate `v9.docx` quotes "5 mass drivers (~280 t YBCO lifetime)" — a third pre-ECN-020 total beside 303 t (ECN-020 §3) and 523 t. Historical only. | ledger |
 
 ## Conflicts already resolved by the rule
 - Temporary commissioning crew at PKT (3–4, P8, 6–12 months) **is** baseline;

@@ -12,16 +12,23 @@ package SeleniteProgramme {
          * master migration index.
          *
          * Package map:
-         *   SelenitePhases          - phase enumeration P0-P14
-         *   SeleniteSites           - site definitions (dual-site arch)
-         *   SeleniteFleet           - robot fleet (fleet v9 authority)
-         *   SeleniteTransport       - conveyors, mass drivers
-         *   SeleniteProcessing      - REE value chain, Th/U separation
-         *   SelenitePower           - thorium MSR fleet, solar
-         *   SeleniteHabitat         - SPA crewed infrastructure
+         *   SelenitePhases          - phase enumeration P0-P14+, PhaseGated
+         *                             base, year windows, F7 gap
+         *   SeleniteSites           - seven programme nodes (SPA, PSR floor,
+         *                             PKT, EML-2, PKT relay, DRO, Earth)
+         *   SeleniteFleet           - robot fleet (fleet v9.md authority)
+         *   SelenitePsrNetwork      - Shackleton PSR access/charging network
+         *   SeleniteHabitat         - SPA/PKT crewed and fixed facilities
+         *   SelenitePower           - SPA/PKT power, MSR fleet, F5
+         *   SeleniteProcessing      - REE value chain, flowsheet, Th/U stage
+         *   SeleniteTransport       - MD-1..5 (ECN-020), conveyors, links
+         *   SeleniteSoftware        - SENTINEL, ECN-014, NAV-001 (structure)
          *   SeleniteRequirements    - committed architectural principles
          *   SeleniteAnalysis        - calcs (MATLAB remains authority)
          *   SeleniteConfigurations  - programme instance tree
+         *
+         * Wave 2 (September 2026): architecture and temporal skeleton
+         * complete; see CHANGELOG_WAVE2.md.
          */
 
     private import SeleniteConfigurations::*;

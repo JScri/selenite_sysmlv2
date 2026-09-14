@@ -30,8 +30,10 @@ package SeleniteRequirements {
 
     requirement def <'SEL-REQ-003'> NoSkipOperationsAtPkt {
         doc /* No SKIP vehicles shall ever operate at the PKT site.
-             * Source: ECN-019 Rev C committed decision. */
+             * Source: ECN-019 Rev C committed decision. Made checkable at
+             * Wave 2 via LunarSite.skipOperationsPermitted. */
         subject site : LunarSite;
+        require constraint { site.skipOperationsPermitted == false }
     }
 
     requirement def <'SEL-REQ-004'> NoD2ehpa {
