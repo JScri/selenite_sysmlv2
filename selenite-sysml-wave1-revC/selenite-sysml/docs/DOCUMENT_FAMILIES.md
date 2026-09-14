@@ -121,6 +121,7 @@ amendment doc; their content is folded into fleet v9 and Hauler/Catapult Rev B.
 | W2-N4 | CAP: baseline "P4+ (anchors reserved P1)"; fleet v9 §13.5 heading "Phase 2+ Contingency". Model binds P4, `anchorsReservedFrom = P1`. | `RobotFleet.sysml` |
 | W2-N5 | P0 window: baseline Y1–3; fleet v9 App. C Y0–3. Model carries Y1–3. | `Phases.sysml` |
 | W2-N6 | The intermediate `v9.docx` quotes "5 mass drivers (~280 t YBCO lifetime)" — a third pre-ECN-020 total beside 303 t (ECN-020 §3) and 523 t. Historical only. | ledger |
+| W2-N7 | Asteroid "online" years do not sit in the phases the tables put them in: C-type online **Y105** is listed under P13 (Y120–140) and S-type online **Y125** under P14 (Y140–180) in both `ARCHITECTURE_BASELINE.md` §1 and fleet v9 App. C, yet by the year windows Y105 and Y125 are both inside P12 (Y80–120). M-type Y85 in P12 is consistent. The model follows the phase column (C-type line P13, S-type line P14); if the years are right, both move to P12. Ties to F5 (SPA MSR units at Y105/Y125/Y140). | `Processing.sysml`, `Power.sysml` |
 
 ## Conflicts already resolved by the rule
 - Temporary commissioning crew at PKT (3–4, P8, 6–12 months) **is** baseline;
