@@ -1,0 +1,71 @@
+SELENITE_ECON v1.1 — Programme Economic Evaluation
+ECN-019 Rev B Applied | 14-Sep-2026 22:47:26
+
+--- Environmental Balance at P12 (Y90) ---
+  REO displacement avoided damage:  $23.3B/yr
+  H2 enabling (Ir→PEM→CO2 avoided): $3.5B/yr
+  Rocket emissions (negative):      $-2.4B/yr
+  NET environmental:                $24.4B/yr
+  Rockets as % of benefits:         9.0%
+  Cumulative PEM installed:          13.7 GW
+  Annual CO2 avoided (H2):           18.4 Mt
+  Annual CO2 from rockets:           12.7 Mt
+
+═══════════════════════════════════════════════
+  SELENITE PROGRAMME — 100-YEAR ECONOMICS
+═══════════════════════════════════════════════
+
+Total programme cost (100 yr):     $5.4 trillion
+Total revenue + externalities:     $0.9 trillion
+  of which direct revenue:         $0.1 trillion
+  of which REO extern (mining):    $0.7 trillion
+  of which H2 extern (Ir→PEM):     $0.2 trillion
+  of which rocket emissions:       $-0.1 trillion
+Total Earth cargo:                 1491021 tonnes
+Total Starship flights (cargo):    ~14910
+Total launches (incl tankers):     ~208743
+Total rocket CO2 (100 yr):         574 Mt
+NPV (with all externalities):      $-0.9 trillion
+NPV (direct revenue only):         $-1.0 trillion
+Breakeven year (direct only):      NOT REACHED in 100 yr
+
+--- Cost per tonne REO by phase ---
+  P7 (Y20): $4954595084/t REO (production: 0 t/yr)
+  P8 (Y30): $125976000/t REO (production: 125 t/yr)
+  P9 (Y40): $195432030/t REO (production: 354 t/yr)
+  P10 (Y55): $11973113/t REO (production: 4642 t/yr)
+  P11 (Y70): $1225571/t REO (production: 31623 t/yr)
+  P12 (Y90): $375314/t REO (production: 316228 t/yr)
+
+═══════════════════════════════════════════════
+  SENSITIVITY ANALYSIS
+═══════════════════════════════════════════════
+
+Canister recovery NPV (with extern):
+  Full parachute ($42B): $-0.9 T
+  Minimal chute ($16B): $-0.9 T
+  Shuttlecock ($4.6B): $-0.9 T
+
+Discount rate sensitivity (NPV with extern):
+  Stern 1.4%: $-1.9 T
+  Flat 2.0%: $-1.4 T
+  Flat 3.0%: $-0.8 T
+  UK Green Book 3.5%: $-0.6 T
+
+Launch cost sensitivity (NPV with extern):
+  150% baseline: $-1.3 T
+  100% baseline: $-0.9 T
+  50% baseline: $-0.5 T
+
+--- OLD vs NEW architecture ---
+  OLD architecture NPV: $-1.3 T
+  NEW architecture NPV: $-0.9 T
+  ECN-019 improvement:  $0.4 T
+
+Saving figures...
+
+═══════════════════════════════════════════════
+  SELENITE_ECON v1.1 COMPLETE
+  4 figures saved to working directory
+  Environmental balance: rockets ~3% of benefits
+═══════════════════════════════════════════════

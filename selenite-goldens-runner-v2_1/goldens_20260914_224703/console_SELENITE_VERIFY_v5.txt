@@ -1,0 +1,153 @@
+════════════════════════════════════════════════════════════════
+  SELENITE v5.0 — Comprehensive Programme Verification
+  Fleet + Power + ECLSS Scenario C + ISRU + Fishbone Pipeline
+  72-hr conservative eclipse | 5× FSP | 19 PEM stacks
+  Ref: All subsystem specs (March 2026)
+════════════════════════════════════════════════════════════════
+
+  Crater: 8.4 km slope, 6.5 km floor dia, 33.2 km² floor
+  Solar: 0.319 kW/m² (1361 W/m² × 29% eff × 85% illum × 95% dust)
+  FSP: 40 kWe per unit, 6600 kg
+
+== MOLE-I (6-WHEEL) ==
+  360.4 kg dry | 1785 W op | 65 W ka | 334 Wh batt
+  Tether draw: 1934W (load 1785 + DC-DC 99 + batt 50)
+  Prospecting: first unit at each branch measures wt% ice
+    (drill mass / water output, 3-5 cycles at ~50 m spacing)
+
+== SUBSTATION NODE ==
+  WEB 10.5 + drums 40 + pump 10 + riser 21 + funnels 3
+  + comms 3 + ctrl 5 + solenoids 3 + enc 0.5 = 96.0 W
+  3 LWRHU (126 g) | 160 kg dry
+
+== CAP ==
+  5.0 kW peak | 1.0 kW standby | 1360 kg loaded
+
+== SKIP ORBITAL MECHANICS ==
+  Range: 100 km | v0=402 m/s | ΔV=1690 m/s | Fuel/hop=327 kg
+  FLEET v8 says: 303 kg/hop. Δ: +24 kg (OK)
+
+== FLEET SIZING ==
+  Phase           Prb  SKP  DRT Crew |    MI   Nod |   Demand   Supply |   Margin
+  -------------------------------------------------------------------------------------
+  P3 Y4-7           3    0    0    0 |     5     1 |    20.0t    28.5t |    +8.5t  [PASS]
+  P4 Y7-9           6    1    0    4 |    30     6 |   130.5t   170.8t |   +40.3t  [PASS]
+  P5 Y9-12         10    2    1    4 |    55    11 |   259.0t   313.1t |   +54.1t  [PASS]
+  P6 Y12-15        15    4    1    6 |    90    18 |   459.4t   512.3t |   +52.9t  [PASS]
+  P7+ Y20+         30    8    1   12 |   180    36 |   924.9t  1024.6t |   +99.6t  [PASS]
+
+  STOCKPILE:
+    P3: +8.5 t/yr × 3 yr -> 25 t
+    P4: +40.3 t/yr × 2 yr -> 106 t
+    P5: +54.1 t/yr × 3 yr -> 268 t
+    P6: +52.9 t/yr × 3 yr -> 427 t
+    P7+: +99.6 t/yr × 5 yr -> 925 t
+
+== PIPELINE HEATING (v5.0) ==
+  Phase  Trunk   Spine   Branch   Heat(kW)  Pump(kW)  Total(kW)
+  P3       2.0     0.3     0.2      16.4       0.0       16.4
+  P4       4.0     0.6     1.2      34.0       0.3       34.3
+  P5       6.0     0.9     2.2      51.6       0.3       51.9
+  P6       8.0     1.2     3.6      69.8       0.3       70.1
+  P7+      8.5     1.3     7.2      79.2       0.3       79.5
+
+== ECLSS SCENARIO C VERIFICATION ==
+  OGA: 0.431 kg H₂/day → 3.42 kg O₂ + 3.85 kg H₂O consumed
+  Sabatier: 2.35 kg CO₂ → 0.86 kg CH₄ + 1.93 kg H₂O
+  CO₂: crew 4.0 − Sab 2.35 − GH 1.65 = -0.00 (✓ CLOSES)
+  O₂: OGA 3.42 − crew 3.36 + GH 1.20 = +1.26 surplus
+  H₂O: crew 20.0 − WRS 18.15 − Sab 1.93 + OGA 3.85 = 3.77 ISRU makeup
+  OGA power: 943 W (0.431 kg H₂ × 52.5 kWh/kg ÷ 24)
+
+== HABITAT POWER BREAKDOWN ==
+  CDRA 1000 + OGA 940 + Sab 350 + TCCS 380 + CCAA 500
+  + WRS 500 + thermal 200 + lighting 500 + comms 150 + other 500 + conv 1000
+  = 6.0 kW no-GH (spec: 50 kW nom → ✓)
+  + LED 12000 = 18.0 kW with-GH (spec: 63 kW margin → ✓)
+
+== NORMAL POWER BUDGET (v5.0) ==
+
+  ISRU CRYO CROSS-CHECK (P7+):
+    LH₂ liq: 431.2 kg/hr × 15 kWh/kg ÷ 24 = 270 kW (ISRU-001: 200 kW)
+    LOX liq: 3422.4 kg/hr × 1.0 kWh/kg ÷ 24 = 143 kW (ISRU-001: 54 kW)
+    Total cryo calc: 412 kW vs ISRU-001 256 kW (Δ=+156 — passive cooling assumption)
+
+  Phase |   MI  Nod |    PSR   Pipe   ISRU |   Base |    Sub  Cont |  TOTAL | Panels
+  -------------------------------------------------------------------------------------
+  P3    |    5    1 |    10     16     46  |    14  |    86     17 |   103 kW |   324 m²
+  P4    |   30    6 |    59     34    241  |    40  |   374     75 |   448 kW |  1407 m²
+  P5    |   55   11 |   107     52    438  |    65  |   662    132 |   795 kW |  2494 m²
+  P6    |   90   18 |   176     70    702  |    94  |  1042    208 |  1250 kW |  3922 m²
+  P7+   |  180   36 |   352     80   1360  |   160  |  1952    390 |  2342 kW |  7348 m²
+
+  PEM STACKS: 1 3 6 9 18 (spec: 19 at P7+)
+
+== ECLIPSE POWER (72-hr conservative) ==
+  Phase | MI ka Nodes  Pipe   Hab FmZBO Other |   CRIT |   FSP |      Battery
+  ------------------------------------------------------------------------------------------
+  P3    |   0.3   0.1  16.4   0.0   0.0   1.0 |    18 kW | 1x40kW | FSP covers
+  P4    |   1.9   0.6  34.3   6.0   4.0   6.0 |    53 kW | 2x40kW | FSP covers
+  P5    |   3.6   1.1  51.9   6.0   6.0   6.5 |    75 kW | 3x40kW | FSP covers
+  P6    |   5.8   1.7  70.1   8.0   8.0   7.0 |   101 kW | 4x40kW | FSP covers
+  P7+   |  11.7   3.5  79.5  18.0  11.0   7.0 |   131 kW | 5x40kW | FSP covers
+
+  BATTERY TIERING (eclipse + ISRU ride-through):
+  Phase  Eclipse(kWh) ISRU-RT(kWh)  Total(kWh)  Mass(t)
+  P3            0           92            92       0.4
+  P4            0          482           482       1.9
+  P5            0          876           876       3.5
+  P6            0         1403          1403       5.6
+  P7+           0         2720          2720      10.9
+
+== ISRU PLANT ==
+  P3: 4.5 kg/hr | 1 PEM | elec 25 + cryo 11 + vex 5 + oth 5 = 46 kW | LH2 3.2t LOX 25.1t
+  P4: 26.8 kg/hr | 3 PEM | elec 147 + cryo 69 + vex 15 + oth 10 = 241 kW | LH2 18.9t LOX 150.3t
+  P5: 49.1 kg/hr | 6 PEM | elec 270 + cryo 126 + vex 30 + oth 12 = 438 kW | LH2 34.7t LOX 275.6t
+  P6: 80.3 kg/hr | 9 PEM | elec 442 + cryo 206 + vex 40 + oth 14 = 702 kW | LH2 56.8t LOX 451.0t
+  P7+: 160.6 kg/hr | 18 PEM | elec 883 + cryo 412 + vex 50 + oth 15 = 1360 kW | LH2 113.6t LOX 901.9t
+
+== TRUNK CABLE ==
+  P3: 26 kW ->  26 A ->   21 mm² ->   3.2 t Cu
+  P4: 93 kW ->  93 A ->   75 mm² ->  11.3 t Cu
+  P5: 159 kW -> 159 A ->  128 mm² ->  19.3 t Cu
+  P6: 246 kW -> 246 A ->  198 mm² ->  29.9 t Cu
+  P7+: 431 kW -> 431 A ->  348 mm² ->  52.3 t Cu
+
+== MATERIAL OUTPUT ==
+  P3: 0.0t PGM ore + 0.0t KREEP concentrate = 0.0t/yr
+  P4: 9.0t PGM ore + 4.4t KREEP concentrate = 13.4t/yr
+  P5: 15.0t PGM ore + 8.8t KREEP concentrate = 23.8t/yr
+  P6: 22.5t PGM ore + 17.5t KREEP concentrate = 40.0t/yr
+  P7+: 45.0t PGM ore + 35.1t KREEP concentrate = 80.1t/yr
+
+== POWER INFRASTRUCTURE MASS ==
+  Phase  Array(t)  FSP(t)  Batt(t) Hub(t)  Conv(t) Cable(t) TOTAL(t)
+  P3        1.0      6.6     0.0     0.5     0.2     0.3      8.6
+  P4        4.2     13.2     1.0     0.5     0.4     0.5     19.8
+  P5        7.5     19.8     1.0     0.5     0.6     0.7     30.1
+  P6       11.8     26.4     1.0     0.5     0.8     0.8     41.3
+  P7+      22.0     33.0     1.0     0.5     1.0     0.9     58.4
+
+== FAILURE ANALYSIS ==
+  P6: 459t demand -> min 81 MI | fleet 90 -> 9 buffer
+  Stockpile: 925 t (24.2 months P6 reserve)
+  Cold spares: 22 (12%)
+  FSP N+1: 5th reactor at P7+ covers single failure (4×40=160 kW > 156 kW crit)
+
+════════════════════════════════════════════════════════════════
+  v5.0 VERIFICATION SUMMARY
+════════════════════════════════════════════════════════════════
+  MOLE-I: 1785 W op / 1934 W tether / 65 W ka          ✓
+  Substation: 96.0 W (10-component + ECN-013 enc)    ✓
+  Scenario C: CO₂ closes (-0.00 residual)            ✓
+  Hab: 6.0 kW no-GH / 18.0 kW with-GH              ✓
+  ISRU elec (P7+): 883 kW (18 PEM stacks)            ✓
+  ISRU cryo (P7+): 412 kW (calc) vs 256 kW (spec)   ⚠
+  Total demand (P7+): 1952 kW + 20% = 2342 kW          
+  Solar (P7+): 7348 m² (0.73 ha) with dust factor    ✓
+  FSP: 5×40 kWe = 200 kW | Eclipse 72hr covered     ✓
+  Propellant: all phases PASS                        ✓
+  Pipeline: 80 kW at P7+ (MUST NOT STOP in eclipse) ✓
+
+  9 figures generated.
+  Save as: SELENITE_VERIFY_v5_0_figures.pdf
