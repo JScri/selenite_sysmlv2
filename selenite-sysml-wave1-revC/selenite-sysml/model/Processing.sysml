@@ -177,15 +177,20 @@ package SeleniteProcessing {
 
     part def CTypeProcessingLine :> AsteroidProcessingLine {
         doc /* C-type: pyrolysis + Fischer-Tropsch (water, carbon, nitrogen;
-             * propellant independence). Online Y105 (P13). */
-        attribute redefines introducedIn = Phase::P13;
+             * propellant independence). Online Y105 = P12 by the year table
+             * (W2-N7 resolved 14 Sep 2026: years authoritative; documents
+             * that file this under P13 carry a stale phase label). */
+        attribute redefines introducedIn = Phase::P12;
         attribute redefines retiredIn = null;
     }
 
     part def STypeProcessingLine :> AsteroidProcessingLine {
         doc /* S-type: Czochralski Si + Cu electrolysis (in-situ sensors and
-             * wiring). Online Y125 (P14). */
-        attribute redefines introducedIn = Phase::P14;
+             * wiring). Online Y125 = P13 by the year table (W2-N7 resolved:
+             * years authoritative; the P14 label in the documents is stale).
+             * P14 therefore has no new asteroid arrival - it is the scale-up
+             * to 2.5 Mt/yr with all three streams flowing. */
+        attribute redefines introducedIn = Phase::P13;
         attribute redefines retiredIn = null;
     }
 }

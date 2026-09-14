@@ -24,9 +24,14 @@ are open flags (see that document).
 | P9 | Y35–45 | MD-2 PKT→Earth (DG-9.1); SKIPs retired; first thorium MSR (DG-9.3); PROBE Mk II; conveyor pilot; foundry scaling | dual-site |
 | P10 | Y45–60 | MSR fleet ~74 replaces FSP at PKT; conveyor network deploying; redirect-tug development; ⚑F5 SPA MSR (DG-10.5?) | industrial |
 | P11 | Y60–80 | PROBE Mk III SEP (DG-11.6); EM catcher at SPA; M-type redirect begins (Y75); MD-4 SPA→Earth PGM; in-situ Ni-201 MSR vessels | 100 kt/yr REO |
-| P12 | Y80–120 | M-type online at DRO (Y85, Laser Ablation Truss); MD-5 DRO→SPA; C-type redirect (Y95); Mk III peak | 100k→500k t/yr |
-| P13 | Y120–140 | C-type online (Y105); propellant independence; S-type redirect (Y115); ⚑F5 SPA MSR #1; Mk III → prospecting | 500k→1.25M t/yr |
-| P14 | Y140–180 | S-type online (Y125); Si/Cu in-situ; 5 mass drivers; Earth-independence gate DG-14.6; SPA MSR #2/#3 | 1.25M→2.5M t/yr |
+| P12 | Y80–120 | M-type online at DRO (Y85, Laser Ablation Truss); MD-5 DRO→SPA; C-type redirect (Y95); **C-type online (Y105)**; propellant independence; S-type redirect (Y115); Mk III peak → prospecting | 100k→500k t/yr |
+| P13 | Y120–140 | **S-type online (Y125)**; Si/Cu in-situ; ⚑F5 SPA MSR units (demand-gated) | 500k→1.25M t/yr |
+| P14 | Y140–180 | No new asteroid arrival: scale-up with all three streams flowing; 5 mass drivers; Earth-independence gate DG-14.6; ⚑F5 SPA MSR #2/#3 | 1.25M→2.5M t/yr |
+
+Corrected 14 Sep 2026 (W2-N7): the online years Y85/Y105/Y125 are the
+authoritative sequence (20-year redirect→arrive cadence); the phase labels
+in fleet v9 App. C, the extended timeline and the final report's Figure 2/34
+had drifted one phase late for C-type and S-type. Years win.
 | P14+ | Y180+ | **Steady state 2.5 Mt/yr REO.** Mission achieved | permanent |
 
 Modelling note: every element below carries `introducedIn` / `retiredIn`

@@ -182,12 +182,28 @@ Enum defs cannot hold attributes (SSM036), so year windows live in
 | F2 | ledgers, this log | **Resolved by evidence** — `v9.md` wins; awaiting Jason's confirmation |
 | F3 | `HaulerRevB` | 92 % vs ~57 %; no fraction bound |
 | F4 | `MoleI` | 355@P12 vs 320→50 in P11 vs ECON v1.3 profile; no count bound |
-| F5 | `SpaThoriumMSR` | **Bound P10** (follow-up commit, Jason's direction, documentation tally 4:2); P13 case and the ECON `cargo_spa_msr` arbiter recorded in the doc |
+| F5 | `SpaThoriumMSR`, `SpaMsrIntroductionGate` | **Demand-gated** (Jason, 14 Sep): `introducedIn` unbound, gate as a calc, P10/P13 as candidates; final report v4 carries both |
 | F6 | `MassDriverMd3` | ECN-020 numbering carried; scope label stale |
 | F7 | `ProgrammeTimeline` | gap explicit (`p6ToP7GapYears = 3`), checked |
 | F8 | `MoleS`, `Sinter`, `Skip`, `PemElectrolyserStack` | AUD-001/002/003/005–007 noted; no masses or powers bound |
 | VC-04/05/06/07/09/10/12/13/14/21 | as cited | carried into Wave 5 |
 | W2-N1…N6 | `DOCUMENT_FAMILIES.md` | new baseline-vs-fleet-v9 phase observations |
+
+## 3a. Follow-ups after the PR opened (14 Sep 2026)
+
+- **W2-N7 resolved, years authoritative.** `CTypeProcessingLine` P13 → P12,
+  `STypeProcessingLine` P14 → P13; `ARCHITECTURE_BASELINE.md` §1 rows
+  corrected; P14 now has no new asteroid arrival. Source documents untouched
+  (obsolete by policy; the model is the source of truth).
+- **F5 re-decided as demand-gated.** `SpaThoriumMSR.introducedIn` unbound
+  again; `SeleniteAnalysis::SpaMsrIntroductionGate` added (demand vs non-MSR
+  capability vs ThCl₄ supply vs feasibility); rule 5c added to
+  `CLAUDE_SYSML_CONTEXT.md`. PKT first MSR stays P9 (DG-9.3), confirmed.
+- **Final report v4 read as integrating reference** (Figures 2, 33, 34, 48):
+  it carries both F5 readings, the W2-N7 drift, a pre-ECN-020 YBCO total
+  (W2-N8), the F6 stale MD-3 label (W2-N9), ECN-021 process-water language
+  (W2-N10) and a conditional P8 MSR prototype (W2-N11). Recorded, not modelled.
+- CI workflow restored at the git root; `.vscode/` restored in the model folder.
 
 ## 4. Counts bound (the only numerics added this wave)
 

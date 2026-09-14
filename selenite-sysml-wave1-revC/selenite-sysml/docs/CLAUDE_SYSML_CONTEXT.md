@@ -75,6 +75,13 @@ uploads) is read-only — copy it to `/home/claude/` before editing.
 5b. **Open flags F1–F10** in `docs/DOCUMENT_FAMILIES.md` are recorded, not
    resolved, in the model: conflicting values become attributes with both
    candidates and a `doc` comment naming the conflict.
+5c. **Demand-gated introductions.** Where a document gives a phase for an
+   element whose real trigger is a computed demand/capability comparison
+   (SPA MSR is the first case), do not bind `introducedIn` to the document's
+   phase. Model the gate as a `calc def` in `SeleniteAnalysis`, keep the
+   document phases as `candidateIntroduction*` attributes, and let Wave 5
+   evaluate the gate on Python-sourced vectors. Phase labels in documents
+   are candidates, not decisions.
 6. **Every definition carries provenance**: a `doc` comment citing
    source document + revision (`Source: SEL_MOLES_DESIGN_RevA.`).
    Unmigrated content gets an explicit `TODO Wave N.` marker.

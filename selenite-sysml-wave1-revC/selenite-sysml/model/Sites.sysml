@@ -115,7 +115,8 @@ package SeleniteSites {
     part def DroStation :> OrbitalNode {
         doc /* Distant retrograde orbit station: captured-asteroid processing
              * (Laser Ablation Truss, MD-5 DRO->SPA). Exists from the first
-             * capture (M-type online Y85, P12); C-type P13, S-type P14.
+             * capture (M-type online Y85, P12); C-type online Y105 (P12),
+             * S-type online Y125 (P13) - years authoritative per W2-N7.
              * Source: fleet v9 s.17, Strategy v3.1. */
         attribute redefines nodeId = SiteId::dro;
         attribute redefines existsFrom = Phase::P12;
