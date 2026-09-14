@@ -8,7 +8,10 @@ from selenite import goldens
 
 def test_all_rows_load(oracle_rows):
     scripts = {r.script for r in oracle_rows}
-    assert scripts == set(goldens.SCRIPT_TO_MODULE), scripts
+    # The merged, tagged oracle carries six scripts (1,016 rows). VISUALIZE's
+    # 47 geometry rows exist only in the raw matlab_r2025a capture.
+    assert scripts <= set(goldens.SCRIPT_TO_MODULE), scripts
+    assert "SELENITE_VISUALIZE_v3_3" not in scripts
     assert len(oracle_rows) == 1016, len(oracle_rows)
 
 

@@ -16,7 +16,7 @@ written from outputs. To unblock, copy these into `selenite-compute/matlab_sourc
 | `MOLEI_THERMAL_v1_3.m` | `selenite/thermal.py` | 240 (26 ODE rows compared at 0.05 K) |
 | `SELENITE_ECON_V1_3.m` + `SELENITE_ECON_V1_4.m` | `selenite/econ.py` (one module; v1.4 is `report()`) | 139 + 179 |
 | `scaling_v1_3.m` | `selenite/historical/scale_v1_3.py` (pre-ECN-019, historical) | 137 |
-| `SELENITE_VISUALIZE_v3_3.m` | `selenite/psr_layout.py` (geometry only) | 47 |
+| `SELENITE_VISUALIZE_v3_3.m` | `selenite/psr_layout.py` (geometry only) | 47 (raw `matlab_r2025a/` capture only; not in the merged oracle) |
 
 ## What works today
 
