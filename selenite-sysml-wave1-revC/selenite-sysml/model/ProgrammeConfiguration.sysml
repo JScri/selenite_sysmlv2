@@ -11,7 +11,9 @@ package SeleniteConfigurations {
 
     private import ScalarValues::*;
     private import SeleniteFleet::*;
+    private import SeleniteGates::*;
     private import SeleniteHabitat::*;
+    private import SeleniteParameters::*;
     private import SelenitePhases::*;
     private import SelenitePower::*;
     private import SeleniteProcessing::*;
@@ -26,6 +28,8 @@ package SeleniteConfigurations {
              * relay, DRO and PSR nodes. */
 
         part timeline : ProgrammeTimeline;
+        part parameters : ProgrammeParameters;
+        part gates : GateCatalogue;
 
         // ---- Earth and orbital nodes ----------------------------------
 

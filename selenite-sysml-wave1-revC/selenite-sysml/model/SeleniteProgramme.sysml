@@ -23,6 +23,8 @@ package SeleniteProgramme {
          *   SeleniteProcessing      - REE value chain, flowsheet, Th/U stage
          *   SeleniteTransport       - MD-1..5 (ECN-020), conveyors, links
          *   SeleniteSoftware        - SENTINEL, ECN-014, NAV-001 (structure)
+         *   SeleniteParameters      - exogenous programme inputs (Wave 3)
+         *   SeleniteGates           - decision gates DG-x.y, derivation rule
          *   SeleniteRequirements    - committed architectural principles
          *   SeleniteAnalysis        - calcs (MATLAB remains authority)
          *   SeleniteConfigurations  - programme instance tree

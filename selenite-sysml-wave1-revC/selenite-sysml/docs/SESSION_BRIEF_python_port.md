@@ -1,5 +1,11 @@
 # Session Brief — Python port of the Selenite computational layer (revised 9 Sep 2026)
 
+**Status 14 Sep 2026: BLOCKED on sources — scaffold in place.** The MATLAB
+scripts are not in the repository (only `RUN_GOLDENS.m`, `gold_run_chain.m`
+and the goldens). Put the six current-baseline `.m` files in
+`selenite-compute/matlab_sources/` (hashes checked by `tests/test_sources.py`
+against `manifest.json`); the scaffold, loader and per-row test suite in
+`selenite-compute/` are ready and CI runs them. Previously:
 **Status: UNBLOCKED.** Goldens captured under MATLAB R2025a (canonical) and
 cross-checked under Octave 8.4: every common scalar bit-identical. Oracle in
 `selenite-goldens-oracle.zip` → unpack as `selenite-compute/goldens/`.

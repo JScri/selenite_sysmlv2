@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "selenite-compute"
+version = "0.0.1"
+description = "Python port of the Selenite Programme computational layer (MATLAB goldens are the oracle)"
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.26", "scipy>=1.11", "pandas>=2.0", "numpy-financial>=1.0"]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[tool.setuptools.packages.find]
+include = ["selenite*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q -rs"
