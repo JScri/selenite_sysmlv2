@@ -1,0 +1,62 @@
+═══════════════════════════════════════════════════════
+  SELENITE AUDIT RESOLUTION SCRIPT
+  Resolving: Q2, Q4, Q8/Q9/Q10/Q12, Q15, Q19
+═══════════════════════════════════════════════════════
+
+━━━ Q8/Q9/Q10/Q12: COMPLETE ECLSS MASS BALANCE ━━━
+
+Crew metabolic rates (4 crew):
+  CO₂ exhaled:    4.00 kg/day
+  O₂ consumed:    3.36 kg/day
+  H₂O consumed:   20.00 kg/day
+
+Greenhouse (48 m², from P5):
+  CO₂ demand:     1.4–1.9 kg/day (nom 1.65)
+  O₂ produced:    ~1.20 kg/day
+
+──── SCENARIO A: OGA at crew O₂ demand (RECOMMENDED) ────
+  OGA O₂ output:  3.86 kg/day
+  OGA H₂ output:  0.486 kg/day
+  OGA H₂O input:  4.35 kg/day
+  Sabatier CO₂ consumed: 2.65 kg/day
+  Sabatier CH₄ produced: 0.97 kg/day
+  Sabatier H₂O recovered: 2.17 kg/day
+  CO₂ remaining for greenhouse: 1.35 kg/day
+  Greenhouse demand: 1.65 kg/day
+  ✗ INSUFFICIENT: deficit 0.30 kg/day
+  O₂ surplus: 1.70 kg/day (OGA excess + greenhouse)
+  WRS recovered: 18.15 kg/day
+  Water deficit (ISRU makeup): 4.02 kg/day
+  OGA power: 1064 W continuous
+
+──── SCENARIO B: OGA at 0.73 kg H₂/day (original spec) ────
+  OGA O₂ output:  5.79 kg/day
+  OGA H₂ output:  0.730 kg/day
+  OGA H₂O input:  6.52 kg/day
+  Sabatier CO₂ consumed: 3.98 kg/day
+  Sabatier CH₄ produced: 1.45 kg/day
+  Sabatier H₂O recovered: 3.26 kg/day
+  CO₂ remaining for greenhouse: 0.02 kg/day
+  O₂ surplus (must store/vent): 3.63 kg/day (1326 kg/yr)
+  Water deficit (ISRU makeup): 5.11 kg/day
+
+──── SCENARIO C: BALANCED (Sabatier + GH = crew CO₂) ────
+  REQUIRED H₂ from OGA: 0.431 kg/day
+  OGA O₂ output:  3.42 kg/day
+  OGA H₂O input:  3.85 kg/day
+  Sabatier CO₂:   2.35 kg/day (59% of crew)
+  Greenhouse CO₂: 1.65 kg/day (41% of crew)
+  CH₄ vented:     0.86 kg/day (313 kg/yr)
+  H₂O recovered:  1.92 kg/day
+  O₂ surplus:     1.26 kg/day (459 kg/yr)
+  Water deficit:   3.77 kg/day (ISRU makeup)
+  OGA power:      942 W continuous
+
+━━━ SCENARIO COMPARISON ━━━
+                    Scen A (crew O₂)  Scen B (0.73 H₂)  Scen C (balanced)
+  H₂ from OGA:     0.486 kg/day       0.730 kg/day       0.431 kg/day
+  CO₂ to Sabatier: 2.65 kg/day       3.98 kg/day       2.35 kg/day
+  CO₂ to GH:       1.35 kg/day       0.02 kg/day       1.65 kg/day
+  GH CO₂ met?:     NO               NO               YES
+  O₂ surplus:      1.70 kg/day       3.63 kg/day       1.26 kg/day
+  ISRU H₂O:        4.02 kg/day       5.11 kg/day       3.77 kg/day

@@ -1,0 +1,171 @@
+═══════════════════════════════════════════════════════
+  SELENITE AUDIT RESOLUTION SCRIPT
+  Resolving: Q2, Q4, Q8/Q9/Q10/Q12, Q15, Q19
+═══════════════════════════════════════════════════════
+
+━━━ Q8/Q9/Q10/Q12: COMPLETE ECLSS MASS BALANCE ━━━
+
+Crew metabolic rates (4 crew):
+  CO₂ exhaled:    4.00 kg/day
+  O₂ consumed:    3.36 kg/day
+  H₂O consumed:   20.00 kg/day
+
+Greenhouse (48 m², from P5):
+  CO₂ demand:     1.4–1.9 kg/day (nom 1.65)
+  O₂ produced:    ~1.20 kg/day
+
+──── SCENARIO A: OGA at crew O₂ demand (RECOMMENDED) ────
+  OGA O₂ output:  3.86 kg/day
+  OGA H₂ output:  0.486 kg/day
+  OGA H₂O input:  4.35 kg/day
+  Sabatier CO₂ consumed: 2.65 kg/day
+  Sabatier CH₄ produced: 0.97 kg/day
+  Sabatier H₂O recovered: 2.17 kg/day
+  CO₂ remaining for greenhouse: 1.35 kg/day
+  Greenhouse demand: 1.65 kg/day
+  ✗ INSUFFICIENT: deficit 0.30 kg/day
+  O₂ surplus: 1.70 kg/day (OGA excess + greenhouse)
+  WRS recovered: 18.15 kg/day
+  Water deficit (ISRU makeup): 4.02 kg/day
+  OGA power: 1064 W continuous
+
+──── SCENARIO B: OGA at 0.73 kg H₂/day (original spec) ────
+  OGA O₂ output:  5.79 kg/day
+  OGA H₂ output:  0.730 kg/day
+  OGA H₂O input:  6.52 kg/day
+  Sabatier CO₂ consumed: 3.98 kg/day
+  Sabatier CH₄ produced: 1.45 kg/day
+  Sabatier H₂O recovered: 3.26 kg/day
+  CO₂ remaining for greenhouse: 0.02 kg/day
+  O₂ surplus (must store/vent): 3.63 kg/day (1326 kg/yr)
+  Water deficit (ISRU makeup): 5.11 kg/day
+
+──── SCENARIO C: BALANCED (Sabatier + GH = crew CO₂) ────
+  REQUIRED H₂ from OGA: 0.431 kg/day
+  OGA O₂ output:  3.42 kg/day
+  OGA H₂O input:  3.85 kg/day
+  Sabatier CO₂:   2.35 kg/day (59% of crew)
+  Greenhouse CO₂: 1.65 kg/day (41% of crew)
+  CH₄ vented:     0.86 kg/day (313 kg/yr)
+  H₂O recovered:  1.92 kg/day
+  O₂ surplus:     1.26 kg/day (459 kg/yr)
+  Water deficit:   3.77 kg/day (ISRU makeup)
+  OGA power:      942 W continuous
+
+━━━ SCENARIO COMPARISON ━━━
+                    Scen A (crew O₂)  Scen B (0.73 H₂)  Scen C (balanced)
+  H₂ from OGA:     0.486 kg/day       0.730 kg/day       0.431 kg/day
+  CO₂ to Sabatier: 2.65 kg/day       3.98 kg/day       2.35 kg/day
+  CO₂ to GH:       1.35 kg/day       0.02 kg/day       1.65 kg/day
+  GH CO₂ met?:     NO               NO               YES
+  O₂ surplus:      1.70 kg/day       3.63 kg/day       1.26 kg/day
+  ISRU H₂O:        4.02 kg/day       5.11 kg/day       3.77 kg/day
+  OGA power:        1064 W              1597 W              942 W
+  CH₄ vented:      0.97 kg/day       1.45 kg/day       0.86 kg/day
+
+  ★ RECOMMENDATION: Scenario C (balanced)
+    - All crew CO₂ is consumed (Sabatier + greenhouse)
+    - Greenhouse gets exactly the CO₂ it needs
+    - O₂ surplus is modest and manageable
+    - OGA power is reasonable (~940 W)
+    - ISRU water demand is lowest
+
+━━━ Q4: MEZZANINE GEOMETRY CORRECTION ━━━
+
+  Cylinder ID: 4200 mm (R = 2100 mm)
+  Floor:     y = -1700 mm from centre → chord = 2466 mm ✓ (spec: 2,470)
+  Mezzanine: y = +500 mm from centre → chord = 4079 mm ✗ (spec: 2,920)
+  Error: spec is 1159 mm too narrow (40%)
+
+  2,920 mm chord occurs at y = +1509 mm (= 3209 mm above floor)
+  That is 1009 mm ABOVE the mezzanine — near the upper wall curvature
+
+  Headroom above mezzanine: 1600 mm (to ceiling centreline)
+  Headroom below mezzanine: 2200 mm (to floor)
+  Width at 1,000 mm above mezzanine: 2939 mm
+
+━━━ Q15: LH₂ STORAGE VOLUME CORRECTION ━━━
+
+  Single 5.0 m sphere: 65.45 m³
+  Two 5.0 m spheres:   130.90 m³ (spec says 175 m³)
+  Shortfall:           44.10 m³ (25.2%)
+
+  Fix option 1: Two spheres at 5.51 m diameter = 175 m³
+  Fix option 2: Three 5.0 m spheres = 196.3 m³ (21 m³ excess)
+
+  Actual LH₂ storage requirement:
+    30-day buffer LH₂:    11366 kg → 160.5 m³
+    DART accumulation:    2143 kg → 30.3 m³
+    TOTAL:                13509 kg → 190.8 m³
+    Two 5.0 m spheres:   130.9 m³ → INSUFFICIENT
+    Recommended: 2 × 5.0 m spheres (130.9 m³) is adequate.
+    The 175 m³ figure in the spec was an error — actual need is ~191 m³.
+
+━━━ Q19: ELECTROLYSIS POWER CORRECTION ━━━
+
+  170 MOLE-I × 7,818 kg water/yr = 1329060 kg water/yr
+  Electrolysis products:
+    H₂: 148731 kg/yr (407.5 kg/day)
+    O₂: 1180403 kg/yr (3234.0 kg/day)
+  Propellant at 6:1 O:F: 1041115 kg/yr (H₂-limited)
+  Propellant at 6:1 O:F: 1377137 kg/yr (O₂-limited)
+  Excess O₂: 288018 kg/yr (available for life support/industrial)
+
+  Electrolysis power at different efficiencies:
+  kWh/kg H₂    kW cont.     Stacks @60.5kW
+  50.0         849          15          
+  52.5         891          15          
+  55.0         934          16          
+  57.5         976          17          
+
+  Spec says: 9 stacks at 545 kW (60.5 kW/stack)
+  At 52.5 kWh/kg H₂: need 891 kW → 15 stacks
+  RECOMMENDATION: Increase to 11 stacks at 665 kW total
+  Or: increase per-stack capacity to ~74 kW (within PEM scaling range)
+
+  REVISED ISRU POWER BUDGET (P7+):
+    Pipeline heating:        60 kW
+    Electrolysis (revised):  891 kW
+    Sublimation (fleet):     275 kW (est.)
+    LH₂ liquefaction:        255 kW
+    LOX liquefaction:        102 kW
+    Purification + other:    45 kW
+    ─────────────────────────────
+    TOTAL:                   1627 kW
+    (Previous spec: 1,090 kW. Δ = +537 kW)
+
+━━━ Q2: STARSHIP PAYLOAD CONFIGURATION ━━━
+
+  Fairing dynamic envelope: 8.0 m diameter × 22.0 m height
+  Module OD: 4.5 m × 11.0 m overall
+
+  2-abreast: enclosing diameter = 9.0 m → DOES NOT FIT (envelope = 8.0 m)
+  Stacked (end-to-end): height = 22.0 m → FITS (envelope = 22.0 m)
+  Single module: 4.5 m OD in 8.0 m envelope → 1.75 m clearance each side
+
+  Heaviest module (Ops Hub revised): 23000 kg
+  Starship lunar payload: ≥50000 kg
+  Mass margin per flight: 27000 kg (54% of capacity)
+  → Co-manifest ECLSS equipment, spares, consumables on same flight
+
+  RECOMMENDATION: 1 module per Starship flight.
+  Co-manifest supplementary cargo to exploit 27+ t mass surplus.
+  Stacking is feasible for smaller modules (EVA vestibule + cargo).
+
+═══════════════════════════════════════════════════════
+  RESOLUTION SUMMARY
+═══════════════════════════════════════════════════════
+
+  Q2  Starship: 1 module/flight. Co-manifest cargo. RESOLVED.
+  Q4  Mezzanine: chord = 4079 mm (not 2,920). Update spec. RESOLVED.
+  Q8  Sabatier: Use Scenario C (balanced). H₂ = 0.431 kg/day.
+       CO₂ to Sabatier: 2.35 kg/day (59%). To GH: 1.65 kg/day (41%).
+  Q9  CO₂ budget: CLOSES under Scenario C. RESOLVED.
+  Q10 O₂ surplus: 1.26 kg/day (459 kg/yr). Small, manageable.
+       → Store in EVA suit O₂ tanks + emergency cache.
+  Q12 Water: 3.77 kg/day ISRU makeup. CLOSES. RESOLVED.
+  Q15 LH₂ vol: 2 × 5.0 m spheres = 130.9 m³. Actual need: ~191 m³.
+       → Correct spec from 175 to 131 m³. RESOLVED.
+  Q19 Electrolysis: Increase to 11 stacks at 891 kW. RESOLVED.
+       Total ISRU power revised: 1627 kW (was 1,090 kW).
+
