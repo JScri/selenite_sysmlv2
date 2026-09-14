@@ -192,6 +192,42 @@ def assert_matches(row: GoldenRow, actual: Any) -> None:
         f"{row.id}: {actual} vs {exp}")
 
 
-def ode_row_is_compared(row: GoldenRow) -> bool:
-    """Only the temperatures the brief names are compared for ODE-tagged rows."""
-    return row.is_ode and any(frag in row.key for frag in ODE_COMPARED_KEY_FRAGMENTS)
+ABS_TOL_ODE_HOURS = 1.0
+
+
+def compare_rule(row: GoldenRow, module) -> tuple:
+    """How to compare one row, honouring the port brief's ODE rules and any
+    ODE_* key sets a port module declares.
+
+    Returns ('skip', reason) | ('exact',) | ('kelvin', tol) | ('hours', tol).
+    """
+    key = row.key
+    if key in getattr(module, "ODE_SKIP_KEYS", ()):
+        return ("skip", "ODE step-sequence dependent (index or figure auto-limit)")
+    if key in getattr(module, "ODE_TEMPERATURE_KEYS", ()):
+        return ("kelvin", ABS_TOL_ODE_KELVIN)
+    if key in getattr(module, "ODE_TIME_STRING_KEYS", ()):
+        return ("hours", ABS_TOL_ODE_HOURS)
+    stem, _, stat = key.rpartition(".")
+    if row.is_ode or stem in getattr(module, "ODE_ARRAY_STEMS", ()):
+        if stat in ("numel", "sum", "mean"):
+            return ("skip", "ODE step-sequence dependent statistic")
+        if stat in ("min", "max"):
+            # temperature arrays at 0.05 K; time grids are exact (span endpoints)
+            return ("kelvin", ABS_TOL_ODE_KELVIN) if stem[:1].isupper() else ("exact",)
+        return ("skip", "ODE step-sequence dependent")
+    return ("exact",)
+
+
+def assert_with_rule(row: GoldenRow, actual: Any, rule: tuple) -> None:
+    if rule[0] == "kelvin":
+        assert abs(float(actual) - float(row.value)) <= rule[1], (
+            f"{row.id}: {actual} vs {row.value} exceeds {rule[1]} K")
+    elif rule[0] == "hours":
+        exp, got = str(row.value), str(actual)
+        if exp == "NEVER" or got == "NEVER":
+            assert exp == got, f"{row.id}: {got!r} vs {exp!r}"
+        else:
+            assert abs(float(got.rstrip("hr")) - float(exp.rstrip("hr"))) <= rule[1], f"{row.id}: {got} vs {exp}"
+    else:
+        assert_matches(row, actual)
