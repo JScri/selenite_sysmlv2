@@ -1,0 +1,28 @@
+SELENITE GOLDENS CAPTURE — Quick start
+
+1. Copy ALL your .m scripts into this folder (from your dated folders; 
+   same-name files are identical, keep one copy).
+
+2. You should have:
+   - RUN_GOLDENS.m (main script)
+   - gold_run_chain.m (helper)
+   - octave_shims/ (directory; only needed for Octave fallback)
+   - sabatier.m
+   - SELENITE_VERIFY_v5_0.m
+   - scaling_v1_3.m
+   - SELENITE_ECON_V1_3.m
+   - SELENITE_ECON_V1_4.m
+   - molei_thermal_v1_3.m
+   - SELENITE_VISUALIZE_v3_3.m
+   - SELENITE_AUDIT_RESOLVE.m (will fail — expected; P_OGA_B undefined)
+   - (older versions optional — for historical tracing only)
+
+3. MATLAB (canonical):
+   Open RUN_GOLDENS.m and press Run (F5). Nothing else.
+
+4. Octave (fallback, if MATLAB licence expired):
+   octave --no-gui --quiet --eval "addpath('octave_shims', '-begin'); RUN_GOLDENS"
+
+Both create: goldens_<timestamp>/ folder with .csv, .json, .txt, manifest.json
+
+Zip that folder and add it to project knowledge as your oracle.

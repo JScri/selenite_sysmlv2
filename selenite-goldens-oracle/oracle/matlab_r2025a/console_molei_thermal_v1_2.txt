@@ -1,0 +1,185 @@
+================================================================
+  MOLE-I THERMAL v1.2
+  v1.1 base + wax-actuated thermal shunt (n-tetradecane)
+================================================================
+
+== S1: Constants. T_floor=40 T_wall=25 T_web=273 dT=233 K
+  WEB: A=1.015 m^2, C=223300 J/K (62 Wh/K)
+
+== S2: WEB heat loss (v1.1 paths, unchanged) ==
+
+  Path                                Q (W)
+  --------------------------------------------
+  A: PEEK standoffs (4x)              1.939
+  B: Drain pipe Ti+PEEK               0.054
+  C: Cables (49 Mn)                   0.359
+  D: VEX tube PEEK                    0.038
+  E: MLI penetrations 5x              2.500
+  F: Valve actuator                   1.794
+  G: Feed chute 50%                   1.674
+  H: MLI 20-layer                     0.391
+  --------------------------------------------
+  SUBTOTAL                            8.748
+  30%% margin                         2.624
+  TOTAL                              11.373
+
+  G_web = 0.04881 W/K | 57W spec -> 5.0x reduction
+
+== S3: LWRHU sizing ==
+  N | Q_in | T_eq(40K) | T_eq(25K) | >250K fl | >250K wl
+  ------------------------------------------------------------
+  3 | 3.3W |  107.6K   |   92.6K   | no      | no 
+  4 | 4.4W |  130.1K   |  115.1K   | no      | no 
+  5 | 5.5W |  152.7K   |  137.7K   | no      | no 
+  6 | 6.6W |  175.2K   |  160.2K   | no      | no 
+  7 | 7.7W |  197.8K   |  182.8K   | no      | no 
+  8 | 8.8W |  220.3K   |  205.3K   | no      | no 
+  9 | 9.9W |  242.8K   |  227.8K   | no      | no 
+  10 | 11.0W |  265.4K   |  250.4K   | YES     | YES
+  Indefinite 250K: 10 LWRHU (11.0W)
+
+== S4: mini-VEX thermal strap ==
+  VEX loss at 200K: 3.07W | Strap cap: 7.24W | Residual htr: 0.00W
+  Strap draws 3.07W from WEB
+
+== S5: Tether connector ==
+  PEEK+Mn: 3.26W (spec 5W). Passive funnel dock. No arm.
+  Tether stays on during dump. Disconnect only for construction.
+  Construction tethers: heated drum at support base,
+  same funnel-cradle geometry, auto-spool after disconnect.
+
+== S6: Wax-actuated thermal shunt (NEW v1.2) ==
+  Problem: during drilling, 23.8W input vs 11.4W loss
+  Uncontrolled T_eq = 528K (DANGEROUS)
+
+  SHUNT SPECIFICATION:
+    Wax: n-tetradecane (C14H30), mp = 278.7 K
+    Mechanism: wax melts -> piston presses Cu pad to chassis
+    Wax solidifies -> spring retracts pad (shunt opens)
+    Hysteresis: ~3K (inherent from wax thermal mass)
+    NO POWER, NO ELECTRONICS, FULLY PASSIVE
+
+  SIZING:
+    G_web (existing):     0.0488 W/K
+    G_shunt (nominal):    0.0512 W/K
+    G_shunt (1.5x margin):0.0768 W/K  <- RECOMMENDED
+    Cu strap: 100mm long, 10.4 mm^2 nominal, 15.7 mm^2 oversized
+    Oversized: flat strip ~10 x 1.6 mm (trivial)
+    Mass: ~50-80g total (wax capsule + Cu strap + spring)
+
+  DRILLING EQUILIBRIUM:
+    No shunt:      528K (RUNAWAY)
+    Nominal shunt: 278K
+    Oversized:     229K  <- DESIGN POINT
+
+  POWER FAILURE: shunt disengages at 275K
+    Below 275K: G = G_web only. Same LWRHU survival as v1.1.
+    Shunt does NOT degrade power-failure performance.
+
+== S7: Keep-alive budget ==
+  Subsystem                | Original | Realistic | Optimistic
+  ------------------------------------------------------------
+  WEB heater               |   57.0W |     14.4W |      14.4W
+  Gearbox 6x5W             |   30.0W |     30.0W |      30.0W
+  Drill bearing            |   15.0W |     15.0W |      15.0W
+  Receptacle               |    5.0W |      5.0W |       0.0W
+  VEX standby              |   25.0W |      0.0W |       0.0W
+  Thermal shunt            |    0.0W |      0.0W |       0.0W
+  ------------------------------------------------------------
+  TOTAL                    |    132W |       64W |        59W
+  LWRHUs                   |  8x1.1 |    8x1.1 |     8x1.1
+  Thermal shunt            |   none |  passive |   passive
+
+  Transit battery (KA x 4.7hr x 1.10):
+    Original: 132W -> 682 Wh (2.7 kg)
+    Realistic: 64W -> 333 Wh (1.3 kg)
+    Optimistic: 59W -> 307 Wh (1.2 kg)
+
+== S8: Multi-mode transient (with vs without shunt) ==
+
+  WITHOUT SHUNT (G_shunt=0.0000 W/K):
+    DRILL: 273.0K -> 283.7K (max 283.7K)
+    DUMP: 283.7K -> 283.7K (max 283.7K)
+    DRILL: 283.7K -> 294.1K (max 294.1K)
+    DUMP: 294.1K -> 294.0K (max 294.1K)
+    DRILL: 294.0K -> 304.1K (max 304.1K)
+    FAIL: 304.1K -> 300.1K (max 304.1K)
+
+  WITH SHUNT (1.5x oversized) (G_shunt=0.0768 W/K):
+    DRILL: 273.0K -> 278.0K (max 278.0K)
+    DUMP: 278.0K -> 277.8K (max 278.0K)
+    DRILL: 277.8K -> 278.0K (max 278.0K)
+    DUMP: 278.0K -> 277.8K (max 278.0K)
+    DRILL: 277.8K -> 278.0K (max 278.0K)
+    FAIL: 278.0K -> 274.9K (max 278.0K)
+
+  TRANSIT (battery, T_amb=25K, with shunt):
+    4 LWRHU + batt: T@4.7hr=272.6K T@6hr=272.5K
+    6 LWRHU + batt: T@4.7hr=272.8K T@6hr=272.7K
+    8 LWRHU + batt: T@4.7hr=273.0K T@6hr=273.0K
+
+  POWER FAILURE (LWRHU only, T_amb=40K, shunt present):
+  N  | T@24hr | T@72hr | T@200hr | t(253K)
+  --------------------------------------------------
+   0 | 269.6K | 263.1K | 246.6K  | 149hr
+   4 | 271.3K | 268.1K | 259.9K  | NEVER
+   6 | 272.2K | 270.6K | 266.5K  | NEVER
+   8 | 273.0K | 273.1K | 273.2K  | NEVER
+  10 | 273.9K | 275.0K | 275.0K  | NEVER
+
+== S9: Waste heat sensitivity (with oversized shunt) ==
+  G_total (web+shunt): 0.1256 W/K
+  Waste heat | Total Q_in | T_eq (drilling) | Status
+  -------------------------------------------------------
+       0W    |    8.8W    |  110.1K          | NOMINAL
+       5W    |   13.8W    |  149.9K          | NOMINAL
+      10W    |   18.8W    |  189.7K          | NOMINAL
+      15W    |   23.8W    |  229.5K          | NOMINAL
+      20W    |   28.8W    |  269.3K          | NOMINAL
+      25W    |   33.8W    |  309.1K          | ACCEPTABLE
+      30W    |   38.8W    |  348.9K          | HIGH
+
+== S10: MLI degrade vs LWRHU (LWRHU-only, shunt OFF) ==
+  Deg  | 4LW| 5LW| 6LW| 7LW| 8LW| 9LW|10LW
+  ------------------------------------------------------------
+   1.0 |!132 |!155 |!178 |!201 |!224 |!247 | 271 
+   1.5 |!131 |!154 |!177 |!200 |!222 |!245 | 268 
+   2.0 |!130 |!153 |!175 |!198 |!220 |!243 | 265 
+   2.5 |!129 |!151 |!174 |!196 |!218 |!241 | 263 
+   3.0 |!128 |!150 |!172 |!194 |!216 |!238 | 260 
+   3.5 |!127 |!149 |!171 |!193 |!214 |!236 | 258 
+   4.0 |!126 |!148 |!169 |!191 |!213 |!234 | 256 
+   4.5 |!125 |!147 |!168 |!189 |!211 |!232 | 253 
+   5.0 |!124 |!146 |!167 |!188 |!209 |!230 | 251 
+  (! = below 250K Li-ion threshold)
+
+== S11: Thermal control requirements ==
+  SENSORS: 8 WEB internal + 10 external = 18 channels
+  HEATER CIRCUITS: 10 switched (WEB, 6x gbx, drill, conn, VEX)
+  WEB THERMOSTAT: bang-bang 273+/-2K, ~15W max element
+  THERMAL SHUNT: fully passive (wax switch), no control needed
+  DOCKING: passive funnel-cradle, rear prox sensors, PLC confirm
+  CONSTRUCTION TETHER: heated drum at support base,
+    same funnel-cradle geometry, auto-spool after disconnect
+  NO ARM OR MANIPULATOR REQUIRED
+
+================================================================
+  v1.2 CONCLUSIONS
+================================================================
+  1. WEB heat loss: 11.4W (57W spec -> 5x reduction)
+  2. Drilling waste heat (15W) + 8 LWRHU (8.8W) = 23.8W input
+     Without shunt: T climbs to >300K (RUNAWAY)
+     With shunt: T stabilises at ~229K (SAFE)
+  3. Shunt: n-tetradecane wax switch + 16mm^2 Cu strap
+     Fully passive. ~50-80g. No power, no control.
+     Engages >278K, disengages <275K.
+  4. Power failure: shunt auto-OFF. 8 LWRHU holds >253K
+     for >200hr. Identical to v1.1.
+  5. VEX standby: 25W -> 0W (Cu strap from WEB)
+  6. Keep-alive: 132W -> 64W. Battery: 682 -> 333 Wh
+  7. Passive funnel-cradle docking everywhere. No arm.
+     Construction tethers: heated drum at support base.
+  8. 18 sensors + 10 heater circuits + 1 passive shunt.
+================================================================
+  8 figures generated.
+================================================================

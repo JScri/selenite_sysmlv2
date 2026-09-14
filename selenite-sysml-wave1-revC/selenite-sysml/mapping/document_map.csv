@@ -1,0 +1,83 @@
+source_document,revision,tier,target_package,target_file,wave,status,family
+49069 course PDFs / pitches / legal PDFs,-,-,-,-,-,out_of_scope,context for the final report only
+selenite_briefing_scene_v2.md,-,-,-,-,-,out_of_scope,novel — never enters repo
+ECN-019_Programme_Wide_Design_Revision.md,-,1,SeleniteRequirements,model/ProgrammeRequirements.sysml,3,skeleton,ecn-019
+SEL-ECN-021_PKT_ProcessWater.md,DRAFT,1,SeleniteProcessing,model/Processing.sysml,4,excluded_until_propagated,ecn-021 — do not model
+W2_T1_1_JS_MTL_v8_5.html,v8.5,1,SelenitePhases,model/Phases.sysml,2,skeleton,mtl
+MTL_GUIDE_v18_revised.docx,v18+,1,SelenitePhases,model/Phases.sysml,2,skeleton,mtl_guide
+SEL-ECN-020_MassDriver_ParallelTracks.md,-,1,SeleniteTransport,model/Transport.sysml,2,skeleton,sel-ecn-020
+SEL-ECON-001_RevA_revised.docx,Rev A+,1,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,planned,sel-econ-001
+SEL-ECON-001_Economic_Evaluation_Report__1_.md,-,1,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,planned,sel-econ-001-report
+SEL-T1_1-STRATEGY-v3_1.md,v3.1,1,SeleniteRequirements;SeleniteConfigurations,model/ProgrammeRequirements.sysml,3,skeleton,sel-t1_1-strategy
+SEL_FINAL_REPORT_v4.docx,v4,1,SeleniteProgramme,model/SeleniteProgramme.sysml,2,reference_integrator,sel_final_report
+SEL_ROBOT_FLEET_v9-1.docx,v9.1,1,SeleniteFleet,model/RobotFleet.sysml,2,skeleton,sel_robot_fleet
+SELENITE_DECISION_FRAMEWORK_v4.md,v4,1,SeleniteRequirements,model/ProgrammeRequirements.sysml,3,skeleton,selenite_decision_framework
+selenite_extended_timeline_v3_revised.html,v3+,1,SelenitePhases,model/Phases.sysml,2,skeleton,selenite_extended_timeline
+selenite_programme_scope.md,ECN-019 rewrite,1,SeleniteProgramme,model/SeleniteProgramme.sysml,2,skeleton,selenite_programme_scope
+W4_T3_3_JS_Selenite_site_selection_v1.docx,v1,1,SeleniteSites,model/Sites.sysml,2,planned,selenite_site_selection
+selenite_value_chain_v16.html,v16,1,SeleniteProcessing,model/Processing.sysml,4,planned,selenite_value_chain
+MOLEI_THERMAL_v1_3.m,v1.3,2,SeleniteFleet,model/RobotFleet.sysml,5,python_port,molei_thermal
+sabatier.m,-,2,SeleniteHabitat,model/Habitat.sysml,5,python_port,sabatier
+SELENITE_ECON_V1_4.m,v1.4,2,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,python_port,selenite_econ
+scaling_v1_3.m,v1.3,2,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,python_port,selenite_scale
+SELENITE_VERIFY_v5_0.m,v5.0,2,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,python_port,selenite_verify
+SELENITE_VISUALIZE_v3_3.m,v3.3,2,-,-,-,python_port_figures,selenite_visualize
+SEL-CAP-001_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,planned,sel-cap-001
+SEL-CATAPULT-001_RevB.docx,Rev B,3,SeleniteTransport,model/Transport.sysml,2,heritage_only,sel-catapult-001
+SEL-CONVEYOR-001_RevA.docx,Rev A,3,SeleniteTransport,model/Transport.sysml,2,skeleton,sel-conveyor-001
+SEL-HAULER-001_RevB.docx,Rev B,3,SeleniteFleet,model/RobotFleet.sysml,2,skeleton,sel-hauler-001
+SEL-MOLEI-MkII-001_RevA.docx,Rev A,3,SeleniteFleet,model/RobotFleet.sysml,2,skeleton,sel-molei-mkii-001
+SEL-NAV-001_MOLEI_Navigation_RevA.docx,Rev A,3,SeleniteSoftware,model/Software.sysml,4,planned,sel-nav-001
+SEL-PROBE-MkII-001_RevA.docx,Rev A,3,SeleniteFleet,model/RobotFleet.sysml,2,skeleton,sel-probe-mkii-001
+SEL-PROBE-MkIII-001_RevA.docx,Rev A,3,SeleniteFleet,model/RobotFleet.sysml,2,skeleton,sel-probe-mkiii-001
+SEL-SW-MOLEI-001_RevD.docx,Rev D,3,SeleniteSoftware,model/Software.sysml,4,planned,sel-sw-molei-001
+SEL-SW-SENTINEL-001_RevB.docx,Rev B,3,SeleniteSoftware,model/Software.sysml,4,planned,sel-sw-sentinel-001
+SEL-SW-SUB-001_RevC.docx,Rev C,3,SeleniteSoftware,model/Software.sysml,4,planned,sel-sw-sub-001
+SEL_ARM_DESIGN_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,skeleton,sel_arm_design
+SEL_DART_DESIGN_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,skeleton,sel_dart_design
+SEL_HARVEST_DESIGN_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,skeleton,sel_harvest_design
+SEL_MOLEI_DESIGN_v5.docx,v5,3,SeleniteFleet,model/RobotFleet.sysml,2,skeleton,sel_molei_design
+SEL_MOLES_DESIGN_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,skeleton,sel_moles_design
+SEL_PROBE_DESIGN_RevB.docx,Rev B,3,SeleniteFleet,model/RobotFleet.sysml,2,skeleton,sel_probe_design
+SEL_SENTINEL_DESIGN_RevB.docx,Rev B,3,SeleniteFleet,model/RobotFleet.sysml,2,skeleton,sel_sentinel_design
+SEL_SINTER_DESIGN_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,skeleton,sel_sinter_design
+SEL_SKIP_DESIGN_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,skeleton,sel_skip_design
+SEL_SUBSTATION_DESIGN_v4.docx,v4,3,SeleniteHabitat,model/PsrNetwork.sysml,2,planned,sel_substation_design
+SEL_SURVEY_DESIGN_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,skeleton,sel_survey_design
+SEL-CON-001_RevB_updated.docx,Rev B+,4,SeleniteHabitat,model/PsrNetwork.sysml,4,planned,sel-con-001
+SEL-ECLSS-001_RevB.docx,Rev B,4,SeleniteHabitat,model/Habitat.sysml,2,planned,sel-eclss-001
+SEL-ECLSS-002_RevB.docx,Rev B,4,SeleniteHabitat,model/Habitat.sysml,2,planned,sel-eclss-002
+SEL-ECLSS-SCALING-001_RevB.docx,Rev B,4,SeleniteHabitat,model/Habitat.sysml,2,planned,sel-eclss-scaling-001
+updated_SEL-ELZ-001_RevA.docx,Rev A+,4,SeleniteSites,model/Sites.sysml,2,planned,sel-elz-001
+SEL-FAB-001_RevA.docx,Rev A,4,SeleniteProcessing,model/Processing.sysml,2,planned,sel-fab-001
+SEL-FP-HAB-001_RevB.html,Rev B,4,SeleniteHabitat,model/Habitat.sysml,2,planned,sel-fp-hab-001
+updated_SEL-HAB-001_RevD.docx,Rev D+,4,SeleniteHabitat,model/Habitat.sysml,2,skeleton,sel-hab-001
+SEL-HAB-WALL-XSECTION-001_1.html,-,4,SeleniteHabitat,model/Habitat.sysml,2,planned,sel-hab-wall-xsection-001
+SEL-ISRU-001_RevD_updated.docx,Rev D+,4,SeleniteHabitat,model/Habitat.sysml,2,skeleton,sel-isru-001
+SEL-IZ-001_RevB.docx,Rev B,4,SeleniteSites,model/Sites.sysml,2,planned,sel-iz-001
+SEL-PIPE-001_RevA.docx,Rev A,4,SeleniteHabitat,model/PsrNetwork.sysml,2,planned,sel-pipe-001
+SEL-POWER-001_RevB.docx,Rev B,4,SelenitePower,model/Power.sysml,2,skeleton,sel-power-001
+SEL-PROC-001_RevB.docx,Rev B,4,SeleniteProcessing,model/Processing.sysml,2,skeleton,sel-proc-001
+SEL-PROC-PKT-001_RevB.docx,Rev B,4,SeleniteProcessing,model/Processing.sysml,2,skeleton,sel-proc-pkt-001
+SEL-REAGENT-001_RevA.docx,Rev A,4,SeleniteProcessing,model/Processing.sysml,2,planned,sel-reagent-001
+SEL_EVA_CONTINGENCY_CORRECTED.docx,-+,4,SeleniteHabitat,model/Habitat.sysml,4,planned,sel_eva_contingency
+Selenite_Base_Floor_Plan_v2_1.pdf,v2.1,4,SeleniteHabitat,model/Habitat.sysml,2,reference_only,selenite_base_floor_plan
+selenite_lh2_transport_v4.pdf,v4,4,SeleniteTransport,model/Transport.sysml,2,planned,selenite_lh2_transport
+SEL-CAD-AC-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-ac-001
+SEL-CAD-AD-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-ad-001
+SEL-CAD-DT-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-dt-001
+SEL-CAD-ELZ-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-elz-001
+SEL-CAD-HAB-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-hab-001
+SEL-CAD-HV-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-hv-001
+updated_SEL-CAD-ISRU-001_RevA.docx,Rev A+,5,-,-,2,reference_only,sel-cad-isru-001
+updated_SEL-CAD-IZ-001_RevA.docx,Rev A+,5,-,-,2,reference_only,sel-cad-iz-001
+SEL-CAD-MS-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-ms-001
+SEL-CAD-PB-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-pb-001
+SEL-CAD-PS-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-ps-001
+SEL-CAD-PZ-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-pz-001
+SEL-CAD-SE-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-se-001
+SEL-CAD-SK-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-sk-001
+SEL-CAD-SN-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-sn-001
+ECN-018_InSitu_Reagent_Fabrication_PGM.md,-,6,SeleniteProcessing,model/Processing.sysml,2,folded,ecn-018
+SEL-ECN-012_DrainPipeReroute_v1.docx,v1,6,SeleniteHabitat,model/PsrNetwork.sysml,2,folded,sel-ecn-012
+SEL-ECN-013_Navigation_ARMfix_RFconstruction_v1.docx,v1,6,SeleniteSoftware,model/Software.sysml,4,folded,sel-ecn-013
