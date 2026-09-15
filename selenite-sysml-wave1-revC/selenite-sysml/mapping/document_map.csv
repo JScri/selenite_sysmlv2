@@ -1,27 +1,27 @@
 source_document,revision,tier,target_package,target_file,wave,status,family
 49069 course PDFs / pitches / legal PDFs,-,-,-,-,-,out_of_scope,context for the final report only
 selenite_briefing_scene_v2.md,-,-,-,-,-,out_of_scope,novel — never enters repo
-ECN-019_Programme_Wide_Design_Revision.md,-,1,SeleniteRequirements,model/ProgrammeRequirements.sysml,3,skeleton,ecn-019
+ECN-019_Programme_Wide_Design_Revision.md,-,1,SeleniteRequirements,model/ProgrammeRequirements.sysml,3,gated,"ecn-019 — file NOT IN REPO; committed decisions cited through Strategy v3.1 (SEL-REQ-001..016, Wave 3)"
 SEL-ECN-021_PKT_ProcessWater.md,DRAFT,1,SeleniteProcessing,model/Processing.sysml,4,excluded_until_propagated,ecn-021 — source recovered 14 Sep 2026; see VC-15/16/17 before any use
 W2_T1_1_JS_MTL_v8_5.html,v8.5,1,SelenitePhases,model/Phases.sysml,2,architected,mtl
 MTL_GUIDE_v18_revised.docx,v18+,1,SelenitePhases,model/Phases.sysml,2,architected,mtl_guide
-SEL-ECN-020_MassDriver_ParallelTracks.md,-,1,SeleniteTransport,model/Transport.sysml,2,architected,"Applied to baseline. 5 drivers/8 tracks; 523 t YBCO; 694,444 canisters/yr. CATAPULT-001 Rev C outstanding (VC-21)"
+SEL-ECN-020_MassDriver_ParallelTracks.md,-,1,SeleniteTransport,model/Transport.sysml,2,architected,"Applied to baseline. 5 drivers/8 tracks; 523 t YBCO; 694,444 canisters/yr; SEL-REQ-011 checks the track budget (Wave 3). CATAPULT-001 Rev C outstanding (VC-21)"
 SEL-ECON-001_RevA_revised.docx,Rev A+,1,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,planned,sel-econ-001
 SEL-ECON-001_Economic_Evaluation_Report__1_.md,-,1,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,planned,sel-econ-001-report
-SEL-T1_1-STRATEGY-v3_1.md,v3.1,1,SeleniteRequirements;SeleniteParameters,model/ProgrammeRequirements.sysml,3,skeleton,sel-t1_1-strategy — in docs/ from 14 Sep 2026
+SEL-T1_1-STRATEGY-v3_1.md,v3.1,1,SeleniteRequirements;SeleniteParameters,model/ProgrammeRequirements.sysml,3,gated,"sel-t1_1-strategy — parameters (SeleniteParameters), requirements SEL-REQ-007..016 and s.16 consequences extracted at Wave 3"
 SEL_FINAL_REPORT_v4.docx,v4,1,SeleniteProgramme,model/SeleniteProgramme.sysml,2,reference_integrator,sel_final_report — PDF read in full 14 Sep 2026; observations W2-N8..N17
 SEL_ROBOT_FLEET_v9.md,v9 (md),1,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel_robot_fleet — F2 resolved by diff 14 Sep 2026: v9-1.docx is an earlier v9.0 draft without ECN-020; v9.md is the winner (see CHANGELOG_WAVE2.md)
-SELENITE_DECISION_FRAMEWORK_v4.md,v4,1,SeleniteGates;SeleniteRequirements,model/Gates.sysml,3,skeleton,selenite_decision_framework — in docs/ from 14 Sep 2026 (Rev D confirmed, v3 = Rev C kept as historical); 82 gates to catalogue at Wave 3
+SELENITE_DECISION_FRAMEWORK_v4.md,v4,1,SeleniteGates;SeleniteRequirements,model/Gates.sysml,3,gated,"selenite_decision_framework — Rev D; 81 gates catalogued at Wave 3 (criterion, evaluability, thresholds, calcs); derivedPhase bound at Wave 5; register in docs/PLAN_REGISTER.md", v3 = Rev C kept as historical); 82 gates to catalogue at Wave 3
 selenite_extended_timeline_v3_revised.html,v3+,1,SelenitePhases,model/Phases.sysml,2,architected,selenite_extended_timeline
 selenite_programme_scope.md,ECN-019 rewrite,1,SeleniteProgramme,model/SeleniteProgramme.sysml,2,architected,selenite_programme_scope
 W4_T3_3_JS_Selenite_site_selection_v1.docx,v1,1,SeleniteSites,model/Sites.sysml,2,architected,selenite_site_selection
 selenite_value_chain_v16.html,v16,1,SeleniteProcessing,model/Processing.sysml,4,planned,selenite_value_chain
 MOLEI_THERMAL_v1_3.m,v1.3,2,SeleniteFleet,model/RobotFleet.sysml,5,python_port,molei_thermal
 sabatier.m,-,2,SeleniteHabitat,model/Habitat.sysml,5,python_port,sabatier
-SELENITE_ECON_V1_4.m,v1.4,2,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,python_port,selenite_econ
+SELENITE_ECON_V1_4.m,v1.4,2,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,python_port,selenite_econ — read by tools/plan_check.py for the derivable gates (Wave 3)
 scaling_v1_3.m,v1.3,2,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,python_port,selenite_scale
-SELENITE_VERIFY_v5_0.m,v5.0,2,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,python_port,selenite_verify
-SELENITE_VISUALIZE_v3_3.m,v3.3,2,-,-,-,python_port_figures,selenite_visualize
+SELENITE_VERIFY_v5_0.m,v5.0,2,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,python_port,selenite_verify — ph.* vectors read by tools/plan_check.py (Wave 3)
+SELENITE_VISUALIZE_v3_3.m,v3.3,2,-,-,-,python_port_figures,"selenite_visualize — psr_layout n_total x units binds ProgrammeParameters.psrMoleICapacityUnits (W2-N18, Wave 3)"
 SEL-CAP-001_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel-cap-001
 SEL-CATAPULT-001_RevB.docx,Rev B,3,SeleniteTransport,model/Transport.sysml,2,heritage_only,sel-catapult-001 | Rev C outstanding per ECN-020 §6 (VC-21)
 SEL-CONVEYOR-001_RevA.docx,Rev A,3,SeleniteTransport,model/Transport.sysml,2,architected,sel-conveyor-001

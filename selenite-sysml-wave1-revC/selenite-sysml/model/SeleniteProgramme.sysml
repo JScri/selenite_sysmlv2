@@ -23,14 +23,15 @@ package SeleniteProgramme {
          *   SeleniteProcessing      - REE value chain, flowsheet, Th/U stage
          *   SeleniteTransport       - MD-1..5 (ECN-020), conveyors, links
          *   SeleniteSoftware        - SENTINEL, ECN-014, NAV-001 (structure)
-         *   SeleniteParameters      - exogenous programme inputs (Wave 3)
-         *   SeleniteGates           - decision gates DG-x.y, derivation rule
+         *   SeleniteParameters      - exogenous inputs and gate thresholds
+         *   SeleniteGates           - 81 decision gates, milestones M0-M8
          *   SeleniteRequirements    - committed architectural principles
          *   SeleniteAnalysis        - calcs (MATLAB remains authority)
          *   SeleniteConfigurations  - programme instance tree
          *
-         * Wave 2 (September 2026): architecture and temporal skeleton
-         * complete; see CHANGELOG_WAVE2.md.
+         * Wave 2 (14 September 2026): architecture and temporal skeleton;
+         * Wave 3 (15 September 2026): gates, thresholds, phase bindings,
+         * requirements, plan_check register - see CHANGELOG_WAVE3.md.
          */
 
     private import SeleniteConfigurations::*;

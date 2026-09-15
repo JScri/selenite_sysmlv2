@@ -44,7 +44,7 @@ or within the ODE rules, 33 declared skips) and the captured console text.
 undiscounted break-even within 200 years). Wave 5 can now bind derived
 values from `selenite.econ.workspace()` and friends.
 
-## Wave 3 — Gates and the derived programme plan (reframed 14 Sep 2026)
+## Wave 3 — Gates and the derived programme plan ✅ DELIVERED (15 Sep 2026)
 
 Decision (Jason, 14 Sep 2026): timing is not gated on a predetermined phase
 where a condition on model data decides it. The documents are inconsistent
@@ -70,6 +70,18 @@ repo), complete the gate catalogue and milestones M0–M8, rebind every
 (compares derived vs declared phases, prints the register automatically),
 and the SEL-REQ-0xx extraction with `satisfy` links as originally planned.
 Evaluation of derivable gates waits on the Python port.
+
+Delivered 15 Sep 2026 — see `CHANGELOG_WAVE3.md` §"Wave 3 delivery". All 81
+Rev D gates are `DecisionGate`s (39 derivable with calcs and thresholds, 13
+test outcomes with `assumedOutcome`, 29 exogenous); every phase attribute is
+classified and the consequences are bound to gate outcomes in the
+configuration; `SeleniteParameters` completed (PSR capacity 620 from
+`psr_layout.py`); SEL-REQ-001..016 with checkable subjects;
+`tools/plan_check.py` prints the register (`docs/PLAN_REGISTER.md`, 55 rows)
+and runs in the `compute` CI job. Left for Wave 5: bind `derivedPhase` from
+the planner; add the SPA demand vector beyond P7 (F5), the thorium stockpile
+vector and the tier resource parameters so the seven unevaluated derivable
+gates evaluate; adjudicate the register findings (W3-N1…N20) by ECN.
 
 ## Wave 4 — Behaviour, interfaces, software
 

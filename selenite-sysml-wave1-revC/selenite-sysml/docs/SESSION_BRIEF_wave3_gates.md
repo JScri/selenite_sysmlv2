@@ -1,5 +1,7 @@
 # Session Brief — Wave 3: Gates and the derived programme plan
 
+> **Status: delivered 15 Sep 2026** — see `CHANGELOG_WAVE3.md` ("Wave 3 delivery") and `docs/PLAN_REGISTER.md`.
+
 **Scope:** one session (two if the Decision Framework is long). Turn the
 phase skeleton of Wave 2 into a plan that is *derived* from declared inputs
 and gate criteria rather than transcribed from documents. Paste into a fresh

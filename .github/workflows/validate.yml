@@ -42,3 +42,10 @@ jobs:
         run: pip install -e "selenite-compute[test]"
       - name: Golden regression suite (1,437 rows + console captures)
         run: pytest selenite-compute -q -rs
+      - name: Plan check (derived-vs-declared register, Wave 3)
+        run: python selenite-sysml-wave1-revC/selenite-sysml/tools/plan_check.py --markdown plan_register.md --quiet
+      - name: Upload plan register
+        uses: actions/upload-artifact@v4
+        with:
+          name: plan-register
+          path: plan_register.md
