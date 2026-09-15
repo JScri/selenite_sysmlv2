@@ -40,5 +40,5 @@ jobs:
           python-version: "3.11"
       - name: Install selenite-compute
         run: pip install -e "selenite-compute[test]"
-      - name: Golden regression suite (skips until each module is ported)
+      - name: Golden regression suite (1,437 rows + console captures)
         run: pytest selenite-compute -q -rs

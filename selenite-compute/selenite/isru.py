@@ -1,14 +1,23 @@
-"""Port of the ISRU sections of SELENITE_VERIFY_v5_0.m: electrolysis, cryo, propellant.
-
-STATUS: not ported. Source is in selenite-goldens-runner-v2_1/ (see
-README.md).
+"""Typed view over the SELENITE_VERIFY_v5_0 port (see verify.py) — the isru
+sections of that script. The numbers are computed once in verify.run(); this
+module only names them. Not an oracle target itself.
 """
 from __future__ import annotations
 
-PORTED = False
-SOURCE_SCRIPT: str | None = None  # set to the .m filename when ported
+from . import verify
+
+PORTED = True
+SOURCE_SCRIPT = "SELENITE_VERIFY_v5_0.m (view)"
+
+PHASE_LABELS = ("P3", "P4", "P5", "P6", "P7+")
 
 
-def run(**params):
-    """Return a flat {golden_key: value} mapping reproducing the oracle."""
-    raise NotImplementedError("port pending: MATLAB source not yet ported")
+def per_phase():
+    """ISRU water, electrolysis and cryo per phase."""
+    w = verify.run()
+    return {
+        "labels": PHASE_LABELS,
+        "water_kg_yr": w["ph.wyr"], "water_kg_hr": w["ph.whr"], "electrolysis_kW": w["ph.p_elec"],
+        "pem_stacks": w["ph.nPEM"], "cryo_kW": w["ph.p_cryo"], "isru_total_kW": w["ph.p_isru"],
+        "h2_kg_hr": w["ph.h2hr"], "o2_kg_hr": w["ph.o2hr"],
+    }

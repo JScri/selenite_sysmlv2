@@ -171,11 +171,13 @@ tables, useful for requirement/attribute exports.
 
 ## 8. Wave roadmap
 
-See `docs/MIGRATION_PLAN.md`. Wave 3 kick-off (14 Sep 2026): `Gates.sysml`
-and `Parameters.sysml` skeletons exist; `selenite-compute/` scaffold exists
-but the Python port is **blocked on the MATLAB sources being added to the
-repo**. Sources for Wave 3 (Decision Framework v4, Strategy v3.1) are also
-not in the repo yet. Previous state: **Wave 2 complete**
+See `docs/MIGRATION_PLAN.md`. Python port (14 Sep 2026, night): **done** —
+`selenite-compute/` reproduces all six current-baseline scripts against the
+v2.1 goldens and console captures (`CHANGELOG_PORT.md` lists what it
+revealed); it is the computational authority from here on. Wave 3 kick-off
+(14 Sep 2026): `Gates.sysml` and `Parameters.sysml` skeletons exist; Wave 3
+proper (the gate catalogue) is the next session, with Decision Framework v4
+and Strategy v3.1 now in `docs/`. Previous state: **Wave 2 complete**
 (architecture and temporal skeleton: every element of
 `ARCHITECTURE_BASELINE.md` §2–§7 is a phase-gated model element with
 provenance; F2 resolved; F3–F8 recorded). Next: Wave 3, requirements and

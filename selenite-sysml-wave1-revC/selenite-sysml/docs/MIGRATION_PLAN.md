@@ -33,14 +33,16 @@ zero hints. Open flags F3–F8 recorded in `doc` comments, none resolved; F2
 resolved by diff (`v9.md` is the fleet winner). F5 leaves `SpaThoriumMSR.
 introducedIn` unbound by design.
 
-## Python port — prerequisite track (unblocked 14 Sep 2026, evening)
+## Python port — prerequisite track (DONE 14 Sep 2026, night)
 
-`selenite-compute/` scaffold exists: golden loader, per-row regression
-suite (skips until each module is ported), invariants against the oracle,
-source-hash check, CI job. Sources (20 `.m`, hashes verified) and the runner
-v2.1 capture are in `selenite-goldens-runner-v2_1/`. Port bottom-up per
-`docs/SESSION_BRIEF_python_port.md` in its own session; it is the critical
-path for every derived phase.
+`selenite-compute/` is the computational authority: the six current-baseline
+scripts are ported and reproduce the runner v2.1 goldens (1,404 rows exact
+or within the ODE rules, 33 declared skips) and the captured console text.
+`pytest selenite-compute` runs 1,443 checks in the CI job next to
+`sysml-validate`. Findings are in `selenite-compute/CHANGELOG_PORT.md`
+(R2025a `fzero` semantics, two ECON sensitivity inconsistencies, no
+undiscounted break-even within 200 years). Wave 5 can now bind derived
+values from `selenite.econ.workspace()` and friends.
 
 ## Wave 3 — Gates and the derived programme plan (reframed 14 Sep 2026)
 

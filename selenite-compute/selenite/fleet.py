@@ -1,14 +1,24 @@
-"""Port of the fleet sections of SELENITE_VERIFY_v5_0.m: MOLE-I/S, PROBE, ARM, SENTINEL per-phase counts (ph.* vectors).
-
-STATUS: not ported. Source is in selenite-goldens-runner-v2_1/ (see
-README.md).
+"""Typed view over the SELENITE_VERIFY_v5_0 port (see verify.py) — the fleet
+sections of that script. The numbers are computed once in verify.run(); this
+module only names them. Not an oracle target itself.
 """
 from __future__ import annotations
 
-PORTED = False
-SOURCE_SCRIPT: str | None = None  # set to the .m filename when ported
+from . import verify
+
+PORTED = True
+SOURCE_SCRIPT = "SELENITE_VERIFY_v5_0.m (view)"
+
+PHASE_LABELS = ("P3", "P4", "P5", "P6", "P7+")
 
 
-def run(**params):
-    """Return a flat {golden_key: value} mapping reproducing the oracle."""
-    raise NotImplementedError("port pending: MATLAB source not yet ported")
+def per_phase():
+    """Demand-driven fleet per phase: MOLE-I, substations, PROBE, SKIP, DART, surface robots."""
+    w = verify.run()
+    return {
+        "labels": PHASE_LABELS,
+        "moleI": w["ph.mi"], "substations": w["ph.nd"], "probe": w["ph.nP"], "skip": w["ph.nS"],
+        "dart": w["ph.nD"], "crew": w["ph.crew"], "moleS": w["ph.nMS"], "armC": w["ph.nARMC"],
+        "armD": w["ph.nARMD"], "sentinel": w["ph.nSEN"],
+        "propellant_demand_kg": w["ph.dT"], "propellant_supply_kg": w["ph.isru"], "margin_kg": w["ph.margin"],
+    }

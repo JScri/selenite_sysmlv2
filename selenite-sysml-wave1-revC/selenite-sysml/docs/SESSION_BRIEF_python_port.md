@@ -1,5 +1,12 @@
 # Session Brief — Python port of the Selenite computational layer (revised 9 Sep 2026)
 
+**Status 14 Sep 2026 (night): DONE.** All six current-baseline scripts are
+ported in `selenite-compute/` (1,404 golden rows reproduced, 33 declared
+skips, 7 console captures reproduced line by line; `pytest` 1,443 passed).
+See `selenite-compute/README.md` and `selenite-compute/CHANGELOG_PORT.md`
+for what the port revealed. The brief below is kept as the record of the
+rules the port was held to.
+
 **Status 14 Sep 2026 (evening): UNBLOCKED — sources and a v2.1 golden
 capture are in the repository.** All 20 `.m` scripts are in
 `selenite-goldens-runner-v2_1/` with SHA-256 matching the 8 Sep manifest, and

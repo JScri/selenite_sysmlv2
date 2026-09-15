@@ -1,5 +1,22 @@
 # Session Brief — Python port of the Selenite computational layer (revised 9 Sep 2026)
 
+**Status 14 Sep 2026 (night): DONE.** All six current-baseline scripts are
+ported in `selenite-compute/` (1,404 golden rows reproduced, 33 declared
+skips, 7 console captures reproduced line by line; `pytest` 1,443 passed).
+See `selenite-compute/README.md` and `selenite-compute/CHANGELOG_PORT.md`
+for what the port revealed. The brief below is kept as the record of the
+rules the port was held to.
+
+**Status 14 Sep 2026 (evening): UNBLOCKED — sources and a v2.1 golden
+capture are in the repository.** All 20 `.m` scripts are in
+`selenite-goldens-runner-v2_1/` with SHA-256 matching the 8 Sep manifest, and
+`selenite-goldens-runner-v2_1/goldens_20260914_224703/` is the runner v2.1
+capture under MATLAB R2025a: it restores the vectors v2.0 dropped
+(`circuits_needed`, `haulers_needed`, `conv_km_needed`, `cargo_spa_msr`, the
+per-phase `ph.*` fleet vectors) and is now the **canonical oracle** used by
+`selenite-compute/selenite/goldens.py`; the 8 Sep merged oracle supplies the
+`platform_dependent_ode` tags. Scaffold, loader and per-row test suite are
+ready; port bottom-up per the order below. Previously:
 **Status: UNBLOCKED.** Goldens captured under MATLAB R2025a (canonical) and
 cross-checked under Octave 8.4: every common scalar bit-identical. Oracle in
 `selenite-goldens-oracle.zip` → unpack as `selenite-compute/goldens/`.

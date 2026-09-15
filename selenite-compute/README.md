@@ -1,44 +1,76 @@
 # selenite-compute — Python port of the Selenite computational layer
 
-**Status (14 Sep 2026, evening): unblocked — sources and the canonical oracle are in the repository; no module ported yet.**
+**Status (14 Sep 2026, night): PORTED. Every current-baseline script is
+reproduced against the runner v2.1 goldens; `pytest` runs 1,443 checks in
+about four seconds.**
 
-- Sources: all 20 MATLAB scripts in `selenite-goldens-runner-v2_1/`, SHA-256 verified
-  against the goldens manifest by `tests/test_sources.py`.
-- Canonical oracle: `selenite-goldens-runner-v2_1/goldens_20260914_224703/` (runner v2.1,
-  MATLAB R2025a). It restores the vectors runner v2.0 dropped. The 8 Sep merged oracle
-  under `selenite-goldens-oracle/` is kept for its `platform_dependent_ode` tags and history.
+The MATLAB scripts remain in `selenite-goldens-runner-v2_1/` as the record
+of what was ported; the Python here is now the computational authority for
+quantitative values (flow: compute → documents → model, never the reverse).
 
-| Script | Port target | Oracle rows (v2.1) |
-|---|---|---|
-| `sabatier.m` | `selenite/eclss.py` | 107 |
-| `SELENITE_VERIFY_v5_0.m` | `selenite/verify.py` over `power.py`, `fleet.py`, `isru.py` | 237 |
-| `MOLEI_THERMAL_v1_3.m` | `selenite/thermal.py` | 274 (26 ODE rows compared at 0.05 K) |
-| `SELENITE_ECON_V1_3.m` + `SELENITE_ECON_V1_4.m` | `selenite/econ.py` (one module; v1.4 is `report()`) | 269 + 313 |
-| `scaling_v1_3.m` | `selenite/historical/scale_v1_3.py` (pre-ECN-019, historical) | 171 |
-| `SELENITE_VISUALIZE_v3_3.m` | `selenite/psr_layout.py` (geometry only) | 66 |
+| Script | Module | Golden rows | Result |
+|---|---|---|---|
+| `sabatier.m` | `selenite/eclss.py` | 107 | 107 exact |
+| `SELENITE_VERIFY_v5_0.m` | `selenite/verify.py` (+ `power.py`, `fleet.py`, `isru.py` views) | 237 | 237 exact |
+| `MOLEI_THERMAL_v1_3.m` | `selenite/thermal.py` | 274 | 242 exact or within the ODE rules; 32 declared skips |
+| `SELENITE_ECON_V1_3.m` | `selenite/econ.py` (`workspace("SELENITE_ECON_V1_3")`) | 269 | 269 exact |
+| `SELENITE_ECON_V1_4.m` | `selenite/econ.py` (v1.4 layered on the v1.3 workspace) | 313 | 313 exact |
+| `scaling_v1_3.m` | `selenite/historical/scale_v1_3.py` (pre-ECN-019, historical) | 171 | 171 exact |
+| `SELENITE_VISUALIZE_v3_3.m` | `selenite/psr_layout.py` (geometry only) | 66 | 65 exact; 1 declared skip |
 
-## What works today
+"Exact" means the brief's tolerances: scalars and array elements at
+relative 1e-9, strings byte-equal, `irr_direct` NaN. The declared skips are
+listed in `CHANGELOG_PORT.md` (ode45 step-count statistics and a MATLAB
+graphics-handle array); nothing else is loosened.
 
-- `selenite/goldens.py` loads every oracle row, parses MATLAB `mat2str`
-  arrays, strings, `NaN`/`Inf`, and carries the `source` / `comparable` tags.
-- `tests/test_loader.py` proves the loader reads all rows (runs green now).
-- `tests/test_goldens.py` is parametrised over every comparable row. Each
-  test resolves the row's port module; while a module is unported the test
-  **skips with the reason**, so the suite is green-by-skip today and turns
-  into the real regression suite module by module as sources land.
-- `tests/test_invariants.py` pins the golden side of every document-versus-
-  golden conflict the model records (VC-01/07/08/09/10, F5), so the register
-  in `docs/VALUE_CONFLICTS.md` is live.
+`selenite/report.py` regenerates the console text each script printed, and
+`tests/test_console.py` compares it line by line with the `console_*.txt`
+files the golden runner captured (only the ECON v1.3 timestamp and the
+ode45-derived temperatures in THERMAL are compared loosely).
+
+## Layout
+
+```
+selenite/
+  capture.py      mirrors gold_flatten: column-major arrays, struct arrays
+                  skipped, >2000-element arrays summarised, "zeros(1,0)"
+  goldens.py      oracle loader + comparison rules (ODE keys, skips)
+  report.py       console reproduction (MATLAB fprintf emulation)
+  eclss.py verify.py thermal.py econ.py psr_layout.py historical/scale_v1_3.py
+  power.py fleet.py isru.py   typed per-phase views over verify.workspace()
+  constants.py    shared constants with provenance
+tests/
+  test_goldens.py     one test per comparable golden row (1,437 rows)
+  test_console.py     console text vs console_*.txt
+  test_invariants.py  golden values behind the model's VC-xx / F5 arbiters
+  test_loader.py      oracle loader
+  test_sources.py     SHA-256 of the .m sources vs the goldens manifest
+```
+
+Every port module exposes `workspace()` (the script's final variables as
+Python objects, loop leftovers included) and `run()` (the same, flattened
+with the harness's rules so keys match the CSV). `econ` takes the script
+name because v1.4 overwrites some v1.3 names.
+
+## Oracle
+
+Canonical: `selenite-goldens-runner-v2_1/goldens_20260914_224703/` (runner
+v2.1, MATLAB R2025a). The 8 Sep merged oracle under
+`selenite-goldens-oracle/` supplies only the `platform_dependent_ode` tags.
+Override with `SELENITE_ORACLE` / `SELENITE_ORACLE_TAGS`.
 
 ## Rules (from `docs/SESSION_BRIEF_python_port.md`)
 
-The port reproduces the goldens, never the documents. Scalars `rel_tol=1e-9`;
-arrays elementwise `rel_tol=1e-9`; `platform_dependent_ode` rows at
-`abs_tol=0.05 K` via `solve_ivp(method="RK45", rtol=1e-6, atol=1e-4)`;
-`irr_direct` is NaN; `octave_8_4_only` rows are valid targets. Every constant
-carries provenance. Flow is compute → documents → model, never the reverse.
+The port reproduces the goldens, never the documents. MATLAB `integral` →
+`scipy.integrate.quad(epsabs=0, epsrel=1e-13)`; `ode45` → `solve_ivp(RK45,
+rtol=1e-6, atol=1e-4, max_step=300)`, compared at 0.05 K and ±1 h; MATLAB
+`fzero` is re-implemented (R2025a semantics: NaN and a notice when no sign
+change is found). Every mismatch was investigated; what the port revealed
+is in `CHANGELOG_PORT.md`.
 
 ```bash
 pip install -e "selenite-compute[test]"
-pytest selenite-compute            # or: SELENITE_ORACLE=/path/to/oracle pytest
+pytest selenite-compute                 # 1,443 passed, 33 skipped
+python -m selenite.report               # all console outputs
+python -m selenite.report SELENITE_ECON_V1_4
 ```
