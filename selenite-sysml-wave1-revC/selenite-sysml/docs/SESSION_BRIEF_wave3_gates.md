@@ -2,16 +2,26 @@
 
 **Scope:** one session (two if the Decision Framework is long). Turn the
 phase skeleton of Wave 2 into a plan that is *derived* from declared inputs
-and gate criteria rather than transcribed from documents. Structure now;
-evaluation when the Python port lands. Paste into a fresh Claude Code
-session on the repository; the model folder is
+and gate criteria rather than transcribed from documents. Paste into a fresh
+Claude Code session on the repository; the model folder is
 `selenite-sysml-wave1-revC/selenite-sysml/`.
+
+**The Python port has landed (PR #3, 14 Sep 2026).** `selenite-compute/` is
+the computational authority: `pip install -e "selenite-compute[test]"`, then
+`from selenite import econ, verify, thermal, psr_layout` and call
+`econ.workspace()` (year vectors `reo_target`, `circuits_needed`,
+`msr_count`, `cargo_spa_msr`, `supply_frac` …, indexed Y0..Y200),
+`verify.workspace()["ph"]` (per-phase fleet/power), `psr_layout.workspace()`
+(`n_total` = 124 nodes for W2-N18). `pytest selenite-compute` must stay
+green (1,443 passed, 33 declared skips). Read
+`selenite-compute/CHANGELOG_PORT.md` for what the port revealed before
+quoting any economics figure.
 
 ## Start-up (mandatory, in order)
 1. `npm install -g sysml-validate@0.36.0 sysml-diagram`; `tools/validate.sh` → exit 0, zero hints.
 2. Read `docs/CLAUDE_SYSML_CONTEXT.md` (rules 5a/5b/5c), `docs/MIGRATION_PLAN.md`
    (Wave 3 section), `docs/DOCUMENT_FAMILIES.md` (flags + W2-N1…N18),
-   `CHANGELOG_WAVE2.md`, then `model/Gates.sysml`, `model/Parameters.sysml`,
+   `CHANGELOG_WAVE2.md`, `CHANGELOG_WAVE3.md` (kick-off + addenda), then `model/Gates.sysml`, `model/Parameters.sysml`,
    `model/ThroughputCalcs.sysml` (`SpaMsrIntroductionGate`).
 3. Sources are in `docs/`: `SELENITE_DECISION_FRAMEWORK_v4.md` (SEL-DECISION-001 Rev D,
    82 gates DG-0.1…DG-14.9 + DG-POST.1/2, with years), `SELENITE_DECISION_FRAMEWORK_v3_historical.md`
@@ -46,10 +56,10 @@ session on the repository; the model folder is
    "no catapult for ore", "no D2EHPA" machine-checkable (the constraints exist
    in `RobotFleet.sysml`; wire them to requirements).
 6. **`tools/plan_check.py`.** Reads the model (regex over `.sysml` is enough
-   for `declaredPhase` / `derivedPhase` / `introducedIn`) and, when the
-   Python layer exists, the planner output; prints the derived-vs-declared
-   register in the W2-N table format. Until the port lands it prints the
-   declared table and the list of unbound derived phases. Wire into CI.
+   for `declaredPhase` / `derivedPhase` / `introducedIn`) and the Python
+   layer (`selenite.econ.workspace()` etc.); evaluates every `derivable`
+   gate criterion against the year vectors and prints the derived-vs-declared
+   register in the W2-N table format. Wire into the `compute` CI job.
 7. Diagrams: add a `gates_view` (gv of `Gates.sysml`) to `tools/render_diagrams.sh`.
 8. `mapping/document_map.csv` statuses; `CHANGELOG_WAVE3.md` in ECN style.
 
