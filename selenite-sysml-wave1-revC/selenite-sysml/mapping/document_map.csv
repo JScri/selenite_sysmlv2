@@ -9,7 +9,7 @@ SEL-ECN-020_MassDriver_ParallelTracks.md,-,1,SeleniteTransport,model/Transport.s
 SEL-ECON-001_RevA_revised.docx,Rev A+,1,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,planned,sel-econ-001
 SEL-ECON-001_Economic_Evaluation_Report__1_.md,-,1,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,planned,sel-econ-001-report
 SEL-T1_1-STRATEGY-v3_1.md,v3.1,1,SeleniteRequirements;SeleniteParameters,model/ProgrammeRequirements.sysml,3,skeleton,sel-t1_1-strategy — in docs/ from 14 Sep 2026
-SEL_FINAL_REPORT_v4.docx,v4,1,SeleniteProgramme,model/SeleniteProgramme.sysml,2,reference_integrator,sel_final_report — PDF read in full 14 Sep 2026; observations W2-N8..N17
+SEL_FINAL_REPORT_v4.md,v4,1,SeleniteProgramme,model/SeleniteProgramme.sysml,2,reference_integrator,sel_final_report — in docs/ from 16 Sep 2026 (narrative + 64 figures; Leadership Reflections section not transcribed); observations W2-N8..N17
 SEL_ROBOT_FLEET_v9.md,v9 (md),1,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel_robot_fleet — F2 resolved by diff 14 Sep 2026: v9-1.docx is an earlier v9.0 draft without ECN-020; v9.md is the winner (see CHANGELOG_WAVE2.md)
 SELENITE_DECISION_FRAMEWORK_v4.md,v4,1,SeleniteGates;SeleniteRequirements,model/Gates.sysml,3,skeleton,selenite_decision_framework — in docs/ from 14 Sep 2026 (Rev D confirmed, v3 = Rev C kept as historical); 82 gates to catalogue at Wave 3
 selenite_extended_timeline_v3_revised.html,v3+,1,SelenitePhases,model/Phases.sysml,2,architected,selenite_extended_timeline
