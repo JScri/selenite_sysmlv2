@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Selenite Programme — Extended Mission Timeline v3 (ECN-019 Rev C)</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050a0f;--surf:#0b1520;--grid:#0d1c2c;--bdr:#122030;--dim:#1c3048;--tlo:#3a5c7a;--tmid:#6a95b8;--txt:#b8d4ea;--thi:#e4f0f9;--mono:'Share Tech Mono',monospace;--sans:'Barlow',sans-serif;--cond:'Barlow Condensed',sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:13px;line-height:1.5;overflow-x:auto}
+h1{font-family:var(--cond);font-weight:700;font-size:22px;color:var(--thi);margin-bottom:4px;letter-spacing:1.5px;text-transform:uppercase}
+.wrap{max-width:1600px;margin:0 auto;padding:20px 24px}
+.hdr{text-align:center;margin-bottom:20px;border-bottom:1px solid var(--bdr);padding-bottom:14px}
+.hdr .sub{font-family:var(--mono);font-size:11px;color:var(--tlo);margin-top:4px}
+.phase{margin-bottom:28px;background:var(--surf);border:1px solid var(--bdr);border-radius:8px;padding:14px 18px}
+.phase-hdr{display:flex;align-items:baseline;gap:14px;margin-bottom:8px;flex-wrap:wrap}
+.phase-label{font-family:var(--cond);font-weight:700;font-size:20px;letter-spacing:1px}
+.phase-years{font-family:var(--mono);font-size:12px;color:var(--tlo)}
+.phase-reo{font-family:var(--mono);font-size:12px;color:#4ae8a0}
+.track{display:flex;align-items:flex-start;margin:4px 0;min-height:26px}
+.track-label{width:200px;min-width:200px;font-family:var(--cond);font-size:12px;color:var(--tmid);padding:3px 8px 3px 0;text-align:right}
+.track-bar{flex:1;display:flex;flex-wrap:wrap;gap:4px}
+.bar{display:inline-block;padding:3px 10px;border-radius:3px;font-family:var(--mono);font-size:10px;color:#fff;line-height:1.4;opacity:0.92}
+.ms{display:inline-block;padding:3px 10px;border-radius:3px;font-family:var(--mono);font-size:10px;font-weight:bold;border:1px solid rgba(255,255,255,0.3);line-height:1.4}
+.c-skip{background:#1a6e6e}.c-hauler{background:#2a7a2a}.c-isru{background:#1e6b8a}.c-proc{background:#8a2a18}
+.c-probe{background:#1a5878}.c-mk3{background:#2060a0}.c-power{background:#4a7a20}.c-hab{background:#7a3820}.c-md{background:#5a2080}
+.c-conv{background:#4a6a20}.c-fab{background:#804a20}.c-ast{background:#2a38b0}.c-crew{background:#7a5010}
+.c-dart{background:#2a38b0}.c-sinter{background:#1a7a5a}.c-msr{background:#7a6a10}.c-ctype{background:#2a8060}.c-stype{background:#806020}
+.c-ms{background:transparent;color:#e8c44a;border-color:#e8c44a}
+.c-econ{background:transparent;color:#4ae8a0;border-color:#4ae8a0}
+.notes{background:rgba(30,60,90,0.2);border:1px solid var(--dim);border-radius:6px;padding:12px 16px;margin-top:12px;font-size:12px;color:var(--tmid)}
+.notes b{color:var(--txt)}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px;margin:8px 0}
+.stat{background:rgba(20,40,60,0.4);border:1px solid var(--dim);border-radius:4px;padding:6px 10px;font-family:var(--mono);font-size:11px}
+.stat .val{font-size:16px;font-weight:700;color:var(--thi)}
+.stat .lbl{color:var(--tlo);font-size:10px}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;padding:8px 12px;background:var(--surf);border-radius:6px;border:1px solid var(--bdr)}
+.legend .li{display:flex;align-items:center;gap:4px;font-size:11px}
+.legend .sw{width:14px;height:14px;border-radius:2px}
+.ecn{font-family:var(--mono);font-size:10px;color:#e8a04a;background:rgba(232,160,74,0.1);border:1px solid rgba(232,160,74,0.3);border-radius:3px;padding:8px 12px;margin-top:8px}
+footer{text-align:center;margin-top:24px;padding:12px;border-top:1px solid var(--bdr);font-family:var(--mono);font-size:10px;color:var(--tlo)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hdr">
+  <h1>Selenite Programme &mdash; Extended Mission Timeline</h1>
+  <div>Phase 7 (Y18) through Phase 14+ (Y180+) &mdash; 200-Year Plan to 2.5 Mt/yr REO</div>
+  <div class="sub">v3.0 &middot; ECN-019 Rev C applied &middot; Companion to MTL v8.5 (Y1&ndash;Y15) &middot; Ref: SEL-DECISION-001 Rev C, ECN-019 Rev C, SEL-ECON-001 Rev A &middot; April 2026</div>
+</div>
+
+<div class="ecn">ECN-019 REV C: 2.5 Mt/yr committed target (was 1.25). Optimised circuits 1.2 t/yr, 2.08M total (was 2.5M batch). PROBE Mk III SEP (ion, never lands, EM anchoring) &mdash; MOLE-I drops to ~50 from Y85. Mass driver to P8 (was P10). No SKIPs at PKT. Catapults &rarr; conveyors. D2EHPA eliminated. Thorium MSR. Na-S batteries + SRM motors. Diversified asteroids (M/C/S-type). Laser ablation truss. 5 mass drivers. Base specialisation (SPA=asteroid hub, PKT=KREEP). BCR 0.50/2.06, +$121.8B/yr steady-state surplus.</div>
+
+<div class="legend">
+  <div class="li"><div class="sw c-skip"></div>SKIP (SPA only)</div>
+  <div class="li"><div class="sw c-hauler"></div>Haulers (PKT)</div>
+  <div class="li"><div class="sw c-conv"></div>Conveyors</div>
+  <div class="li"><div class="sw c-isru"></div>ISRU / MOLE-I</div>
+  <div class="li"><div class="sw c-proc"></div>Processing</div>
+  <div class="li"><div class="sw c-probe"></div>PROBE Mk I/II</div>
+  <div class="li"><div class="sw c-mk3"></div>PROBE Mk III</div>
+  <div class="li"><div class="sw c-power"></div>Solar / FSP</div>
+  <div class="li"><div class="sw c-msr"></div>Thorium MSR</div>
+  <div class="li"><div class="sw c-hab"></div>Hab / Crew</div>
+  <div class="li"><div class="sw c-md"></div>Mass driver</div>
+  <div class="li"><div class="sw c-fab"></div>Fabrication</div>
+  <div class="li"><div class="sw c-ast"></div>Asteroid ops</div>
+  <div class="li"><div class="sw c-ctype"></div>C-type asteroid</div>
+  <div class="li"><div class="sw c-stype"></div>S-type asteroid</div>
+  <div class="li"><div class="sw c-sinter"></div>Construction</div>
+  <div class="li"><div class="sw c-ms"></div>&diams; Milestone</div>
+</div>
+
+<!-- ═══ PHASE 7 ═══ -->
+<div class="phase">
+  <div class="phase-hdr">
+    <span class="phase-label" style="color:#4ae8a0">PHASE 7</span>
+    <span class="phase-years">Y18&ndash;Y25 (~2043&ndash;2050)</span>
+    <span class="phase-reo">REO: 0.4 t/yr &middot; Proof of Concept &middot; Last SKIP Phase</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="val">8</div><div class="lbl">SPA SKIPs</div></div>
+    <div class="stat"><div class="val">30</div><div class="lbl">PROBEs (Mk I)</div></div>
+    <div class="stat"><div class="val">170</div><div class="lbl">MOLE-I</div></div>
+    <div class="stat"><div class="val">5</div><div class="lbl">Circuits (SPA)</div></div>
+    <div class="stat"><div class="val">16&ndash;20</div><div class="lbl">Crew</div></div>
+    <div class="stat"><div class="val">~2.3 MW</div><div class="lbl">SPA Power</div></div>
+  </div>
+  <div class="track"><div class="track-label">Processing</div><div class="track-bar">
+    <span class="bar c-proc">5 circuits &mdash; H&#x2082;SO&#x2084; bake-leach, zero D2EHPA, split value chain</span>
+    <span class="ms c-ms">&diams; Y20: First REO at Shackleton &mdash; DG-7.1 PKT commitment gate</span>
+  </div></div>
+  <div class="track"><div class="track-label">Th/U Recovery</div><div class="track-bar">
+    <span class="bar c-proc" style="opacity:0.7">Th(OH)&#x2084; stockpiling &mdash; free byproduct of acid bake</span>
+    <span class="ms c-ms">&diams; DG-7.5: Thorium MSR decision (commit if terrestrial BR &gt;1.0)</span>
+  </div></div>
+  <div class="track"><div class="track-label">Reagent ISRU</div><div class="track-bar">
+    <span class="bar c-isru">H&#x2082;SO&#x2084; 50%+ in-situ (troilite) &middot; Ca(OH)&#x2082; replaces NaOH</span>
+  </div></div>
+  <div class="track"><div class="track-label">DART Pathfinder</div><div class="track-bar">
+    <span class="bar c-dart">Y18&ndash;22: DART to PKT via LLO &mdash; XRF grade mapping</span>
+    <span class="ms c-ms">&diams; Y22: PKT site confirmed (&gt;500 ppm REE)</span>
+  </div></div>
+  <div class="track"><div class="track-label">Mass Driver Prep</div><div class="track-bar">
+    <span class="bar c-md" style="opacity:0.6">Y22&ndash;25: MD-1 SPA&rarr;PKT construction (~3.3 km, ~60 t YBCO delivered from Earth)</span>
+  </div></div>
+  <div class="track"><div class="track-label">SPA SKIP</div><div class="track-bar">
+    <span class="bar c-skip">8 SKIPs &mdash; 877 t/yr raw SPA KREEP &mdash; last phase at peak fleet</span>
+  </div></div>
+  <div class="track"><div class="track-label">PROBE Fleet</div><div class="track-bar">
+    <span class="bar c-probe">30 Mk I &mdash; asteroid Fe-Ni/PGM returns to SPA IZ</span>
+  </div></div>
+  <div class="notes"><b>Phase 7:</b> Shackleton proves hydromet chemistry on the Moon (zero organic solvents). DART confirms PKT grades. Thorium stockpiling begins. <b>Critical path:</b> MD-1 must be built during P7 for P8 commissioning.</div>
+</div>
+
+<!-- ═══ PHASE 8 ═══ -->
+<div class="phase">
+  <div class="phase-hdr">
+    <span class="phase-label" style="color:#4ae8a0">PHASE 8</span>
+    <span class="phase-years">Y25&ndash;Y35 (~2050&ndash;2060)</span>
+    <span class="phase-reo">REO: 125 t/yr &middot; PKT Base Online &middot; Mass Driver Era Begins</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="val">200</div><div class="lbl">Haulers (PKT)</div></div>
+    <div class="stat"><div class="val">308</div><div class="lbl">Circuits (PKT)</div></div>
+    <div class="stat"><div class="val">96</div><div class="lbl">PROBEs (Mk I)</div></div>
+    <div class="stat"><div class="val">~247</div><div class="lbl">MOLE-I</div></div>
+    <div class="stat"><div class="val">8</div><div class="lbl">SPA SKIPs (continuing)</div></div>
+    <div class="stat"><div class="val">~55 MW</div><div class="lbl">PKT Power (FSP)</div></div>
+  </div>
+  <div class="track"><div class="track-label">Mass Driver MD-1</div><div class="track-bar">
+    <span class="ms c-ms">&diams; DG-8.0 (Y25): SPA&rarr;PKT mass driver operational (~1,800 m/s)</span>
+  </div></div>
+  <div class="track"><div class="track-label">PKT Construction</div><div class="track-bar">
+    <span class="bar c-sinter">Wave 1 (Y25): 20 SINTER + 10 haulers + 5 ARM-C + FSP &mdash; autonomous spine build</span>
+    <span class="bar c-sinter">Wave 2 (Y26&ndash;28): 100 circuits, 50 haulers, charging hubs, spine conveyor</span>
+    <span class="bar c-hab">Wave 3 (Y28&ndash;30): Temp crew (3&ndash;4, 6&ndash;12 mo) &mdash; foundry pilot, MSR cold structure, circuit tuning</span>
+    <span class="bar c-sinter">Wave 4 (Y30&ndash;35): Scale to 308 circuits, MSR fuel loading, hauler expansion to 200</span>
+  </div></div>
+  <div class="track"><div class="track-label">Circuit Validation</div><div class="track-bar">
+    <span class="ms c-ms">&diams; DG-8.X (Y28): Circuit throughput &ge;1.0 t/yr validated &mdash; highest-value gate ($22T impact)</span>
+  </div></div>
+  <div class="track"><div class="track-label">Catapult Demo</div><div class="track-bar">
+    <span class="bar c-md" style="opacity:0.6">Y30: EM catapult demonstrator (500 m/s, 23 t YBCO) &mdash; validates coilgun for MD-2</span>
+  </div></div>
+  <div class="track"><div class="track-label">PKT Haulers</div><div class="track-bar">
+    <span class="bar c-hauler">200 mining-capable haulers (Na-S, SRM, bucket/blade) &mdash; NO SKIPs, NO MOLE-S at PKT</span>
+  </div></div>
+  <div class="track"><div class="track-label">PROBE Fleet</div><div class="track-bar">
+    <span class="bar c-probe">96 Mk I PROBEs (peak Mk I fleet) &mdash; Fe-Ni/PGM to SPA, bulk mass-driven SPA&rarr;PKT</span>
+  </div></div>
+  <div class="track"><div class="track-label">MOLE-I</div><div class="track-bar">
+    <span class="bar c-isru">~247 MOLE-I &mdash; demand-driven (96 PROBEs + 8 SKIPs + crew)</span>
+  </div></div>
+  <div class="track"><div class="track-label">Earth Logistics</div><div class="track-bar">
+    <span class="bar c-hab" style="opacity:0.6">~30,000 t total (~300 Starship flights over P8) &mdash; ~30 flights/yr average</span>
+  </div></div>
+  <div class="notes"><b>Phase 8:</b> PKT base built in 4 waves by autonomous robot fleet, supervised from SPA (0.5s latency). Haulers replace SKIPs+MOLE-S at PKT from day one. Temp crew (Wave 3) commissions foundry and MSR cold structure, departs before fuel loading. All PKT deliveries Earth&rarr;PKT direct (not via SPA).</div>
+</div>
+
+<!-- ═══ PHASE 9 ═══ -->
+<div class="phase">
+  <div class="phase-hdr">
+    <span class="phase-label" style="color:#4ae8a0">PHASE 9</span>
+    <span class="phase-years">Y35&ndash;Y45 (~2060&ndash;2070)</span>
+    <span class="phase-reo">REO: 1,000 t/yr &middot; Mass Driver Exports &middot; SKIPs Retired</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="val">1,000+</div><div class="lbl">Haulers</div></div>
+    <div class="stat"><div class="val">2,500</div><div class="lbl">Circuits</div></div>
+    <div class="stat"><div class="val">~190</div><div class="lbl">PROBEs (Mk I&rarr;II)</div></div>
+    <div class="stat"><div class="val">~240</div><div class="lbl">MOLE-I</div></div>
+    <div class="stat"><div class="val">0</div><div class="lbl">SKIPs (RETIRED)</div></div>
+    <div class="stat"><div class="val">~100 MW</div><div class="lbl">PKT Power (FSP+MSR)</div></div>
+  </div>
+  <div class="track"><div class="track-label">Mass Driver MD-2</div><div class="track-bar">
+    <span class="ms c-ms">&diams; DG-9.1 (Y35): PKT&rarr;Earth mass driver operational (~2,400 m/s) &mdash; first REO canister exports</span>
+  </div></div>
+  <div class="track"><div class="track-label">SKIP Retirement</div><div class="track-bar">
+    <span class="ms c-ms" style="color:#e84a4a">&diams; P9: ALL SKIPs retired &mdash; PKT 1,000 t/yr REO from 2,500 circuits far exceeds SPA 0.4 t/yr</span>
+  </div></div>
+  <div class="track"><div class="track-label">Thorium MSR</div><div class="track-bar">
+    <span class="bar c-msr">DG-9.3 (Y40): First MSR power &mdash; BR &gt;1.0 confirmed &rarr; fleet expansion committed</span>
+  </div></div>
+  <div class="track"><div class="track-label">Mass Driver MD-3</div><div class="track-bar">
+    <span class="bar c-md" style="opacity:0.6">Y43: PKT&rarr;SPA mass driver &mdash; ThCl&#x2084; fuel for future SPA MSR</span>
+  </div></div>
+  <div class="track"><div class="track-label">Foundry</div><div class="track-bar">
+    <span class="bar c-fab">PKT foundry at 100+ t/yr metal (MRE + WAAM/EB welding) &mdash; first in-situ haulers (55&ndash;60%)</span>
+  </div></div>
+  <div class="track"><div class="track-label">Conveyor Pilot</div><div class="track-bar">
+    <span class="bar c-conv">First 500 km steel apron conveyor trunk &mdash; Fe-Ni + MRE iron</span>
+  </div></div>
+  <div class="track"><div class="track-label">PROBE Transition</div><div class="track-bar">
+    <span class="bar c-probe">Mk I phasedown (96&rarr;30) &middot; Mk II Heavy introduced (190 units, in-situ beneficiation)</span>
+  </div></div>
+  <div class="notes"><b>Phase 9:</b> Mass driver exports begin. SKIPs retired &mdash; propellant freed for PROBE fleet. First MSR confirms thorium breeding. Foundry starts producing haulers from in-situ materials. Earth logistics: ~15,000 t/yr (~150 flights).</div>
+</div>
+
+<!-- ═══ PHASE 10 ═══ -->
+<div class="phase">
+  <div class="phase-hdr">
+    <span class="phase-label" style="color:#4ae8a0">PHASE 10</span>
+    <span class="phase-years">Y45&ndash;Y60 (~2070&ndash;2085)</span>
+    <span class="phase-reo">REO: 10,000 t/yr &middot; Full-Scale Industrial Operations</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="val">14,881</div><div class="lbl">Haulers</div></div>
+    <div class="stat"><div class="val">25,000</div><div class="lbl">Circuits</div></div>
+    <div class="stat"><div class="val">~230</div><div class="lbl">PROBEs (Mk II)</div></div>
+    <div class="stat"><div class="val">~280</div><div class="lbl">MOLE-I (peak chemical era)</div></div>
+    <div class="stat"><div class="val">7.4 GW</div><div class="lbl">PKT Power (~74 MSR)</div></div>
+  </div>
+  <div class="track"><div class="track-label">MSR Fleet</div><div class="track-bar">
+    <span class="bar c-msr">~74 &times; 100 MWe MSR &mdash; ThCl&#x2084; fuel from KREEP waste &mdash; replaces FSP for bulk power</span>
+  </div></div>
+  <div class="track"><div class="track-label">SPA MSR</div><div class="track-bar">
+    <span class="bar c-msr" style="opacity:0.6">DG-10.5 (Y50): SPA MSR commissioned &mdash; ThCl&#x2084; from PKT via MD-3</span>
+  </div></div>
+  <div class="track"><div class="track-label">Conveyors</div><div class="track-bar">
+    <span class="bar c-conv">5,000+ km steel apron conveyors &mdash; replaces Tier 3 hauler routes (50&ndash;150 km)</span>
+  </div></div>
+  <div class="track"><div class="track-label">Fabrication</div><div class="track-bar">
+    <span class="bar c-fab">Full industrial foundry &mdash; haulers 57% in-situ, canisters 85%, conveyors 95%</span>
+  </div></div>
+  <div class="track"><div class="track-label">Earth Logistics</div><div class="track-bar">
+    <span class="bar c-hab" style="opacity:0.6">~25,000 t/yr (~250 flights) &mdash; declining as in-situ fraction grows</span>
+  </div></div>
+  <div class="notes"><b>Phase 10:</b> Full industrial scale. MSR fleet provides 7.4 GW for 25,000 circuits. Foundry produces haulers, canisters, conveyor sections from in-situ materials. Peak chemical-era MOLE-I demand (~280). Earth imports declining.</div>
+</div>
+
+<!-- ═══ PHASE 11 ═══ -->
+<div class="phase">
+  <div class="phase-hdr">
+    <span class="phase-label" style="color:#4a9ef5">PHASE 11</span>
+    <span class="phase-years">Y60&ndash;Y80 (~2085&ndash;2105)</span>
+    <span class="phase-reo">REO: 100,000 t/yr &middot; 10% Displacement &middot; PROBE Mk III Transition</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="val">148,810</div><div class="lbl">Haulers</div></div>
+    <div class="stat"><div class="val">250,000</div><div class="lbl">Circuits</div></div>
+    <div class="stat"><div class="val">260&rarr;30</div><div class="lbl">Mk I/II (phasedown)</div></div>
+    <div class="stat"><div class="val">0&rarr;1,714</div><div class="lbl">Mk III SEP (build-out)</div></div>
+    <div class="stat"><div class="val">~320&rarr;~50</div><div class="lbl">MOLE-I (Mk III transition)</div></div>
+    <div class="stat"><div class="val">67.9 GW</div><div class="lbl">PKT Power (~679 MSR)</div></div>
+  </div>
+  <div class="track"><div class="track-label">PROBE Mk III SEP</div><div class="track-bar">
+    <span class="bar c-mk3">DG-11.6: Ion propulsion, NEVER lands, EM anchoring on M-type Fe-Ni. Build-out ~86/yr &rarr; 1,714 units</span>
+    <span class="bar c-mk3" style="opacity:0.7">Ejects 10 t canisters from LLO &rarr; EM catcher at SPA (~1,680 m/s). Zero ISRU propellant.</span>
+  </div></div>
+  <div class="track"><div class="track-label">Mk I/II Phasedown</div><div class="track-bar">
+    <span class="bar c-probe" style="opacity:0.5">260&rarr;50&rarr;30 chemical PROBEs &mdash; salvaged at SPA (~184 t Fe-Ni recovered)</span>
+  </div></div>
+  <div class="track"><div class="track-label">MOLE-I Cascade</div><div class="track-bar">
+    <span class="bar c-isru">~320&rarr;~50 MOLE-I &mdash; Mk III uses zero ISRU propellant &rarr; chemical fleet minimal</span>
+  </div></div>
+  <div class="track"><div class="track-label">Mass Driver MD-4</div><div class="track-bar">
+    <span class="bar c-md">Y70: SPA&rarr;Earth mass driver &mdash; PGM exports when &gt;100 t/yr (Ir for H&#x2082; economy PEM electrolysers)</span>
+  </div></div>
+  <div class="track"><div class="track-label">Ni-201 Vessels</div><div class="track-bar">
+    <span class="bar c-fab">Y75: In-situ Ni-201 MSR vessels from asteroid Ni &mdash; replaces Hastelloy-N import</span>
+  </div></div>
+  <div class="track"><div class="track-label">M-type Redirect</div><div class="track-bar">
+    <span class="bar c-ast">Y65&ndash;75: SEP/NEP redirect tugs (~50,000 kg) &mdash; ~200 m M-type asteroid &rarr; DRO</span>
+    <span class="ms c-ms">&diams; Y75: M-type asteroid redirect initiated (arrival ~Y85)</span>
+  </div></div>
+  <div class="track"><div class="track-label">Earth Logistics</div><div class="track-bar">
+    <span class="bar c-hab" style="opacity:0.6">~12,500 t/yr (~126 flights) &mdash; Mk III PROBEs LEO-launched, self-transfer</span>
+  </div></div>
+  <div class="notes"><b>Phase 11:</b> The Mk III transition is the architectural inflection &mdash; ion propulsion eliminates ISRU as the fleet constraint. MOLE-I drops from ~320 to ~50. M-type asteroid redirect begins (10-year transit to DRO). Ni-201 in-situ vessels replace Hastelloy-N. 10% global REE displacement &mdash; lunar supply begins affecting Earth commodity prices.</div>
+</div>
+
+<!-- ═══ PHASE 12 ═══ -->
+<div class="phase">
+  <div class="phase-hdr">
+    <span class="phase-label" style="color:#e8a04a">PHASE 12</span>
+    <span class="phase-years">Y80&ndash;Y120 (~2105&ndash;2145)</span>
+    <span class="phase-reo">REO: 100k&rarr;500k t/yr &middot; Scaling + M-type Asteroid Online</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="val">1,488,096</div><div class="lbl">Haulers</div></div>
+    <div class="stat"><div class="val">2,083,334</div><div class="lbl">Circuits (optimised 1.2 t/yr)</div></div>
+    <div class="stat"><div class="val">1,714</div><div class="lbl">Mk III PROBEs</div></div>
+    <div class="stat"><div class="val">~50</div><div class="lbl">MOLE-I</div></div>
+    <div class="stat"><div class="val">689 GW</div><div class="lbl">PKT Power (~6,890 MSR)</div></div>
+    <div class="stat"><div class="val">5</div><div class="lbl">Mass Drivers</div></div>
+  </div>
+  <div class="track"><div class="track-label">M-type Asteroid</div><div class="track-bar">
+    <span class="ms c-ms">&diams; Y85: M-type asteroid (~200 m) arrives in DRO &mdash; 36.5 t/yr PGM at 100 ppm</span>
+    <span class="bar c-ast">Laser Ablation Truss: ~350 MW, 1,000 t/day spiral surface ablation, electrostatic/magnetic collectors</span>
+  </div></div>
+  <div class="track"><div class="track-label">Mass Driver MD-5</div><div class="track-bar">
+    <span class="bar c-md">Y85: DRO&rarr;SPA mass driver (~800 m/s, ~500 m track, ~30 t YBCO) &mdash; asteroid concentrate to SPA</span>
+  </div></div>
+  <div class="track"><div class="track-label">Processing at Scale</div><div class="track-bar">
+    <span class="bar c-proc">2.08M optimised circuits (1.2 t/yr each, 28,000 kg, 400 kW) &mdash; scaling 100k&rarr;500k t/yr REO</span>
+  </div></div>
+  <div class="track"><div class="track-label">Transport Network</div><div class="track-bar">
+    <span class="bar c-hauler">1.49M haulers &mdash; ~200,000 km road &mdash; Na-S + SRM &mdash; 33% Earth fraction (M-type Fe-Ni)</span>
+    <span class="bar c-conv">~87,500 km steel apron conveyors &mdash; 95% in-situ</span>
+  </div></div>
+  <div class="track"><div class="track-label">Earth Return</div><div class="track-bar">
+    <span class="bar c-md">285,715 canister launches/yr (783/day) &mdash; minimal drag chute &mdash; Fe-Ni 8 mm wall</span>
+  </div></div>
+  <div class="track"><div class="track-label">C-type Redirect</div><div class="track-bar">
+    <span class="bar c-ctype" style="opacity:0.6">Y95: C-type asteroid (~100 m) redirect initiated &mdash; DG-14.1 targeting decision</span>
+  </div></div>
+  <div class="track"><div class="track-label">Earth Logistics</div><div class="track-bar">
+    <span class="bar c-hab" style="opacity:0.6">~30,000&ndash;36,000 t/yr (~300&ndash;360 flights) &mdash; hauler spares, canister recovery, circuit parts</span>
+  </div></div>
+  <div class="notes"><b>Phase 12:</b> M-type asteroid arrives Y85 &mdash; 36.5 t/yr PGM via laser ablation truss + MD-5. Hauler Earth fraction drops to 33% with M-type Fe-Ni. 5 mass drivers operational. Circuit count: 2.08M (optimised 1.2 t/yr design, $22T saving vs batch). MOLE-I at ~50 (Mk III dominates). C-type redirect begins Y95.</div>
+</div>
+
+<!-- ═══ PHASE 13 ═══ -->
+<div class="phase" style="border-color:#2a8060">
+  <div class="phase-hdr">
+    <span class="phase-label" style="color:#4ae8a0">PHASE 13</span>
+    <span class="phase-years">Y120&ndash;Y140 (~2145&ndash;2165)</span>
+    <span class="phase-reo">REO: 500k&rarr;1.25M t/yr &middot; 50% Replacement &middot; C-type Online</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="val">~1.5M</div><div class="lbl">Haulers</div></div>
+    <div class="stat"><div class="val">2.08M</div><div class="lbl">Circuits</div></div>
+    <div class="stat"><div class="val">1,714</div><div class="lbl">Mk III (transitioning to prospecting)</div></div>
+    <div class="stat"><div class="val">3%</div><div class="lbl">Circuit Earth Fraction</div></div>
+    <div class="stat"><div class="val">~50</div><div class="lbl">MOLE-I (crew ECLSS only)</div></div>
+  </div>
+  <div class="track"><div class="track-label">C-type Asteroid</div><div class="track-bar">
+    <span class="ms c-ms">&diams; Y105: C-type asteroid (~100 m) arrives in DRO &mdash; water, carbon, nitrogen</span>
+    <span class="bar c-ctype">Pyrolysis + Fischer-Tropsch at SPA &mdash; PTFE, polymer precursors in-situ</span>
+    <span class="bar c-ctype" style="opacity:0.7">Reflective MLI blanket over unmined C-type surfaces (preserve subsurface ice in DRO solar)</span>
+  </div></div>
+  <div class="track"><div class="track-label">SPA MSR #1</div><div class="track-bar">
+    <span class="bar c-msr">Y105: SPA MSR ~50 MWe &mdash; C-type processing power &mdash; ThCl&#x2084; from PKT via MD-3</span>
+  </div></div>
+  <div class="track"><div class="track-label">Propellant Independence</div><div class="track-bar">
+    <span class="bar c-isru" style="opacity:0.7">C-type water supplements lunar ISRU &mdash; MOLE-I demand for propellant &rarr; near zero</span>
+  </div></div>
+  <div class="track"><div class="track-label">Circuit Earth Frac</div><div class="track-bar">
+    <span class="bar c-fab">10% &rarr; 3% &mdash; C-type carbon replaces PTFE, polymer, Nomex/Kevlar imports</span>
+  </div></div>
+  <div class="track"><div class="track-label">S-type Redirect</div><div class="track-bar">
+    <span class="bar c-stype" style="opacity:0.6">Y115: S-type asteroid (~100 m) redirect initiated &mdash; DG-14.2 targeting decision</span>
+  </div></div>
+  <div class="track"><div class="track-label">Mk III Transition</div><div class="track-bar">
+    <span class="bar c-mk3" style="opacity:0.5">Y115: All 3 asteroid captures complete &mdash; Mk III 1,714&rarr;300 (prospecting only)</span>
+  </div></div>
+  <div class="track"><div class="track-label">REO Milestone</div><div class="track-bar">
+    <span class="ms c-econ">&diams; 1,250,000 t/yr REO &mdash; 50% of projected global demand replaced</span>
+  </div></div>
+  <div class="notes"><b>Phase 13:</b> C-type asteroid provides water (propellant independence), carbon (PTFE/polymer in-situ), and nitrogen (organic chemistry). Circuit Earth fraction drops 10%&rarr;3%. C-type carbon is the feedstock for S-type silicon refining (carbothermic reduction). Each capture enables the next.</div>
+</div>
+
+<!-- ═══ PHASE 14 ═══ -->
+<div class="phase" style="border-color:#806020">
+  <div class="phase-hdr">
+    <span class="phase-label" style="color:#e8c44a">PHASE 14</span>
+    <span class="phase-years">Y140&ndash;Y180 (~2165&ndash;2205)</span>
+    <span class="phase-reo">REO: 1.25M&rarr;2.5M t/yr &middot; Full Replacement &middot; Earth Independence</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="val">~1.5M</div><div class="lbl">Haulers (20% Earth frac floor)</div></div>
+    <div class="stat"><div class="val">2.08M</div><div class="lbl">Circuits (0.8% Earth frac)</div></div>
+    <div class="stat"><div class="val">300</div><div class="lbl">Mk III (prospecting)</div></div>
+    <div class="stat"><div class="val">5</div><div class="lbl">Redirect Tugs</div></div>
+    <div class="stat"><div class="val">3</div><div class="lbl">Laser Trusses (M/C/S)</div></div>
+  </div>
+  <div class="track"><div class="track-label">S-type Asteroid</div><div class="track-bar">
+    <span class="ms c-ms">&diams; Y125: S-type asteroid (~100 m) arrives in DRO &mdash; silicon, copper</span>
+    <span class="bar c-stype">Czochralski Si refinery + Cu electrolysis at SPA &mdash; semiconductor-grade silicon in-situ</span>
+  </div></div>
+  <div class="track"><div class="track-label">SPA MSR #2 + #3</div><div class="track-bar">
+    <span class="bar c-msr">Y125: +100 MWe (S-type refinery) &middot; Y140: +1 MSR (scaled ops)</span>
+  </div></div>
+  <div class="track"><div class="track-label">Circuit Earth Frac</div><div class="track-bar">
+    <span class="bar c-fab" style="font-weight:bold">3% &rarr; 0.8% &mdash; Si sensors, Cu wiring in-situ &mdash; only advanced ICs from Earth</span>
+  </div></div>
+  <div class="track"><div class="track-label">Earth Independence</div><div class="track-bar">
+    <span class="ms c-ms">&diams; DG-14.3 (Y140): Earth independence assessment &mdash; &lt;0.5% of infrastructure mass from Earth</span>
+  </div></div>
+  <div class="track"><div class="track-label">REO Target</div><div class="track-bar">
+    <span class="ms c-econ" style="font-size:12px">&diams; Y180: 2,500,000 t/yr REO &mdash; FULL REPLACEMENT of terrestrial REE mining</span>
+  </div></div>
+  <div class="notes"><b>Phase 14:</b> S-type silicon + copper complete the material independence trifecta (M-type Fe-Ni/PGM + C-type water/carbon + S-type Si/Cu). Circuit Earth fraction reaches 0.8% &mdash; only advanced ICs, specialty optics, precision bearings remain. By Y180: 2.5 Mt/yr REO steady state achieved.</div>
+</div>
+
+<!-- ═══ PHASE 14+ ═══ -->
+<div class="phase" style="border-color:#4ae8a0">
+  <div class="phase-hdr">
+    <span class="phase-label" style="color:#4ae8a0">PHASE 14+ STEADY STATE</span>
+    <span class="phase-years">Y180+ (~2205+)</span>
+    <span class="phase-reo">REO: 2,500,000 t/yr &middot; Maintenance Only &middot; Self-Sustaining Civilisation</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="val">+$121.8B/yr</div><div class="lbl">Net Surplus (BCR 2.06 annual)</div></div>
+    <div class="stat"><div class="val">182 Mt/yr</div><div class="lbl">CO&#x2082; Avoided</div></div>
+    <div class="stat"><div class="val">&lt;0.5%</div><div class="lbl">Earth Mass Dependency</div></div>
+    <div class="stat"><div class="val">$106B/yr</div><div class="lbl">Programme Cost (4.7% military spend)</div></div>
+    <div class="stat"><div class="val">400–1,300 yr</div><div class="lbl">Lunar REE reserves at rate</div></div>
+  </div>
+  <div class="track"><div class="track-label">Operations</div><div class="track-bar">
+    <span class="bar c-proc">2.5 Mt/yr REO &mdash; 2.08M circuits &mdash; maintenance replacement only</span>
+    <span class="bar c-md">783 canister launches/day &mdash; mass driver to Earth &mdash; zero propellant</span>
+  </div></div>
+  <div class="track"><div class="track-label">Asteroid Campaigns</div><div class="track-bar">
+    <span class="bar c-ast">M-type: 80+ yr PGM campaign continues &middot; 300 Mk III prospecting &middot; 3 laser trusses</span>
+  </div></div>
+  <div class="track"><div class="track-label">SPA Role</div><div class="track-bar">
+    <span class="bar c-hab">Deep-space launch hub &mdash; ISRU propellant for interplanetary missions &mdash; ~20 crew &mdash; R&amp;D centre</span>
+  </div></div>
+  <div class="track"><div class="track-label">Earth Dependencies</div><div class="track-bar">
+    <span class="bar c-hab" style="opacity:0.5">Advanced ICs, specialty optics, precision bearings only (&lt;0.5% mass). All else in-situ.</span>
+  </div></div>
+  <div class="track"><div class="track-label">Economic Model</div><div class="track-bar">
+    <span class="ms c-econ">&diams; BCR 2.06 annual &mdash; $2.06 in benefits for every $1 spent &mdash; comparable to mature infrastructure</span>
+  </div></div>
+  <div class="notes"><b>Steady State:</b> Programme transitions from &ldquo;betterment of Earth&rdquo; to &ldquo;self-sustaining cislunar industrial civilisation.&rdquo; 2.5 Mt/yr REO fully replaces terrestrial REE mining. 182 Mt CO&#x2082;/yr avoided (France + UK combined). M/C/S-type asteroid resources provide near-complete material independence. Infrastructure supports indefinite operation and growth without Earth resupply. PKT resource adequacy: ~220&ndash;660 Mt REE accessible to 200 m depth (100&ndash;300 ppm bulk grade), providing ~88&ndash;264 years of supply at 2.5 Mt/yr from Y180. Post-P14 expansion: hauler upgrades (deeper mining attachments, relay depot chains), fleet expansion across PKT&rsquo;s 6.1M km&sup2;, or new extraction methods for depths beyond 200 m. Terrestrial REE recycling (projected 90%+ by 23rd century) progressively reduces demand. Resource depletion is not a binding constraint on any programme-relevant timescale.</div>
+</div>
+
+<footer>
+  SELENITE PROGRAMME &middot; Extended Mission Timeline v3.0 &middot; ECN-019 Rev C Applied &middot; April 2026<br>
+  Ref: SEL-DECISION-001 Rev C, ECN-019 Rev C, SEL-ECON-001 Rev A, SELENITE_ECON v1.3/v1.4<br>
+  Systems Engineering Lead: Jason &middot; Committed target: 2.5 Mt/yr REO &middot; Programme cost: $21.3T / 200 yr &middot; BCR 0.50 (200-yr) / 2.06 (annual SS)
+</footer>
+</div>
+</body>
+</html>

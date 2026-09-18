@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selenite — Programme Scaling P7–P12+</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root {
+    --bg: #080c10; --surf: #0d1520; --surf2: #111d2c; --bdr: #1a2a3c;
+    --dim: #2a4060; --txt: #b8d0e4; --txt2: #6a90b0; --hi: #e4f0f9;
+    --acc: #4ae8a0; --ms: #ffdd44; --warn: #e8a84a; --crit: #e84a4a;
+    --p7: #4ae8a0; --p8: #4a9ef5; --p9: #e8c44a; --p10: #e87a4a; --p11: #e84a8a; --p12: #e84a4a; --p13: #a84ae8; --p14: #4ae8e8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--txt);
+    font-family: 'Barlow', sans-serif;
+    padding: 32px 20px 60px; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .container { max-width: 1020px; width: 100%; }
+  header { margin-bottom: 20px; }
+  header .eyebrow { font-family: 'Barlow Condensed'; font-weight: 600; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--acc); margin-bottom: 4px; }
+  header h1 { font-family: 'Barlow Condensed'; font-weight: 700; font-size: 24px; color: var(--hi); margin-bottom: 4px; }
+  header .sub { font-size: 12px; color: var(--txt2); line-height: 1.5; }
+
+  .flow { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 0; }
+
+  .phase-card {
+    background: var(--surf); border: 1px solid var(--bdr); border-radius: 8px;
+    padding: 16px 18px 14px; position: relative;
+  }
+  .phase-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; border-radius: 8px 8px 0 0;
+  }
+  .full-width { grid-column: 1 / -1; }
+
+  .phase-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+  .phase-id { font-family: 'Barlow Condensed'; font-weight: 700; font-size: 22px; letter-spacing: 0.5px; }
+  .phase-years { font-family: 'JetBrains Mono'; font-size: 11px; color: var(--txt2); }
+  .phase-reo { font-family: 'JetBrains Mono'; font-size: 11px; font-weight: 500; }
+  .phase-title { font-family: 'Barlow Condensed'; font-weight: 600; font-size: 14px; color: var(--hi); letter-spacing: 0.5px; margin-bottom: 8px; }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; }
+  .stats-6 { grid-template-columns: repeat(3, 1fr); }
+  .stat { background: rgba(0,0,0,0.25); border-radius: 4px; padding: 6px 8px; text-align: center; }
+  .stat-val { font-family: 'JetBrains Mono'; font-weight: 500; font-size: 14px; color: var(--hi); }
+  .stat-val-sm { font-size: 12px; }
+  .stat-label { font-size: 9px; color: var(--txt2); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 2px; }
+
+  .new-section { margin-top: 8px; }
+  .new-head { font-family: 'Barlow Condensed'; font-weight: 600; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); margin-bottom: 4px; }
+  .new-item { font-size: 12px; line-height: 1.5; color: var(--txt); padding: 3px 0; border-bottom: 1px solid rgba(26,42,60,0.3); }
+  .new-item:last-child { border-bottom: none; }
+  .new-item b { color: var(--hi); font-weight: 600; }
+  .delta { font-family: 'JetBrains Mono'; font-size: 10px; font-weight: 500; padding: 1px 4px; border-radius: 3px; margin-left: 4px; }
+  .delta-up { background: rgba(74,232,160,0.15); color: var(--acc); }
+  .delta-new { background: rgba(255,221,68,0.15); color: var(--ms); }
+  .delta-crit { background: rgba(232,74,74,0.15); color: var(--crit); }
+  .delta-shift { background: rgba(168,74,232,0.2); color: #c88aff; }
+
+  .transition {
+    grid-column: 1 / -1;
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; padding: 8px 0; margin: 2px 0;
+  }
+  .transition .arrow { flex: 1; height: 1px; background: var(--dim); }
+  .transition-text {
+    font-family: 'Barlow Condensed'; font-size: 12px; font-weight: 600;
+    color: var(--ms); text-align: center; padding: 4px 16px;
+    border: 1px solid rgba(255,221,68,0.3); border-radius: 4px;
+    background: rgba(255,221,68,0.05); letter-spacing: 0.5px;
+  }
+
+  .vision-card {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, rgba(168,74,232,0.08), rgba(74,232,160,0.04));
+    border: 1px solid rgba(168,74,232,0.25); border-radius: 8px;
+    padding: 18px 20px 16px; margin-top: 14px;
+  }
+  .vision-card .phase-id { color: var(--p13); }
+  .vision-card::before { display: none; }
+  .vision-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 10px; }
+  .vision-col h4 { font-family: 'Barlow Condensed'; font-weight: 600; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .vision-col p { font-size: 11px; line-height: 1.55; color: var(--txt2); }
+  .vision-col b { color: var(--txt); }
+
+  footer { margin-top: 16px; font-size: 10px; color: var(--dim); line-height: 1.5; }
+
+  .c7::before { background: var(--p7); } .c8::before { background: var(--p8); }
+  .c9::before { background: var(--p9); } .c10::before { background: var(--p10); }
+  .c11::before { background: var(--p11); } .c12::before { background: var(--p12); }
+  .c13::before { background: var(--p13); } .c14::before { background: var(--p14); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="eyebrow">Selenite Programme · Deliverable 04</div>
+  <h1>Programme Scaling — Phase 7 through Phase 14+</h1>
+  <div class="sub">Dual-base architecture: SPA Shackleton (crewed hub) + PKT Procellarum (autonomous factory) · 200-year programme scope · Target: 2.5 Mt/yr REO by ~Y180 (~2205) · Full replacement of terrestrial REE mining · ECN-019 Rev C baseline</div>
+</header>
+
+<div class="flow">
+
+<!-- ═══ P7 (recap) ═══ -->
+<div class="phase-card c7">
+  <div class="phase-head">
+    <span class="phase-id" style="color:var(--p7)">P7</span>
+    <span class="phase-years">Y18–25 · ~2043–2050</span>
+    <span class="phase-reo" style="color:var(--p7)">0.4 t/yr REO</span>
+  </div>
+  <div class="phase-title">Proof of Concept — SPA Only</div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">20</div><div class="stat-label">Crew (SPA)</div></div>
+    <div class="stat"><div class="stat-val">8</div><div class="stat-label">SPA SKIPs</div></div>
+    <div class="stat"><div class="stat-val">170</div><div class="stat-label">MOLE-I</div></div>
+    <div class="stat"><div class="stat-val">2.1 MW</div><div class="stat-label">SPA Power</div></div>
+  </div>
+  <div class="new-section">
+    <div class="new-head">Key state at P7</div>
+    <div class="new-item"><b>Processing facility (5 circuits)</b> proves 8-step zero-carbon lunar flowsheet — 0.4 t/yr REO proof-of-concept. D2EHPA eliminated; group separation on Moon, individual SX on Earth.</div>
+    <div class="new-item"><b>DART confirms PKT site</b> by Y22 — ground-truth >500 ppm REE <span class="delta delta-new">PKT GO</span></div>
+    <div class="new-item"><b>MOLE-I Mk II retrofit</b> underway — 5 m telescoping drill · Inconel 718 bellows seal · deep ice access for scaling era</div>
+    <div class="new-item"><b>Progressive automation</b> of processing — systematically removing crew intervention to validate PKT zero-crew architecture</div>
+    <div class="new-item"><b>30 PROBEs Mk I</b> · <b>8 SKIPs (peak)</b> · ISRU at 968 t/yr · YBCO delivery for MD-1 begins</div>
+  </div>
+</div>
+
+<!-- ═══ P8 ═══ -->
+<div class="phase-card c8">
+  <div class="phase-head">
+    <span class="phase-id" style="color:var(--p8)">P8</span>
+    <span class="phase-years">Y25–35 · ~2050–2060</span>
+    <span class="phase-reo" style="color:var(--p8)">125 t/yr REO</span>
+  </div>
+  <div class="phase-title">PKT Base Online — Autonomous Factory</div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">20</div><div class="stat-label">Crew (SPA)</div></div>
+    <div class="stat"><div class="stat-val">~247</div><div class="stat-label">MOLE-I</div></div>
+    <div class="stat"><div class="stat-val">308</div><div class="stat-label">Proc circuits</div></div>
+    <div class="stat"><div class="stat-val">200</div><div class="stat-label">PKT Haulers</div></div>
+  </div>
+  <div class="new-section">
+    <div class="new-head">What gets built</div>
+    <div class="new-item"><b>SPA→PKT mass driver (MD-1) operational</b> (DG-8.0) — propellant + reagents delivered electromagnetically <span class="delta delta-new">MASS DRIVER</span></div>
+    <div class="new-item"><b>SINTER + ARM fleet deployed to PKT from SPA via cargo</b> — autonomous site construction. PKT declared operational Y27. Zero crew. <span class="delta delta-new">PKT BASE</span></div>
+    <div class="new-item"><b>4-wave PKT construction</b> (~300 Starship flights). 308 processing circuits along linear spine.</div>
+    <div class="new-item"><b>200 Hauler Rev B at PKT</b> — mining-capable (Na-S battery, SRM motors, front bucket). NO SKIPs at PKT — EVER. <span class="delta delta-new">HAULER</span></div>
+    <div class="new-item"><b>~1,386 FSP for initial PKT power</b> (~55 MW). Th(OH)₄ stockpiling from acid bake byproduct (~40 t). First MSR prototype if DG-7.5 met.</div>
+    <div class="new-item"><b>Temporary commissioning crew</b> — 3–4 specialists at PKT for 6–12 months (foundry + MSR cold structure). Decommissioned after.</div>
+    <div class="new-item"><b>PROBE Mk I → 96 (peak)</b> · SPA SKIPs → 8 (maintained) · Circuit validation gate DG-8.X (≥1.0 t/yr before commitment)</div>
+    <div class="new-item"><b>Earth frac: 100%</b> (all circuit components Earth-manufactured at this phase)</div>
+  </div>
+</div>
+
+<!-- Transition 1 -->
+<div class="transition">
+  <div class="arrow"></div>
+  <div class="transition-text">Mass driver logistics · First MSR · Conveyor pilot · Chemical PROBE peak then phasedown</div>
+  <div class="arrow"></div>
+</div>
+
+<!-- ═══ P9 ═══ -->
+<div class="phase-card c9">
+  <div class="phase-head">
+    <span class="phase-id" style="color:var(--p9)">P9</span>
+    <span class="phase-years">Y35–45 · ~2060–2070</span>
+    <span class="phase-reo" style="color:var(--p9)">1,000 t/yr REO</span>
+  </div>
+  <div class="phase-title">First MSR · SKIPs Retired · Earth Return</div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">~240</div><div class="stat-label">MOLE-I</div></div>
+    <div class="stat"><div class="stat-val">1,000+</div><div class="stat-label">Haulers</div></div>
+    <div class="stat"><div class="stat-val">2,500</div><div class="stat-label">Proc circuits</div></div>
+    <div class="stat"><div class="stat-val">~100 MW</div><div class="stat-label">PKT Power</div></div>
+  </div>
+  <div class="new-section">
+    <div class="new-head">What gets built</div>
+    <div class="new-item"><b>PKT→Earth mass driver (MD-2) operational</b> (DG-9.1) — REO canisters at escape velocity (~2,400 m/s) · heat-shielded atmospheric entry · zero propellant <span class="delta delta-new">EARTH RETURN</span></div>
+    <div class="new-item"><b>SPA SKIPs retired (8→0)</b> — PKT 2,500 circuits make SPA 5-circuit proof-of-concept irrelevant <span class="delta delta-crit">SKIP RETIRED</span></div>
+    <div class="new-item"><b>First MSR(s) commissioned</b> (DG-9.3) — confirm breeding ratio >1.0. ThCl₄ fuel from KREEP waste. Chloride salt, 700°C. <span class="delta delta-new">MSR</span></div>
+    <div class="new-item"><b>Conveyor pilot at PKT</b> — steel apron conveyor prototype for Tier 3 ore transport</div>
+    <div class="new-item"><b>PROBE Mk II introduced</b> — 5,000 kg heavy, on-asteroid beneficiation, 10 t × 50× PGM concentrated per mission <span class="delta delta-up">×350 PGM/mission</span></div>
+    <div class="new-item"><b>Foundry scaling</b> — PKT distributed manufacturing network. Hauler in-situ fraction ~57%.</div>
+    <div class="new-item"><b>Earth frac: ~10%</b> (in-situ H₂SO₄, Ca(OH)₂ reducing Earth reagent dependency)</div>
+  </div>
+</div>
+
+<!-- ═══ P10 ═══ -->
+<div class="phase-card c10">
+  <div class="phase-head">
+    <span class="phase-id" style="color:var(--p10)">P10</span>
+    <span class="phase-years">Y45–60 · ~2070–2085</span>
+    <span class="phase-reo" style="color:var(--p10)">10,000 t/yr REO</span>
+  </div>
+  <div class="phase-title">Industrial Scale — MSR Fleet · Conveyors</div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">14,881</div><div class="stat-label">Haulers</div></div>
+    <div class="stat"><div class="stat-val">~74</div><div class="stat-label">MSR (100 MWe)</div></div>
+    <div class="stat"><div class="stat-val">25,000</div><div class="stat-label">Proc circuits</div></div>
+    <div class="stat"><div class="stat-val">7.4 GW</div><div class="stat-label">PKT Power</div></div>
+  </div>
+  <div class="new-section">
+    <div class="new-head">Three simultaneous revolutions</div>
+    <div class="new-item"><b>MSR fleet ~74 × 100 MWe</b> (DG-10.4) replaces FSP for PKT bulk power. Continuous through lunar night. ThCl₄ consuming ~54 t/yr; producing 387–773 t/yr. <span class="delta delta-shift">FSP → MSR</span></div>
+    <div class="new-item"><b>SPA MSR commissioned</b> (DG-10.5) — first nuclear power at crewed base</div>
+    <div class="new-item"><b>Steel apron conveyor network deploying</b> — replaces EM catapult concept entirely. ~95% in-situ Fe-Ni. YBCO 209,000 t → 0 for ore transport. <span class="delta delta-shift">CATAPULT → CONVEYOR</span></div>
+    <div class="new-item"><b>14,881 electric haulers</b> at PKT — mining + transport + grading, zero propellant at any scale</div>
+    <div class="new-item"><b>Redirect tug development begins</b> — SEP/NEP, ~50,000 kg, Hall-effect thrusters, 20-yr life</div>
+    <div class="new-item"><b>In-situ fabrication fully operational</b> — haulers, conveyor sections, road network from local Fe-Ni + Al + Ti</div>
+    <div class="new-item"><b>Earth frac: ~10% → 3%</b> (post C-type asteroid capture, see P12)</div>
+    <div class="new-item"><b>~0.8% of projected global REE demand</b> — first market impact</div>
+  </div>
+</div>
+
+<!-- Transition 2 -->
+<div class="transition">
+  <div class="arrow"></div>
+  <div class="transition-text">MSR fleet scaling · Conveyor network expanding · PROBE Mk III development · Redirect tugs building</div>
+  <div class="arrow"></div>
+</div>
+
+<!-- ═══ P11 ═══ -->
+<div class="phase-card c11">
+  <div class="phase-head">
+    <span class="phase-id" style="color:var(--p11)">P11</span>
+    <span class="phase-years">Y60–80 · ~2085–2105</span>
+    <span class="phase-reo" style="color:var(--p11)">100,000 t/yr REO</span>
+  </div>
+  <div class="phase-title">PROBE Mk III · M-type Asteroid Redirect</div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">148,810</div><div class="stat-label">Haulers</div></div>
+    <div class="stat"><div class="stat-val">~679</div><div class="stat-label">MSR (100 MWe)</div></div>
+    <div class="stat"><div class="stat-val">250,000</div><div class="stat-label">Proc circuits</div></div>
+    <div class="stat"><div class="stat-val">67.9 GW</div><div class="stat-label">PKT Power</div></div>
+  </div>
+  <div class="new-section">
+    <div class="new-head">What gets built</div>
+    <div class="new-item"><b>PROBE Mk III SEP commissioned</b> (DG-11.6) — ion propulsion, never lands, EM anchoring on M-type surfaces. LLO canister eject to EM catcher at SPA. Zero ISRU propellant. Build-out ~86/yr. <span class="delta delta-new">Mk III ION</span></div>
+    <div class="new-item"><b>MOLE-I fleet drops 320→~50</b> — Mk III eliminates chemical propellant demand. ISRU collapses. SPA returns to research + asteroid ops + command.</div>
+    <div class="new-item"><b>M-type asteroid redirect begins</b> (Y75) — 2–3 SEP redirect tugs, DRO capture, planetary defence review (UN COPUOS, impact prob. <10⁻⁸) <span class="delta delta-new">ASTEROID REDIRECT</span></div>
+    <div class="new-item"><b>SPA→Earth mass driver (MD-3) operational</b> — PGM + asteroid products direct to Earth</div>
+    <div class="new-item"><b>In-situ Ni-201 MSR vessels</b> (P11+) — replace imported Hastelloy-N for fleet expansion</div>
+    <div class="new-item"><b>~87,500 km conveyor network approaching full deployment</b></div>
+    <div class="new-item"><b>10% of projected global REE demand</b> — the price inflection point</div>
+  </div>
+</div>
+
+<!-- ═══ P12 ═══ -->
+<div class="phase-card c12">
+  <div class="phase-head">
+    <span class="phase-id" style="color:var(--p12)">P12</span>
+    <span class="phase-years">Y80–120 · ~2105–2145</span>
+    <span class="phase-reo" style="color:var(--p12)">100k → 500k t/yr REO</span>
+  </div>
+  <div class="phase-title">M-type Online · Laser Truss · C-type Redirect</div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">~1.49M</div><div class="stat-label">Haulers</div></div>
+    <div class="stat"><div class="stat-val">~6,890</div><div class="stat-label">MSR (100 MWe)</div></div>
+    <div class="stat"><div class="stat-val">~417k</div><div class="stat-label">Proc circuits</div></div>
+    <div class="stat"><div class="stat-val">688.7 GW</div><div class="stat-label">PKT Power</div></div>
+  </div>
+  <div class="new-section">
+    <div class="new-head">What gets built</div>
+    <div class="new-item"><b>M-type asteroid online at DRO</b> (Y85) — Laser Ablation Truss (350 MW, 1,000 t/day, spiral ablation). Electrostatic/magnetic collectors. 36.5 t/yr PGM. <span class="delta delta-new">M-TYPE ONLINE</span></div>
+    <div class="new-item"><b>DRO→SPA mass driver (MD-5)</b> — processed asteroid material to SPA IZ</div>
+    <div class="new-item"><b>~1,714 PROBE Mk III peak</b> fleet. Chemical Mk I/II phasedown to 30.</div>
+    <div class="new-item"><b>C-type asteroid redirect begins</b> (Y95) — water ice + organics for propellant independence. C-type surfaces covered with reflective MLI blankets to preserve subsurface ice. <span class="delta delta-new">C-TYPE REDIRECT</span></div>
+    <div class="new-item"><b>~87,500 km conveyor network fully deployed</b> · ~500 trunk lines + ~5,000 branches</div>
+    <div class="new-item"><b>1,488,096 haulers</b> · Charging hubs 1 per 100. Na-S thermal management critical.</div>
+    <div class="new-item"><b>Earth reagent supply: ~6,000 t/yr</b> (vs 122 Mt/yr pre-ECN-019). D2EHPA eliminated. In-situ H₂SO₄ + Ca(OH)₂.</div>
+    <div class="new-item"><b>Earth frac: ~3%</b> (post C-type asteroid material availability)</div>
+  </div>
+</div>
+
+<!-- Transition 3 -->
+<div class="transition">
+  <div class="arrow"></div>
+  <div class="transition-text">Original 100-year scope ended here at P12. 200-year scope adopted to achieve full REE displacement + steady state + robust CBA.</div>
+  <div class="arrow"></div>
+</div>
+
+<!-- ═══ P13 ═══ -->
+<div class="phase-card c13">
+  <div class="phase-head">
+    <span class="phase-id" style="color:var(--p13)">P13</span>
+    <span class="phase-years">Y120–140 · ~2145–2165</span>
+    <span class="phase-reo" style="color:var(--p13)">500k → 1.25M t/yr REO</span>
+  </div>
+  <div class="phase-title">C-type Online · Propellant Independence</div>
+  <div class="stats stats-6">
+    <div class="stat"><div class="stat-val">C-type DRO</div><div class="stat-label">Y105 online</div></div>
+    <div class="stat"><div class="stat-val">SPA MSR #1</div><div class="stat-label">Crewed base</div></div>
+    <div class="stat"><div class="stat-val">→3%</div><div class="stat-label">Earth frac</div></div>
+  </div>
+  <div class="new-section">
+    <div class="new-head">What gets built</div>
+    <div class="new-item"><b>C-type asteroid online at DRO</b> (Y105) — pyrolysis + Fischer-Tropsch at SPA. Water ice → propellant independence from lunar PSR sources.</div>
+    <div class="new-item"><b>S-type asteroid redirect begins</b> (Y115) — silicate-rich, Cu + Si source for electronics independence <span class="delta delta-new">S-TYPE REDIRECT</span></div>
+    <div class="new-item"><b>SPA MSR #1 commissioned</b> — thorium fission at crewed base, supplementing/replacing FSPs</div>
+    <div class="new-item"><b>Circuit Earth frac → 3%</b> — C-type Fe-Ni + organics enable further substitution</div>
+    <div class="new-item"><b>PROBE Mk III fleet → prospecting mode</b> (~300 units Y115+). All major asteroid captures underway or complete.</div>
+    <div class="new-item"><b>Decommissioned MOLE-I Pu-238 RTGs stockpiled</b> for P15+ deep-space missions</div>
+  </div>
+</div>
+
+<!-- ═══ P14 ═══ -->
+<div class="phase-card c14">
+  <div class="phase-head">
+    <span class="phase-id" style="color:var(--p14)">P14</span>
+    <span class="phase-years">Y140–180 · ~2165–2205</span>
+    <span class="phase-reo" style="color:var(--p14)">1.25M → 2.5M t/yr REO</span>
+  </div>
+  <div class="phase-title">Full Displacement · Earth Independence</div>
+  <div class="stats stats-6">
+    <div class="stat"><div class="stat-val">~2.08M</div><div class="stat-label">Proc circuits</div></div>
+    <div class="stat"><div class="stat-val">→0.8%</div><div class="stat-label">Earth frac</div></div>
+    <div class="stat"><div class="stat-val">~1.5M</div><div class="stat-label">Haulers (steady)</div></div>
+  </div>
+  <div class="new-section">
+    <div class="new-head">End state</div>
+    <div class="new-item"><b>S-type asteroid online</b> (Y125) — Czochralski Si + Cu electrolysis at SPA. In-situ semiconductor capability. <span class="delta delta-new">S-TYPE ONLINE</span></div>
+    <div class="new-item"><b>~2.08M optimised continuous-flow processing circuits</b> (1.2 t/yr, 28,000 kg, 400 kW each) across PKT spine network</div>
+    <div class="new-item"><b>Circuit Earth frac → 0.8%</b> — post S-type Si/Cu availability. Earth independence gate DG-14.6.</div>
+    <div class="new-item"><b>SPA MSR #2/#3 commissioned</b> — full thorium fission power at crewed base</div>
+    <div class="new-item"><b>5 mass drivers operational</b> (MD-1 through MD-5). Total YBCO: ~303 t lifetime (~3 Starship flights) vs 209,000 t for eliminated catapults.</div>
+    <div class="new-item"><b>PKT→Earth mass driver: ~695,000 launches/yr</b> (~1,900/day at 3.6 t per canister) · zero propellant</div>
+    <div class="new-item"><b>Terrestrial REE mining economically uncompetitive</b> — degraded mine sites begin passive ecosystem recovery <span class="delta delta-shift">MISSION ACHIEVED</span></div>
+  </div>
+</div>
+
+</div><!-- end flow grid -->
+
+<!-- ═══ P14+ VISION ═══ -->
+<div class="vision-card">
+  <div class="phase-head">
+    <span class="phase-id" style="color:var(--p14)">P14+</span>
+    <span class="phase-years">Y180+ · ~2205 onward</span>
+    <span class="phase-reo" style="color:var(--p14)">2,500,000 t/yr REO — Steady State</span>
+  </div>
+  <div class="phase-title">Indefinite Operation · Lunar-Based Space Industry Foundation</div>
+  <div class="new-section">
+    <div class="new-head" style="color:var(--p14)">Steady-state economics</div>
+    <div class="new-item"><b>+$121.8B/yr net surplus</b> from Y181. 182 Mt CO₂/yr avoided. <0.5% Earth mass dependency. Programme cost $21.3T total; BCR 0.50 (200-yr) / 2.06 (annual steady state). NPV −$0.49T. Dominant sensitivity: discount rate — programme's economic case is fundamentally an intergenerational ethics question, not a conventional investment.</div>
+  </div>
+
+  <div class="vision-grid">
+    <div class="vision-col">
+      <h4 style="color:#4ae8e8">Infrastructure Achieved</h4>
+      <p><b>~2.08M processing circuits</b> at 1.2 t/yr each. <b>~1.5M haulers</b>. <b>~87,500 km conveyor network</b>. <b>5 mass drivers</b> (~303 t YBCO lifetime). <b>~6,890 MSR</b> (688.7 GW thorium fission). MSR fuel cycle self-sustaining (breeding ratio 1.01–1.08). All construction fleet in-situ manufactured. <b>Earth dependency: electronics, specialty alloys, catalysts only.</b></p>
+    </div>
+    <div class="vision-col">
+      <h4 style="color:#e8a84a">Asteroid Resources Online</h4>
+      <p><b>M-type (Y85):</b> PGM + Fe-Ni structural metal. <b>C-type (Y105):</b> water ice + organics → propellant independence. MLI blankets preserve subsurface ice. <b>S-type (Y125):</b> Si + Cu → electronics independence. Each asteroid type enables the next: M-type Fe-Ni for C-type processing infrastructure; C-type organics for S-type chemistry. <b>Laser Ablation Truss</b> at DRO for captured asteroids.</p>
+    </div>
+    <div class="vision-col">
+      <h4 style="color:#4ae8a0">Beyond REE Displacement</h4>
+      <p><b>LOX by-product economy:</b> KREEP processing generates surplus LOX — foundation for cislunar propellant market. <b>Deep-space staging:</b> lunar propellant depot + mass driver network as departure point for Mars+ missions. <b>In-situ reagent synthesis</b> long-term goal. <b>Stockpiled Pu-238 RTGs</b> from decommissioned MOLE-I for deep-space probes. <b>Solar power satellites</b> from lunar Al + Si. Programme infrastructure becomes permanent cislunar industrial foundation.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Source: SEL_ROBOT_FLEET v9 (ECN-019 Rev C), SEL-T1_1-STRATEGY v3.0, SEL-ECON-001 Rev A, SELENITE_DECISION_FRAMEWORK v3, selenite_extended_timeline v3. 200-year programme scope: original 100-year plan (P7 at 15 years, scaled to P12 at ~Y100) did not reach steady state for complete terrestrial REE replacement or provide foundation for lunar-based space industry. 200-year scope adopted to properly model CBA and achieve programme objectives: full 2.5 Mt/yr displacement + intergenerational economic surplus. All PKT fleet counts demand-driven from REO production targets. Circuit specs: optimised continuous-flow, 1.2 t/yr REO, 28,000 kg, 400 kW per unit. MSR: ThCl₄ chloride salt, 100 MWe units, breeding ratio 1.01–1.08. Conveyor network replaces 9,084 EM catapult hubs (YBCO 209,000 t → 0 for ore transport; ~303 t retained for 5 mass drivers). April 2026.
+</footer>
+
+</div>
+</body>
+</html>

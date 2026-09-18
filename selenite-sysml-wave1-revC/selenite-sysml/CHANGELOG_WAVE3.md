@@ -492,3 +492,40 @@ repo); ECN-020 note (SEL-REQ-011); VERIFY / ECON / VISUALIZE rows note
 3. The SPA demand vector beyond P7 (F5 evaluation) and the thorium stockpile
    vector are the two Python additions that would evaluate the remaining
    derivable gates.
+
+## Addendum — 18 September 2026 (final report in repo; milestones settled; MD-4 trigger)
+
+- **Merged main** (PR #6: `docs/SEL_FINAL_REPORT_v4.md` and 64 figure pages)
+  into the Wave 3 branch; `document_map.csv` conflict resolved (Strategy row
+  `gated`, final report row now the `.md` transcription).
+- **W3-N13 closed.** `SeleniteGates::MilestoneSet` rebuilt from
+  `docs/W5_T4_4_JS_milestone_reference.html` ("Programme Milestones (from
+  MTL v8.5)"): M0 Relay Network Live M20/Y2, M1 First PROBE Landing M36/Y3,
+  M2 First SINTER Print M54/Y5, M3 Crew-1 M82/Y7, M4 First SKIP Hop M70/Y6,
+  M5 Beneficiation Online M105/Y9, M6 First Export M116/Y10, M7 Crew
+  Rotation M136/Y11.5, M8 First DART PKT M130/Y11. Final report Fig. 2
+  (`docs/final_report_figures/page-05.jpg`) agrees on every diamond it draws
+  (it omits M5). `Milestone` gains `declaredMonth`; `confirmedAgainstFigure2`
+  is now true. The Decision Framework s.1 proxy is gone.
+- **W3-N21 (new).** Three milestone years differ from the Decision Framework
+  gate years for the same events: M4 SKIP hop Y6 vs DG-2.2 Y5; M8 DART PKT
+  Y11 vs DG-5.1 Y9; M7 crew rotation Y11.5 vs DG-6.4 Y12 (also M5 Y9 vs
+  DG-5.2 Y10, a ceiling-of-month artefact). Recorded on the milestones, not
+  resolved.
+- **Sources added to `docs/`:** `selenite_extended_timeline_v3_revised.html`
+  (family winner, P7–P14+), `W5_T4_4_JS_milestone_reference.html`,
+  `W5_T4_4_JS_scaling_P7_P14.html`, `W5_T4_3_JS_fleet_specs_summary.html`.
+  Notable while reading them: the scaling page labels the SPA→Earth driver
+  "MD-3" (F6 stale label) and the extended timeline labels Earth independence
+  "DG-14.3" (W3-N14 family); the scaling page also carries "~417k circuits" at
+  P12 against 2,083,334 on the extended timeline (VC-09 family).
+- **MD-4 trigger (W3-N2) — decision proposal, awaiting Jason.** The 100 t/yr
+  PGM trigger was set from iridium demand (PEM electrolysers, 34+ t/yr by
+  2040), not from the programme's own PGM production, which the Decision
+  Framework itself puts at 36.5 t/yr from the M-type capture plus ~15 t/yr
+  from the Mk III fleet: the trigger is unreachable under the documents as
+  written, not only under ECON. Proposed ECN: bind MD-4 to the M-type
+  arrival (DG-12.4, Y85) or lower `GateThresholds.pgmExportTriggerTonnesPerYear`
+  to a value the plan reaches (30 t/yr crosses at Y85 on ECON `total_pgm`);
+  either makes MD-4 a P12 element and retires the Starship returns at Y85.
+  Not applied.

@@ -7,7 +7,7 @@ package SeleniteGates {
          * the Rev A DG-10.3 canister-recovery decision, which Rev D folds into
          * DG-9.1 ("brought forward"); it is carried there as formerGateId and
          * the recovery-option attributes, not as a separate gate. Milestones
-         * M0-M8 are in MilestoneSet (see its doc for the Fig. 2 caveat).
+         * M0-M8 are in MilestoneSet (MTL v8.5 numbering, final report Fig. 2).
          *
          * Conventions:
          * - criterion: the Decision Framework Rev D text, verbatim modulo an
@@ -1379,106 +1379,107 @@ package SeleniteGates {
     // =====================================================================
 
     part def Milestone {
-        doc /* One programme milestone with its declared year (and phase where
-             * the source gives one). declaredYearEnd for a span. */
+        doc /* One formally defined programme milestone (MTL v8.5 convention:
+             * nine milestones M0-M8, each verified by SENTINEL, crew or Earth
+             * mission control before subsequent activities are authorised).
+             * declaredMonth is the MTL month from programme go-ahead (M1);
+             * declaredYear = ceiling(month / 12) as the reference states it. */
         attribute milestoneId : String;
         attribute title : String;
+        attribute declaredMonth : Integer [0..1];
         attribute declaredYear : Real [0..1];
-        attribute declaredYearEnd : Real [0..1];
         abstract attribute declaredPhase : Phase [0..1];
-        abstract attribute declaredPhaseEnd : Phase [0..1];
         attribute source : String;
-        attribute confirmedAgainstFigure2 : Boolean = false;
+        attribute confirmedAgainstFigure2 : Boolean = true;
     }
 
     part def MilestoneSet {
-        doc /* Milestones M0-M8. The session brief asks for them from
-             * SEL_FINAL_REPORT_v4 Fig. 2, but the final report is not in the
-             * repository (only its "Mission achieved Y180" is quoted, in
-             * Parameters.sysml) and the Fig. 2 list was never transcribed into
-             * any repo document. PROXY (flagged W3-N13): M0 is the programme
-             * GO (DG-0.1) and M1-M8 are the Decision Framework Rev D s.1
-             * "Eight critical transitions to self-sufficiency" with that
-             * table's phases and years, ending at the Y180 mission-achieved
-             * milestone the report's Fig. 2 carries. confirmedAgainstFigure2
-             * is false on every row until Jason checks the figure; a
-             * milestone that Fig. 2 defines differently is corrected by
-             * editing this set, not by adding to it. */
+        doc /* Milestones M0-M8 from docs/W5_T4_4_JS_milestone_reference.html
+             * ("Programme Milestones (from MTL v8.5)", the milestone numbering
+             * convention the final report's Fig. 2 follows); the Fig. 2
+             * diamonds (docs/final_report_figures/page-05.jpg) agree on every
+             * number and year it draws - it omits M5 (beneficiation) and
+             * places M8 before M7 because M8 (M130) precedes M7 (M136). The
+             * numbering is by definition order in MTL v8.5, not by date.
+             * Phases follow the milestone month against ProgrammeTimeline
+             * (P1 Y2-4, P2 Y4-6, P3 Y4-7, P4 Y7-9, P5 Y9-12); a boundary year
+             * carries the phase the reference's own timeline shows. Replaces
+             * the Wave 3 delivery proxy (W3-N13, closed 18 Sep 2026). Three
+             * of these differ from the Decision Framework gate years the same
+             * events carry: M4 SKIP hop Y6 vs DG-2.2 Y5, M8 DART PKT Y11 vs
+             * DG-5.1 Y9, M7 crew rotation Y11.5 vs DG-6.4 Y12 (W3-N21). */
 
         part m0 : Milestone {
             attribute redefines milestoneId = "M0";
-            attribute redefines title = "Programme GO (DG-0.1); relay satellites built, fleet fabricated";
-            attribute redefines declaredYear = 0.0;
-            attribute redefines declaredPhase = Phase::P0;
-            attribute redefines source = "Decision Framework Rev D s.2 P0; ARCHITECTURE_BASELINE.md s.1 (proxy for final report Fig. 2)";
+            attribute redefines title = "Relay Network Live - 3x EML-2 halo satellites validated; robot fleet launch cleared";
+            attribute redefines declaredMonth = 20;
+            attribute redefines declaredYear = 2.0;
+            attribute redefines declaredPhase = Phase::P1;
+            attribute redefines source = "W5_T4_4 milestone reference (MTL v8.5) M20; final report Fig. 2 'M0 Relay Live (Y2)'; DG-1.1";
         }
         part m1 : Milestone {
             attribute redefines milestoneId = "M1";
-            attribute redefines title = "Propellant ISRU - eliminates Earth-supplied LH2/LOX";
-            attribute redefines declaredYear = 5.0;
-            attribute redefines declaredPhase = Phase::P3;
-            attribute redefines source = "Decision Framework Rev D s.1 transition 1 (proxy for final report Fig. 2)";
+            attribute redefines title = "First PROBE Landing - PROBE-Scout XRF data from three expendable NEA survey vehicles";
+            attribute redefines declaredMonth = 36;
+            attribute redefines declaredYear = 3.0;
+            attribute redefines declaredPhase = Phase::P1;
+            attribute redefines source = "W5_T4_4 milestone reference M36; final report Fig. 2 'M1 First Surface (Y3)'";
         }
         part m2 : Milestone {
             attribute redefines milestoneId = "M2";
-            attribute redefines title = "Sintered construction - eliminates imported structural materials";
-            attribute redefines declaredYear = 4.0;
-            attribute redefines declaredYearEnd = 7.0;
+            attribute redefines title = "First SINTER Print - hab shell Layer 0, first in-situ manufactured structural component";
+            attribute redefines declaredMonth = 54;
+            attribute redefines declaredYear = 5.0;
             attribute redefines declaredPhase = Phase::P2;
-            attribute redefines declaredPhaseEnd = Phase::P3;
-            attribute redefines source = "Decision Framework Rev D s.1 transition 2 (proxy for final report Fig. 2)";
+            attribute redefines source = "W5_T4_4 milestone reference M54; final report Fig. 2 'M2 First SINTER Print (Y5)'";
         }
         part m3 : Milestone {
             attribute redefines milestoneId = "M3";
-            attribute redefines title = "Reagent self-sufficiency - H2SO4 from troilite, Ca(OH)2 from anorthite -> 98% in-situ";
-            attribute redefines declaredYear = 9.0;
-            attribute redefines declaredYearEnd = 55.0;
-            attribute redefines declaredPhase = Phase::P5;
-            attribute redefines declaredPhaseEnd = Phase::P10;
-            attribute redefines source = "Decision Framework Rev D s.1 transition 3 (proxy for final report Fig. 2)";
+            attribute redefines title = "Crew-1 Arrival - 4 persons; ECLSS commissioning begins";
+            attribute redefines declaredMonth = 82;
+            attribute redefines declaredYear = 7.0;
+            attribute redefines declaredPhase = Phase::P4;
+            attribute redefines source = "W5_T4_4 milestone reference M82; final report Fig. 2 'M3 Crew-1 (Y7)'; DG-4.1";
         }
         part m4 : Milestone {
-            doc /* The table gives "P7 (Y15)": Y15 is the end of P6 / the F7
-                 * gap, not P7 (Y18-25). Carried as written. */
             attribute redefines milestoneId = "M4";
-            attribute redefines title = "D2EHPA elimination - split value chain replaces solvent extraction";
-            attribute redefines declaredYear = 15.0;
-            attribute redefines declaredPhase = Phase::P7;
-            attribute redefines source = "Decision Framework Rev D s.1 transition 4 (proxy for final report Fig. 2)";
+            attribute redefines title = "First SKIP Hop - SKIP-1 sub-orbital hop on ISRU propellant, KREEP sample return";
+            attribute redefines declaredMonth = 70;
+            attribute redefines declaredYear = 6.0;
+            attribute redefines declaredPhase = Phase::P3;
+            attribute redefines source = "W5_T4_4 milestone reference M70; final report Fig. 2 'M4 First SKIP Hop (Y6)'; DG-2.2 gives Y5 (W3-N21)";
         }
         part m5 : Milestone {
             attribute redefines milestoneId = "M5";
-            attribute redefines title = "In-situ fabrication - 55-60% in-situ haulers, canisters, infrastructure";
-            attribute redefines declaredYear = 45.0;
-            attribute redefines declaredPhase = Phase::P10;
-            attribute redefines source = "Decision Framework Rev D s.1 transition 5 (proxy for final report Fig. 2)";
+            attribute redefines title = "Beneficiation Online - crusher, screens, magnetic separation; 2-8x grade uplift";
+            attribute redefines declaredMonth = 105;
+            attribute redefines declaredYear = 9.0;
+            attribute redefines declaredPhase = Phase::P5;
+            attribute redefines source = "W5_T4_4 milestone reference M105 (not drawn on Fig. 2); DG-5.2 gives Y10";
         }
         part m6 : Milestone {
             attribute redefines milestoneId = "M6";
-            attribute redefines title = "Uranium -> thorium MSR - self-breeding Th cycle from KREEP waste";
-            attribute redefines declaredYear = 35.0;
-            attribute redefines declaredYearEnd = 55.0;
-            attribute redefines declaredPhase = Phase::P9;
-            attribute redefines declaredPhaseEnd = Phase::P10;
-            attribute redefines source = "Decision Framework Rev D s.1 transition 6 (proxy for final report Fig. 2)";
+            attribute redefines title = "First Export Batch - asteroid Ni-Fe/PGM + KREEP REE concentrate dispatched";
+            attribute redefines declaredMonth = 116;
+            attribute redefines declaredYear = 10.0;
+            attribute redefines declaredPhase = Phase::P5;
+            attribute redefines source = "W5_T4_4 milestone reference M116; final report Fig. 2 'M6 First Export (Y10)'; DG-5.4";
         }
         part m7 : Milestone {
             attribute redefines milestoneId = "M7";
-            attribute redefines title = "Propulsive -> EM logistics + conveyor - mass drivers (5) and steel conveyor network";
-            attribute redefines declaredYear = 25.0;
-            attribute redefines declaredYearEnd = 55.0;
-            attribute redefines declaredPhase = Phase::P8;
-            attribute redefines declaredPhaseEnd = Phase::P10;
-            attribute redefines source = "Decision Framework Rev D s.1 transition 7 (proxy for final report Fig. 2)";
+            attribute redefines title = "Crew Rotation Begins - staggered swap M136/139/142/145";
+            attribute redefines declaredMonth = 136;
+            attribute redefines declaredYear = 11.5;
+            attribute redefines declaredPhase = Phase::P5;
+            attribute redefines source = "W5_T4_4 milestone reference M136; final report Fig. 2 'M7 Crew Rotation (Y11.5)' under P6; DG-6.4 gives Y12 (W3-N21)";
         }
         part m8 : Milestone {
             attribute redefines milestoneId = "M8";
-            attribute redefines title = "Asteroid material independence; mission achieved at 2.5 Mt/yr (Y180)";
-            attribute redefines declaredYear = 85.0;
-            attribute redefines declaredYearEnd = 180.0;
-            attribute redefines declaredPhase = Phase::P12;
-            attribute redefines declaredPhaseEnd = Phase::P14;
-            attribute redefines source = "Decision Framework Rev D s.1 transition 8; final report v4 Fig. 2 'Mission achieved Y180' (the one Fig. 2 label in the repository)";
+            attribute redefines title = "First DART PKT Mission - LLO transfer, autonomous landing, XRF confirms PKT grade";
+            attribute redefines declaredMonth = 130;
+            attribute redefines declaredYear = 11.0;
+            attribute redefines declaredPhase = Phase::P5;
+            attribute redefines source = "W5_T4_4 milestone reference M130; final report Fig. 2 'M8 DART PKT (Y11)'; DG-5.1 gives Y9 (W3-N21)";
         }
     }
 

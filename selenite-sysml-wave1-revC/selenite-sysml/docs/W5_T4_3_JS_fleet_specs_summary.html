@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selenite — Robot Fleet Specifications</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root {
+    --bg: #080c10;
+    --surf: #0d1520;
+    --surf2: #111d2c;
+    --bdr: #1a2a3c;
+    --dim: #2a4060;
+    --txt: #c0d4e4;
+    --txt2: #7a9ab8;
+    --hi: #e4f0f9;
+    --acc: #4ae8a0;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Barlow', sans-serif;
+    --cond: 'Barlow Condensed', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--txt);
+    font-family: var(--sans);
+    padding: 40px 24px 60px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .container { max-width: 960px; width: 100%; }
+  header { margin-bottom: 28px; }
+  header .eyebrow {
+    font-family: var(--cond);
+    font-weight: 600; font-size: 11px;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--acc); margin-bottom: 6px;
+  }
+  header h1 {
+    font-family: var(--cond);
+    font-weight: 700; font-size: 26px;
+    letter-spacing: 0.5px; color: var(--hi);
+    margin-bottom: 4px;
+  }
+  header .sub { font-size: 13px; color: var(--txt2); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .card {
+    background: var(--surf);
+    border: 1px solid var(--bdr);
+    border-radius: 8px;
+    padding: 16px 18px 14px;
+    position: relative;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 8px 8px 0 0;
+  }
+  .card-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .card-name {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--hi);
+    letter-spacing: 0.5px;
+  }
+  .card-type {
+    font-family: var(--cond);
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .card-desc {
+    font-size: 13px;
+    color: var(--txt);
+    line-height: 1.55;
+    margin-bottom: 10px;
+  }
+  .specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 16px;
+  }
+  .spec {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 3px 0;
+    border-bottom: 1px solid rgba(26,42,60,0.4);
+  }
+  .spec-label {
+    font-size: 11px;
+    color: var(--txt2);
+    font-weight: 500;
+  }
+  .spec-val {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--hi);
+    font-weight: 500;
+    text-align: right;
+  }
+  .card-heritage {
+    margin-top: 8px;
+    font-size: 10px;
+    color: var(--dim);
+    font-style: italic;
+  }
+
+  /* Card colours */
+  .c-probe::before { background: #4a9ef5; }
+  .c-probe .card-type { color: #4a9ef5; }
+  .c-skip::before { background: #e84a8a; }
+  .c-skip .card-type { color: #e84a8a; }
+  .c-dart::before { background: #4ae8e8; }
+  .c-dart .card-type { color: #4ae8e8; }
+  .c-survey::before { background: #a84ae8; }
+  .c-survey .card-type { color: #a84ae8; }
+  .c-molei::before { background: #e8a84a; }
+  .c-molei .card-type { color: #e8a84a; }
+  .c-moles::before { background: #d4924a; }
+  .c-moles .card-type { color: #d4924a; }
+  .c-sinter::before { background: #e86a4a; }
+  .c-sinter .card-type { color: #e86a4a; }
+  .c-armc::before { background: #8ae84a; }
+  .c-armc .card-type { color: #8ae84a; }
+  .c-armd::before { background: #6ac83a; }
+  .c-armd .card-type { color: #6ac83a; }
+  .c-sentinel::before { background: #e8e84a; }
+  .c-sentinel .card-type { color: #e8e84a; }
+  .c-harvest::before { background: #4ae870; }
+  .c-harvest .card-type { color: #4ae870; }
+  .c-hauler::before { background: #e8c44a; }
+  .c-hauler .card-type { color: #e8c44a; }
+  .c-conveyor::before { background: #9ab8d0; }
+  .c-conveyor .card-type { color: #9ab8d0; }
+
+  /* Full width card */
+  .full { grid-column: 1 / -1; }
+  .full .specs { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+  .badge {
+    display: inline-block;
+    font-family: var(--mono); font-size: 9px; font-weight: 600;
+    padding: 2px 6px; border-radius: 3px; margin-left: 6px;
+    vertical-align: middle;
+  }
+  .badge-retired { background: rgba(232,74,138,0.15); color: #e84a8a; }
+  .badge-new { background: rgba(74,232,160,0.15); color: var(--acc); }
+  .badge-pkt { background: rgba(232,196,74,0.15); color: #e8c44a; }
+
+  footer {
+    margin-top: 20px;
+    font-size: 11px;
+    color: var(--dim);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="eyebrow">Selenite Programme · Deliverable 04</div>
+  <h1>Robot Fleet — Specifications Summary</h1>
+  <div class="sub">14 vehicle classes · SPA Shackleton (crewed hub) + PKT Procellarum (autonomous factory) · ECN-019 Rev C baseline</div>
+</header>
+
+<div class="grid">
+
+<!-- PROBE Mk I -->
+<div class="card c-probe">
+  <div class="card-head">
+    <span class="card-name">PROBE Mk I</span>
+    <span class="card-type">Spacecraft</span>
+  </div>
+  <div class="card-desc">Chemical return vehicle. Launches from lunar surface to intercept M-type NEAs, extracts semi-raw Ni-Fe/PGM ore, and returns to SPA IZ for docking and processing. ISRU-refuelled from P4+. 6–18 month round-trip missions. Phased down from P9 as Mk II takes over.</div>
+  <div class="specs">
+    <div class="spec"><span class="spec-label">Dry mass</span><span class="spec-val">~800 kg</span></div>
+    <div class="spec"><span class="spec-label">Wet mass</span><span class="spec-val">8,950 kg</span></div>
+    <div class="spec"><span class="spec-label">Payload</span><span class="spec-val">1,500 kg</span></div>
+    <div class="spec"><span class="spec-label">ΔV</span><span class="spec-val">6 km/s</span></div>
+    <div class="spec"><span class="spec-label">Isp</span><span class="spec-val">~450 s (LH₂/LOX)</span></div>
+    <div class="spec"><span class="spec-label">Fleet</span><span class="spec-val">P3: 3 → P7: 30 → P8: 96</span></div>
+  </div>
+  <div class="card-heritage">Heritage: RL-10 (Centaur), ZBO cryocooler (Ball Aerospace). P3–P11.</div>
+</div>
+
+<!-- PROBE Mk II -->
+<div class="card c-probe">
+  <div class="card-head">
+    <span class="card-name">PROBE Mk II</span>
+    <span class="card-type">Spacecraft</span>
+    <span class="badge badge-new">P9+</span>
+  </div>
+  <div class="card-desc">Heavy asteroid processor with on-asteroid beneficiation. Magnetic drum separator + centrifuge processes 500 t in-situ, returns 10 t of 50× PGM-concentrated material (~17.5 kg PGM/mission). Weeks-to-months dwell time at asteroid.</div>
+  <div class="specs">
+    <div class="spec"><span class="spec-label">Dry mass</span><span class="spec-val">~5,000 kg</span></div>
+    <div class="spec"><span class="spec-label">Propellant</span><span class="spec-val">40,000 kg LH₂/LOX</span></div>
+    <div class="spec"><span class="spec-label">Beneficiation</span><span class="spec-val">50× concentration</span></div>
+    <div class="spec"><span class="spec-label">Return payload</span><span class="spec-val">10 t concentrated</span></div>
+    <div class="spec"><span class="spec-label">PGM/mission</span><span class="spec-val">~17.5 kg</span></div>
+    <div class="spec"><span class="spec-label">Fleet</span><span class="spec-val">P9: 190 → P11: 260 peak</span></div>
+  </div>
+  <div class="card-heritage">Heritage: Mk I platform scaled. P9–P11+, phasedown to 30.</div>
+</div>
+
+<!-- PROBE Mk III -->
+<div class="card c-probe full">
+  <div class="card-head">
+    <span class="card-name">PROBE Mk III SEP</span>
+    <span class="card-type">Spacecraft — Ion</span>
+    <span class="badge badge-new">P11+ (DG-11.6)</span>
+  </div>
+  <div class="card-desc">Ion-propelled bulk miner. NEVER lands on the Moon — stays in orbit permanently. Electromagnetic anchor pads engage ferromagnetic M-type surfaces; scraper mining 6–12 months; ejects 10 t Fe-Ni/PGM canisters from LLO on ballistic deorbit to EM catcher at SPA. Zero ISRU LH₂/LOX consumption. Build-out ~86/yr Y60–Y80.</div>
+  <div class="specs">
+    <div class="spec"><span class="spec-label">Dry mass</span><span class="spec-val">~1,200 kg</span></div>
+    <div class="spec"><span class="spec-label">Propulsion</span><span class="spec-val">Ion (Xe/Ar)</span></div>
+    <div class="spec"><span class="spec-label">Landing</span><span class="spec-val">NEVER — orbit only</span></div>
+    <div class="spec"><span class="spec-label">Payload</span><span class="spec-val">10 t canisters (LLO eject)</span></div>
+    <div class="spec"><span class="spec-label">Anchoring</span><span class="spec-val">EM pads (M-type Fe-Ni)</span></div>
+    <div class="spec"><span class="spec-label">Cadence</span><span class="spec-val">0.5 missions/yr/unit</span></div>
+    <div class="spec"><span class="spec-label">Fleet peak</span><span class="spec-val">~1,714 units</span></div>
+    <div class="spec"><span class="spec-label">Prospecting</span><span class="spec-val">→300 (Y115+)</span></div>
+  </div>
+  <div class="card-heritage">Heritage: MEV-1 EM docking (2020), Dawn ion SEP (NASA). Canisters to EM catcher — not IZ docking gantry.</div>
+</div>
+
+<!-- SKIP -->
+<div class="card c-skip">
+  <div class="card-head">
+    <span class="card-name">SKIP</span>
+    <span class="card-type">Sub-orbital hopper</span>
+    <span class="badge badge-retired">RETIRED P9</span>
+  </div>
+  <div class="card-desc">SPA-only KREEP regolith collector. Sub-orbital ballistic hops to SPA Basin deposits within 100 km, scoops 400 kg KREEP regolith, returns. 274 hops/yr per unit. NO SKIPs at PKT — EVER. Retired at P9 when PKT 2,500 circuits make SPA 5-circuit research irrelevant.</div>
+  <div class="specs">
+    <div class="spec"><span class="spec-label">Dry mass</span><span class="spec-val">~300 kg</span></div>
+    <div class="spec"><span class="spec-label">Payload</span><span class="spec-val">400 kg</span></div>
+    <div class="spec"><span class="spec-label">ΔV (RT)</span><span class="spec-val">1,690 m/s</span></div>
+    <div class="spec"><span class="spec-label">Propellant</span><span class="spec-val">303 kg/hop</span></div>
+    <div class="spec"><span class="spec-label">Engine</span><span class="spec-val">5 kN pres-fed</span></div>
+    <div class="spec"><span class="spec-label">Fleet</span><span class="spec-val">P4: 1 → P7: 8 peak → P9: 0</span></div>
+  </div>
+  <div class="card-heritage">Heritage: Morpheus (NASA JSC). SPA only. Retired P9.</div>
+</div>
+
+<!-- DART -->
+<div class="card c-dart">
+  <div class="card-head">
+    <span class="card-name">DART</span>
+    <span class="card-type">Orbital transfer vehicle</span>
+  </div>
+  <div class="card-desc">PKT site selection pathfinder. Transfers from SPA to PKT (~3,300 km) via LLO. Lands at candidate site, collects sample for ground-truth REE confirmation, returns to SPA. Single-campaign recon (P5–P7).</div>
+  <div class="specs">
+    <div class="spec"><span class="spec-label">Dry mass</span><span class="spec-val">~1,400 kg</span></div>
+    <div class="spec"><span class="spec-label">Payload</span><span class="spec-val">~1,200 kg</span></div>
+    <div class="spec"><span class="spec-label">Transfer</span><span class="spec-val">LLO orbit</span></div>
+    <div class="spec"><span class="spec-label">Instruments</span><span class="spec-val">XRF + sample</span></div>
+    <div class="spec"><span class="spec-label">Propellant</span><span class="spec-val">ISRU LH₂/LOX</span></div>
+    <div class="spec"><span class="spec-label">Fleet (P7)</span><span class="spec-val">1 unit</span></div>
+  </div>
+  <div class="card-heritage">Heritage: JAXA SLIM precision landing (100 m class)</div>
+</div>
+
+<!-- SURVEY -->
+<div class="card c-survey">
+  <div class="card-head">
+    <span class="card-name">SURVEY</span>
+    <span class="card-type">Orbital spacecraft</span>
+  </div>
+  <div class="card-desc">Polar low-lunar-orbit prospector (~120 kg). Maps surface composition and subsurface ice distribution from orbit using neutron spectrometer, XRF, and ground-penetrating radar. Provides 1.5 km resolution zone identification for MOLE-I branch placement and SKIP target selection.</div>
+  <div class="specs">
+    <div class="spec"><span class="spec-label">Mass</span><span class="spec-val">~120 kg</span></div>
+    <div class="spec"><span class="spec-label">Orbit</span><span class="spec-val">Polar LLO</span></div>
+    <div class="spec"><span class="spec-label">Sensors</span><span class="spec-val">NS + XRF + GPR</span></div>
+    <div class="spec"><span class="spec-label">Resolution</span><span class="spec-val">~1.5 km</span></div>
+    <div class="spec"><span class="spec-label">Comms</span><span class="spec-val">X-band relay</span></div>
+    <div class="spec"><span class="spec-label">Fleet (P7)</span><span class="spec-val">2 units</span></div>
+  </div>
+  <div class="card-heritage">Heritage: Lunar Prospector (NASA), LRO LEND</div>
+</div>
+
+<!-- MOLE-I -->
+<div class="card c-molei full">
+  <div class="card-head">
+    <span class="card-name">MOLE-I</span>
+    <span class="card-type">PSR ice extraction rover</span>
+  </div>
+  <div class="card-desc">Permanently tethered rover at ~40 K on Shackleton PSR floor. Rotary-percussive drill, onboard mini-VEX sublimation chamber, 50 L water tank, dumps to substation for heated pipeline transfer to rim ISRU plant. Yields 5,692 kg propellant/yr per unit. The binding ISRU asset — fleet count determines every other fleet size. Demand-driven: max ~355 (P10), drops to ~50 at Y85+ as Mk III PROBE eliminates chemical propellant demand.</div>
+  <div class="specs">
+    <div class="spec"><span class="spec-label">Dry mass</span><span class="spec-val">~360.65 kg (ECN-013 R2)</span></div>
+    <div class="spec"><span class="spec-label">Power (ops)</span><span class="spec-val">~1,934 W at tether</span></div>
+    <div class="spec"><span class="spec-label">Tether</span><span class="spec-val">200 m</span></div>
+    <div class="spec"><span class="spec-label">Yield</span><span class="spec-val">5,692 kg/yr</span></div>
+    <div class="spec"><span class="spec-label">WEB temp</span><span class="spec-val">273 K setpoint</span></div>
+    <div class="spec"><span class="spec-label">Drill (Mk I)</span><span class="spec-val">0.8 m depth</span></div>
+    <div class="spec"><span class="spec-label">Drill (Mk II)</span><span class="spec-val">5 m telescoping (P7+ retrofit)</span></div>
+    <div class="spec"><span class="spec-label">Fleet</span><span class="spec-val">10→170 (P7)→355 peak→~50</span></div>
+  </div>
+  <div class="card-heritage">Heritage: NASA TRIDENT drill, PROSPECT (ESA). Mk II retrofit: telescoping drill, Inconel 718 bellows seal, tungsten counterbalance, field-swappable ORU. Same chassis.</div>
+</div>
+
+<!-- MOLE-S -->
+<div class="card c-moles">
+  <div class="card-head">
+    <span class="card-name">MOLE-S</span>
+    <span class="card-type">Surface excavation rover</span>
+  </div>
+  <div class="card-desc">Battery-powered surface rover for SPA rim and campus operations ONLY. Not deployed to PKT. Dual counterrotating bucket drums + grading blade (~360× more productive for lateral pushing). Builds berms, grades roads, levels pads, digs trenches.</div>
+  <div class="specs">
+    <div class="spec"><span class="spec-label">Dry mass</span><span class="spec-val">~350 kg</span></div>
+    <div class="spec"><span class="spec-label">Battery</span><span class="spec-val">5,000 Wh Li-ion</span></div>
+    <div class="spec"><span class="spec-label">Hopper</span><span class="spec-val">350 kg</span></div>
+    <div class="spec"><span class="spec-label">Output</span><span class="spec-val">~204 t/yr</span></div>
+    <div class="spec"><span class="spec-label">Speed</span><span class="spec-val">0.5 m/s</span></div>
+    <div class="spec"><span class="spec-label">Fleet</span><span class="spec-val">4 (P3) → 6 (P7+)</span></div>
+  </div>
+  <div class="card-heritage">Heritage: NASA RASSOR 2.0 (counterrotating drums). SPA ONLY — PKT uses Hauler Rev B.</div>
+</div>
+
+<!-- SINTER -->
+<div class="card c-sinter">
+  <div class="card-head">
+    <span class="card-name">SINTER</span>
+    <span class="card-type">Construction rover</span>
+  </div>
+  <div class="card-desc">Self-powered construction robot with onboard 10 kWe HALEU fission reactor. Three sintering modes: concentrated solar (2.37 m² Fresnel, primary), CO₂ laser 5 kW (night ops), 2×1 kW microwave 2.45 GHz (volumetric). Builds roads (~100 m/day), pads, walls, docking collars, brick/tile. 50 m crew exclusion zone. Deploys to both SPA and PKT.</div>
+  <div class="specs">
+    <div class="spec"><span class="spec-label">Dry mass</span><span class="spec-val">~2,200 kg</span></div>
+    <div class="spec"><span class="spec-label">Reactor</span><span class="spec-val">10 kWe HALEU</span></div>
+    <div class="spec"><span class="spec-label">Arm</span><span class="spec-val">7-DOF, 3.0 m, 150 kg</span></div>
+    <div class="spec"><span class="spec-label">Strength</span><span class="spec-val">206–370 MPa</span></div>
+    <div class="spec"><span class="spec-label">Road rate</span><span class="spec-val">~100 m/day (3 m wide)</span></div>
+    <div class="spec"><span class="spec-label">Fleet</span><span class="spec-val">3 (P3) → 20+ (P8) → 200+ (P12)</span></div>
+  </div>
+  <div class="card-heritage">Heritage: ICON Project Olympus, ESA RegoLight, NASA KSC microwave sintering</div>
+</div>
+
+<!-- HAULER Rev B -->
+<div class="card c-hauler">
+  <div class="card-head">
+    <span class="card-name">Hauler Rev B</span>
+    <span class="card-type">Surface vehicle</span>
+    <span class="badge badge-pkt">PKT ONLY</span>
+  </div>
+  <div class="card-desc">Mining-capable surface vehicle replacing both SKIP and MOLE-S at PKT. One vehicle class handles all PKT surface operations from P8: mining (front bucket/blade, 200 kg/min), transport (5 t payload), grading, trenching, SINTER supply. Na-S battery requires thermal management (270°C solidification → must never freeze). ~57% in-situ manufactured at P8, improving to ~80% post S-type.</div>
+  <div class="specs">
+    <div class="spec"><span class="spec-label">Dry mass</span><span class="spec-val">~1,450 kg</span></div>
+    <div class="spec"><span class="spec-label">Battery</span><span class="spec-val">~300 kg Na-S, 50 kWh</span></div>
+    <div class="spec"><span class="spec-label">Payload</span><span class="spec-val">5,000 kg</span></div>
+    <div class="spec"><span class="spec-label">Motors</span><span class="spec-val">4× SRM (no magnets)</span></div>
+    <div class="spec"><span class="spec-label">Mining</span><span class="spec-val">150 kg bucket, self-load 25 min</span></div>
+    <div class="spec"><span class="spec-label">Fleet</span><span class="spec-val">P8: 200 → P12: 1,488,096</span></div>
+  </div>
+  <div class="card-heritage">Heritage: MOLE-S chassis lineage. SEL-HAULER-001 Rev B (ECN-019). PKT only — never at SPA.</div>
+</div>
+
+<!-- CONVEYOR -->
+<div class="card c-conveyor">
+  <div class="card-head">
+    <span class="card-name">Conveyor Network</span>
+    <span class="card-type">Infrastructure</span>
+    <span class="badge badge-pkt">PKT</span>
+  </div>
+  <div class="card-desc">Steel apron conveyors replace all EM catapults for Tier 3 ore transport. Dendritic network: ~500 trunks (75 km avg) + ~5,000 branches (10 km avg). SRM drive stations every 1–2 km. MoS₂ lubricated. ~95% in-situ (Fe-Ni + MRE iron). YBCO eliminated for ore transport (209,000 t → 0). Coilgun heritage retained for 5 mass drivers only (~303 t YBCO lifetime).</div>
+  <div class="specs">
+    <div class="spec"><span class="spec-label">Network (P12)</span><span class="spec-val">~87,500 km</span></div>
+    <div class="spec"><span class="spec-label">In-situ frac</span><span class="spec-val">~95%</span></div>
+    <div class="spec"><span class="spec-label">Drive</span><span class="spec-val">SRM stations, 1–2 km</span></div>
+    <div class="spec"><span class="spec-label">Supersedes</span><span class="spec-val">SEL-CATAPULT-001 Rev A</span></div>
+    <div class="spec"><span class="spec-label">YBCO saved</span><span class="spec-val">209,000 t → 0</span></div>
+    <div class="spec"><span class="spec-label">Doc required</span><span class="spec-val">SEL-CONVEYOR-001 Rev A</span></div>
+  </div>
+  <div class="card-heritage">Replaces 9,084 EM catapult hubs. Heritage: terrestrial mining conveyor practice.</div>
+</div>
+
+<!-- ARM-C -->
+<div class="card c-armc">
+  <div class="card-head">
+    <span class="card-name">ARM-C</span>
+    <span class="card-type">Mobile crane</span>
+  </div>
+  <div class="card-desc">Self-propelled heavy crane for module transport, lander offload, and equipment placement. Cable-driven LSMS truss boom on 6-wheel chassis with 14 m heavy transport trailer. Long-haul runs to Power Zone (4.3 km, 28 hr RT) and CAP (5.6 km, 34 hr RT) dominate P3 schedule. Deploys to both SPA and PKT.</div>
+  <div class="specs">
+    <div class="spec"><span class="spec-label">Mass</span><span class="spec-val">~1,500 kg</span></div>
+    <div class="spec"><span class="spec-label">Lift (5 m)</span><span class="spec-val">6,000 kg</span></div>
+    <div class="spec"><span class="spec-label">Lift (8 m)</span><span class="spec-val">4,000 kg</span></div>
+    <div class="spec"><span class="spec-label">Accuracy</span><span class="spec-val">±5 mm</span></div>
+    <div class="spec"><span class="spec-label">Battery</span><span class="spec-val">12,000 Wh</span></div>
+    <div class="spec"><span class="spec-label">Fleet (P7)</span><span class="spec-val">2 units (SPA)</span></div>
+  </div>
+  <div class="card-heritage">Heritage: NASA LSMS (Langley), NASA ATHLETE (6-legged transport). Scales to 20+ at PKT (P8+).</div>
+</div>
+
+<!-- ARM-D -->
+<div class="card c-armd">
+  <div class="card-head">
+    <span class="card-name">ARM-D</span>
+    <span class="card-type">Docking gantry manipulator</span>
+  </div>
+  <div class="card-desc">Fixed LSMS boom on IZ overhead gantry rail. One per docking collar (1:1 ratio). Performs complete PROBE Mk I/II servicing cycle: capture, collar docking, ore extraction, propellant coupling, ORU maintenance, pre-flight inspection. 7-DOF dexterous sub-arm with 6-tool carousel at ±2 mm. Mk III PROBEs never dock at IZ (never land) — their canisters arrive via EM catcher.</div>
+  <div class="specs">
+    <div class="spec"><span class="spec-label">Boom mass</span><span class="spec-val">~75 kg</span></div>
+    <div class="spec"><span class="spec-label">Reach</span><span class="spec-val">10 m</span></div>
+    <div class="spec"><span class="spec-label">Lift</span><span class="spec-val">2,500 kg</span></div>
+    <div class="spec"><span class="spec-label">Accuracy</span><span class="spec-val">±2 mm</span></div>
+    <div class="spec"><span class="spec-label">Power</span><span class="spec-val">1.5 kW (grid)</span></div>
+    <div class="spec"><span class="spec-label">Fleet</span><span class="spec-val">P3: 2 → P7: 8 → P11: 30+</span></div>
+  </div>
+  <div class="card-heritage">Heritage: ESA European Robotic Arm, CSA Dextre (SPDM)</div>
+</div>
+
+<!-- SENTINEL -->
+<div class="card c-sentinel">
+  <div class="card-head">
+    <span class="card-name">SENTINEL</span>
+    <span class="card-type">Oversight system + inspection rovers</span>
+  </div>
+  <div class="card-desc">Two components: (1) distributed software platform on redundant Ops Hub servers — coordinates all robots, ECLSS, ISRU monitoring, power balancing, crew safety geofencing, cryo transfer line monitoring (ECN-014: auto-close at threshold, hardwired 24 VDC); (2) physical inspection rovers with 5-sensor heads (LiDAR, thermal IR, ultrasonic, HD camera, radiation). Monitored-autonomy: monitors and recommends autonomously, requires human approval for irreversible actions.</div>
+  <div class="specs">
+    <div class="spec"><span class="spec-label">Rover mass</span><span class="spec-val">~80 kg</span></div>
+    <div class="spec"><span class="spec-label">Server</span><span class="spec-val">2× 25 kg</span></div>
+    <div class="spec"><span class="spec-label">Compute</span><span class="spec-val">~100 GFLOPS</span></div>
+    <div class="spec"><span class="spec-label">OS</span><span class="spec-val">ARINC 653 RTOS</span></div>
+    <div class="spec"><span class="spec-label">Storage</span><span class="spec-val">2× 10 TB SSD</span></div>
+    <div class="spec"><span class="spec-label">Rovers (P7)</span><span class="spec-val">4 units (scales to 4,000+)</span></div>
+  </div>
+  <div class="card-heritage">Heritage: ISS SPHERES/Astrobee (TRL 9), NASA ISAAC (TRL 7), JPL Mars Relay</div>
+</div>
+
+<!-- HARVEST -->
+<div class="card c-harvest">
+  <div class="card-head">
+    <span class="card-name">HARVEST</span>
+    <span class="card-type">Hydroponic tender</span>
+  </div>
+  <div class="card-desc">3-axis gantry robot inside the 4,500 mm OD greenhouse module. Manages the full crop cycle: seeding, nutrient dosing, pH monitoring, pollination, pest/disease detection (computer vision), and automated harvesting. Supplements crew diet from P6; crew food is 100% Earth-supplied freeze-dried rations from P4, HARVEST supplements from P6.</div>
+  <div class="specs">
+    <div class="spec"><span class="spec-label">Gantry</span><span class="spec-val">8×3.2×1.5 m</span></div>
+    <div class="spec"><span class="spec-label">Arm reach</span><span class="spec-val">800 mm</span></div>
+    <div class="spec"><span class="spec-label">Arm DOF</span><span class="spec-val">6-DOF</span></div>
+    <div class="spec"><span class="spec-label">Vision</span><span class="spec-val">Multispectral</span></div>
+    <div class="spec"><span class="spec-label">Power</span><span class="spec-val">~500 W</span></div>
+    <div class="spec"><span class="spec-label">Fleet (P7)</span><span class="spec-val">1 unit</span></div>
+  </div>
+  <div class="card-heritage">Heritage: FarmBot Genesis (gantry concept), ISS Veggie/APH (NASA)</div>
+</div>
+
+</div>
+
+<footer>
+  All specifications from programme design documents per SEL_ROBOT_FLEET v9 (ECN-019 Rev C baseline). Individual specs: SEL_PROBE_DESIGN Rev A, SEL_SKIP_DESIGN Rev A, SEL_DART_DESIGN Rev A, SEL_SURVEY_DESIGN Rev A, SEL_MOLEI_DESIGN v5, SEL_MOLES_DESIGN Rev A, SEL_SINTER_DESIGN Rev A, SEL_ARM_DESIGN Rev A, SEL_SENTINEL_DESIGN Rev A (+ ECN-014), SEL_HARVEST_DESIGN Rev A, SEL-HAULER-001 Rev B. Power and yield figures MATLAB-verified (SELENITE_VERIFY v5.0). PROBE Mk II/III and Hauler Rev B specs from fleet v9 §2/§7. Conveyor network per fleet v9 §8 (SEL-CONVEYOR-001 Rev A not yet written).
+</footer>
+
+</div>
+</body>
+</html>

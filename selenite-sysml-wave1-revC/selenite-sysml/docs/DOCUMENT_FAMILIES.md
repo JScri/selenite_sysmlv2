@@ -18,7 +18,11 @@ labels and exists nowhere else, which is why this was written down first.
 4. **Markdown over docx** at equal revision.
 5. **`SEL_FINAL_REPORT_v4.docx` is the integrating reference.** Team inputs
    (W2_T1_6, W5_Task_4_1, W5_T4_6, W6_T5_4, W7_T6_1) carry design weight
-   through it.
+   through it. Transcribed into the repo 16 Sep 2026 as `docs/SEL_FINAL_REPORT_v4.md`
+   (narrative + all 64 figures, `docs/final_report_figures/`); its
+   Leadership Reflections section is course-assessment content and was not
+   transcribed. Historical reference only — see the status note at the top
+   of that file and W2-N8…N17 below before citing a figure from it.
 6. Documents your own inventory marks STALE (pre-ECN-019 `programme_scope`,
    catapults for ore, SKIPs at PKT, 2.5M circuits at P12, 1 Mt/yr at Y100) are
    historical context only.
@@ -37,7 +41,7 @@ labels and exists nowhere else, which is why this was written down first.
 | Extended timeline | `selenite_extended_timeline_v3_revised.html` | P7–P14+ |
 | MTL interactive | `W2_T1_1_JS_MTL_v8_5.html` | P0–P7 |
 | Programme scope | `selenite_programme_scope.md` (ECN-019 rewrite, April-12 folder) | three older same-named copies are pre-ECN-019 |
-| Final report | `SEL_FINAL_REPORT_v4.docx` | integrator |
+| Final report | `SEL_FINAL_REPORT_v4.docx` → `docs/SEL_FINAL_REPORT_v4.md` | integrator, in repo from 16 Sep 2026 |
 | Economics | `SEL-ECON-001_RevA_revised.docx`, `SEL-ECON-001_Economic_Evaluation_Report.md` | |
 | Value chain | `v14_1` (P0–P7) + `v15` (P7–P12) + `v16` (P13+) | scope split, all three current |
 | Site selection | `W4_T3_3_JS_Selenite_site_selection_v1` | GIS, LOLA 5 m |
