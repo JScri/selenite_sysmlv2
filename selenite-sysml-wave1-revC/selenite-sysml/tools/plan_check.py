@@ -530,17 +530,20 @@ def ev_spa_msr(ctx: Ctx, unit: int) -> list[Result]:
     from selenite import plan_vectors as pv
     y_econ = ctx.first_year(ctx.w["spa_msr_count"] >= unit)
     md3 = int(ctx.md3_year)
-    frac = ctx.P.get("spaAsteroidLoadCriticalFraction")
-    t0 = pv.fsp_msr_trade(md3, 0.0 if frac is None else frac, ctx.P["spaMsrFirstUnitRatedKw"])
-    t1 = pv.fsp_msr_trade(md3, 1.0, ctx.P["spaMsrFirstUnitRatedKw"])
-    y = t0["first_justified_year"]
-    detail = (f"plan_vectors.fsp_msr_trade: FSP fleet Earth mass for eclipse-critical demand "
-              f"({t0['p_critical'][18]:.0f}-{t0['p_critical'].max():.0f} kW, {int(t0['nfsp_needed'].max())} units max) exceeds one SPA MSR's "
-              f"Earth mass from Y{t0['first_worth_it_year']} (Ni-201 in-situ vessels); ThCl4 from MD-3 Y{md3}; "
-              f"asteroid loads {'not ' if not frac else ''}eclipse-critical"
-              f"{'' if frac else ' (unbound; with them critical the MSR is forced by Y' + str(t1['first_justified_year']) + ')'}; "
+    frac = ctx.P.get("spaAsteroidLoadCriticalFraction") or 0.0
+    kw = ctx.P["spaMsrFirstUnitRatedKw"]
+    inc = pv.fsp_msr_trade(md3, frac, kw, basis="incremental")
+    inc_insitu = pv.fsp_msr_trade(md3, frac, kw, basis="incremental", solar_in_situ_from=60)
+    asb = pv.fsp_msr_trade(md3, frac, kw, basis="asbuilt")
+    y = inc["first_justified_year"]
+    yy = y if y is None else y
+    detail = (f"plan_vectors.fsp_msr_trade, incremental basis (cargo beyond the P7 as-built fleet; FSP Earth->SPA, solar Earth->SPA, "
+              f"MSR Earth fraction Earth->SPA, in-situ fraction PKT->SPA via MD-3): non-nuclear cargo exceeds the MSR's Earth cargo from "
+              f"Y{inc['first_worth_it_year']}, ThCl4 from MD-3 Y{md3}; with a-Si solar in-situ from Y60 -> Y{inc_insitu['first_justified_year']}; "
+              f"as-built basis (all cargo for the year's demand, delivered hardware not sunk) -> Y{asb['first_justified_year']}; "
+              f"eclipse-critical load {inc['p_critical'][18]:.0f}-{inc['p_critical'].max():.0f} kW, {int(inc['nfsp_needed'].max())} FSP max; "
               f"ECON spa_msr_count reaches {unit} at Y{y_econ}")
-    return [Result(f"SPA MSR unit #{unit}: FSP fleet dearer than an MSR, with ThCl4 available", "never" if y is None else y, None, detail)]
+    return [Result(f"SPA MSR unit #{unit}: non-nuclear cargo dearer than an MSR, with ThCl4 available", "never" if y is None else y, None, detail)]
 
 
 @evaluator("DG-10.5")

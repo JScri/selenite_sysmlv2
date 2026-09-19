@@ -159,34 +159,79 @@ def spa_critical_power(asteroid_critical_fraction: float = 0.0) -> dict:
                             "asteroid_critical_fraction": asteroid_critical_fraction}}
 
 
-def fsp_msr_trade(md3_year: int, asteroid_critical_fraction: float = 0.0, msr_rated_kw: float = 50_000.0) -> dict:
-    """The SPA MSR decision as a mass trade, by year: the Earth mass of the
-    FSP fleet needed to cover eclipse-critical demand (VERIFY fsp: 40 kW,
-    6,600 kg per unit) against the Earth mass of one SPA MSR (ECON msr:
-    50,000 kg x earth_frac(y), which falls to 0.3 as Ni-201 vessels go
-    in-situ). The MSR is *worth it* when the FSP fleet's Earth mass exceeds
-    the MSR's; it is *justified* (SpaMsrIntroductionGate) when it is worth it
-    and ThCl4 is available (MD-3 operational from ``md3_year``); the crewed-
-    base feasibility input is assumed true. ``msr_rated_kw`` caps what one
-    unit covers (Decision Framework s.10.1: SPA MSR #1 ~50 MWe)."""
+def fsp_msr_trade(md3_year: int, asteroid_critical_fraction: float = 0.0, msr_rated_kw: float = 50_000.0,
+                  basis: str = "incremental", solar_in_situ_from: int | None = None,
+                  solar_in_situ_earth_frac: float = 0.3) -> dict:
+    """The SPA MSR decision as a cargo-mass trade, by year, with every mass
+    given its source and destination:
+
+    Non-nuclear alternative (both parts Earth -> SPA ELZ by Starship, then
+    ARM-C haul ELZ -> power zone, 4.3 km uphill):
+      * FSP units to cover the eclipse-critical load (VERIFY fsp: 40 kW,
+        6,600 kg each), and
+      * the solar array to cover the total day load (VERIFY solar yield
+        0.319 kW/m2 at 85 % illumination, 3 kg/m2), Earth-sourced unless
+        ``solar_in_situ_from`` is set (Decision Framework s.6: a-Si panels
+        in-situ from P11), after which only ``solar_in_situ_earth_frac`` of
+        new array mass comes from Earth.
+    Nuclear alternative: SPA MSR units sized to the total demand (ECON msr:
+    50,000 kg each, ``msr_rated_kw`` per unit); the Earth fraction
+    (ECON earth_frac(y), 0.3 floor from Y80) travels Earth -> SPA; the
+    in-situ fraction is PKT-foundry Ni-201 and travels PKT -> SPA by MD-3
+    (ECN-020: MD-3 single track, ~42 launches/yr; the canister payload for
+    that route is not specified - a mass, not a cargo-flight cost, is what
+    is compared here).
+
+    ``basis="asbuilt"`` compares the full masses for that year's demand;
+    ``basis="incremental"`` (decision-relevant: delivered hardware is sunk)
+    subtracts the P7 as-built non-nuclear fleet (VERIFY ecl.nfsp and
+    ph.panel_kg at P7) from the non-nuclear side, floored at zero.
+    The MSR is *worth it* when the non-nuclear Earth-sourced cargo exceeds the
+    MSR's Earth-sourced cargo; *justified* (SpaMsrIntroductionGate) when it
+    is worth it and ThCl4 is available (MD-3 from ``md3_year``); the
+    crewed-base feasibility input is assumed true."""
     w = econ.workspace()
     v = verify.workspace()
     cp = spa_critical_power(asteroid_critical_fraction)
+    sp = spa_power(with_asteroid_loads=True)
     Y = cp["Y"]
     fsp_kw, fsp_kg = float(v["fsp"]["pwr_kW"]), float(v["fsp"]["mass_kg"])
+    yield_kwm2 = float(v["solar"]["yield_kWm2"])
+    panel_kg_m2 = 3.0
     nfsp = np.ceil(cp["p_critical"] / fsp_kw)
     fsp_mass = nfsp * fsp_kg
+    panel_m2 = sp["p_tot"] / yield_kwm2
+    solar_ef = np.ones_like(panel_m2)
+    if solar_in_situ_from is not None:
+        solar_ef[Y >= solar_in_situ_from] = solar_in_situ_earth_frac
+    solar_mass = panel_m2 * panel_kg_m2 * solar_ef
+    if basis == "incremental":
+        fsp_mass = np.maximum(0.0, fsp_mass - float(v["ecl"]["nfsp"][P7_INDEX]) * fsp_kg)
+        solar_mass = np.maximum(0.0, panel_m2 * panel_kg_m2 - float(v["ph"]["panel_kg"][P7_INDEX])) * solar_ef
+    elif basis != "asbuilt":
+        raise ValueError(basis)
+    nonnuclear_mass = fsp_mass + solar_mass
     ef = np.array([w["msr"]["earth_frac"](float(y)) for y in Y])
-    units = np.maximum(1.0, np.ceil(cp["p_critical"] / msr_rated_kw))
-    msr_mass = units * w["msr"]["mass_kg"] * ef
-    worth = fsp_mass > msr_mass
+    units = np.maximum(1.0, np.ceil(sp["p_tot"] / msr_rated_kw))
+    msr_total_mass = units * w["msr"]["mass_kg"]
+    msr_earth_mass = msr_total_mass * ef
+    msr_pkt_mass = msr_total_mass * (1.0 - ef)     # PKT -> SPA via MD-3
+    worth = nonnuclear_mass > msr_earth_mass
     fuel = Y >= md3_year
     justified = worth & fuel & (Y >= 18)
     idx = np.flatnonzero(justified)
     idx_w = np.flatnonzero(worth & (Y >= 18))
-    return {"Y": Y, "p_critical": cp["p_critical"], "nfsp_needed": nfsp, "fsp_earth_mass_kg": fsp_mass,
-            "msr_earth_mass_kg": msr_mass, "msr_units": units, "worth_it": worth, "justified": justified,
+    return {"Y": Y, "basis": basis, "p_critical": cp["p_critical"], "p_total": sp["p_tot"],
+            "nfsp_needed": nfsp, "fsp_earth_mass_kg": fsp_mass, "solar_earth_mass_kg": solar_mass,
+            "nonnuclear_earth_mass_kg": nonnuclear_mass, "msr_units": units,
+            "msr_earth_mass_kg": msr_earth_mass, "msr_pkt_to_spa_mass_kg": msr_pkt_mass,
+            "worth_it": worth, "justified": justified,
             "first_worth_it_year": int(idx_w[0]) if idx_w.size else None,
             "first_justified_year": int(idx[0]) if idx.size else None,
-            "assumptions": {**cp["assumptions"], "fsp_kw": fsp_kw, "fsp_kg": fsp_kg,
-                            "msr_mass_kg": w["msr"]["mass_kg"], "md3_year": md3_year, "msr_rated_kw": msr_rated_kw}}
+            "routes": {"fsp": "Earth -> SPA ELZ (Starship), ARM-C haul to power zone",
+                       "solar": "Earth -> SPA ELZ (Starship)" + (f"; a-Si in-situ from Y{solar_in_situ_from}" if solar_in_situ_from else ""),
+                       "msr_earth_fraction": "Earth -> SPA ELZ (Starship)",
+                       "msr_in_situ_fraction": "PKT foundry -> SPA via MD-3 (ECN-020 single track, ~42 launches/yr; canister payload unspecified)"},
+            "assumptions": {**cp["assumptions"], "fsp_kw": fsp_kw, "fsp_kg": fsp_kg, "solar_yield_kwm2": yield_kwm2,
+                            "panel_kg_m2": panel_kg_m2, "msr_mass_kg": w["msr"]["mass_kg"], "md3_year": md3_year,
+                            "msr_rated_kw": msr_rated_kw, "solar_in_situ_from": solar_in_situ_from}}

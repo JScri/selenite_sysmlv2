@@ -594,3 +594,25 @@ unevaluated (tier resource tonnages have no source).
   throughout, and the MSR wins on Earth mass only once Ni-201 in-situ
   vessels cut its Earth fraction — the register row gives the year. Jason's
   hypothesis (later phases, not P10) is what the numbers show.
+
+## Addendum — 19 September 2026 (correction: solar cargo and routes in the SPA MSR trade)
+
+The trade in the previous addendum omitted the solar array that carries the
+day load and did not name the route of the MSR's in-situ fraction; its Y69
+result is withdrawn. `plan_vectors.fsp_msr_trade` now compares, with every
+mass given a source and destination: the non-nuclear alternative (FSP units
+for the eclipse-critical load + the solar array for the total load, both
+Earth → SPA ELZ by Starship then ARM-C haul to the power zone, VERIFY 3 kg/m²
+at 0.319 kW/m²; optionally a-Si in-situ from P11) against SPA MSR units sized
+to the total load (Earth fraction Earth → SPA; in-situ Ni-201 fraction PKT
+foundry → SPA via MD-3, whose canister payload ECN-020 does not specify).
+Two bases: *incremental* (cargo beyond the P7 as-built fleet, delivered
+hardware being sunk — the decision-relevant one, carried as the derived
+year) and *as-built*. Results: incremental → the MSR is worth it only when
+the asteroid-processing loads arrive, **Y105 (P12)**, matching the
+economics' assumption and DG-13.4 and the same with a-Si solar in-situ from
+Y60; as-built → Y43, the ThCl4 availability year, because the P8–P10 solar
+array (32–47 t) plus four FSP (26 t) already outweighs a 50 t MSR. Solar,
+not FSP, is the dominant non-nuclear cargo once asteroid loads arrive (573 t
+of panels at Y105). DG-10.5 and DG-11.3 therefore read "later than
+declared"; DG-13.4 reads consistent.

@@ -45,10 +45,14 @@ def test_critical_load_is_a_small_fraction_of_total():
     assert np.all(cp["p_critical"][18:] < 0.2 * sp["p_tot"][18:])
 
 
-def test_fsp_msr_trade_crosses_after_in_situ_vessels():
-    t = pv.fsp_msr_trade(md3_year=43)
-    assert t["first_worth_it_year"] is not None and t["first_worth_it_year"] > 43
-    assert t["first_justified_year"] == t["first_worth_it_year"]
-    # With asteroid loads treated as eclipse-critical the MSR is forced by Y105 at the latest.
-    t2 = pv.fsp_msr_trade(md3_year=43, asteroid_critical_fraction=1.0)
-    assert t2["first_justified_year"] <= 105
+def test_fsp_msr_trade_bases_and_routes():
+    inc = pv.fsp_msr_trade(md3_year=43, basis="incremental")
+    asb = pv.fsp_msr_trade(md3_year=43, basis="asbuilt")
+    assert set(inc["routes"]) == {"fsp", "solar", "msr_earth_fraction", "msr_in_situ_fraction"}
+    # As-built counts the whole array, so it can only make the MSR worth it earlier.
+    assert asb["first_justified_year"] <= inc["first_justified_year"]
+    assert inc["first_justified_year"] >= 43
+    # Solar is the dominant non-nuclear cargo once asteroid loads arrive.
+    assert inc["solar_earth_mass_kg"][105] > inc["fsp_earth_mass_kg"][105]
+    with pytest.raises(ValueError):
+        pv.fsp_msr_trade(43, basis="wrong")
