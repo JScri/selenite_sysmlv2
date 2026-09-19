@@ -86,3 +86,4 @@ Phase1_Economic_Evaluation_(team),-,-,-,-,5,team_input,"Phase 1 base setup US$51
 W5_T4_4_JS_milestone_reference.html,MTL v8.5,1,SeleniteGates,model/Gates.sysml,3,gated,"team input W5_T4_4 — milestones M0-M8 (MilestoneSet) from this reference, 18 Sep 2026"
 W5_T4_4_JS_scaling_P7_P14.html,-,1,SelenitePhases,model/Phases.sysml,2,reference_only,"team input W5_T4_4 — P7-P14+ scaling cards; in docs/ from 18 Sep 2026"
 W5_T4_3_JS_fleet_specs_summary.html,-,3,SeleniteFleet,model/RobotFleet.sysml,2,reference_only,"team input W5_T4_3 — fleet specs summary; in docs/ from 18 Sep 2026"
+SEL-ECN-022_DecisionFramework_Wave3.md,-,6,SeleniteGates;SeleniteParameters,model/Gates.sysml,3,applied,"ecn-022 — Wave 3 gate decisions and Rev D corrections (19 Sep 2026); applied in the model, Rev E is a Wave 5 rendering"

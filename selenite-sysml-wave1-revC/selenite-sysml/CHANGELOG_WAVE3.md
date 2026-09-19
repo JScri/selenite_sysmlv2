@@ -616,3 +616,13 @@ array (32–47 t) plus four FSP (26 t) already outweighs a 50 t MSR. Solar,
 not FSP, is the dominant non-nuclear cargo once asteroid loads arrive (573 t
 of panels at Y105). DG-10.5 and DG-11.3 therefore read "later than
 declared"; DG-13.4 reads consistent.
+
+## Close-out — 19 September 2026 (SEL-ECN-022)
+
+`docs/SEL-ECN-022_DecisionFramework_Wave3.md` records every Wave 3 decision
+on the Decision Framework (MD-4 to DG-12.4; thorium ratio with ranges; SPA
+MSR by cargo-mass trade, first unit Y105; asteroid loads eclipse-critical,
+`spaAsteroidLoadCriticalFraction = 1.0`; milestones per MTL v8.5; PSR
+capacity 620) and the seven corrections Rev D needs, with the open Wave 5
+findings listed separately. Rev E is a rendering from the model at Wave 5,
+not a hand rewrite. Wave 3 closed.
