@@ -922,7 +922,10 @@ package SeleniteGates {
              * ECON peak of 357 never forces it; (b) MD-4 is triggered when PGM
              * concentrate exceeds ~100 t/yr (ECON total_pgm peaks near 52
              * t/yr, so the trigger as written is never met on the current
-             * economics - W3-N2). Both are register rows, not decisions. */
+             * economics - W3-N2). ECN (Jason, 19 Sep 2026): MD-4 is bound to
+             * DG-12.4 (M-type arrival) in the configuration instead of this
+             * trigger; the calc stays so the register keeps reporting the
+             * trigger against the PGM vector. */
         attribute redefines gateId = "DG-11.6";
         attribute redefines criterion = "PROBE Mk III SEP commissioning + SPA->Earth mass driver for PGM exports. Mk III: ion propulsion, ~1,200 kg dry, never lands on the Moon; ejects 10 t Fe-Ni/PGM payload canisters from LLO to the EM catcher at SPA (~1,680 m/s); electromagnetic anchoring on M-type Fe-Ni; build-out ~86 Mk III/yr from Y60-Y80 -> ~1,714 units, reducing to ~300 after all asteroid captures complete (Y115+); Mk I/II phasedown 260->50 (Y60-Y80), then ->30 (Y85+). SPA->Earth mass driver triggered when PGM concentrate volume exceeds ~100 t/yr.";
         attribute redefines criterionAsModelled = "MkIiiTransitionGate: ECON molei_needed > ProgrammeParameters.psrMoleICapacityUnits; PgmExportDriverGate: ECON total_pgm > GateThresholds.pgmExportTriggerTonnesPerYear";
@@ -930,7 +933,7 @@ package SeleniteGates {
         attribute redefines declaredYear = 65.0;
         attribute redefines declaredYearEnd = 75.0;
         attribute redefines prerequisites = ("ProbeMkII.introducedIn", "EmCatcher.introducedIn", "DG-9.6");
-        attribute redefines gatedElements = ("ProbeMkIII.introducedIn", "MassDriverMd4.operationalFrom", "PgmExportCanister", "ProbeMkI.retiredIn", "MoleIMkII.declineDrivenByMkIIIFrom", "ProbeReturnLink.mkIiiCanisterStreamFrom", "StarshipReturnLink.retiredIn (via MD-4)");
+        attribute redefines gatedElements = ("ProbeMkIII.introducedIn", "ProbeMkI.retiredIn", "MoleIMkII.declineDrivenByMkIIIFrom", "ProbeReturnLink.mkIiiCanisterStreamFrom", "MassDriverMd4 (trigger only; bound to DG-12.4 by ECN 19 Sep 2026)");
         attribute redefines consequenceIfNotMet = "Chemical-only fleet caps at ~355 MOLE-I (Strategy v3.1 s.16)";
         calc transitionCheck : MkIiiTransitionGate;
         calc exportDriverCheck : PgmExportDriverGate;
@@ -1014,14 +1017,16 @@ package SeleniteGates {
         doc /* "DG-12.4 (Y85): M-type asteroid arrives in DRO". derivedYear =
              * mTypeCaptureYear + asteroidOnlineLagYears in the configuration.
              * ECON captured_asteroid_pgm is non-zero from Y85 (agrees). The DRO
-             * node, the first Laser Ablation Truss and the M-type line bind
-             * here. */
+             * node, the first Laser Ablation Truss, the M-type line and - by
+             * ECN (Jason, 19 Sep 2026, W3-N2) - MD-4 SPA->Earth bind here:
+             * the PGM export stream becomes bulk only once the captured
+             * asteroid is being ablated. */
         attribute redefines gateId = "DG-12.4";
         attribute redefines criterion = "M-type asteroid arrives in DRO - ~200 m Fe-Ni body. Dedicated Laser Ablation Truss + mass driver (MD-5, DRO->SPA) installed.";
         attribute redefines declaredPhase = Phase::P12;
         attribute redefines declaredYear = 85.0;
         attribute redefines prerequisites = ("DG-11.8");
-        attribute redefines gatedElements = ("DroStation.existsFrom", "LaserAblationTruss.introducedIn", "MTypeProcessingLine.introducedIn", "DG-12.5");
+        attribute redefines gatedElements = ("DroStation.existsFrom", "LaserAblationTruss.introducedIn", "MTypeProcessingLine.introducedIn", "MassDriverMd4.operationalFrom (ECN 19 Sep 2026)", "PgmExportCanister", "StarshipReturnLink.retiredIn (via MD-4)", "DG-12.5");
     }
 
     part def DgTwelveFive :> ExogenousGate {

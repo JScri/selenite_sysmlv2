@@ -176,8 +176,8 @@ Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a bou
 | massDriverNetwork.md2.operationalFrom | MassDriverMd2 | P9 | DG-9.1 (P9, Y35) | declared | Y35 (P8/P9) - ECON canisters_yr first non-zero | def = gate; vector = def |
 | massDriverNetwork.md3.introducedIn | MassDriverMd3 | P10 | DG-9.6 (P9, alt P10, Y43) | declared | - | def = gate |
 | massDriverNetwork.md3.operationalFrom | MassDriverMd3 | P10 | DG-9.6 (P9, alt P10, Y43) | declared | - | def = gate |
-| massDriverNetwork.md4.introducedIn | MassDriverMd4 | P11 | DG-11.6 (P11, Y65) | never | - | def = gate |
-| massDriverNetwork.md4.operationalFrom | MassDriverMd4 | P11 | DG-11.6 (P11, Y65) | never | - | def = gate |
+| massDriverNetwork.md4.introducedIn | MassDriverMd4 | P11 | DG-12.4 (P12, Y85) | Y85 (P12) | - | def P11 vs gate P12 |
+| massDriverNetwork.md4.operationalFrom | MassDriverMd4 | P11 | DG-12.4 (P12, Y85) | Y85 (P12) | - | def P11 vs gate P12 |
 | massDriverNetwork.md5.introducedIn | MassDriverMd5 | P12 | DG-12.5 (P12, Y85) | Y85 (P12) | - | def = gate |
 | massDriverNetwork.md5.operationalFrom | MassDriverMd5 | P12 | DG-12.5 (P12, Y85) | Y85 (P12) | - | def = gate |
 | sentinelSystem.edge.supervisedFromSpaFrom | SentinelEdgeTier | P4 | DG-4.1 (P4, Y7) | assumed | - | def = gate |
@@ -243,6 +243,8 @@ Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a bou
 | W3-R53 | shackletonHub.skipHops.introducedIn: definition P4 but bound to DG-2.2 (P2, Y5) | ProgrammeConfiguration.sysml |
 | W3-R54 | shackletonHub.skipHops.operationalFrom: definition P4 but bound to DG-2.2 (P2, Y5) | ProgrammeConfiguration.sysml |
 | W3-R55 | pktFactory.siteConfirmedIn: definition P7 but bound to DG-6.3 (P6, Y13) | ProgrammeConfiguration.sysml |
+| W3-R56 | massDriverNetwork.md4.introducedIn: definition P11 but bound to DG-12.4 (P12, Y85) | ProgrammeConfiguration.sysml |
+| W3-R57 | massDriverNetwork.md4.operationalFrom: definition P11 but bound to DG-12.4 (P12, Y85) | ProgrammeConfiguration.sysml |
 
 ## 4. Structural checks
 

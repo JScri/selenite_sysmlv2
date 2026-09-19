@@ -529,3 +529,19 @@ repo); ECN-020 note (SEL-REQ-011); VERIFY / ECON / VISUALIZE rows note
   to a value the plan reaches (30 t/yr crosses at Y85 on ECON `total_pgm`);
   either makes MD-4 a P12 element and retires the Starship returns at Y85.
   Not applied.
+
+## Addendum — 19 September 2026 (ECN: MD-4 bound to the M-type arrival)
+
+Decision (Jason, 19 Sep 2026): the SPA→Earth mass driver MD-4 is a
+consequence of DG-12.4 (M-type asteroid arrives in DRO, Y85), not of the
+DG-11.6 PGM-volume trigger, which the programme's own production (36.5 t/yr
+M-type + ~15 t/yr Mk III) never reaches. Applied: `massDriverNetwork.md4`
+re-bound to `gates.dgTwelveFour.derivedPhase` in the configuration; DG-11.6
+and DG-12.4 gated-element lists and docs updated; MD-4 definition keeps the
+document's P11 with a pointer. `PgmExportDriverGate` stays on DG-11.6 so the
+register keeps reporting the trigger against ECON `total_pgm`. Consequence
+through the Wave 2 chain: `StarshipReturnLink.retiredIn` now derives from the
+M-type arrival (register row W3-R for MD-4: definition P11, bound to DG-12.4
+P12/Y85). W3-N2 closed as a decision; the Decision Framework s.3 MD-4 row
+("P11 (Y70)") and DG-11.6 text are now superseded by this ECN and should be
+updated at the next Rev.

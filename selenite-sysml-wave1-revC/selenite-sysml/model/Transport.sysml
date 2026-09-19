@@ -111,7 +111,10 @@ package SeleniteTransport {
 
     part def MassDriverMd4 :> MassDriver {
         doc /* MD-4 SPA->Earth, P11 (DG-11.6): PGM exports, single track,
-             * foundation sized for a future parallel track. See F6 in MD-3. */
+             * foundation sized for a future parallel track. See F6 in MD-3.
+             * Wave 3 ECN (Jason, 19 Sep 2026): operationalFrom is bound in
+             * SeleniteConfigurations to DG-12.4 (M-type arrival, Y85 = P12);
+             * the P11 here stays as the document value (W3-N2). */
         attribute redefines driverId = MassDriverId::md4;
         attribute redefines introducedIn = Phase::P11;
         attribute redefines operationalFrom = Phase::P11;
