@@ -92,8 +92,10 @@ package SeleniteProcessing {
     part def RelayDepot :> ProcessingFacility {
         doc /* Relay depot for tiered depth mining (Tier 2/3 haul distances) at
              * PKT in later phases. ARCHITECTURE_BASELINE.md s.4 gives no phase;
-             * introducedIn is deliberately unbound until Wave 3 reads the
-             * Decision Framework tiering gates (TODO Wave 3). */
+             * introducedIn is deliberately unbound at definition level; Wave 3
+             * binds it in SeleniteConfigurations to DG-POST.1 (Decision
+             * Framework Rev D s.10.2, ~Y280+: Tier 1 approaching depletion),
+             * so the depot appears when the tiering gate says so. */
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::pkt;
     }
@@ -112,7 +114,13 @@ package SeleniteProcessing {
              * Ca(OH)2 precipitation -> U removal via H2O2 -> Ce oxidation ->
              * LREE/HREE split -> (NH4)2SO4 LREE -> H3PO4 HREE -> calcination
              * -> mixed oxide concentrates to Earth (individual SX on Earth).
-             * No D2EHPA anywhere (SEL-REQ-004). Th(OH)4 -> ThCl4 MSR fuel. */
+             * No D2EHPA anywhere (SEL-REQ-004, asserted on usesD2ehpa).
+             * Th(OH)4 -> ThCl4 MSR fuel. */
+        attribute usesD2ehpa : Boolean = false;
+        assert constraint noOrganicSolventExtraction {
+            doc /* ECN-019 Rev C committed decision (Strategy v3.1 s.10.1). */
+            usesD2ehpa == false
+        }
         part acidBake : FlowsheetStep {
             attribute redefines stepName = "acid bake";
         }
@@ -155,6 +163,12 @@ package SeleniteProcessing {
         doc /* Organic-solvent-free Th/U separation from KREEP leach liquor.
              * Candidate architectures per the Th/U preprint; selection OPEN
              * (TODO Wave 4). Constraint: no D2EHPA (SEL-REQ-004). */
+        attribute usesD2ehpa : Boolean = false;
+        assert constraint noOrganicSolventExtraction {
+            doc /* Whatever architecture the preprint selects, it is
+                 * organic-solvent-free. */
+            usesD2ehpa == false
+        }
     }
 
     part def KreepFeedstock {

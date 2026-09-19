@@ -20,13 +20,21 @@ package SeleniteTransport {
          * heritage for the five mass drivers and the EM catcher. SCALE v1.3
          * output showing tankers and PKT SKIPs is HISTORICAL (VC-14). */
 
+    enum def OreTransportMode {
+        doc /* How bulk ore moves on a link. catapult exists only so that
+             * SEL-REQ-006 can assert it is never bound to an ore link. */
+        hauler; conveyor; catapult; skip;
+    }
+
     abstract part def LogisticsLink :> PhaseGated {
         doc /* Directed transport link between two programme nodes.
              * operationalFrom is the phase the link first carries traffic
-             * (the brief's name for links; equals introducedIn). */
+             * (the brief's name for links; equals introducedIn). Links that
+             * carry bulk ore bind oreTransportMode (SEL-REQ-006). */
         abstract attribute operationalFrom : Phase;
         abstract attribute fromNode : SiteId;
         abstract attribute toNode : SiteId;
+        abstract attribute oreTransportMode : OreTransportMode [0..1];
     }
 
     enum def MassDriverId {
@@ -86,7 +94,10 @@ package SeleniteTransport {
              * (Y43 lies in P9) - recorded as W2-N2. FLAG F6 (recorded): scope
              * P11 labels the SPA->Earth driver "MD-3"; ECN-020 numbering
              * (MD-3 = PKT->SPA, MD-4 = SPA->Earth) is carried and the scope
-             * label treated as stale, per DOCUMENT_FAMILIES.md default. */
+             * label treated as stale, per DOCUMENT_FAMILIES.md default.
+             * Wave 3: operationalFrom is bound in SeleniteConfigurations to
+             * DG-9.6 (Y43), whose declaredPhase is P9 with P10 as the
+             * alternate; the P10 here stays as the document value. */
         attribute redefines driverId = MassDriverId::md3;
         attribute redefines introducedIn = Phase::P10;
         attribute redefines operationalFrom = Phase::P10;
@@ -100,7 +111,10 @@ package SeleniteTransport {
 
     part def MassDriverMd4 :> MassDriver {
         doc /* MD-4 SPA->Earth, P11 (DG-11.6): PGM exports, single track,
-             * foundation sized for a future parallel track. See F6 in MD-3. */
+             * foundation sized for a future parallel track. See F6 in MD-3.
+             * Wave 3 ECN (Jason, 19 Sep 2026): operationalFrom is bound in
+             * SeleniteConfigurations to DG-12.4 (M-type arrival, Y85 = P12);
+             * the P11 here stays as the document value (W3-N2). */
         attribute redefines driverId = MassDriverId::md4;
         attribute redefines introducedIn = Phase::P11;
         attribute redefines operationalFrom = Phase::P11;
@@ -197,6 +211,9 @@ package SeleniteTransport {
              * concentrate (MD-5), Mk III PROBE LLO ejections. P11 per
              * ARCHITECTURE_BASELINE.md s.4; fleet v9 s.2.4 notes the MD-3
              * receiver "built P9-P10 serves double duty" (recorded, W2-N3).
+             * Wave 3: a driver needs its receiver, so the configuration binds
+             * operationalFrom to DG-9.6 (MD-3 operational, Y43); the P11 here
+             * stays as the document value and the register shows the gap.
              * Source: fleet v9 s.16 and s.19. */
         attribute redefines introducedIn = Phase::P11;
         attribute redefines operationalFrom = Phase::P11;
@@ -223,6 +240,7 @@ package SeleniteTransport {
         attribute redefines fromNode = SiteId::pkt;
         attribute redefines toNode = SiteId::pkt;
         attribute tier = PktTransportTier::tier3;
+        attribute redefines oreTransportMode = OreTransportMode::conveyor;
         attribute throughputTonnesPerYear : Real;
     }
 
@@ -233,6 +251,11 @@ package SeleniteTransport {
         attribute redefines introducedIn = Phase::P9;
         attribute redefines retiredIn = null;
         attribute deployingFrom = Phase::P10;
+        attribute oreCatapultHubCount : Integer = 0;
+        doc catapultDoc /* The 9,084 EM catapult hubs of ECN-016/017 are zero
+             * under ECN-019 Rev C (Strategy v3.1 s.7.3); SEL-REQ-006 asserts
+             * it on this attribute. Coilgun heritage survives only in the
+             * mass drivers and the EM catcher. */
         part referenceTrunk : SteelApronConveyor;
         part referenceBranch : SteelApronConveyor;
         port spineDelivery;
@@ -248,6 +271,7 @@ package SeleniteTransport {
         attribute redefines fromNode = SiteId::pkt;
         attribute redefines toNode = SiteId::pkt;
         attribute tiers = (PktTransportTier::tier1, PktTransportTier::tier2);
+        attribute redefines oreTransportMode = OreTransportMode::hauler;
     }
 
     part def SkipHopLink :> LogisticsLink {
@@ -258,6 +282,7 @@ package SeleniteTransport {
         attribute redefines retiredIn = Phase::P9;
         attribute redefines fromNode = SiteId::spa;
         attribute redefines toNode = SiteId::spa;
+        attribute redefines oreTransportMode = OreTransportMode::skip;
     }
 
     part def StarshipCargoLink :> LogisticsLink {

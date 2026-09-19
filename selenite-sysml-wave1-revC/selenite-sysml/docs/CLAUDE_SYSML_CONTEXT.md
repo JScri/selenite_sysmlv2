@@ -116,6 +116,15 @@ uploads) is read-only — copy it to `/home/claude/` before editing.
   are untyped value bindings: `attribute crewedFrom = Phase::P4;`.
   `retiredIn = null` means "never retired within the programme". An open
   flag may leave `introducedIn` deliberately unbound (F5, `SpaThoriumMSR`).
+- **Gate-bound phases** (Wave 3): a phase attribute that is the consequence
+  of a decision gate is re-bound in `ProgrammeConfiguration.sysml` to
+  `gates.<usage>.derivedPhase` (unbound until Wave 5); the definition keeps
+  the document value. Gate criteria are `calc def`s in `SeleniteAnalysis`
+  with thresholds from `SeleniteParameters::GateThresholds`, never literals.
+  `tools/plan_check.py` must exit 0 (structural checks) before delivery; its
+  register (`docs/PLAN_REGISTER.md`) is regenerated with `--markdown`.
+- A requirement `subject` typed by an abstract definition is declared
+  `abstract subject x : AbstractDef;` (clears SSM021).
 - Fleet-scale counts stay as configuration **attributes**
   (`circuitCountAtP14`), not part multiplicities, until multiplicities
   earn their keep. Exception: genuinely enumerable assets
@@ -129,7 +138,9 @@ uploads) is read-only — copy it to `/home/claude/` before editing.
    inherited state is clean before changing anything.
 3. Make the session's changes. Whole-file rewrites are fine; keep
    diffs reviewable per commit-sized chunk of intent.
-4. Validate (hard rule 1). Fix until exit 0 and hints are clean.
+4. Validate (hard rule 1). Fix until exit 0 and hints are clean. Run
+   `python tools/plan_check.py --quiet` (exit 0) whenever gates, thresholds,
+   calcs or configuration bindings change.
 5. If structure changed, regenerate `diagrams/` via
    `tools/render_diagrams.sh` (add new views to that script when new
    anchors matter).
@@ -171,7 +182,11 @@ tables, useful for requirement/attribute exports.
 
 ## 8. Wave roadmap
 
-See `docs/MIGRATION_PLAN.md`. Python port (14 Sep 2026, night): **done** —
+See `docs/MIGRATION_PLAN.md`. **Wave 3 delivered (15 Sep 2026)**: 81 gates,
+thresholds, calcs, phase bindings, SEL-REQ-001..016, `tools/plan_check.py`
+in CI, register in `docs/PLAN_REGISTER.md`; next is Wave 4 (behaviour) and
+Wave 5 (bind `derivedPhase`, evaluate the seven unevaluated gates). Previous
+state: Python port (14 Sep 2026, night): **done** —
 `selenite-compute/` reproduces all six current-baseline scripts against the
 v2.1 goldens and console captures (`CHANGELOG_PORT.md` lists what it
 revealed); it is the computational authority from here on. Wave 3 kick-off

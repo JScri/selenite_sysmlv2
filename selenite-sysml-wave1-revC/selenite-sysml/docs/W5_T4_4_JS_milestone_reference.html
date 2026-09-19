@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selenite — Construction Phasing Milestone Reference</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root {
+    --bg: #080c10; --surf: #0d1520; --bdr: #1a2a3c; --dim: #2a4060;
+    --txt: #b8d0e4; --txt2: #6a90b0; --hi: #e4f0f9; --acc: #4ae8a0;
+    --s0: #e8a84a; --s1: #e86a4a; --s2: #4a9ef5; --s3: #4ae8a0; --s4: #a84ae8; --s5: #e84a8a;
+    --ms: #ffdd44; --dep: #3a6090;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--txt);
+    font-family: 'Barlow', sans-serif;
+    padding: 32px 24px 60px; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .container { max-width: 900px; width: 100%; }
+  header { margin-bottom: 20px; }
+  header .eyebrow { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--acc); margin-bottom: 4px; }
+  header h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 24px; color: var(--hi); margin-bottom: 4px; }
+  header .sub { font-size: 12px; color: var(--txt2); line-height: 1.5; }
+
+  h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 1px; margin: 20px 0 8px; padding-top: 12px; border-top: 1px solid var(--bdr); }
+
+  table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+  thead th {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 11px;
+    letter-spacing: 1.5px; text-transform: uppercase; color: var(--txt2);
+    padding: 8px 8px 6px; text-align: left; border-bottom: 1px solid var(--bdr);
+  }
+  tbody td {
+    padding: 7px 8px; border-bottom: 1px solid rgba(26,42,60,0.4);
+    font-size: 13px; line-height: 1.5; vertical-align: top;
+  }
+  .col-month { width: 70px; font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 13px; color: var(--ms); }
+  .col-year { width: 55px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--dim); }
+  .col-stage { width: 28px; }
+  .col-event { color: var(--txt); }
+  .col-event b { color: var(--hi); font-weight: 600; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 2px; }
+  .ms-diamond { display: inline-block; width: 8px; height: 8px; transform: rotate(45deg); background: var(--ms); vertical-align: middle; margin-right: 4px; }
+  .phase-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 1px 5px; border-radius: 3px; color: rgba(0,0,0,0.7); font-weight: 600; }
+
+  .section-intro { font-size: 12px; color: var(--txt2); margin-bottom: 10px; line-height: 1.6; }
+  .cargo-box { background: var(--surf); border: 1px solid var(--bdr); border-radius: 6px; padding: 12px 14px; margin-bottom: 14px; }
+  .cargo-box h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 13px; color: var(--hi); letter-spacing: 1px; margin-bottom: 6px; }
+  .cargo-row { display: flex; gap: 8px; align-items: baseline; padding: 3px 0; font-size: 12px; border-bottom: 1px solid rgba(26,42,60,0.3); }
+  .cargo-month { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ms); width: 50px; flex-shrink: 0; }
+  .cargo-desc { color: var(--txt); flex: 1; }
+
+  footer { margin-top: 16px; font-size: 10px; color: var(--dim); line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="eyebrow">Selenite Programme · Deliverable 04 · Supplementary Reference</div>
+  <h1>Construction Phasing — Milestone & Event Definitions</h1>
+  <div class="sub">Cross-reference to Construction Phasing Gantt and Master Timeline (MTL v8.5). All month numbers (M##) count from programme go-ahead (M1). Year = ceiling(M/12).</div>
+</header>
+
+<!-- ═══════════ CARGO LAUNCHES ═══════════ -->
+<div class="cargo-box">
+  <h3>Cargo Launch Manifest (from MTL v8.5)</h3>
+  <div class="section-intro">All hardware arrives via Starship-class vehicles. After the first landing at PLZ, all subsequent landings target ELZ sintered pads.</div>
+  <div class="cargo-row"><span class="cargo-month">M20–23</span><span class="cargo-desc"><b>Cargo Launch 1 (first landing at PLZ):</b> MOLE-S ×1, SINTER ×1, ARM-C ×1, SENTINEL ×1, initial solar arrays, MOLE-I ×4 (P3 batch), pre-fab PROBE capture collar ×2 (provisional, non-pressurised). PROBE-Scout ×3 launched M21 (one-way expendable NEA survey).</span></div>
+  <div class="cargo-row"><span class="cargo-month">M42–45</span><span class="cargo-desc"><b>Cargo Launch 2 (first ELZ landing):</b> FSP-1, additional solar arrays, ISRU equipment (VEX, electrolyser, cryo tanks), prefab hab pressure modules, SKIP propellant depot, MOLE-S ×1, SINTER ×1.</span></div>
+  <div class="cargo-row"><span class="cargo-month">M62–65</span><span class="cargo-desc"><b>Cargo Launch 3:</b> PROBE batch-2 (×3), spares batch-1, beneficiation module components, life support / hydroponics / medical bay prefab modules, SINTER ×1 (3rd unit).</span></div>
+  <div class="cargo-row"><span class="cargo-month">M80–83</span><span class="cargo-desc"><b>Crew Launch:</b> Crew-1 (4 persons) + co-manifested FSP-2 + P4 eclipse battery (250 kWh, 1 t).</span></div>
+  <div class="cargo-row"><span class="cargo-month">M108–111</span><span class="cargo-desc"><b>Cargo Launch 4:</b> PROBE batch-3 (×4), ops-phase robot fleet (ARM ×2, MOLE spares, SKIP ×1), DART ×1, SURVEY-2, solar expansion panels.</span></div>
+  <div class="cargo-row"><span class="cargo-month">M138–141</span><span class="cargo-desc"><b>Crew Rotation Launch:</b> Crew-2 (staggered swap P1→P4 at M136/139/142/145). 1–3 month overlap for knowledge transfer.</span></div>
+  <div class="cargo-row"><span class="cargo-month">M154–157</span><span class="cargo-desc"><b>Cargo Launch 5:</b> PROBE batch-4 (×5), spares batch-3, processing facility prefab batch-1.</span></div>
+</div>
+
+<!-- ═══════════ PROGRAMME MILESTONES ═══════════ -->
+<h2 style="color:var(--ms)"><span class="ms-diamond"></span> Programme Milestones (from MTL v8.5)</h2>
+<div class="section-intro">Nine formally defined milestones gate programme progression. Each must be verified (by SENTINEL autonomously, by crew where present, or by Earth mission control) before subsequent activities are authorised.</div>
+
+<table>
+<thead><tr><th>Month</th><th>Year</th><th>ID</th><th>Milestone &amp; Description</th></tr></thead>
+<tbody>
+  <tr><td class="col-month">M20</td><td class="col-year">Y2</td><td><b>M0</b></td><td class="col-event"><b>Relay Network Live.</b> 3× EML-2 halo orbit satellites validated. Continuous south pole comms coverage confirmed. Robot fleet launch cleared — without this, surface autonomy faces blackout windows that make fully autonomous operation unacceptably risky.</td></tr>
+  <tr><td class="col-month">M36</td><td class="col-year">Y3</td><td><b>M1</b></td><td class="col-event"><b>First PROBE Landing.</b> PROBE-Scout XRF data received from 3 expendable one-way NEA survey vehicles (launched M21). Shape models, spectral maps, and standoff XRF confirm first M-type asteroid targets. Scouts expended at NEAs (no physical return). First PROBE-Ops vehicles (×3) arrive from Earth at M24; collar docking begins M68. SURVEY continuously active in polar LLO since P2.</td></tr>
+  <tr><td class="col-month">M54</td><td class="col-year">Y5</td><td><b>M2</b></td><td class="col-event"><b>First SINTER Print.</b> SINTER-1 begins microwave sintering of hab shell Layer 0 (200 m² pad). Modular ring design confirmed — no permanent structures block future living module expansion arm. SENTINEL validates structural integrity of first in-situ manufactured component. Zero imported concrete.</td></tr>
+  <tr><td class="col-month">M70</td><td class="col-year">Y6</td><td><b>M4</b></td><td class="col-event"><b>First SKIP Hop.</b> SKIP-1 executes first sub-orbital hop to nearest KREEP-rich SPA Basin zone using ISRU-produced LH₂/LOX. Lands on dedicated SKIP pad (separate from PROBE collars). Returns with KREEP regolith sample. First use of lunar-produced propellant for surface transport.</td></tr>
+  <tr><td class="col-month">M82</td><td class="col-year">Y7</td><td><b>M3</b></td><td class="col-event"><b>Crew-1 Arrival.</b> 4 persons (Commander, Mission Scientist, Systems Engineer, Medical Officer). Pre-conditions verified: base pressurised, ISRU operational, SENTINEL structural clearance complete, 90-day consumables buffer present (1.9 t), crew return vehicle fuelled, PROBE fleet 4–6 active (docking station online M68), SKIP-1 hops since M70. ECLSS commissioning begins immediately (target 3–4 weeks, contingency 6–8 weeks). Crew vessel remains powered and habitable as fallback habitat ≥8 weeks.</td></tr>
+  <tr><td class="col-month">M105</td><td class="col-year">Y9</td><td><b>M5</b></td><td class="col-event"><b>Beneficiation Online.</b> Module commissioned. Double airlock dust containment verified. Physical concentration begins: crusher → screens → magnetic separation. KREEP concentrate 2–8× grade uplift. No acids required at this stage.</td></tr>
+  <tr><td class="col-month">M116</td><td class="col-year">Y10</td><td><b>M6</b></td><td class="col-event"><b>First Export Batch.</b> First combined export: semi-raw asteroid Ni-Fe/PGM + KREEP REE concentrate dispatched to Earth orbit depot. Planetary protection screening complete. Two independent revenue streams active. PROBE fleet at 10, SKIP fleet at 2.</td></tr>
+  <tr><td class="col-month">M130</td><td class="col-year">Y11</td><td><b>M8</b></td><td class="col-event"><b>First DART PKT Mission.</b> DART-1 ascends to LLO (~1,800 m/s), coasts to PKT zone, performs powered deorbit + autonomous landing at unimproved site. Onboard XRF confirms PKT REE grade. Ballistic arc physically ruled out at 3,300 km range — LLO orbital transfer is the only viable architecture. Returns with ~1,200 kg payload. PKT thorium/REE grade 5–10× SPA Basin average validates the fuel investment for the autonomous second base.</td></tr>
+  <tr><td class="col-month">M136</td><td class="col-year">Y11.5</td><td><b>M7</b></td><td class="col-event"><b>Crew Rotation Begins.</b> Staggered swap: P1 descends M136, P2 M139, P3 M142, P4 M145. Timed to cargo launches. 1–3 month knowledge-transfer overlap. Crew-2 composition may include processing specialist if P7 facility decision approved.</td></tr>
+</tbody>
+</table>
+
+<!-- ═══════════ CONSTRUCTION EVENTS ═══════════ -->
+<h2 style="color:var(--s0)">Construction Phase Events (Month-by-Month Reference)</h2>
+<div class="section-intro">Events referenced in the Construction Phasing Gantt, mapped to programme months. These are engineering events, not formal milestones — they track the physical construction sequence.</div>
+
+<table>
+<thead><tr><th>Month</th><th>Year</th><th>Stage</th><th>Event</th></tr></thead>
+<tbody>
+  <!-- Phase 0 -->
+  <tr><td class="col-month">M1–20</td><td class="col-year">Y1–2</td><td class="col-stage"><span class="dot" style="background:var(--dep)"></span></td><td class="col-event"><b>Earth-side:</b> EML-2 relay constellation design, build, launch, and validation. Robot fleet fabrication and integration testing. All hardware Earth-side.</td></tr>
+  <tr><td class="col-month">M21–28</td><td class="col-year">Y2</td><td class="col-stage"><span class="dot" style="background:var(--dep)"></span></td><td class="col-event"><b>Cargo launch campaign:</b> Multiple Starship cargos dispatched. PROBE-Scouts launched M21 (expendable, one-way). Robot fleet transit to Moon.</td></tr>
+
+  <!-- Stage 0 -->
+  <tr><td class="col-month">M24</td><td class="col-year">Y2</td><td class="col-stage"><span class="dot" style="background:var(--s0)"></span></td><td class="col-event"><b>First cargo landing at PLZ.</b> First and only landing on ridge crest. SINTER, MOLE-S, ARM-C, SENTINEL, solar panels offloaded. PLZ becomes Power Zone permanently — no further landings here (ejecta protection).</td></tr>
+  <tr><td class="col-month">M24–25</td><td class="col-year">Y2</td><td class="col-stage"><span class="dot" style="background:var(--s0)"></span></td><td class="col-event"><b>PLZ charging pad sintered + solar deployed.</b> MOLE-S levels ~200 m². SINTER sinters surface. ARM-C deploys initial solar panel frames. First permanent off-grid charging point established. (~14 days)</td></tr>
+  <tr><td class="col-month">M24–25</td><td class="col-year">Y2</td><td class="col-stage"><span class="dot" style="background:var(--s0)"></span></td><td class="col-event"><b>MOLE-S pre-grades ELZ site (concurrent).</b> Blade levels 80 m circle at ELZ location, ~4.3 km from PLZ. ~7–10 days.</td></tr>
+  <tr><td class="col-month">M25</td><td class="col-year">Y2–3</td><td class="col-stage"><span class="dot" style="background:var(--s0)"></span></td><td class="col-event"><b>SINTER drives to ELZ.</b> Self-powered (onboard reactor). 4.3 km traverse on MOLE-S pre-graded terrain. ~12 hours.</td></tr>
+  <tr><td class="col-month">M25–28</td><td class="col-year">Y3</td><td class="col-stage"><span class="dot" style="background:var(--s0)"></span></td><td class="col-event"><b>ELZ Pad 1 centre zone sintered.</b> SINTER sinters 20 m diameter centre patch (1–2 passes, ~50 mm depth) on pre-graded 80 m circle. Sufficient for Starship landing legs (9 m footprint). ~40 days. (Option C: light-sintered centre for early landings.)</td></tr>
+  <tr><td class="col-month">~M28</td><td class="col-year">Y3</td><td class="col-stage"><span class="dot" style="background:var(--s0)"></span></td><td class="col-event"><b>ELZ declared landable.</b> Centre zone sintered. Cargo lander #2 can target ELZ Pad 1.</td></tr>
+  <tr><td class="col-month">M28–60+</td><td class="col-year">Y3–5</td><td class="col-stage"><span class="dot" style="background:var(--s0)"></span></td><td class="col-event"><b>ELZ Pad 1 full-depth sintering (background).</b> Expanding outward to 80 m total diameter, 360 mm depth (6 passes), 270° blast berm. ~48,000 SINTER-hr. Largest single construction task in the programme. Ongoing through end of P3.</td></tr>
+  <tr><td class="col-month">M26–28</td><td class="col-year">Y3</td><td class="col-stage"><span class="dot" style="background:var(--s0)"></span></td><td class="col-event"><b>ARM-C drops interim charging waypoint at HAB zone.</b> Battery pack + small solar panel set at HAB-zone midpoint (~1.5 km from PLZ). Allows ARM-C mid-route charging during long ELZ↔PLZ hauls.</td></tr>
+  <tr><td class="col-month">M25–34</td><td class="col-year">Y3</td><td class="col-stage"><span class="dot" style="background:var(--s0)"></span></td><td class="col-event"><b>Road grading PLZ→HAB→ELZ.</b> MOLE-S blade grades ~4.3 km route. Graded but unsintered initially — road sintering is lowest SINTER priority. ARM-C operates on graded surface at reduced speed (~0.05 m/s).</td></tr>
+
+  <!-- Stage 1 -->
+  <tr><td class="col-month">M28–32</td><td class="col-year">Y3</td><td class="col-stage"><span class="dot" style="background:var(--s1)"></span></td><td class="col-event"><b>Cargo landers #2–3 at ELZ.</b> FSP-1, solar array expansion panels, cable spools, ISRU equipment, hab modules, MOLE-S #2, SINTER #2, additional MOLE-I units. All subsequent programme cargo lands here.</td></tr>
+  <tr><td class="col-month">M30–34</td><td class="col-year">Y3</td><td class="col-stage"><span class="dot" style="background:var(--s1)"></span></td><td class="col-event"><b>FSP-1 haul ELZ→PLZ.</b> ARM-C + heavy trailer. 6,600 kg, 4.3 km uphill. ~50+ hours loaded (charging stops required). The programme's hardest single transport operation — becomes the standard procedure for all 5 FSP deliveries through P7.</td></tr>
+  <tr><td class="col-month">M30–40</td><td class="col-year">Y3</td><td class="col-stage"><span class="dot" style="background:var(--s1)"></span></td><td class="col-event"><b>±2,800 VDC trunk cable PLZ→ISRU.</b> SINTER builds sintered trench (400 × 300 mm). ARM-C lays OFHC Cu cable. DC-DC converter at ISRU entry steps down to 1,000 VDC internal bus.</td></tr>
+  <tr><td class="col-month">M30–35</td><td class="col-year">Y3</td><td class="col-stage"><span class="dot" style="background:var(--s1)"></span></td><td class="col-event"><b>1,000 VDC cable PLZ→HAB.</b> 3 km downhill in sintered trench. DC-DC converter at HAB sub-floor steps to 120 VDC module bus.</td></tr>
+  <tr><td class="col-month">M36</td><td class="col-year">Y3</td><td class="col-stage"><span class="dot" style="background:var(--s1)"></span></td><td class="col-event"><b>Power hub commissioned.</b> Solar string combiners + FSP-1 input breakers + bus-tie switches + SENTINEL power management interface. Base grid live. All zones can draw power.</td></tr>
+  <tr><td class="col-month">M36–41</td><td class="col-year">Y3–4</td><td class="col-stage"><span class="dot" style="background:var(--s1)"></span></td><td class="col-event"><b>±2,800 VDC trunk PLZ→IZ.</b> ~1.8 km. Lower priority than ISRU and HAB branches. IZ converter steps to 1,000 VDC gantry bus.</td></tr>
+
+  <!-- Stage 2 -->
+  <tr><td class="col-month">M32–40</td><td class="col-year">Y3–4</td><td class="col-stage"><span class="dot" style="background:var(--s2)"></span></td><td class="col-event"><b>ISRU plant installation.</b> ARM-C hauls VEX, electrolyser, cryo tanks from ELZ. SINTER builds foundations and enclosures. ±2,800 VDC energised. 1,000 VDC internal distribution commissioned.</td></tr>
+  <tr><td class="col-month">M34–42</td><td class="col-year">Y3–4</td><td class="col-stage"><span class="dot" style="background:var(--s2)"></span></td><td class="col-event"><b>Heated pipeline ISRU→CAP.</b> 3 km. SS tube (80 bar, 20 mm OD) co-routed with 1,000 VDC PSR trunk cable in sintered trench. Trace heating at 7 W/m.</td></tr>
+  <tr><td class="col-month">M40–43</td><td class="col-year">Y4</td><td class="col-stage"><span class="dot" style="background:var(--s2)"></span></td><td class="col-event"><b>PSR trunk cable descent.</b> Cable + pipeline lowered from CAP rim anchor 8.2 km down crater wall via winch at 0.1 m/s (~23 hr). Pre-integrated SATS+WEB assembly at cable end arrives at CLP already powered and operational (pre-heated to 293 K, 3× LWRHU maintain ≥268 K during descent).</td></tr>
+  <tr><td class="col-month">M43</td><td class="col-year">Y4</td><td class="col-stage"><span class="dot" style="background:var(--s2)"></span></td><td class="col-event"><b>CLP powered.</b> First powered node on PSR floor. GATE 2 in autonomous PSR deployment sequence.</td></tr>
+  <tr><td class="col-month">M43–55</td><td class="col-year">Y4–5</td><td class="col-stage"><span class="dot" style="background:var(--s2)"></span></td><td class="col-event"><b>MOLE-I fleet descent + hopscotch build-out.</b> First MOLE-I descends (4.7 hr on transit battery). Plugs into CLP for grid power. Pulls first 500 m spine cable to Junction 1 (2.1 km from CLP). J1 live. Hop-scotch continues: plug into junction, work within 100 m radius, hop to next. Branch build-out: ~3–5 days per branch (200 posts, 3 km) per MOLE-I. 10 units deployed by P3 end across 2 substations.</td></tr>
+  <tr><td class="col-month">M43–53</td><td class="col-year">Y4–5</td><td class="col-stage"><span class="dot" style="background:var(--s2)"></span></td><td class="col-event"><b>Substation deployment.</b> Pre-assembled on PTFE-runner sleds (~160 kg). Lowered to CLP staging area. Sled clips to spine cable; MOLE-I pushes along spine to target junction, transfers to branch, pushes to final position. Anchors deploy, riser connected. WEB powers up. ~48 hr from rim dispatch to first water per new substation.</td></tr>
+  <tr><td class="col-month">~M46</td><td class="col-year">Y4</td><td class="col-stage"><span class="dot" style="background:var(--s2)"></span></td><td class="col-event"><b>First water production.</b> MOLE-I drills icy permafrost, sublimates water in mini-VEX, dumps to substation, water flows via heated pipeline to ISRU plant. Electrolyser commissioned. H₂/O₂ production begins. Propellant stockpile accumulates. Programme transitions from 100% Earth propellant toward ISRU self-sufficiency.</td></tr>
+
+  <!-- Stage 3 -->
+  <tr><td class="col-month">M38–43</td><td class="col-year">Y4</td><td class="col-stage"><span class="dot" style="background:var(--s3)"></span></td><td class="col-event"><b>Hab cradle excavation.</b> MOLE-S excavates ~1,300 t of regolith to create the sunken cradle profile for habitat module placement.</td></tr>
+  <tr><td class="col-month">M40–54</td><td class="col-year">Y4–5</td><td class="col-stage"><span class="dot" style="background:var(--s3)"></span></td><td class="col-event"><b>Berm construction.</b> MOLE-S blade pushes regolith fill. SINTER follows with shell sintering. 2.5 m overburden for passive radiation shielding (zero energy input, zero import). Multi-month sequential lift-and-sinter process.</td></tr>
+  <tr><td class="col-month">M52–56</td><td class="col-year">Y5</td><td class="col-stage"><span class="dot" style="background:var(--s3)"></span></td><td class="col-event"><b>SINTER hab shell Layer 0 (= Milestone M2).</b> First in-situ manufactured structural component sintered directly onto berm. SENTINEL validates.</td></tr>
+  <tr><td class="col-month">M47–55</td><td class="col-year">Y4–5</td><td class="col-stage"><span class="dot" style="background:var(--s3)"></span></td><td class="col-event"><b>Pressure module placement.</b> ARM-C positions H1, H2, Ops modules into cradle from ELZ (~1.3 km haul each). CBM berthing interfaces connected.</td></tr>
+  <tr><td class="col-month">M52–56</td><td class="col-year">Y5</td><td class="col-stage"><span class="dot" style="background:var(--s3)"></span></td><td class="col-event"><b>O₂ + water lines from ISRU to HAB.</b> 0.4 km. Life-critical. O₂ line: dome-loaded regulator at ISRU end, double-block-and-bleed at hab entry. Pressure-tested. Water line: remineralisation + UV sterilisation at hab end.</td></tr>
+  <tr><td class="col-month">M55–60</td><td class="col-year">Y5</td><td class="col-stage"><span class="dot" style="background:var(--s3)"></span></td><td class="col-event"><b>ECLSS racks installed (not commissioned).</b> Sabatier reactor, OGA electrolyser, CDRA CO₂ removal. Positioned by ARM-C. Commissioning is a crew task (323 crew-hours on arrival).</td></tr>
+  <tr><td class="col-month">M60–63</td><td class="col-year">Y5</td><td class="col-stage"><span class="dot" style="background:var(--s3)"></span></td><td class="col-event"><b>SENTINEL structural validation.</b> Full exterior + interior scan of hab complex. Pressure hold test. Thermal verification. SENTINEL clearance is a hard pre-crew gate.</td></tr>
+  <tr><td class="col-month">M63</td><td class="col-year">Y5–6</td><td class="col-stage"><span class="dot" style="background:var(--s3)"></span></td><td class="col-event"><b>Hab declared structurally clear.</b> SENTINEL sign-off. Hab is pressure-tight, radiation-shielded, powered, O₂/water-connected, ECLSS-installed. Awaiting crew for ECLSS commissioning.</td></tr>
+
+  <!-- Stage 4 -->
+  <tr><td class="col-month">M32</td><td class="col-year">Y3</td><td class="col-stage"><span class="dot" style="background:var(--s4)"></span></td><td class="col-event"><b>Provisional docking collar deployed.</b> Cargo Launch 1 hardware. Non-pressurised. Surface ARM transfer only. For PROBE-Scout data receipt and initial PROBE-Ops staging.</td></tr>
+  <tr><td class="col-month">M50–58</td><td class="col-year">Y4–5</td><td class="col-stage"><span class="dot" style="background:var(--s4)"></span></td><td class="col-event"><b>IZ pad sintering.</b> SINTER builds PROBE and SKIP landing pads + gantry column foundations at IZ campus.</td></tr>
+  <tr><td class="col-month">M55–63</td><td class="col-year">Y5</td><td class="col-stage"><span class="dot" style="background:var(--s4)"></span></td><td class="col-event"><b>Permanent docking collars × 2.</b> SINTER builds pressurised cylinders (3,000 mm ID × 4,500 mm, sintered regolith walls 500–1,000 mm, Al 6061 pressure liner). Replaces provisional collar.</td></tr>
+  <tr><td class="col-month">M60–65</td><td class="col-year">Y5–6</td><td class="col-stage"><span class="dot" style="background:var(--s4)"></span></td><td class="col-event"><b>Gantry rail + ARM-D installation.</b> Imported steel I-beam rails on sintered columns. ARM-D ×2 mounted. 1,000 VDC bus bar along rail. 6-tool carousel per ARM-D.</td></tr>
+  <tr><td class="col-month">M58–65</td><td class="col-year">Y5–6</td><td class="col-stage"><span class="dot" style="background:var(--s4)"></span></td><td class="col-event"><b>Propellant farm + cryo transfer lines.</b> ISRU→IZ 0.7 km. LH₂ + LOX vacuum-jacketed lines. 4× isolation valve stations. SENTINEL monitors at 10 Hz (H₂ leak, pressure, UV flame). Auto-close on threshold exceedance.</td></tr>
+  <tr><td class="col-month">M68</td><td class="col-year">Y6</td><td class="col-stage"><span class="dot" style="background:var(--s4)"></span></td><td class="col-event"><b>Docking station declared operational.</b> 2 permanent pressurised collars + 2 ARM-D + propellant feed + SENTINEL oversight. Full 48–72 hr PROBE turnaround cycling begins.</td></tr>
+
+  <!-- Fleet ops -->
+  <tr><td class="col-month">M65–72</td><td class="col-year">Y6</td><td class="col-stage"><span class="dot" style="background:var(--s5)"></span></td><td class="col-event"><b>CRV positioned + fuelled.</b> Crew return vehicle on dedicated hardstand. Propellant from ISRU. Maintained fuelled at all times. Non-negotiable pre-crew safety gate.</td></tr>
+  <tr><td class="col-month">M68–75</td><td class="col-year">Y6</td><td class="col-stage"><span class="dot" style="background:var(--s5)"></span></td><td class="col-event"><b>90-day consumables buffer loaded.</b> 1.9 t total (324 kg O₂ + 900 kg H₂O + 648 kg food + 4 kg N₂). MATLAB-verified. Stored aboard crew vessel (fallback habitat).</td></tr>
+  <tr><td class="col-month">M70</td><td class="col-year">Y6</td><td class="col-stage"><span class="dot" style="background:var(--s5)"></span></td><td class="col-event"><b>First SKIP hop (= Milestone M4).</b> SKIP-1 sub-orbital hop using ISRU propellant. KREEP sample return. Crew assumes supervisory oversight of hop cadence on arrival.</td></tr>
+  <tr><td class="col-month">M82</td><td class="col-year">Y7</td><td class="col-stage"><span class="dot" style="background:var(--acc)"></span></td><td class="col-event"><b>Crew-1 arrival (= Milestone M3).</b> 4 persons. All pre-crew gates verified. ECLSS commissioning begins (323 crew-hours, 3–4 weeks baseline). The robots built the base; the crew makes it habitable.</td></tr>
+</tbody>
+</table>
+
+<footer>
+  Source: Master Timeline v8.5 (W2_T1_1_JS_MTL_v8_5.html), MTL Guide v18, POWER-001 Rev A, ELZ-001 Rev A, IZ-001 Rev A, ISRU-001 Rev D, HAB-001 Rev D, ROBOT_FLEET v9 (ECN-019 Rev C), PIPE-001 Rev A. All month numbers from programme go-ahead (M1). Milestone numbering (M0–M8) follows MTL v8.5 convention. Construction event months are engineering estimates consistent with MTL bar positions and SINTER/MOLE-S production rates.
+</footer>
+
+</div>
+</body>
+</html>

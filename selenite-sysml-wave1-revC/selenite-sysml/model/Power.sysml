@@ -84,7 +84,10 @@ package SelenitePower {
              * too, to accommodate asteroid processing demands" - i.e. demand
              * driven, which is the rule now adopted. The ECON cargo_spa_msr
              * vector (dropped by golden runner v2.0) records what the
-             * economics assumed and is an input to the gate, not its answer. */
+             * economics assumed and is an input to the gate, not its answer.
+             * Wave 3: introducedIn is bound in SeleniteConfigurations to
+             * SeleniteGates DG-10.5 derivedPhase (the same calc serves
+             * DG-11.3 / 13.4 / 14.4 / 14.7, W2-N20). */
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::spa;
         attribute gatedByDemand : Boolean = true;
