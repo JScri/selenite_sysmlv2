@@ -118,3 +118,75 @@ def thorium_stockpile(ratio: float) -> np.ndarray:
 def first_year_stockpile_reaches(tonnes: float, ratio: float) -> int | None:
     idx = np.flatnonzero(thorium_stockpile(ratio) >= tonnes)
     return int(idx[0]) if idx.size else None
+
+
+# ---------------------------------------------------------------------------
+# Eclipse-critical load split and the FSP-versus-MSR trade (19 Sep 2026)
+# ---------------------------------------------------------------------------
+
+TH_HYDROXIDE_TO_TH_MASS = (232.04 + 4 * 17.01) / 232.04   # Th(OH)4 / Th = 1.293
+
+
+def thorium_ratio(th_grade_ppm: float, ree_grade_ppm: float, capture: float) -> float:
+    """Th(OH)4 tonnes per tonne REO: ore Th:REE ratio x acid-bake capture x
+    hydroxide mass factor (DG-7.2: ~90-95 % of Th locks into ThP2O7)."""
+    return th_grade_ppm / ree_grade_ppm * capture * TH_HYDROXIDE_TO_TH_MASS
+
+
+def spa_critical_power(asteroid_critical_fraction: float = 0.0) -> dict:
+    """Eclipse-critical SPA demand by year (kW): the loads VERIFY v5.0's
+    eclipse budget (ecl.*) must carry for the 72 h design case, scaled from
+    the P7 values - MOLE-I keep-alive and node overhead per ECON molei_needed,
+    with pipeline heating, habitat, SENTINEL, farm ZBO and misc held at P7.
+    ``asteroid_critical_fraction`` is the share of the Decision Framework
+    asteroid-processing loads that cannot pause through an eclipse (an
+    assumption, default none). Solar carries everything else, as VERIFY
+    sizes it."""
+    w = econ.workspace()
+    v = verify.workspace()
+    ecl = v["ecl"]
+    Y = w["Y"].astype(int)
+    molei = np.asarray(w["molei_needed"], dtype=float)
+    ka_kw = v["mi"]["pwr_ka"] / 1000.0 + v["node"]["overhead_v5"] / 1000.0 / v["node"]["units"]
+    fixed = float(ecl["pipe"][P7_INDEX] + ecl["hab"][P7_INDEX] + ecl["sent"][P7_INDEX]
+                  + ecl["farmzbo"][P7_INDEX] + ecl["misc"][P7_INDEX])
+    crit = molei * ka_kw + fixed
+    asteroid = np.zeros_like(crit)
+    for year, kw in DF_ASTEROID_PROCESSING_KW:
+        asteroid[Y >= year] += kw * asteroid_critical_fraction
+    return {"Y": Y, "p_critical": crit + asteroid, "p_critical_base": crit, "p_asteroid_critical": asteroid,
+            "assumptions": {"keepalive_kw_per_molei": ka_kw, "fixed_kw": fixed,
+                            "asteroid_critical_fraction": asteroid_critical_fraction}}
+
+
+def fsp_msr_trade(md3_year: int, asteroid_critical_fraction: float = 0.0, msr_rated_kw: float = 50_000.0) -> dict:
+    """The SPA MSR decision as a mass trade, by year: the Earth mass of the
+    FSP fleet needed to cover eclipse-critical demand (VERIFY fsp: 40 kW,
+    6,600 kg per unit) against the Earth mass of one SPA MSR (ECON msr:
+    50,000 kg x earth_frac(y), which falls to 0.3 as Ni-201 vessels go
+    in-situ). The MSR is *worth it* when the FSP fleet's Earth mass exceeds
+    the MSR's; it is *justified* (SpaMsrIntroductionGate) when it is worth it
+    and ThCl4 is available (MD-3 operational from ``md3_year``); the crewed-
+    base feasibility input is assumed true. ``msr_rated_kw`` caps what one
+    unit covers (Decision Framework s.10.1: SPA MSR #1 ~50 MWe)."""
+    w = econ.workspace()
+    v = verify.workspace()
+    cp = spa_critical_power(asteroid_critical_fraction)
+    Y = cp["Y"]
+    fsp_kw, fsp_kg = float(v["fsp"]["pwr_kW"]), float(v["fsp"]["mass_kg"])
+    nfsp = np.ceil(cp["p_critical"] / fsp_kw)
+    fsp_mass = nfsp * fsp_kg
+    ef = np.array([w["msr"]["earth_frac"](float(y)) for y in Y])
+    units = np.maximum(1.0, np.ceil(cp["p_critical"] / msr_rated_kw))
+    msr_mass = units * w["msr"]["mass_kg"] * ef
+    worth = fsp_mass > msr_mass
+    fuel = Y >= md3_year
+    justified = worth & fuel & (Y >= 18)
+    idx = np.flatnonzero(justified)
+    idx_w = np.flatnonzero(worth & (Y >= 18))
+    return {"Y": Y, "p_critical": cp["p_critical"], "nfsp_needed": nfsp, "fsp_earth_mass_kg": fsp_mass,
+            "msr_earth_mass_kg": msr_mass, "msr_units": units, "worth_it": worth, "justified": justified,
+            "first_worth_it_year": int(idx_w[0]) if idx_w.size else None,
+            "first_justified_year": int(idx[0]) if idx.size else None,
+            "assumptions": {**cp["assumptions"], "fsp_kw": fsp_kw, "fsp_kg": fsp_kg,
+                            "msr_mass_kg": w["msr"]["mass_kg"], "md3_year": md3_year, "msr_rated_kw": msr_rated_kw}}

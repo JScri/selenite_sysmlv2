@@ -145,23 +145,57 @@ package SeleniteParameters {
              * layer extends these vectors (Wave 5). */
 
         attribute thoriumHydroxideStockpileByYear : Real [0..*] ordered;
-        attribute thoriumToReoMassRatio : Real;
         doc thoriumDoc /* owner: processing | kind: computationalInput |
-             * UNBOUND: cumulative Th(OH)4 from the acid bake; not a vector in
-             * ECON v1.3/v1.4. selenite.plan_vectors.thorium_stockpile (Wave 3
-             * extension, no golden) computes it as cumulative reo_target x
-             * thoriumToReoMassRatio; the Decision Framework's DG-11.2 numbers
-             * imply 0.0039-0.0077 (387-773 t/yr Th against 100,000 t/yr REO).
-             * plan_check reports DG-8.7 at both bounds until the ratio is
-             * bound. Input to DG-8.7 (ThoriumStockpileGate). */
+             * UNBOUND vector: cumulative Th(OH)4 from the acid bake, computed
+             * by selenite.plan_vectors.thorium_stockpile (Wave 3 extension,
+             * no golden) as cumulative reo_target x thoriumToReoMassRatio.
+             * Input to DG-8.7 (ThoriumStockpileGate). */
 
-        attribute spaNonMsrCapabilityCeilingKw : Real;
-        doc spaCeilingDoc /* owner: power | kind: capacityConstraint | UNBOUND:
-             * the most solar + FSP + battery can deliver at SPA. No source
-             * states it; VERIFY v5.0 sizes solar to demand through P7 (2,342
-             * kW at P7). selenite.plan_vectors.spa_power (Wave 3 extension)
-             * gives the demand trajectory beyond P7; the F5 gate evaluates
-             * only once this ceiling is bound. */
+        attribute processingReeGradePpm : Real = 500.0;
+        attribute thoriumGradePpm : Real = 12.5;
+        attribute thoriumGradePpmLow : Real = 10.0;
+        attribute thoriumGradePpmHigh : Real = 15.0;
+        attribute acidBakeThoriumCapture : Real = 0.92;
+        attribute acidBakeThoriumCaptureLow : Real = 0.90;
+        attribute acidBakeThoriumCaptureHigh : Real = 0.95;
+        attribute thoriumHydroxideToThoriumMassRatio : Real = 1.293;
+        attribute thoriumToReoMassRatio : Real =
+            thoriumGradePpm / processingReeGradePpm * acidBakeThoriumCapture * thoriumHydroxideToThoriumMassRatio;
+        doc thoriumRatioDoc /* owner: processing | kind: computationalInput |
+             * ECN (Jason, 19 Sep 2026): Th grade at the DART-selected
+             * processing sites 12.5 ppm nominal, range 10-15 ppm (fleet v9
+             * s.11 "10-15 ppm Th vs 1-3 ppm SPA"; Lunar Prospector GRS:
+             * Apollo-14-soil-equivalent Fra Mauro 12-13 ppm, PKT hot spots at
+             * Aristarchus / Apennine Bench, Lawrence et al. 2000, 2003; KREEP
+             * basalt ~15 ppm Th); REE processing grade 500 ppm (Decision
+             * Framework Rev D "500 ppm grade clarified as DART-selected site /
+             * post-beneficiation concentrate"); acid-bake Th capture 0.92
+             * nominal, range 0.90-0.95 (DG-7.2 "~90-95 % of Th into ThP2O7");
+             * Th(OH)4/Th = 300.1/232.0. The ratio is derived, never typed:
+             * ~0.030 t Th(OH)4 per t REO, four times the 0.004-0.008 the
+             * Decision Framework's DG-11.2 figures imply (387-773 t/yr Th at
+             * 100,000 t/yr REO) - W3-N22. plan_check evaluates DG-8.7 at the
+             * nominal and both range corners. */
+
+        attribute spaEclipseCriticalCoverageOnly : Boolean = true;
+        attribute spaAsteroidLoadCriticalFraction : Real;
+        attribute spaMsrFirstUnitRatedKw : Real = 50000.0;
+        doc spaMsrDoc /* owner: power | kind: policy / computationalInput |
+             * The SPA MSR decision (F5, SpaMsrIntroductionGate) is evaluated
+             * as VERIFY v5.0 sizes SPA power: solar carries the day load and
+             * FSP + battery must carry the eclipse-critical loads (ecl.*) for
+             * the 72 h case. spaEclipseCriticalCoverageOnly = true is that
+             * rule. selenite.plan_vectors.fsp_msr_trade compares the Earth
+             * mass of the FSP fleet the critical load needs (VERIFY fsp: 40
+             * kW, 6,600 kg per unit) with one SPA MSR (ECON msr: 50,000 kg x
+             * earth_frac(y), 0.3 floor from Y80 as Ni-201 vessels go in-situ)
+             * and requires ThCl4 (MD-3, DG-9.6). Jason, 19 Sep 2026: "when
+             * demand builds beyond what it is worth bringing more FSP units
+             * for, the MSR becomes worth it". spaAsteroidLoadCriticalFraction
+             * (UNBOUND: the share of the Decision Framework s.10.1 asteroid
+             * processing loads that cannot pause through an eclipse) is the
+             * one open assumption; plan_check reports 0 and 1. First-unit
+             * rating 50 MWe per Decision Framework s.10.1. */
 
         attribute co2PerLaunchTonnes : Real;
         doc co2Doc /* owner: economics | kind: computationalInput | UNBOUND -

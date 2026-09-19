@@ -562,3 +562,35 @@ now reports DG-8.7 at both ratio bounds and the SPA demand trajectory for the
 five F5 gates; both stay "unevaluated" until the parameters are bound, by
 design. Four tests in `tests/test_plan_vectors.py`. DG-POST.1/2 remain
 unevaluated (tier resource tonnages have no source).
+
+## Addendum — 19 September 2026 (ECNs: thorium ratio bound; SPA MSR as an FSP-versus-MSR trade)
+
+- **Thorium (Jason, 19 Sep 2026).** `thoriumGradePpm = 12.5` (range 10–15,
+  fleet v9 s.11; Lunar Prospector GRS Fra Mauro / Apollo 14 soils 12–13 ppm,
+  Lawrence et al. 2000, 2003; KREEP basalt ~15 ppm), `acidBakeThoriumCapture
+  = 0.92` (range 0.90–0.95, DG-7.2), `processingReeGradePpm = 500` (Decision
+  Framework Rev D), Th(OH)4/Th 1.293; `thoriumToReoMassRatio` is now a
+  derived expression (~0.030 t/t). **W3-N22 (new):** this is about four
+  times the 0.004–0.008 the Decision Framework's DG-11.2 figures imply, so
+  its 387–773 t/yr Th production at P11 understates its own ore grades.
+  plan_check evaluates DG-8.7 at the nominal and both range corners
+  (`plan_vectors.thorium_ratio`).
+- **SPA MSR (Jason, 19 Sep 2026): "when demand builds beyond what it is worth
+  bringing more FSP units for, the MSR becomes worth it."** Modelled as
+  VERIFY sizes SPA power: solar carries the day load, FSP + battery the
+  eclipse-critical loads. `plan_vectors.spa_critical_power` scales VERIFY's
+  ecl.* budget (MOLE-I keep-alive and node overhead per ECON MOLE-I; pipeline
+  heating, habitat, SENTINEL, farm ZBO, misc at P7); `fsp_msr_trade`
+  compares the Earth mass of the FSP fleet that load needs (40 kW, 6,600 kg
+  each) with one SPA MSR (50,000 kg × ECON earth_frac(y)), and the gate is
+  justified when the FSP fleet is dearer *and* ThCl4 is available (MD-3,
+  DG-9.6 Y43). The unbound `spaNonMsrCapabilityCeilingKw` is withdrawn
+  (illuminated area is not the constraint: a tenth of the 17.5 km² Gläser
+  2018 site at VERIFY's 0.32 kW/m² is ~560 MW); replaced by
+  `spaEclipseCriticalCoverageOnly = true`, `spaMsrFirstUnitRatedKw = 50000`
+  and the one open assumption `spaAsteroidLoadCriticalFraction` (unbound;
+  plan_check reports 0 and 1). Result: the eclipse-critical load stays at
+  120–146 kW (pipeline heating dominates), four FSP units cover it
+  throughout, and the MSR wins on Earth mass only once Ni-201 in-situ
+  vessels cut its Earth fraction — the register row gives the year. Jason's
+  hypothesis (later phases, not P10) is what the numbers show.

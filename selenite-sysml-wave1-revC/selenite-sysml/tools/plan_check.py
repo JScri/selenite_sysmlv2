@@ -330,6 +330,7 @@ class Ctx:
     psr: dict
     T: dict[str, float]
     P: dict[str, float]
+    md3_year: float = 43.0
 
     def first_year(self, mask) -> int | None:
         import numpy as np
@@ -469,16 +470,16 @@ def _(ctx):
 def _(ctx):
     from selenite import plan_vectors as pv
     t = _thr(ctx, "thoriumStockpileTonnes")
-    ratio = ctx.P.get("thoriumToReoMassRatio")
-    if ratio:
-        y = pv.first_year_stockpile_reaches(t, ratio)
-        return [Result("Th(OH)4 stockpile >= 40 t", "never" if y is None else y, None,
-                       f"plan_vectors.thorium_stockpile at the bound ratio {ratio:g}")]
-    lo = pv.first_year_stockpile_reaches(t, pv.TH_TO_REO_RATIO_LOW)
-    hi = pv.first_year_stockpile_reaches(t, pv.TH_TO_REO_RATIO_HIGH)
-    return [Result("Th(OH)4 stockpile >= 40 t", None, None,
-                   f"thoriumToReoMassRatio unbound; plan_vectors (cumulative reo_target x ratio) reaches 40 t at "
-                   f"Y{hi} (ratio {pv.TH_TO_REO_RATIO_HIGH:.4f}) to Y{lo} (ratio {pv.TH_TO_REO_RATIO_LOW:.4f}) - DG-11.2 bounds")]
+    P = ctx.P
+    ree = P["processingReeGradePpm"]
+    nom = pv.thorium_ratio(P["thoriumGradePpm"], ree, P["acidBakeThoriumCapture"])
+    lo = pv.thorium_ratio(P["thoriumGradePpmLow"], ree, P["acidBakeThoriumCaptureLow"])
+    hi = pv.thorium_ratio(P["thoriumGradePpmHigh"], ree, P["acidBakeThoriumCaptureHigh"])
+    y = pv.first_year_stockpile_reaches(t, nom)
+    ylo = pv.first_year_stockpile_reaches(t, lo)
+    yhi = pv.first_year_stockpile_reaches(t, hi)
+    return [Result("Th(OH)4 stockpile >= 40 t", "never" if y is None else y, None,
+                   f"plan_vectors.thorium_stockpile: ratio {nom:.4f} t/t nominal (12.5 ppm Th, 0.92 capture); range Y{yhi}-Y{ylo} (ratios {hi:.4f}-{lo:.4f})")]
 
 
 @evaluator("DG-9.2")
@@ -527,19 +528,19 @@ def _(ctx):
 
 def ev_spa_msr(ctx: Ctx, unit: int) -> list[Result]:
     from selenite import plan_vectors as pv
-    y = ctx.first_year(ctx.w["spa_msr_count"] >= unit)
-    ceiling = ctx.P.get("spaNonMsrCapabilityCeilingKw")
-    sp = pv.spa_power(with_asteroid_loads=True)
-    demand_105 = sp["p_tot"][105] / 1000
-    if ceiling:
-        yd = pv.first_year_demand_exceeds(ceiling, with_asteroid_loads=True)
-        return [Result(f"SPA MSR unit #{unit}: demand > non-MSR capability", "never" if yd is None else yd, None,
-                       f"plan_vectors.spa_power (with asteroid loads) vs bound ceiling {ceiling:,.0f} kW; ECON spa_msr_count reaches {unit} at Y{y}")]
-    y_p7 = pv.first_year_demand_exceeds(sp["p7_sized_capability_kw"])
-    return [Result(f"SPA MSR unit #{unit}: demand > non-MSR capability", None, None,
-                   f"spaNonMsrCapabilityCeilingKw unbound; plan_vectors.spa_power: demand exceeds the P7-sized capability "
-                   f"({sp['p7_sized_capability_kw']:,.0f} kW) at Y{y_p7} on fleet growth alone, {demand_105:,.0f} MW at Y105 with the "
-                   f"Decision Framework asteroid loads; ECON spa_msr_count reaches {unit} at Y{y}")]
+    y_econ = ctx.first_year(ctx.w["spa_msr_count"] >= unit)
+    md3 = int(ctx.md3_year)
+    frac = ctx.P.get("spaAsteroidLoadCriticalFraction")
+    t0 = pv.fsp_msr_trade(md3, 0.0 if frac is None else frac, ctx.P["spaMsrFirstUnitRatedKw"])
+    t1 = pv.fsp_msr_trade(md3, 1.0, ctx.P["spaMsrFirstUnitRatedKw"])
+    y = t0["first_justified_year"]
+    detail = (f"plan_vectors.fsp_msr_trade: FSP fleet Earth mass for eclipse-critical demand "
+              f"({t0['p_critical'][18]:.0f}-{t0['p_critical'].max():.0f} kW, {int(t0['nfsp_needed'].max())} units max) exceeds one SPA MSR's "
+              f"Earth mass from Y{t0['first_worth_it_year']} (Ni-201 in-situ vessels); ThCl4 from MD-3 Y{md3}; "
+              f"asteroid loads {'not ' if not frac else ''}eclipse-critical"
+              f"{'' if frac else ' (unbound; with them critical the MSR is forced by Y' + str(t1['first_justified_year']) + ')'}; "
+              f"ECON spa_msr_count reaches {unit} at Y{y_econ}")
+    return [Result(f"SPA MSR unit #{unit}: FSP fleet dearer than an MSR, with ThCl4 available", "never" if y is None else y, None, detail)]
 
 
 @evaluator("DG-10.5")
@@ -1216,7 +1217,7 @@ def main(argv=None) -> int:
     ctx = None
     if not args.no_python:
         w, ph, psr = load_python()
-        ctx = Ctx(w, ph, psr, thresholds, params)
+        ctx = Ctx(w, ph, psr, thresholds, params, md3_year=gates["DG-9.6"].declared_year or 43.0)
         n_total = int(psr["n_total"]) * int(psr["node"]["units"])
         if n_total != int(params.get("psrMoleICapacityUnits", -1)):
             errors.append(f"ProgrammeParameters.psrMoleICapacityUnits = {params.get('psrMoleICapacityUnits')} but psr_layout gives {n_total} (rule W2-N18)")

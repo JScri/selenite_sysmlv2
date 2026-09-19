@@ -80,11 +80,15 @@ def test_register_runs_and_evaluates_every_derivable_gate(pc, parsed):
     assert "## 3. Discrepancy register" in text and "W3-R1" in text
 
 
-def test_f5_gates_report_the_econ_assumption(pc, parsed):
-    # The five SPA MSR gates are unevaluated (no SPA demand vector beyond P7)
-    # and print what the economics assumed: Y105 / Y125 / Y140.
+def test_f5_gates_evaluate_as_the_fsp_msr_trade(pc, parsed):
+    # The five SPA MSR gates share one evaluation: the FSP-versus-MSR Earth-mass
+    # trade with ThCl4 available (plan_vectors.fsp_msr_trade); every one also
+    # prints what the economics assumed (Y105 / Y125 / Y140).
     w, ph, psr = pc.load_python()
-    ctx = pc.Ctx(w, ph, psr, parsed["thresholds"], parsed["params"])
-    for gid, year in (("DG-10.5", 105), ("DG-13.4", 105), ("DG-14.4", 125), ("DG-14.7", 140)):
+    ctx = pc.Ctx(w, ph, psr, parsed["thresholds"], parsed["params"], md3_year=43.0)
+    years = set()
+    for gid, econ_year in (("DG-10.5", 105), ("DG-13.4", 105), ("DG-14.4", 125), ("DG-14.7", 140)):
         res = pc.EVALUATORS[gid](ctx)[0]
-        assert res.year is None and f"at Y{year}" in res.detail
+        assert isinstance(res.year, int) and res.year > 43 and f"at Y{econ_year}" in res.detail
+        years.add(res.year)
+    assert len(years) == 1
