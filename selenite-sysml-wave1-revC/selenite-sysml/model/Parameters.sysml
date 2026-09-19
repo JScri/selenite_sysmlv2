@@ -145,9 +145,23 @@ package SeleniteParameters {
              * layer extends these vectors (Wave 5). */
 
         attribute thoriumHydroxideStockpileByYear : Real [0..*] ordered;
+        attribute thoriumToReoMassRatio : Real;
         doc thoriumDoc /* owner: processing | kind: computationalInput |
              * UNBOUND: cumulative Th(OH)4 from the acid bake; not a vector in
-             * ECON v1.3/v1.4. Input to DG-8.7 (ThoriumStockpileGate). */
+             * ECON v1.3/v1.4. selenite.plan_vectors.thorium_stockpile (Wave 3
+             * extension, no golden) computes it as cumulative reo_target x
+             * thoriumToReoMassRatio; the Decision Framework's DG-11.2 numbers
+             * imply 0.0039-0.0077 (387-773 t/yr Th against 100,000 t/yr REO).
+             * plan_check reports DG-8.7 at both bounds until the ratio is
+             * bound. Input to DG-8.7 (ThoriumStockpileGate). */
+
+        attribute spaNonMsrCapabilityCeilingKw : Real;
+        doc spaCeilingDoc /* owner: power | kind: capacityConstraint | UNBOUND:
+             * the most solar + FSP + battery can deliver at SPA. No source
+             * states it; VERIFY v5.0 sizes solar to demand through P7 (2,342
+             * kW at P7). selenite.plan_vectors.spa_power (Wave 3 extension)
+             * gives the demand trajectory beyond P7; the F5 gate evaluates
+             * only once this ceiling is bound. */
 
         attribute co2PerLaunchTonnes : Real;
         doc co2Doc /* owner: economics | kind: computationalInput | UNBOUND -

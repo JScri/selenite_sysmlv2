@@ -545,3 +545,20 @@ M-type arrival (register row W3-R for MD-4: definition P11, bound to DG-12.4
 P12/Y85). W3-N2 closed as a decision; the Decision Framework s.3 MD-4 row
 ("P11 (Y70)") and DG-11.6 text are now superseded by this ECN and should be
 updated at the next Rev.
+
+## Addendum — 19 September 2026 (extension vectors for the unevaluated gates)
+
+`selenite-compute/selenite/plan_vectors.py` (NOT a port, no golden,
+`PORTED = False`; goldens untouched): `spa_power()` extends SPA electrical
+demand beyond P7 by scaling VERIFY v5.0's P7 per-unit loads (MOLE-I tether
+and node overhead, ISRU per MOLE-I, IZ per chemical PROBE, habitat with
+greenhouse, other base loads, 20 % contingency) with the ECON fleet vectors,
+optionally adding the Decision Framework s.10.1 asteroid-processing loads;
+`thorium_stockpile(ratio)` is cumulative ECON `reo_target` times a Th:REO
+mass ratio, with the DG-11.2-implied bounds 0.0039–0.0077 as constants. Two
+new unbound parameters: `spaNonMsrCapabilityCeilingKw` (no source states
+the solar + FSP + battery ceiling) and `thoriumToReoMassRatio`. plan_check
+now reports DG-8.7 at both ratio bounds and the SPA demand trajectory for the
+five F5 gates; both stay "unevaluated" until the parameters are bound, by
+design. Four tests in `tests/test_plan_vectors.py`. DG-POST.1/2 remain
+unevaluated (tier resource tonnages have no source).

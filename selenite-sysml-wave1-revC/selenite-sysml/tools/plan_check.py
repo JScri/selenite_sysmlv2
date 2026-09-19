@@ -467,7 +467,18 @@ def _(ctx):
 
 @evaluator("DG-8.7")
 def _(ctx):
-    return [Result("Th(OH)4 stockpile >= 40 t", None, None, "no thorium vector in the Python layer (Wave 5)")]
+    from selenite import plan_vectors as pv
+    t = _thr(ctx, "thoriumStockpileTonnes")
+    ratio = ctx.P.get("thoriumToReoMassRatio")
+    if ratio:
+        y = pv.first_year_stockpile_reaches(t, ratio)
+        return [Result("Th(OH)4 stockpile >= 40 t", "never" if y is None else y, None,
+                       f"plan_vectors.thorium_stockpile at the bound ratio {ratio:g}")]
+    lo = pv.first_year_stockpile_reaches(t, pv.TH_TO_REO_RATIO_LOW)
+    hi = pv.first_year_stockpile_reaches(t, pv.TH_TO_REO_RATIO_HIGH)
+    return [Result("Th(OH)4 stockpile >= 40 t", None, None,
+                   f"thoriumToReoMassRatio unbound; plan_vectors (cumulative reo_target x ratio) reaches 40 t at "
+                   f"Y{hi} (ratio {pv.TH_TO_REO_RATIO_HIGH:.4f}) to Y{lo} (ratio {pv.TH_TO_REO_RATIO_LOW:.4f}) - DG-11.2 bounds")]
 
 
 @evaluator("DG-9.2")
@@ -515,9 +526,20 @@ def _(ctx):
 
 
 def ev_spa_msr(ctx: Ctx, unit: int) -> list[Result]:
+    from selenite import plan_vectors as pv
     y = ctx.first_year(ctx.w["spa_msr_count"] >= unit)
+    ceiling = ctx.P.get("spaNonMsrCapabilityCeilingKw")
+    sp = pv.spa_power(with_asteroid_loads=True)
+    demand_105 = sp["p_tot"][105] / 1000
+    if ceiling:
+        yd = pv.first_year_demand_exceeds(ceiling, with_asteroid_loads=True)
+        return [Result(f"SPA MSR unit #{unit}: demand > non-MSR capability", "never" if yd is None else yd, None,
+                       f"plan_vectors.spa_power (with asteroid loads) vs bound ceiling {ceiling:,.0f} kW; ECON spa_msr_count reaches {unit} at Y{y}")]
+    y_p7 = pv.first_year_demand_exceeds(sp["p7_sized_capability_kw"])
     return [Result(f"SPA MSR unit #{unit}: demand > non-MSR capability", None, None,
-                   f"no SPA demand vector beyond P7 (unevaluated); ECON spa_msr_count reaches {unit} at Y{y}")]
+                   f"spaNonMsrCapabilityCeilingKw unbound; plan_vectors.spa_power: demand exceeds the P7-sized capability "
+                   f"({sp['p7_sized_capability_kw']:,.0f} kW) at Y{y_p7} on fleet growth alone, {demand_105:,.0f} MW at Y105 with the "
+                   f"Decision Framework asteroid loads; ECON spa_msr_count reaches {unit} at Y{y}")]
 
 
 @evaluator("DG-10.5")

@@ -40,7 +40,7 @@ Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a bou
 | DG-8.4 | derivable | P8 | Y26 | P8 | haulers >= 50: Y28 (P8) | consistent | ECON haulers_needed >= 50 (max 1.5e+06; Y200 1.5e+06) |
 | DG-8.5 | derivable | P8 | Y28 | P8 | REO >= 125 t/yr: Y28 (P8); circuits >= 308 (batch-design count): Y41 (P9) | consistent | ECON reo_target >= 125 (max 2.5e+06; Y200 2.5e+06) / ECON circuits_needed >= 308 (max 2.083e+06; Y200 2.083e+06) |
 | DG-8.6 | exogenous | P8 | Y28 | P8 | declared | declared | exogenous: no parameter carries the year |
-| DG-8.7 | derivable | P8 | Y30 | P8 | Th(OH)4 stockpile >= 40 t: unevaluated | unevaluated | no thorium vector in the Python layer (Wave 5) |
+| DG-8.7 | derivable | P8 | Y30 | P8 | Th(OH)4 stockpile >= 40 t: unevaluated | unevaluated | thoriumToReoMassRatio unbound; plan_vectors (cumulative reo_target x ratio) reaches 40 t at Y45 (ratio 0.0077) to Y49 (ratio 0.0039) - DG-11.2 bounds |
 | DG-8.8 | exogenous | P8 (alt P7) | Y30 | P8 | declared | declared | exogenous: no parameter carries the year |
 | DG-8.9 | exogenous | P8 | Y32 | P8 | declared | declared | exogenous: no parameter carries the year |
 | DG-8.X | testOutcome | P8 | Y28 | P8 | assumed | assumed | assumedOutcome = true |
@@ -55,10 +55,10 @@ Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a bou
 | DG-10.2 | derivable | P10 | Y48 | P10 | conveyor >= 5,000 km: Y84 (P12) | later than declared | ECON conv_km_needed >= 5,000 (max 1.375e+05; Y200 1.375e+05) |
 | DG-10.3 | derivable | P10 | Y45 | P9/P10 | in-situ manufactured mass >= 1,000 t/yr (foundry proxy): Y41 (P9) | earlier than declared | ECON insitu_total >= 1,000 (max 1.685e+06; Y200 0) |
 | DG-10.4 | derivable | P10 | Y50 | P10 | MSR units >= 74: Y67 (P11); FSP field superseded: MSR installed power >= FSP installed power: Y36 (P9) | later than declared | ECON msr_count >= 74 (max 8,334; Y200 8,334) / ECON msr_count x 100 MWe vs fsp_count x 40 kWe; ECON caps fsp_count at 20 units from Y45 (its own FSP phase-out) |
-| DG-10.5 | derivable | P10 | Y50 | P10 | SPA MSR unit #1: demand > non-MSR capability: unevaluated | unevaluated | no SPA demand vector beyond P7 (unevaluated); ECON spa_msr_count reaches 1 at Y105 |
+| DG-10.5 | derivable | P10 | Y50 | P10 | SPA MSR unit #1: demand > non-MSR capability: unevaluated | unevaluated | spaNonMsrCapabilityCeilingKw unbound; plan_vectors.spa_power: demand exceeds the P7-sized capability (2,342 kW) at Y18 on fleet growth alone, 61 MW at Y105 with the Decision Framework asteroid loads; ECON spa_msr_count reaches 1 at Y105 |
 | DG-11.1 | derivable | P11 | Y60 | P10/P11 | REO >= 100,000 t/yr: Y80 (P11/P12); supply fraction >= 10%: Y101 (P12) | consistent | ECON reo_target >= 1e+05 (max 2.5e+06; Y200 2.5e+06) / ECON supply_frac >= 0.1 (max 1; Y200 1) |
 | DG-11.2 | derivable | P11 | Y65 | P11 | MSR units >= 679: Y96 (P12) | later than declared | ECON msr_count >= 679 (max 8,334; Y200 8,334) |
-| DG-11.3 | derivable | P11 | Y70 | P11 | SPA MSR unit #1: demand > non-MSR capability: unevaluated | unevaluated | no SPA demand vector beyond P7 (unevaluated); ECON spa_msr_count reaches 1 at Y105 |
+| DG-11.3 | derivable | P11 | Y70 | P11 | SPA MSR unit #1: demand > non-MSR capability: unevaluated | unevaluated | spaNonMsrCapabilityCeilingKw unbound; plan_vectors.spa_power: demand exceeds the P7-sized capability (2,342 kW) at Y18 on fleet growth alone, 61 MW at Y105 with the Decision Framework asteroid loads; ECON spa_msr_count reaches 1 at Y105 |
 | DG-11.4 | testOutcome | P11 | Y75 | P11 | assumed | assumed | assumedOutcome = true |
 | DG-11.5 | derivable | P11 | - | - | conveyor >= 15,000 km: Y103 (P12) | later than declared | ECON conv_km_needed >= 1.5e+04 (max 1.375e+05; Y200 1.375e+05) |
 | DG-11.6 | derivable | P11 | Y65-Y75 | P11 | Mk III forced: chemical MOLE-I need > PSR capacity (620): never; MD-4 trigger: PGM concentrate > 100 t/yr: never | never met on current vectors | ECON molei_needed peak 357 at Y35; with the fleet v9 figure 310 the need exceeds capacity at Y31 (sensitivity only, W2-N18) / ECON total_pgm > 100 (max 52.02; Y200 39.65) |
@@ -75,16 +75,16 @@ Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a bou
 | DG-13.2 | exogenous | P13 (alt P12) | Y95 | P12 | Y95 (P12) | consistent | derivedYear = parameters.cTypeCaptureYear |
 | DG-14.1 | exogenous | P13 (alt P14) | Y95 | P12 | Y95 (P12) | earlier than declared | derivedYear = parameters.cTypeCaptureYear; declared year Y95 is P12 by the year table |
 | DG-13.3 | exogenous | P13 (alt P12) | Y105 | P12 | Y105 (P12) | consistent | derivedYear = parameters.cTypeCaptureYear + parameters.asteroidOnlineLagYears |
-| DG-13.4 | derivable | P13 (alt P12) | Y105 | P12 | SPA MSR unit #1: demand > non-MSR capability: unevaluated | unevaluated | no SPA demand vector beyond P7 (unevaluated); ECON spa_msr_count reaches 1 at Y105 |
+| DG-13.4 | derivable | P13 (alt P12) | Y105 | P12 | SPA MSR unit #1: demand > non-MSR capability: unevaluated | unevaluated | spaNonMsrCapabilityCeilingKw unbound; plan_vectors.spa_power: demand exceeds the P7-sized capability (2,342 kW) at Y18 on fleet growth alone, 61 MW at Y105 with the Decision Framework asteroid loads; ECON spa_msr_count reaches 1 at Y105 |
 | DG-13.5 | derivable | P13 | Y110 | P12 | circuit Earth fraction <= 3%: Y115 (P12) | earlier than declared | declared year Y110 is P12 by the year table; ECON cargo_circuits / (d_circuits x circuit.mass_kg), years with new circuits only |
 | DG-13.6 | exogenous | P13 | Y115 | P12 | Y115 (P12) | earlier than declared | derivedYear = parameters.sTypeCaptureYear; declared year Y115 is P12 by the year table |
 | DG-13.7 | derivable | P13 | Y120 | P12/P13 | hauler Earth fraction <= 20%: never | never met on current vectors | ECON hauler Earth fraction floors at 0.33 (hauler.earth_frac 0.43 floor less the M-type bonus); never reaches 0.20 |
 | DG-14.2 | exogenous | P14 (alt P13) | Y115 | P12 | Y115 (P12) | earlier than declared | derivedYear = parameters.sTypeCaptureYear; declared year Y115 is P12 by the year table |
 | DG-14.3 | exogenous | P14 (alt P13) | Y125 | P13 | Y125 (P13) | consistent | derivedYear = parameters.sTypeCaptureYear + parameters.asteroidOnlineLagYears |
-| DG-14.4 | derivable | P14 (alt P13) | Y125 | P13 | SPA MSR unit #2: demand > non-MSR capability: unevaluated | unevaluated | no SPA demand vector beyond P7 (unevaluated); ECON spa_msr_count reaches 2 at Y125 |
+| DG-14.4 | derivable | P14 (alt P13) | Y125 | P13 | SPA MSR unit #2: demand > non-MSR capability: unevaluated | unevaluated | spaNonMsrCapabilityCeilingKw unbound; plan_vectors.spa_power: demand exceeds the P7-sized capability (2,342 kW) at Y18 on fleet growth alone, 61 MW at Y105 with the Decision Framework asteroid loads; ECON spa_msr_count reaches 2 at Y125 |
 | DG-14.5 | derivable | P14 | Y130 | P13 | circuit Earth fraction <= 0.8%: Y135 (P13) | earlier than declared | declared year Y130 is P13 by the year table; ECON cargo_circuits / (d_circuits x circuit.mass_kg) |
 | DG-14.6 | derivable | P14 | Y140 | P13/P14 | Earth-supplied mass < 0.5% of infrastructure mass flow: never | never met on current vectors | annual-flow proxy earth_cargo / (earth_cargo + insitu_total): minimum 4.8% at Y139 |
-| DG-14.7 | derivable | P14 | Y140 | P13/P14 | SPA MSR unit #3: demand > non-MSR capability: unevaluated | unevaluated | no SPA demand vector beyond P7 (unevaluated); ECON spa_msr_count reaches 3 at Y140 |
+| DG-14.7 | derivable | P14 | Y140 | P13/P14 | SPA MSR unit #3: demand > non-MSR capability: unevaluated | unevaluated | spaNonMsrCapabilityCeilingKw unbound; plan_vectors.spa_power: demand exceeds the P7-sized capability (2,342 kW) at Y18 on fleet growth alone, 61 MW at Y105 with the Decision Framework asteroid loads; ECON spa_msr_count reaches 3 at Y140 |
 | DG-14.8 | derivable | P14 (alt P14plus) | Y180 | P14/P14plus | REO >= 2,500,000 t/yr: Y180 (P14/P14plus) | consistent | ECON reo_target reaches the target at Y180; ProgrammeParameters.steadyStateYear = 180 |
 | DG-14.9 | derivable | P14 | Y115 | P12 | Mk III active <= 300 with all captures complete: Y125 (P13) | earlier than declared | declared year Y115 is P12 by the year table; ECON mkiii_active falls to 300 at Y115; captures complete at Y125 (sTypeCaptureYear + lag) |
 | DG-POST.1 | derivable | P14plus | Y280 | P14plus | Tier 1 approaching depletion: unevaluated | unevaluated | tier1ResourceTonnes unbound; ECON stops at Y200 (Wave 5) |
@@ -192,7 +192,7 @@ Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a bou
 | W3-R2 | DG-7.4 Progressive reagent substitution at SPA (10% -> 50% in-situ H2SO4, Ca(...: declared Y22 (P7); derived Y26 (P8) - ECON reagent.isru_frac(y) = min(0.98, max(0, (y-9) x 0.03)) | Gates.sysml / econ.py |
 | W3-R3 | DG-7.5: listed under P7 but its year Y15 is P6 | Gates.sysml / Phases.sysml |
 | W3-R4 | DG-8.5: its criteria split - REO >= 125 t/yr -> Y28; circuits >= 308 (batch-design count) -> Y41 | Gates.sysml / econ.py |
-| W3-R5 | DG-8.7: derivable but unevaluated - no thorium vector in the Python layer (Wave 5) | Gates.sysml / Parameters.sysml |
+| W3-R5 | DG-8.7: derivable but unevaluated - thoriumToReoMassRatio unbound; plan_vectors (cumulative reo_target x ratio) reaches 40 t at Y45 (ratio 0.0077) to Y49 (ratio 0.0039) - DG-11.2 bounds | Gates.sysml / Parameters.sysml |
 | W3-R6 | DG-9.4 PKT foundry at 100+ t/yr metal production (MRE + WAAM/EB welding): declared Y42 (P9); derived Y28 (P8) - ECON insitu_total >= 100 (max 1.685e+06; Y200 0) | Gates.sysml / econ.py |
 | W3-R7 | DG-9.7 Steel conveyor pilot - first 500 km trunk from Fe-Ni + MRE iron: declared Y40 (P9); derived Y66 (P11) - ECON conv_km_needed >= 500 (max 1.375e+05; Y200 1.375e+05) | Gates.sysml / econ.py |
 | W3-R8 | DG-10.1 Hauler fleet at scale - 14,881 mining-capable haulers (Na-S battery, S...: declared Y45 (P10); derived Y64 (P11) - ECON haulers_needed >= 1.488e+04 (max 1.5e+06; Y200 1.5e+06) | Gates.sysml / econ.py |
@@ -200,10 +200,10 @@ Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a bou
 | W3-R10 | DG-10.3 PKT foundry at industrial scale - MRE cells, WAAM/EB welding, Fe-Si an...: declared Y45 (P10); derived Y41 (P9) - ECON insitu_total >= 1,000 (max 1.685e+06; Y200 0) | Gates.sysml / econ.py |
 | W3-R11 | DG-10.4 Thorium MSR fleet expansion - ~74 x 100 MWe units at PKT. Construction...: declared Y50 (P10); derived Y67 (P11) - ECON msr_count >= 74 (max 8,334; Y200 8,334) | Gates.sysml / econ.py |
 | W3-R12 | DG-10.4: its criteria split - MSR units >= 74 -> Y67; FSP field superseded: MSR installed power >= FSP installed power -> Y36 | Gates.sysml / econ.py |
-| W3-R13 | DG-10.5: derivable but unevaluated - no SPA demand vector beyond P7 (unevaluated); ECON spa_msr_count reaches 1 at Y105 | Gates.sysml / Parameters.sysml |
+| W3-R13 | DG-10.5: derivable but unevaluated - spaNonMsrCapabilityCeilingKw unbound; plan_vectors.spa_power: demand exceeds the P7-sized capability (2,342 kW) at Y18 on fleet growth alone, 61 MW at Y105 with the Decision Framework asteroid loads; ECON spa_msr_count reaches 1 at Y105 | Gates.sysml / Parameters.sysml |
 | W3-R14 | DG-11.1: its criteria split - REO >= 100,000 t/yr -> Y80; supply fraction >= 10% -> Y101 | Gates.sysml / econ.py |
 | W3-R15 | DG-11.2 Thorium MSR fleet at ~679 x 100 MWe. Annual Th consumption ~54 t/yr vs...: declared Y65 (P11); derived Y96 (P12) - ECON msr_count >= 679 (max 8,334; Y200 8,334) | Gates.sysml / econ.py |
-| W3-R16 | DG-11.3: derivable but unevaluated - no SPA demand vector beyond P7 (unevaluated); ECON spa_msr_count reaches 1 at Y105 | Gates.sysml / Parameters.sysml |
+| W3-R16 | DG-11.3: derivable but unevaluated - spaNonMsrCapabilityCeilingKw unbound; plan_vectors.spa_power: demand exceeds the P7-sized capability (2,342 kW) at Y18 on fleet growth alone, 61 MW at Y105 with the Decision Framework asteroid loads; ECON spa_msr_count reaches 1 at Y105 | Gates.sysml / Parameters.sysml |
 | W3-R17 | DG-11.5 Conveyor network scales to ~15,000 km: declared - (P11); derived Y103 (P12) - ECON conv_km_needed >= 1.5e+04 (max 1.375e+05; Y200 1.375e+05) | Gates.sysml / econ.py |
 | W3-R18 | DG-11.6 PROBE Mk III SEP commissioning + SPA->Earth mass driver for PGM export...: declared Y65 (P11); derived never - ECON molei_needed peak 357 at Y35; with the fleet v9 figure 310 the need exceeds capacity at Y31 (sensitivity only, W2-N18) | Gates.sysml / econ.py |
 | W3-R19 | DG-12.1 500,000 t/yr REO -> 40% global displacement (revised from 1,000,000 at...: declared Y80 (P12); derived Y121 (P13) - ECON reo_target >= 5e+05 (max 2.5e+06; Y200 2.5e+06) | Gates.sysml / econ.py |
@@ -213,7 +213,7 @@ Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a bou
 | W3-R23 | DG-13.1 1,250,000 t/yr REO - 50% of projected global demand. P13 milestone, no...: declared Y120 (P13); derived Y152 (P14) - ECON reo_target >= 1.25e+06 (max 2.5e+06; Y200 2.5e+06) | Gates.sysml / econ.py |
 | W3-R24 | DG-14.1 C-type asteroid targeting decision gate - selects target optimising fo...: declared Y95 (P13/P14); derived Y95 (P12) - derivedYear = parameters.cTypeCaptureYear; declared year Y95 is P12 by the year table | Gates.sysml / Parameters.sysml |
 | W3-R25 | DG-14.1: listed under P13 (alt P14) but its year Y95 is P12 | Gates.sysml / Phases.sysml |
-| W3-R26 | DG-13.4: derivable but unevaluated - no SPA demand vector beyond P7 (unevaluated); ECON spa_msr_count reaches 1 at Y105 | Gates.sysml / Parameters.sysml |
+| W3-R26 | DG-13.4: derivable but unevaluated - spaNonMsrCapabilityCeilingKw unbound; plan_vectors.spa_power: demand exceeds the P7-sized capability (2,342 kW) at Y18 on fleet growth alone, 61 MW at Y105 with the Decision Framework asteroid loads; ECON spa_msr_count reaches 1 at Y105 | Gates.sysml / Parameters.sysml |
 | W3-R27 | DG-13.5 Circuit Earth fraction drops from 10% to 3% - C-type carbon replaces P...: declared Y110 (P13); derived Y115 (P12) - ECON cargo_circuits / (d_circuits x circuit.mass_kg), years with new circuits only | Gates.sysml / econ.py |
 | W3-R28 | DG-13.5: listed under P13 but its year Y110 is P12 | Gates.sysml / Phases.sysml |
 | W3-R29 | DG-13.6 S-type asteroid redirect initiated - ~100 m silicaceous body. Fleet no...: declared Y115 (P13); derived Y115 (P12) - derivedYear = parameters.sTypeCaptureYear; declared year Y115 is P12 by the year table | Gates.sysml / Parameters.sysml |
@@ -221,11 +221,11 @@ Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a bou
 | W3-R31 | DG-13.7 M-type Fe-Ni reduces hauler Earth fraction from 43% to 20% floor (avio...: declared Y120 (P13); derived never - ECON hauler Earth fraction floors at 0.33 (hauler.earth_frac 0.43 floor less the M-type bonus); never reaches 0.20 | Gates.sysml / econ.py |
 | W3-R32 | DG-14.2 S-type asteroid targeting decision gate - selects target optimising fo...: declared Y115 (P14/P13); derived Y115 (P12) - derivedYear = parameters.sTypeCaptureYear; declared year Y115 is P12 by the year table | Gates.sysml / Parameters.sysml |
 | W3-R33 | DG-14.2: listed under P14 (alt P13) but its year Y115 is P12 | Gates.sysml / Phases.sysml |
-| W3-R34 | DG-14.4: derivable but unevaluated - no SPA demand vector beyond P7 (unevaluated); ECON spa_msr_count reaches 2 at Y125 | Gates.sysml / Parameters.sysml |
+| W3-R34 | DG-14.4: derivable but unevaluated - spaNonMsrCapabilityCeilingKw unbound; plan_vectors.spa_power: demand exceeds the P7-sized capability (2,342 kW) at Y18 on fleet growth alone, 61 MW at Y105 with the Decision Framework asteroid loads; ECON spa_msr_count reaches 2 at Y125 | Gates.sysml / Parameters.sysml |
 | W3-R35 | DG-14.5 Circuit Earth fraction drops from 3% to 0.8% - only advanced ICs remai...: declared Y130 (P14); derived Y135 (P13) - ECON cargo_circuits / (d_circuits x circuit.mass_kg) | Gates.sysml / econ.py |
 | W3-R36 | DG-14.5: listed under P14 but its year Y130 is P13 | Gates.sysml / Phases.sysml |
 | W3-R37 | DG-14.6 Earth independence assessment (DG-14.3 from ECN-019) - comprehensive a...: declared Y140 (P14); derived never - annual-flow proxy earth_cargo / (earth_cargo + insitu_total): minimum 4.8% at Y139 | Gates.sysml / econ.py |
-| W3-R38 | DG-14.7: derivable but unevaluated - no SPA demand vector beyond P7 (unevaluated); ECON spa_msr_count reaches 3 at Y140 | Gates.sysml / Parameters.sysml |
+| W3-R38 | DG-14.7: derivable but unevaluated - spaNonMsrCapabilityCeilingKw unbound; plan_vectors.spa_power: demand exceeds the P7-sized capability (2,342 kW) at Y18 on fleet growth alone, 61 MW at Y105 with the Decision Framework asteroid loads; ECON spa_msr_count reaches 3 at Y140 | Gates.sysml / Parameters.sysml |
 | W3-R39 | DG-14.9 Mk III PROBE fleet reduction - all 3 asteroid captures complete by Y12...: declared Y115 (P14); derived Y125 (P13) - ECON mkiii_active falls to 300 at Y115; captures complete at Y125 (sTypeCaptureYear + lag) | Gates.sysml / econ.py |
 | W3-R40 | DG-14.9: listed under P14 but its year Y115 is P12 | Gates.sysml / Phases.sysml |
 | W3-R41 | DG-POST.1: derivable but unevaluated - tier1ResourceTonnes unbound; ECON stops at Y200 (Wave 5) | Gates.sysml / Parameters.sysml |
