@@ -83,6 +83,11 @@ the planner; add the SPA demand vector beyond P7 (F5), the thorium stockpile
 vector and the tier resource parameters so the seven unevaluated derivable
 gates evaluate; adjudicate the register findings (W3-N1…N20) by ECN.
 
+Closed 19 Sep 2026 with SEL-ECN-022 (`docs/`): the extension vectors landed
+(`plan_vectors.py`), thorium and the SPA MSR trade are bound, MD-4 is bound
+to the M-type arrival, milestones follow MTL v8.5. Rev E of the Decision
+Framework is a Wave 5 rendering.
+
 ## Wave 4 — Behaviour, interfaces, software
 
 Value-chain action flows (v14.1/v15/v16), ports and interfaces, SENTINEL

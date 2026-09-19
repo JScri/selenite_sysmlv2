@@ -178,7 +178,7 @@ package SeleniteParameters {
              * nominal and both range corners. */
 
         attribute spaEclipseCriticalCoverageOnly : Boolean = true;
-        attribute spaAsteroidLoadCriticalFraction : Real;
+        attribute spaAsteroidLoadCriticalFraction : Real = 1.0;
         attribute spaMsrFirstUnitRatedKw : Real = 50000.0;
         doc spaMsrDoc /* owner: power | kind: policy / computationalInput |
              * The SPA MSR decision (F5, SpaMsrIntroductionGate) is evaluated
@@ -192,10 +192,13 @@ package SeleniteParameters {
              * and requires ThCl4 (MD-3, DG-9.6). Jason, 19 Sep 2026: "when
              * demand builds beyond what it is worth bringing more FSP units
              * for, the MSR becomes worth it". spaAsteroidLoadCriticalFraction
-             * (UNBOUND: the share of the Decision Framework s.10.1 asteroid
-             * processing loads that cannot pause through an eclipse) is the
-             * one open assumption; plan_check reports 0 and 1. First-unit
-             * rating 50 MWe per Decision Framework s.10.1. */
+             * = 1.0 (ECN-022, Jason, 19 Sep 2026): pyrolysis, Fischer-Tropsch
+             * and Czochralski growth are continuous thermal processes that
+             * cannot cold-soak through the 72 h eclipse, so the whole
+             * asteroid-processing load is eclipse-critical. The derived year
+             * (Y105) is the same at 0 and 1 because the cargo-mass crossover
+             * comes first. First-unit rating 50 MWe per Decision Framework
+             * s.10.1. */
 
         attribute co2PerLaunchTonnes : Real;
         doc co2Doc /* owner: economics | kind: computationalInput | UNBOUND -

@@ -87,7 +87,7 @@ Rev A · Base Floor Plan v2.1 · LH₂ transport v4 · EVA contingency (correcte
 `updated_` copy carries the ECN-014 valve-station amendment.
 
 **Tier 6 — ECN records** — ECN-012, -013, -014 (as amendments), -018, -019,
--020. ECN-015/-016/-017 exist only as folder names and the fleet ECN-016
+-020, -022 (Wave 3 gate decisions, `docs/SEL-ECN-022_DecisionFramework_Wave3.md`). ECN-015/-016/-017 exist only as folder names and the fleet ECN-016
 amendment doc; their content is folded into fleet v9 and Hauler/Catapult Rev B.
 
 ## Excluded / out of scope
