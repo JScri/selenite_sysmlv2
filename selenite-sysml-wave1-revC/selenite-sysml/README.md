@@ -13,8 +13,9 @@ steady state (~Y180). Baseline: **ECN-019 Rev C + ECN-020**.
 > PROC-001, ISRU-001, MTL Guide and Strategy. The model must not adopt
 > ECN-021 content until those source documents are revised.
 
-**State: Wave 3 complete (15 Sep 2026)** — gates and the derived programme
-plan: 81 Decision Framework gates with criteria, thresholds and calcs, every
+**State: Wave 3 closed (19 Sep 2026, SEL-ECN-022); next is Wave 4A, scenarios
+and decision analysis (`docs/SESSION_BRIEF_wave4_scenarios.md`).** Wave 3
+delivered gates and the derived programme plan: 81 Decision Framework gates with criteria, thresholds and calcs, every
 phase attribute classified and bound, SEL-REQ-001..016, `tools/plan_check.py`
 printing the derived-vs-declared register (`docs/PLAN_REGISTER.md`); see
 `CHANGELOG_WAVE3.md`. Wave 2 (architecture and temporal skeleton) is in

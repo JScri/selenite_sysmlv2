@@ -182,7 +182,11 @@ tables, useful for requirement/attribute exports.
 
 ## 8. Wave roadmap
 
-See `docs/MIGRATION_PLAN.md`. **Wave 3 delivered (15 Sep 2026)**: 81 gates,
+See `docs/MIGRATION_PLAN.md`. **Wave 3 closed (19 Sep 2026, SEL-ECN-022)**;
+**Wave 4 is split (20 Sep 2026)**: 4A scenarios, uncertainty and decision
+analysis (`docs/SESSION_BRIEF_wave4_scenarios.md`, next) precedes 4B
+behaviour, interfaces and software (original scope). Wave 3 delivered
+(15 Sep 2026): 81 gates,
 thresholds, calcs, phase bindings, SEL-REQ-001..016, `tools/plan_check.py`
 in CI, register in `docs/PLAN_REGISTER.md`; next is Wave 4 (behaviour) and
 Wave 5 (bind `derivedPhase`, evaluate the seven unevaluated gates). Previous

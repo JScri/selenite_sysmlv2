@@ -88,7 +88,27 @@ Closed 19 Sep 2026 with SEL-ECN-022 (`docs/`): the extension vectors landed
 to the M-type arrival, milestones follow MTL v8.5. Rev E of the Decision
 Framework is a Wave 5 rendering.
 
-## Wave 4 — Behaviour, interfaces, software
+## Wave 4 — split 20 Sep 2026 into 4A (scenarios) and 4B (behaviour)
+
+### Wave 4A — Scenarios, uncertainty and decision analysis (next; brief: `docs/SESSION_BRIEF_wave4_scenarios.md`)
+
+Decision (Jason, 20 Sep 2026): the model must parameterise per scenario,
+compute and compare alternatives under uncertainty and guide the selection;
+where an input is not deterministic the plan carries its distribution
+(stochastic optimisation by sample-average approximation over discrete
+alternatives, recourse decisions re-evaluated per sample). First case: the
+SPA eclipse operating strategy behind `spaAsteroidLoadCriticalFraction`
+(SEL-ECN-022 §2.4) — "fine if the power-intensive work is done while the
+eclipse is not present" makes it a strategy to trade, not a constant to type.
+Delivers `model/Scenarios.sysml` (decision catalogue D1–D8 as variations, an
+uncertainty register bound to the existing parameter ranges, trade-study
+analyses), `selenite/scenarios/` (parametrised ECON equal to the port at
+defaults, common-random-number sampler, criteria), `tools/scenario_check.py`
+printing `docs/SCENARIO_REGISTER.md` in CI, and a draft ECN-023 for the
+eclipse strategy. Committed parameters are never rebound by the wave; the
+draft ECN carries the recommendation to Jason.
+
+### Wave 4B — Behaviour, interfaces, software (original Wave 4 scope, unchanged)
 
 Value-chain action flows (v14.1/v15/v16), ports and interfaces, SENTINEL
 states and modes, ECN-014 valve auto-close logic as state machine and
@@ -99,8 +119,9 @@ ECN-021 enters here once its source documents are revised.
 
 Adds to the original scope: the planner's first full run (every derivable
 gate evaluated on Python vectors, `derivedPhase` bound, phase year windows
-in `Phases.sysml` become outputs), and the derived-versus-document register
-replaces the hand-kept W2-N list. Timeline figures are then rendered from
+in `Phases.sysml` become outputs), the derived-versus-document register
+replaces the hand-kept W2-N list, and the Wave 4A gate-year distributions
+feed the bound phases as probabilities beside the point values. Timeline figures are then rendered from
 the model.
 
 ### Wave 5 (original scope)
