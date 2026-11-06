@@ -57,17 +57,17 @@ Stage: now; gates: DG-10.5, DG-11.3, DG-13.4, DG-14.4, DG-14.7; evaluator: `sele
 
 | Alternative | Earth-launched mass (t) mean / P10 / P50 / P90 | SPA power-side Earth mass (t) mean / P10 / P50 / P90 | NPV with externalities ($B) mean / P10 / P50 / P90 | direct BCR mean / P10 / P50 / P90 | gate slip (yr) mean / P10 / P50 / P90 | launch CO2 (t) mean / P10 / P50 / P90 | FSP units (non-nuclear fallback) mean / P10 / P50 / P90 | battery mass (t) mean / P10 / P50 / P90 | oversize plant mass (t) mean / P10 / P50 / P90 | throughput lost mean / P10 / P50 / P90 | throughput penalty, Earth mass (t) mean / P10 / P50 / P90 | SPA MSR first year mean / P10 / P50 / P90 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| carryThroughEclipse | 6,935,204 / 5,548,520 / 6,864,572 / 8,352,623 | 135 / 135 / 135 / 135 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 6,254 / 6,254 / 6,254 / 6,254 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 105 / 105 / 105 / 105 |
-| sunlitDutyCycle | 6,935,382 / 5,548,675 / 6,864,765 / 8,352,869 | 313 / 278 / 309 / 353 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 941 / 941 / 941 / 941 | 0 / 0 / 0 / 0 | 162 / 128 / 158 / 202 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 105 / 105 / 105 / 105 |
-| hotStandby | 7,946,080 / 6,549,355 / 7,981,661 / 9,339,042 | 135 / 135 / 135 / 135 | -1,246 / -2,241 / -1,104 / -472 | 0.04983 / 0.03829 / 0.04899 / 0.06248 | 0 / 0 / 0 / 0 | 82,779,146 / 58,381,274 / 82,910,807 / 107,212,506 | 941 / 941 / 941 / 941 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 0.2051 / 0.1694 / 0.2016 / 0.2467 | 1,010,876 / 785,445 / 993,420 / 1,262,430 | 105 / 105 / 105 / 105 |
-| hybridStorage | 6,988,086 / 5,602,067 / 6,926,494 / 8,406,537 | 53,017 / 44,887 / 51,849 / 63,121 | -1,132 / -2,075 / -996 / -401 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 472 / 472 / 472 / 472 | 52,800 / 44,679 / 51,636 / 62,882 | 81 / 64 / 79 / 101 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 105 / 105 / 105 / 105 |
+| carryThroughEclipse | 6,935,154 / 5,548,470 / 6,864,522 / 8,352,573 | 131 / 131 / 131 / 131 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 6,254 / 6,254 / 6,254 / 6,254 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 105 / 105 / 105 / 105 |
+| sunlitDutyCycle | 6,935,326 / 5,548,619 / 6,864,707 / 8,352,815 | 302 / 269 / 298 / 341 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 1,156 / 1,113 / 1,150 / 1,209 | 0 / 0 / 0 / 0 | 157 / 123 / 153 / 196 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 105 / 105 / 105 / 105 |
+| hotStandby | 7,909,452 / 6,515,765 / 7,954,591 / 9,301,854 | 131 / 131 / 131 / 131 | -1,242 / -2,234 / -1,101 / -469 | 0.04994 / 0.03833 / 0.0491 / 0.06266 | 0 / 0 / 0 / 0 | 82,527,674 / 58,144,129 / 82,720,834 / 106,956,109 | 941 / 941 / 941 / 941 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 0.1986 / 0.1644 / 0.1953 / 0.2393 | 974,299 / 756,582 / 958,805 / 1,219,011 | 105 / 105 / 105 / 105 |
+| hybridStorage | 6,988,033 / 5,602,014 / 6,926,440 / 8,406,486 | 53,009 / 44,881 / 51,842 / 63,095 | -1,128 / -2,069 / -993 / -398 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 580 / 558 / 577 / 606 | 52,800 / 44,679 / 51,636 / 62,882 | 78 / 62 / 76 / 98 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 105 / 105 / 105 / 105 |
 
 | Alternative | Earth mass P90 (t) | NPV CVaR90 ($B) | Earth mass SE (t) | P(no slip) |
 |---|---|---|---|---|
-| carryThroughEclipse | 8,352,623 | -2,597 | 30,390 | 1.00 |
-| sunlitDutyCycle | 8,352,869 | -2,597 | 30,390 | 1.00 |
-| hotStandby | 9,339,042 | -2,835 | 28,233 | 1.00 |
-| hybridStorage | 8,406,537 | -2,622 | 30,389 | 1.00 |
+| carryThroughEclipse | 8,352,573 | -2,597 | 30,390 | 1.00 |
+| sunlitDutyCycle | 8,352,815 | -2,597 | 30,390 | 1.00 |
+| hotStandby | 9,301,854 | -2,827 | 28,321 | 1.00 |
+| hybridStorage | 8,406,486 | -2,616 | 30,389 | 1.00 |
 
 | Criterion | Recommended | P(win) | P(no slip) |
 |---|---|---|---|
@@ -82,18 +82,18 @@ Declared versus derived eclipse-critical fraction of the asteroid-processing loa
 | Strategy | Declared | Derived mean / P10 / P50 / P90 | FSP units (fallback, max) | critical load max (kW) |
 |---|---|---|---|---|
 | carryThroughEclipse | 1 | 1 / 1 / 1 / 1 | 6,254 | 250,120 |
-| sunlitDutyCycle | 1 | 0.15 / 0.15 / 0.15 / 0.15 | 941 | 37,620 |
+| sunlitDutyCycle | 1 | 0.1843 / 0.1775 / 0.1835 / 0.1928 | 1,156 | 46,203 |
 | hotStandby | 1 | 0.15 / 0.15 / 0.15 / 0.15 | 941 | 37,620 |
-| hybridStorage | 1 | 0.575 / 0.575 / 0.575 / 0.575 | 472 | 143,870 |
+| hybridStorage | 1 | 0.5922 / 0.5887 / 0.5917 / 0.5964 | 580 | 148,161 |
 
-The two worlds D1 turns on (same samples; `spaMsrAvailabilityProbability` = 1 in the committed plan, scenario override none): the SPA MSR carries the asteroid loads through every eclipse when it is available at the C-type arrival; without it the strategy sizes the FSP fleet. Break-even: the availability probability below which the strategy beats carry-through on expected Earth-launched mass.
+The two worlds D1 turns on (same samples; `spaMsrAvailabilityProbability` = 1 in the committed plan, scenario override none): the SPA MSR carries the asteroid loads through every eclipse when it is available at the C-type arrival; without it the strategy sizes the FSP fleet. Break-even: the MSR-availability probability at which the strategy's expected total Earth-launched mass equals carry-through's ('below': it wins at lower probabilities; 'above': at higher; 'always' / 'never': no worse / no better in either world).
 
 | Strategy | MSR available: SPA power mass (t) | MSR available: total Earth mass (t) | MSR unavailable: SPA power mass (t) | MSR unavailable: total Earth mass (t) | break-even P(MSR available) |
 |---|---|---|---|---|---|
-| carryThroughEclipse | 135 | 6,935,204 | 42,117 | 6,977,185 | reference |
-| sunlitDutyCycle | 313 | 6,935,382 | 7,425 | 6,942,493 | 0.9949 |
-| hotStandby | 135 | 7,946,080 | 7,051 | 7,952,996 | always |
-| hybridStorage | 53,017 | 6,988,086 | 56,943 | 6,992,011 | never |
+| carryThroughEclipse | 131 | 6,935,154 | 42,086 | 6,977,110 | reference |
+| sunlitDutyCycle | 302 | 6,935,326 | 8,798 | 6,943,821 | 0.9949 (below) |
+| hotStandby | 131 | 7,909,452 | 7,021 | 7,916,343 | never |
+| hybridStorage | 53,009 | 6,988,033 | 57,615 | 6,992,639 | never |
 
 Notes: hold-load fractions ASSUMED (no process source): cTypeLine 0.25, sTypeLine 0.25, scaledOperations 0.25; restart loss ASSUMED 0.50 day per eclipse; DG-10.5 declared year superseded by ECN-022 s.2.3 (Y50 superseded); reported, excluded from the slip; DG-11.3 declared year superseded by ECN-022 s.2.3 (Y70 superseded); reported, excluded from the slip.
 
@@ -105,15 +105,15 @@ Stage: recourse; gates: DG-9.6, DG-10.5, DG-13.4; evaluator: `selenite.scenarios
 
 | Alternative | Earth-launched mass (t) mean / P10 / P50 / P90 | NPV with externalities ($B) mean / P10 / P50 / P90 | direct BCR mean / P10 / P50 / P90 | gate slip (yr) mean / P10 / P50 / P90 | launch CO2 (t) mean / P10 / P50 / P90 | SPA MSR first year mean / P10 / P50 / P90 | P(MSR before Y105) mean / P10 / P50 / P90 |
 |---|---|---|---|---|---|---|---|
-| nonNuclearOnly | 6,977,185 / 5,590,501 / 6,906,553 / 8,394,604 | -1,126 / -2,062 / -989 / -396 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | never / never / never / never | 0 / 0 / 0 / 0 |
-| msrWhenJustified | 6,935,204 / 5,548,520 / 6,864,572 / 8,352,623 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 105 / 105 / 105 / 105 | 0 / 0 / 0 / 0 |
-| msrAtThcl4Availability | 6,935,231 / 5,548,543 / 6,864,598 / 8,352,653 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 49 / 44 / 48 / 55 | 1 / 1 / 1 / 1 |
+| nonNuclearOnly | 6,977,140 / 5,590,456 / 6,906,508 / 8,394,559 | -1,126 / -2,062 / -989 / -396 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | never / never / never / never | 0 / 0 / 0 / 0 |
+| msrWhenJustified | 6,935,159 / 5,548,475 / 6,864,527 / 8,352,578 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 105 / 105 / 105 / 105 | 0 / 0 / 0 / 0 |
+| msrAtThcl4Availability | 6,935,186 / 5,548,498 / 6,864,553 / 8,352,608 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 49 / 44 / 48 / 55 | 1 / 1 / 1 / 1 |
 
 | Alternative | Earth mass P90 (t) | NPV CVaR90 ($B) | Earth mass SE (t) | P(no slip) |
 |---|---|---|---|---|
-| nonNuclearOnly | 8,394,604 | -2,612 | 30,390 | 1.00 |
-| msrWhenJustified | 8,352,623 | -2,597 | 30,390 | 1.00 |
-| msrAtThcl4Availability | 8,352,653 | -2,597 | 30,390 | 1.00 |
+| nonNuclearOnly | 8,394,559 | -2,612 | 30,390 | 1.00 |
+| msrWhenJustified | 8,352,578 | -2,597 | 30,390 | 1.00 |
+| msrAtThcl4Availability | 8,352,608 | -2,597 | 30,390 | 1.00 |
 
 | Criterion | Recommended | P(win) | P(no slip) |
 |---|---|---|---|
@@ -207,7 +207,7 @@ Notes: capture-year ranges unbound: the distribution is a point unless the scena
 
 Stage: recourse; gates: DG-8.7, DG-9.6; evaluator: `selenite.scenarios.trades.evaluate_d6` (evaluated); baseline selection: consequenceOfGradeAndCapture; objective: minimise Earth-launched mass (t).
 
-**Recommended under the default criterion (chanceConstrained): `consequenceOfGradeAndCapture`** - P(win) 1.00, P(no slip) 0.59.
+**Recommended under the default criterion (chanceConstrained, fell back to expectedValue): `consequenceOfGradeAndCapture`** - P(win) 1.00, P(no slip) 0.59.
 
 | Alternative | Earth-launched mass (t) mean / P10 / P50 / P90 | NPV with externalities ($B) mean / P10 / P50 / P90 | direct BCR mean / P10 / P50 / P90 | gate slip (yr) mean / P10 / P50 / P90 | launch CO2 (t) mean / P10 / P50 / P90 | DG-8.7 year mean / P10 / P50 / P90 | Th(OH)4 stockpile at Y43 (t) mean / P10 / P50 / P90 | Th(OH)4 per t REO mean / P10 / P50 / P90 |
 |---|---|---|---|---|---|---|---|---|
@@ -225,18 +225,18 @@ Stage: recourse; gates: DG-8.7, DG-9.6; evaluator: `selenite.scenarios.trades.ev
 | minimaxRegret | consequenceOfGradeAndCapture | 1.00 | 0.59 |
 | chanceConstrained | none admissible | - | - |
 
-Notes: no alternative meets P(no slip) >= 0.80; lead falls back to expectedValue.
+Notes: no alternative meets P(no slip) >= 0.80; the lead falls back to expectedValue.
 
 ### D7 - Mk III transition trigger (capacity-forced versus DG-11.6 test outcome)
 
 Stage: recourse; gates: DG-11.6, DG-11.7; evaluator: `selenite.scenarios.trades.evaluate_d7` (evaluated); baseline selection: testOutcomeDriven; objective: minimise Earth-launched mass (t).
 
-**Recommended under the default criterion (chanceConstrained): `capacityForced`** - P(win) 0.50, P(no slip) 0.50.
+**Recommended under the default criterion (chanceConstrained, fell back to expectedValue): `capacityForced`** - P(win) 0.50, P(no slip) 0.50.
 
 | Alternative | Earth-launched mass (t) mean / P10 / P50 / P90 | NPV with externalities ($B) mean / P10 / P50 / P90 | direct BCR mean / P10 / P50 / P90 | gate slip (yr) mean / P10 / P50 / P90 | launch CO2 (t) mean / P10 / P50 / P90 | P(capacity-forced) mean / P10 / P50 / P90 | Mk III transition year mean / P10 / P50 / P90 | Mk III fleet Earth mass (t, LEO) mean / P10 / P50 / P90 |
 |---|---|---|---|---|---|---|---|---|
-| capacityForced | 6,935,068 / 5,548,384 / 6,864,436 / 8,352,487 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 68 / 0 / 68 / 135 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 0.5 / 0 / 0.5 / 1 | never / never / never / never | 5,111 / 0 / 5,111 / 10,223 |
-| testOutcomeDriven | 6,935,068 / 5,548,384 / 6,864,436 / 8,352,487 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 68 / 0 / 68 / 135 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 0.5 / 0 / 0.5 / 1 | never / never / never / never | 5,111 / 0 / 5,111 / 10,223 |
+| capacityForced | 6,935,068 / 5,548,384 / 6,864,436 / 8,352,487 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 68 / 0 / 68 / 135 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 0.5 / 0 / 0.5 / 1 | 31 / 31 / 31 / 31 (never in 50 %) | 5,111 / 0 / 5,111 / 10,223 |
+| testOutcomeDriven | 6,935,068 / 5,548,384 / 6,864,436 / 8,352,487 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 68 / 0 / 68 / 135 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 0.5 / 0 / 0.5 / 1 | 65 / 65 / 65 / 65 (never in 50 %) | 5,111 / 0 / 5,111 / 10,223 |
 
 | Alternative | Earth mass P90 (t) | NPV CVaR90 ($B) | Earth mass SE (t) | P(no slip) |
 |---|---|---|---|---|
@@ -251,7 +251,7 @@ Stage: recourse; gates: DG-11.6, DG-11.7; evaluator: `selenite.scenarios.trades.
 | minimaxRegret | capacityForced | 0.50 | 0.50 |
 | chanceConstrained | none admissible | - | - |
 
-Notes: Mk III validation pass probability uninformative 0.5 (range unbound); no alternative meets P(no slip) >= 0.80; lead falls back to expectedValue.
+Notes: Mk III validation pass probability uninformative 0.5 (range unbound); no alternative meets P(no slip) >= 0.80; the lead falls back to expectedValue.
 
 ### D8 - Hauler in-situ fraction policy (F3, DG-13.7)
 
@@ -308,16 +308,16 @@ Each scenario holds its overrides constant and samples everything else (n = 100 
 
 | Scenario | Overrides | D1 lead (P win) | D2 lead (P win) | D3 lead (P win) | D4 lead (P win) | D5 lead (P win) | D6 lead (P win) | D7 lead (P win) | D8 lead (P win) | D1 SPA power mass by strategy (t) |
 |---|---|---|---|---|---|---|---|---|---|---|
-| baseline | none | carryThroughEclipse (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 135; sunlitDutyCycle 313; hotStandby 135; hybridStorage 53,018 |
-| lowLaunchCost | launchCostMultiplier=0.5 | carryThroughEclipse (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 135; sunlitDutyCycle 313; hotStandby 135; hybridStorage 53,018 |
-| lateMType | mTypeCaptureYear=85 | carryThroughEclipse (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 135; sunlitDutyCycle 313; hotStandby 135; hybridStorage 53,018 |
-| highThorium | thoriumGradePpm=15, acidBakeThoriumCapture=0.95 | carryThroughEclipse (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 135; sunlitDutyCycle 313; hotStandby 135; hybridStorage 53,018 |
-| msrUnavailable | spaMsrAvailabilityProbability=0 | sunlitDutyCycle (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 42,117; sunlitDutyCycle 7,424; hotStandby 7,051; hybridStorage 56,943 |
-| msrUncertain | spaMsrAvailabilityProbability=0.9 | sunlitDutyCycle (0.10) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 4,334; sunlitDutyCycle 1,025; hotStandby 827; hybridStorage 53,411 |
-| earthBuiltAsteroidPlant | asteroidPlantEarthFraction=1 | carryThroughEclipse (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 135; sunlitDutyCycle 4,794; hotStandby 135; hybridStorage 55,258 |
-| holdLoadLow | holdLoadFraction=0.05 | carryThroughEclipse (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 135; sunlitDutyCycle 313; hotStandby 135; hybridStorage 53,018 |
-| holdLoadHigh | holdLoadFraction=0.5 | carryThroughEclipse (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 135; sunlitDutyCycle 313; hotStandby 135; hybridStorage 53,018 |
-| darkSite | spaDarkFraction=0.229 | carryThroughEclipse (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 135; sunlitDutyCycle 406; hotStandby 135; hybridStorage 53,071 |
+| baseline | none | carryThroughEclipse (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 131; sunlitDutyCycle 303; hotStandby 131; hybridStorage 53,010 |
+| lowLaunchCost | launchCostMultiplier=0.5 | carryThroughEclipse (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 131; sunlitDutyCycle 303; hotStandby 131; hybridStorage 53,010 |
+| lateMType | mTypeCaptureYear=85 | carryThroughEclipse (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 131; sunlitDutyCycle 303; hotStandby 131; hybridStorage 53,010 |
+| highThorium | thoriumGradePpm=15, acidBakeThoriumCapture=0.95 | carryThroughEclipse (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 131; sunlitDutyCycle 303; hotStandby 131; hybridStorage 53,010 |
+| msrUnavailable | spaMsrAvailabilityProbability=0 | sunlitDutyCycle (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 42,086; sunlitDutyCycle 8,798; hotStandby 7,021; hybridStorage 57,616 |
+| msrUncertain | spaMsrAvailabilityProbability=0.9 | sunlitDutyCycle (0.10) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 4,326; sunlitDutyCycle 1,156; hotStandby 820; hybridStorage 53,473 |
+| earthBuiltAsteroidPlant | asteroidPlantEarthFraction=1 | carryThroughEclipse (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 131; sunlitDutyCycle 4,632; hotStandby 131; hybridStorage 55,175 |
+| holdLoadLow | holdLoadFraction=0.05 | carryThroughEclipse (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 131; sunlitDutyCycle 303; hotStandby 131; hybridStorage 53,010 |
+| holdLoadHigh | holdLoadFraction=0.5 | carryThroughEclipse (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 131; sunlitDutyCycle 303; hotStandby 131; hybridStorage 53,010 |
+| darkSite | spaDarkFraction=0.229 | carryThroughEclipse (1.00) | msrWhenJustified (1.00) | shuttlecock (0.71) | optimisedDesign (1.00) | consequenceOfMTypeArrival (1.00) | consequenceOfGradeAndCapture (1.00) | capacityForced (0.50) | econFloor (0.50) | carryThroughEclipse 131; sunlitDutyCycle 393; hotStandby 131; hybridStorage 53,062 |
 
 ## 5. Structural checks
 
