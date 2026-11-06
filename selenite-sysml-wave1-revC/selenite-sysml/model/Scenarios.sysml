@@ -288,11 +288,15 @@ package SeleniteScenarios {
             attribute redefines nominal = parameters.mkIiiTestPassProbability;
             attribute redefines source = "DG-11.6 ion-SEP / EM-catcher validation; probability uninformative 0.5; range unbound";
         }
-        attribute haulerEarthFractionFloor : DiscreteReal {
+        attribute haulerEarthFractionFloor : PointReal {
+            doc /* SEL-ECN-024 (Jason, 6 Nov 2026, option 2a): flag F3 closed by
+                 * the Wave 2 F2 diff - the 92 % figure is the superseded
+                 * SEL-HAULER-001 Rev A column, not a current candidate - so the
+                 * entry is a point at the ECON floor (rule 5d: no range without a
+                 * source). The 0.08 stays recorded in ProgrammeParameters as a
+                 * historical candidate, not sampled. */
             attribute redefines nominal = parameters.haulerEarthFractionFloorEcon;
-            attribute redefines low = parameters.haulerEarthFractionFloorFleetV9;
-            attribute redefines high = parameters.haulerEarthFractionFloorEcon;
-            attribute redefines source = "F3: ECON 0.43 (~57 % in-situ; fleet v9 s.10.1) vs hauler Rev A / hauler brief 92 % in-situ (0.08, superseded column); equal weights";
+            attribute redefines source = "F3 closed by SEL-ECN-024: ECON v1.3 floor 0.43 (~57 % in-situ, fleet v9 s.10.1); 92 % is the superseded Rev A column (CHANGELOG_WAVE2 s.0); range unbound";
         }
     }
 

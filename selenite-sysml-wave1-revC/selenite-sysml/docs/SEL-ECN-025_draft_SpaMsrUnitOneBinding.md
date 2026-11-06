@@ -2,7 +2,7 @@
 
 **Reference:** SEL-ECN-022 §2.3; `model/ProgrammeConfiguration.sysml` (`shackletonHub.powerZone.spaMsr`); `model/Gates.sysml` (DG-10.5, DG-11.3, DG-13.4, DG-14.4, DG-14.7); `model/Power.sysml` (`SpaThoriumMSR`); `docs/PLAN_REGISTER.md` (W3-R13, W3-R16, W3-R33, W3-R37, element row `spaMsr.introducedIn`); `CHANGELOG_VERIFICATION.md` (V-N, item 4)
 
-**Date:** 6 November 2026 | **Status:** **DRAFT — for Jason's decision; not applied.** | **Author:** verification session for Jason (Systems Engineering Lead)
+**Date:** 6 November 2026 | **Status:** **SIGNED and APPLIED (Jason, 6 Nov 2026): option 2a.** `shackletonHub.powerZone.spaMsr.introducedIn` rebound to `gates.dgThirteenFour.derivedPhase`; `docs/PLAN_REGISTER.md` regenerated and the plan_check fixture re-cut. The file keeps its draft name for the document map. | **Author:** verification session for Jason (Systems Engineering Lead)
 
 ---
 
@@ -38,4 +38,10 @@ At verification the gate docs were brought up to date (value-neutral): DG-8.7 an
 
 ---
 
-*— End of SEL-ECN-025 (DRAFT) —*
+## 5. Decision (Jason, 6 November 2026)
+
+**Option 2a adopted and applied in the same session:** the binding, the `Power.sysml` and DG-10.5 docs and `gatedElements` as §3 lists; `docs/PLAN_REGISTER.md` regenerated (the `spaMsr.introducedIn` element row now reads "bound to DG-13.4 (P13/P12, Y105)"; derived year unchanged) and `tests/fixtures/plan_check_stdout_wave3.txt` re-cut; `CHANGELOG_WAVE3.md` §3 row updated by addendum. The §4 calc-body item stays with Wave 5.
+
+---
+
+*— End of SEL-ECN-025 — signed 6 Nov 2026 (option 2a applied) —*

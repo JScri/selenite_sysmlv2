@@ -832,14 +832,15 @@ package SeleniteGates {
              * Evaluated since 19 Sep 2026 as the FSP-versus-MSR cargo-mass
              * trade (plan_vectors.fsp_msr_trade, ECN-022 s.2.3): first unit
              * Y105 (P12). ECN-022 s.2.3 supersedes DG-10.5 and DG-11.3 as
-             * commissioning gates; DG-13.4 stands as unit #1. */
+             * commissioning gates; DG-13.4 stands as unit #1, and SEL-ECN-025
+             * (6 Nov 2026) moved the SpaThoriumMSR.introducedIn binding there. */
         attribute redefines gateId = "DG-10.5";
         attribute redefines criterion = "SPA MSR commissioning - ThCl4 mass-driven from PKT. Enables scaled PROBE/PGM ops.";
         attribute redefines criterionAsModelled = "SpaMsrIntroductionGate via plan_vectors.fsp_msr_trade: non-nuclear Earth cargo (FSP for the eclipse-critical load + solar for the day load, incremental to the P7 fleet) > SPA MSR Earth cargo, with ThCl4 available (MD-3, DG-9.6) - first unit Y105; ECON spa_msr_count first unit Y105";
         attribute redefines declaredPhase = Phase::P10;
         attribute redefines declaredYear = 50.0;
         attribute redefines prerequisites = ("MassDriverMd3.operationalFrom", "DG-9.3", "DG-9.6");
-        attribute redefines gatedElements = ("SpaThoriumMSR.introducedIn");
+        attribute redefines gatedElements = ("SpaThoriumMSR.introducedIn (superseded owner; bound to DG-13.4 since SEL-ECN-025)");
         attribute econAssumedIntroductionYear : Integer = 105;
         calc introductionCheck : SpaMsrIntroductionGate;
     }

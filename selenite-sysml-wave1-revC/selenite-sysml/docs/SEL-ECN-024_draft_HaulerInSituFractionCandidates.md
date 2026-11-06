@@ -2,7 +2,7 @@
 
 **Reference:** `docs/DOCUMENT_FAMILIES.md` flag F3; `CHANGELOG_WAVE2.md` §0 (F2 diff); `model/Parameters.sysml` (`haulerEarthFractionFloorEcon` 0.43, `haulerEarthFractionFloorFleetV9` 0.08, `GateThresholds.haulerEarthFractionFloor` 0.20); `model/Scenarios.sysml` (`UncertaintyRegister.haulerEarthFractionFloor`, D8 `HaulerInSituFractionPolicy`); `docs/SCENARIO_REGISTER.md` §1 and §2 D8; `CHANGELOG_VERIFICATION.md` (V-N, item 2)
 
-**Date:** 6 November 2026 | **Status:** **DRAFT — for Jason's decision; not applied.** The verification session changes no bound value, no sampling weight and no selection. | **Author:** verification session for Jason (Systems Engineering Lead)
+**Date:** 6 November 2026 | **Status:** **SIGNED and APPLIED (Jason, 6 Nov 2026): option 2a.** Flag F3 closed; `UncertaintyRegister.haulerEarthFractionFloor` is a `PointReal` at the ECON floor 0.43 (range unbound); `haulerEarthFractionFloorFleetV9` (0.08) kept as a historical candidate, not sampled; `docs/SCENARIO_REGISTER.md` regenerated (17 sampled entries, D8 evaluated on the ECON floor). The file keeps its draft name for the document map. | **Author:** verification session for Jason (Systems Engineering Lead)
 
 ---
 
@@ -47,4 +47,12 @@ Nothing in ECON, VERIFY or the goldens moves under either option; `evaluate_d8` 
 
 ---
 
-*— End of SEL-ECN-024 (DRAFT) —*
+## 6. Decision (Jason, 6 November 2026)
+
+**Option 2a adopted and applied in the same session:** `model/Scenarios.sysml` entry rebuilt as a `PointReal` bound to `parameters.haulerEarthFractionFloorEcon`; `model/Parameters.sysml` `haulerFloorDoc` records the closure and keeps the 0.08 attribute as history; `docs/DOCUMENT_FAMILIES.md` F3 row closed; `docs/SCENARIO_REGISTER.md` regenerated at n = 2,000 (17 sampled entries; D8 now compares `econFloor` against `targetFloor` on the ECON floor alone). W3-N5 (the DG-13.7 20 % floor never reached) stays open for Wave 5.
+
+**Consequence in the regenerated register (recorded, not decided):** with the floor fixed at the ECON 0.43, D8 is no longer a sampling tie — under every criterion the register now recommends `targetFloor` (P(win) 1.00: hauler Earth mass 1,363,140 t against `econFloor`'s 1,483,295 t; total Earth-launched mass 6,815,654 t against 6,935,809 t), and DG-13.7 under `econFloor` reads "never" (P(met by Y120) 0.00, W3-N5). The baseline's selection `d8 :> econFloor` is unchanged: the register recommends, the wave never rebinds. Whether the programme adopts the DG-13.7 20 % floor as policy (and what in ECON would have to change to reach it) is the next hauler decision for Jason, listed in `CHANGELOG_VERIFICATION.md` §4. Note also that removing a sampled dimension (22 → 21 with the event draws) re-draws the common random numbers, so every decision's means shift by a few hundred tonnes in a 6.9 Mt total; no other recommendation, the derived D1 fraction (0.1843) or the D1 break-even (0.9949) moved.
+
+---
+
+*— End of SEL-ECN-024 — signed 6 Nov 2026 (option 2a applied) —*

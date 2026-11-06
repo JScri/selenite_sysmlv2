@@ -296,6 +296,19 @@ Gläser et al. 2014 → `cited_external`.
 4. **Hold-load fractions and the restart loss** (W4A-N3): a process source
    or a declared value by ECN.
 
+## Addendum — 6 November 2026 (SEL-ECN-024 signed: F3 closed)
+
+Decision (Jason, 6 Nov 2026, verification session): SEL-ECN-024 option 2a.
+The W4A-N4 two-point sampling of `haulerEarthFractionFloor` (0.43 / 0.08,
+equal weights) is withdrawn: the 92 % figure is the superseded Rev A column
+(F2 diff), so the register entry is a point at the ECON floor 0.43 and D8 is
+evaluated on it (17 sampled entries, 15 points). The other W4A-N4 two-point
+entries (REO ramp knots, canister payload VC-22, PSR capacity 620 / 310) stand.
+Consequence in the register: D8 now recommends `targetFloor` (P(win) 1.00)
+over the baseline's `econFloor`, and DG-13.7 under `econFloor` reads "never";
+the selection is unchanged (the register recommends, the wave never rebinds)
+and the hauler policy is listed for Jason in `CHANGELOG_VERIFICATION.md` §4.
+
 ## Addendum — 6 November 2026 (SEL-ECN-023 signed)
 
 Decision (Jason, 6 Nov 2026): option 3b — the sunlit duty cycle is the SPA

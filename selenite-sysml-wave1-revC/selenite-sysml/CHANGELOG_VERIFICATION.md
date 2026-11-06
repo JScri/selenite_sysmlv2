@@ -319,25 +319,26 @@ byte-identical to `docs/`; spelling clean after the one fix.
 - **`CHANGELOG_WAVE4A.md`** — V-N31. **`CHANGELOG_WAVE3.md`** — V-N32 note. **`docs/SESSION_BRIEF_wave4_scenarios.md`** — V-N35; **`…wave2_architecture.md`** — status banner; **`…verification_post_wave4a.md`** — delivered.
 - **`README.md`** (root), **`selenite-sysml-wave1-revC/selenite-sysml/README.md`**, **`selenite-compute/README.md`**, **`docs/HUMAN_QUICKSTART.md`** — V-N44.
 
-## 3. Draft ECNs for Jason (not applied)
+## 3. ECNs raised (SEL-ECN-024 and 025 signed and applied in the same session; SEL-ECN-026 remains a draft)
 
 | ECN | Question | Value / decision at stake |
 |---|---|---|
-| SEL-ECN-024 | Close flag F3 (92 % is the superseded Rev A column) and reduce the D8 register entry to a point at 0.43, or re-source the 92 %. | `UncertaintyRegister.haulerEarthFractionFloor` sampling (0.43 / 0.08 equal weights); D8's 0.50 / 0.50 tie; F3 status |
-| SEL-ECN-025 | Bind the SPA MSR unit #1 to DG-13.4 (ECN-022 §2.3 carry-through) or keep DG-10.5 as the owning gate. | `shackletonHub.powerZone.spaMsr.introducedIn` binding (derived year unchanged, Y105) |
+| SEL-ECN-024 — **SIGNED, option 2a (Jason, 6 Nov 2026), applied** | Flag F3 closed (92 % is the superseded Rev A column); the D8 register entry is a point at the ECON floor 0.43 (`PointReal`, range unbound); 0.08 kept as a historical candidate, not sampled. | Register: 17 sampled entries, 15 points; D8 evaluated on the ECON floor (`econFloor` vs `targetFloor` no longer a sampling tie); scenario register regenerated |
+| SEL-ECN-025 — **SIGNED, option 2a (Jason, 6 Nov 2026), applied** | `shackletonHub.powerZone.spaMsr.introducedIn` rebound to `gates.dgThirteenFour.derivedPhase` (ECN-022 §2.3 carry-through); DG-10.5 / DG-11.3 stay as superseded gates. | Plan register element row "bound to DG-13.4 (P13/P12, Y105)" — derived year unchanged; `tests/fixtures/plan_check_stdout_wave3.txt` re-cut |
 | SEL-ECN-026 | Align `canistersPerDaySteadyState` (783 → 1,903) and `circuitsP8Complete` (308 → 105, or drop) to ECN-020 / ECN-022, or keep Rev D's figures until Rev E. | two `GateThresholds`; DG-12.3 (Y141) and DG-8.5 (circuits Y41) derived years |
 
 ## 4. Consolidated open-items list for Waves 4B and 5 (the state they start from)
 
-### Needs Jason's decision now (ECN-024 … 026 above, plus)
+### Needs Jason's decision now (SEL-ECN-026 above, plus)
 
 1. **Default decision criterion** (Wave 4A open question 1): `decisionCriterion = expectedEarthMassWithSlipChance`, `chanceConstraintThreshold = 0.8` are still PROPOSED; every D1–D8 lead recommendation follows it.
 2. **`spaMsrAvailabilityProbability`** 1.0 (range unbound): a sourced probability for the thorium line settles the D1 insurance case (break-even 0.995) and D2's first-MSR year.
 3. **Hold-load fractions 0.25 and restart loss 0.5 day** (W4A-N3): bind from a process source or accept by ECN; `spaAsteroidLoadCriticalFraction` 0.18 (0.04–0.37) rests on them.
 4. **VC-22** canister payload 3.5 t (ECON) vs 3.6 t (ECN-020): cadence, DG-12.3, D3 costs, and the ECN-026 figure.
 5. **W3-N4 REO ramp**: align DG-11.1 / 12.1 / 13.1 to the ECON ramp (Y80 / Y121 / Y152) at Rev E or ECN the ramp.
-6. **D7 Mk III trigger** (`mkIiiTestPassProbability` 0.5 uninformative; capacity-forced never on 620, Y31 on 310) and **D3 canister recovery** (`abstract part d3`; shuttlecock P(win) 0.71 on an uninformative 0.5 impact-survival probability; `canisterEarthContentKg` unbound).
-7. **W3-N11** demonstrator location (SPA rim P7 vs PKT Y28–30, DG-8.8); **F7** gap intent (DG-7.5 at Y15); **F9** final report date; **F2** confirmation (V-N36); **W4A-N1** design eclipse 72 h vs 3–5 days; **VC-21** Catapult Rev C; **DG-2.1** 5,692 vs 5,642 (V-N15); SURVEY concept and first-FSP phase rulings (V-N37, V-N38).
+6. **D8 hauler policy after SEL-ECN-024**: with F3 closed the register recommends `targetFloor` (the DG-13.7 20 % floor) over the baseline's `econFloor` under every criterion (P(win) 1.00, about 120 kt less Earth mass), while ECON never reaches 20 % (W3-N5: floors at 0.33). Decide whether the 20 % floor is policy (then the ECON hauler Earth-fraction model needs an ECN to reach it) or the ECON floor stands and DG-13.7's threshold moves.
+7. **D7 Mk III trigger** (`mkIiiTestPassProbability` 0.5 uninformative; capacity-forced never on 620, Y31 on 310) and **D3 canister recovery** (`abstract part d3`; shuttlecock P(win) 0.71 on an uninformative 0.5 impact-survival probability; `canisterEarthContentKg` unbound).
+8. **W3-N11** demonstrator location (SPA rim P7 vs PKT Y28–30, DG-8.8); **F7** gap intent (DG-7.5 at Y15); **F9** final report date; **F2** confirmation (V-N36); **W4A-N1** design eclipse 72 h vs 3–5 days; **VC-21** Catapult Rev C; **DG-2.1** 5,692 vs 5,642 (V-N15); SURVEY concept and first-FSP phase rulings (V-N37, V-N38).
 
 ### Wave 4B (behaviour, interfaces, software) must start from
 
@@ -351,9 +352,9 @@ byte-identical to `docs/`; spelling clean after the one fix.
 
 ### Wave 5 (quantities, derived timeline) must start from
 
-- Bind `derivedPhase` for the 89 bindings; the W2-N1/2/3/4, W3-N9/10 and W3-R42–56 definition-versus-gate rows become derived outputs; settle the SPA MSR owner (ECN-025) and rewrite `SpaMsrIntroductionGate` to mirror `fsp_msr_trade` (V-N24); decide the `declaredPhaseAlternate` rule (V-N30); bind `UncertaintyRegister.parameters` to the programme instance (V-N10).
+- Bind `derivedPhase` for the 89 bindings; the W2-N1/2/3/4, W3-N9/10 and W3-R42–56 definition-versus-gate rows become derived outputs; SPA MSR owner settled (ECN-025 → DG-13.4); rewrite `SpaMsrIntroductionGate` to mirror `fsp_msr_trade` (V-N24); decide the `declaredPhaseAlternate` rule (V-N30); bind `UncertaintyRegister.parameters` to the programme instance (V-N10).
 - DG-POST.1/2: `tier1ResourceTonnes` / `tier2ResourceTonnes` unbound; ECON stops at Y200.
-- Never-met gates: DG-14.6 (annual-flow proxy minimum 4.76 % at Y139; needs a cumulative infrastructure-mass vector) and DG-13.7 (hauler floor 0.33 vs 0.20; F3 / ECN-024 lineage).
+- Never-met gates: DG-14.6 (annual-flow proxy minimum 4.76 % at Y139; needs a cumulative infrastructure-mass vector) and DG-13.7 (hauler floor 0.33 vs 0.20; F3 closed by ECN-024, the threshold stands).
 - VC adjudications VC-01…14, 18, 19, 20, 22 by ECN + new golden (VC-09 carried in `msrUnitsP12` and `msrUnitCountAtP14` = 6,890; `circuitCountAtP14` 2.08 M; VC-20 `co2PerLaunchTonnes` unbound); VC-03 / VC-11 model doc records (V-N39).
 - Decision Framework Rev E rendering (ECN-022 §3 and §5; ECN-023 §5; ECN-026 if signed): MD-4 row, DG-11.2 thorium figures (W3-N22), DG-10.5 / 11.3 superseded, milestone alignment (W3-N21), 310 → 620, 308 / 783 / DG-14.3 alias / DG-7.5 placement / P12–P13 re-sectioning / REO gate years / YBCO 280 → 523, DG-13.2 double use (W2-N19); Strategy v3.2 and fleet v9 follow-ons.
 - Unbound Python-supplied inputs to bind: `reoTonnesPerYearByYear`, `reoDemandBaseline…`, `spaElectricalDemandByYear`, `spaNonMsrCapabilityByYear`, `thoriumHydroxideStockpileByYear`, `mkIiiPeakFleetUnits`, `redirectTugFleetUnits`, `canisterEarthContentKg`, `reoPayloadPerCanisterTonnes`, `co2PerLaunchTonnes`, `launchCostPerFlightUsd` (W3-N18 basis); the capture-year ranges (W4A-N5); the test-outcome probabilities (W4A-N4).
@@ -367,8 +368,29 @@ problems found** — exit 0, zero hints. `tools/render_diagrams.sh`
 **1,565 passed, 33 skipped**. `tools/plan_check.py --quiet`: exit 0; default
 output byte-identical to the fixture and `docs/PLAN_REGISTER.md`.
 `tools/scenario_check.py --n 2000 --seed 20260920 --markdown
-docs/SCENARIO_REGISTER.md`: exit 0, all structural checks passed, largest SE
-0.59 % (D3/shuttlecock); `--n 200 --quiet`: exit 0.
+docs/SCENARIO_REGISTER.md`: exit 0, all structural checks passed (17 sampled
+entries after SEL-ECN-024); `--n 200 --quiet`: exit 0.
+
+## 7. Addendum — 6 November 2026 (SEL-ECN-024 and SEL-ECN-025 signed)
+
+Decision (Jason, 6 Nov 2026): option 2a of both. Applied in the same
+session: F3 closed and the hauler floor a point at the ECON 0.43
+(`Scenarios.sysml`, `Parameters.sysml`, `DOCUMENT_FAMILIES.md` F3 row,
+`CHANGELOG_WAVE4A.md` addendum, scenario register regenerated at n = 2,000 —
+**D8 now recommends `targetFloor` with P(win) 1.00 and DG-13.7 under
+`econFloor` reads "never"**: the coin toss was the uninformative weight, and on
+the ECON floor alone the DG-13.7 policy wins on Earth mass; the baseline's
+`d8 :> econFloor` selection is unchanged and the hauler policy is now a
+decision for Jason, §4 item 6; the resampling (21 instead of 22 dimensions)
+shifts every mean by a few hundred tonnes in 6.9 Mt and no other
+recommendation, fraction or break-even moves);
+the SPA MSR unit #1 bound to DG-13.4 (`ProgrammeConfiguration.sysml`,
+`Power.sysml` and DG-10.5 docs, `gatedElements`; `docs/PLAN_REGISTER.md`
+regenerated — one element row changes, derived year still Y105 — and the
+plan_check fixture re-cut; `CHANGELOG_WAVE3.md` §3 note). SEL-ECN-026 (Rev D
+thresholds 783/day and 308 circuits) remains a draft. Validate exit 0, zero
+hints; pytest 1,565 passed, 33 skipped; plan_check and scenario_check exit 0;
+diagrams re-rendered.
 
 ## 6. Map updates
 

@@ -85,9 +85,10 @@ package SelenitePower {
              * driven, which is the rule now adopted. The ECON cargo_spa_msr
              * vector (dropped by golden runner v2.0) records what the
              * economics assumed and is an input to the gate, not its answer.
-             * Wave 3: introducedIn is bound in SeleniteConfigurations to
-             * SeleniteGates DG-10.5 derivedPhase (the same calc serves
-             * DG-11.3 / 13.4 / 14.4 / 14.7, W2-N20). */
+             * Wave 3 bound introducedIn in SeleniteConfigurations to DG-10.5
+             * derivedPhase; SEL-ECN-025 (Jason, 6 Nov 2026) rebound it to
+             * DG-13.4 (unit #1, the ECN-022 s.2.3 carry-through); the same
+             * calc serves DG-10.5 / 11.3 / 14.4 / 14.7 (W2-N20). */
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::spa;
         attribute gatedByDemand : Boolean = true;

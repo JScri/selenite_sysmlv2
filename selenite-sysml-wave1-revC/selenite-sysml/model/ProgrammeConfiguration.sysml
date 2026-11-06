@@ -189,8 +189,13 @@ package SeleniteConfigurations {
             }
             part powerZone : SpaPowerZone {
                 part redefines spaMsr : SpaThoriumMSR {
-                    doc /* F5: demand-gated through DG-10.5 (SpaMsrIntroductionGate). */
-                    attribute redefines introducedIn = gates.dgTenFive.derivedPhase;
+                    doc /* F5: demand-gated (SpaMsrIntroductionGate). SEL-ECN-025
+                         * (Jason, 6 Nov 2026, option 2a): unit #1 is DG-13.4, the
+                         * ECN-022 s.2.3 carry-through; DG-10.5 and DG-11.3 are
+                         * superseded as commissioning gates and stay in the
+                         * catalogue evaluating the same trade. Wave 3 bound this
+                         * to DG-10.5. */
+                    attribute redefines introducedIn = gates.dgThirteenFour.derivedPhase;
                 }
             }
             part processingFacility : SpaProcessingFacility {

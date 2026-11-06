@@ -109,7 +109,7 @@ Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a bou
 | shackletonHub.industrialZone.emCatcher.introducedIn | EmCatcher | P11 | DG-9.6 (P9, alt P10, Y43) | declared | - | def P11 vs gate P9/P10 |
 | shackletonHub.industrialZone.emCatcher.operationalFrom | EmCatcher | P11 | DG-9.6 (P9, alt P10, Y43) | declared | - | def P11 vs gate P9/P10 |
 | shackletonHub.crewReturnVehicle.introducedIn | CrewReturnVehicle | P4 | DG-4.1 (P4, Y7) | assumed | - | def = gate |
-| shackletonHub.powerZone.spaMsr.introducedIn | SpaThoriumMSR | unbound | DG-10.5 (P10, Y50) | Y105 (P12) | Y105 (P12) - ECON spa_msr_count first non-zero (the economics' assumption, F5) | def unbound -> gate; vector P12 vs def None |
+| shackletonHub.powerZone.spaMsr.introducedIn | SpaThoriumMSR | unbound | DG-13.4 (P13, alt P12, Y105) | Y105 (P12) | Y105 (P12) - ECON spa_msr_count first non-zero (the economics' assumption, F5) | def unbound -> gate; vector P12 vs def None |
 | shackletonHub.mTypeLine.introducedIn | MTypeProcessingLine | P12 | DG-12.4 (P12, Y85) | Y85 (P12) | Y85 (P12) - ECON captured_asteroid_pgm first non-zero | def = gate; vector = def |
 | shackletonHub.cTypeLine.introducedIn | CTypeProcessingLine | P12 | DG-13.3 (P13, alt P12, Y105) | Y105 (P12) | - | def = gate |
 | shackletonHub.sTypeLine.introducedIn | STypeProcessingLine | P13 | DG-14.3 (P14, alt P13, Y125) | Y125 (P13) | - | def = gate |

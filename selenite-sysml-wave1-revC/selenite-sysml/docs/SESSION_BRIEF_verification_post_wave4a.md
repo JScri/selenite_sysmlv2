@@ -1,6 +1,6 @@
 # Session Brief — Verification of the model after Wave 4A
 
-> **Status: delivered 6 Nov 2026** — see `CHANGELOG_VERIFICATION.md` (V-N observations, value-neutral fixes, SEL-ECN-024 … 026 drafts, open items for Waves 4B and 5). Scope: one session. This is an
+> **Status: delivered 6 Nov 2026** — see `CHANGELOG_VERIFICATION.md` (V-N observations, value-neutral fixes, SEL-ECN-024 and 025 signed, SEL-ECN-026 draft, open items for Waves 4B and 5). Scope: one session. This is an
 > *audit*, not a build. It verifies the model as it stands after Waves 1–3,
 > the Python port and Wave 4A (SEL-ECN-023 signed). It is not the final
 > verification: **Wave 4B** (behaviour, interfaces, software — the original

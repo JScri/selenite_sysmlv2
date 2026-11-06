@@ -137,10 +137,10 @@ Sobol: no recommendation changes) hold; `econ_param` equals the port
 bit-for-bit. 46 observations: value-neutral fixes applied (citation strings,
 stale statuses and doc comments, 20 missing definition docs, map rows and
 package names, a stale diagram, the register's number formatting and D1
-caption); three draft ECNs for Jason — **SEL-ECN-024** (D8 samples the
-superseded 92 % hauler figure; close F3?), **SEL-ECN-025** (SPA MSR unit #1
-bound to DG-10.5 or DG-13.4), **SEL-ECN-026** (DG-12.3 783/day and DG-8.5 308
-circuits carried verbatim from Rev D) — and the consolidated open-items list
+caption); three ECNs raised — **SEL-ECN-024** (signed 6 Nov 2026: flag F3 closed, the
+hauler floor a point at the ECON 0.43), **SEL-ECN-025** (signed 6 Nov 2026:
+SPA MSR unit #1 bound to DG-13.4), **SEL-ECN-026** (DRAFT: DG-12.3 783/day and
+DG-8.5 308 circuits carried verbatim from Rev D) — and the consolidated open-items list
 for Waves 4B and 5 (`CHANGELOG_VERIFICATION.md` §4), which both waves start
 from.
 

@@ -513,13 +513,16 @@ package SeleniteParameters {
 
         attribute haulerEarthFractionFloorEcon : Real = 0.43;
         attribute haulerEarthFractionFloorFleetV9 : Real = 0.08;
-        doc haulerFloorDoc /* owner: fleet | kind: computationalInput | F3
-             * candidates for D8: ECON v1.3 hauler.earth_frac floor 0.43 (the
-             * "~57 % in-situ" reading; fleet v9 s.10.1 itself) and the superseded
+        doc haulerFloorDoc /* owner: fleet | kind: computationalInput | SEL-ECN-024
+             * (Jason, 6 Nov 2026, option 2a): flag F3 CLOSED. The hauler floor
+             * the plan carries is ECON v1.3 hauler.earth_frac 0.43 (the "~57 %
+             * in-situ" reading; fleet v9 s.10.1 itself), a point in the
+             * uncertainty register (range unbound). The 0.08 is the superseded
              * SEL-HAULER-001 Rev A column / HAULER_SPEC_UPDATE_BRIEF "92 %
-             * in-situ" -> 0.08 (CHANGELOG_WAVE2 F2 diff; DOCUMENT_FAMILIES F3).
-             * The DG-13.7 20 % floor is GateThresholds.
-             * haulerEarthFractionFloor. Sampled two-point, equal weights. */
+             * in-situ" (CHANGELOG_WAVE2 F2 diff), kept here as a historical
+             * candidate and no longer sampled. The DG-13.7 20 % floor is
+             * GateThresholds.haulerEarthFractionFloor (never met on ECON,
+             * W3-N5 - Wave 5). */
 
         attribute mTypeCaptureYearLow : Integer;
         attribute mTypeCaptureYearHigh : Integer;

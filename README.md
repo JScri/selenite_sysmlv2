@@ -16,7 +16,7 @@ steady state (~Y180). Baseline: **ECN-019 Rev C + ECN-020**.
 **State (6 Nov 2026):** Wave 4A delivered
 (`selenite-sysml-wave1-revC/selenite-sysml/CHANGELOG_WAVE4A.md`) and
 SEL-ECN-023 signed and applied; the post-Wave-4A verification session
-(`CHANGELOG_VERIFICATION.md`, SEL-ECN-024 … 026 drafts) audits that state; Wave 4B
+(`CHANGELOG_VERIFICATION.md`, SEL-ECN-024 and 025 signed, 026 draft) audits that state; Wave 4B
 (behaviour, interfaces, software) is next, then Wave 5. The Python layer
 `selenite-compute/` is the quantitative authority (goldens, plan vectors,
 scenario engine). Tools pinned: `sysml-validate@0.36.0`,

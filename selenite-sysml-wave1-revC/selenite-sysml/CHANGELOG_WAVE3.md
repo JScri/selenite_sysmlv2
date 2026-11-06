@@ -637,3 +637,10 @@ as W3-R42 (ISRU self-sufficiency), W3-R44/45 as W3-R43/44 (EM catcher),
 W3-R47 as W3-R46 (PROBE ISRU fuelling), W3-R48/49 as W3-R47/48 (Mk III
 prospecting role) and W3-R52 as W3-R51 (CAP). W3-R7 and W3-R18 are unchanged.
 The current numbering is `docs/PLAN_REGISTER.md` §3.
+
+## Note — 6 November 2026 (SEL-ECN-025: SPA MSR unit #1 binding)
+
+§3 row `SpaThoriumMSR.introducedIn | unbound (F5) | C | DG-10.5` now reads
+DG-13.4: SEL-ECN-025 (Jason, 6 Nov 2026, option 2a) moved the binding to the
+unit-#1 gate that ECN-022 §2.3 left standing; DG-10.5 and DG-11.3 remain in
+the catalogue as superseded commissioning gates evaluating the same trade.
