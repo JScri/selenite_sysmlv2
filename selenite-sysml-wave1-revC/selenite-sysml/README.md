@@ -19,7 +19,9 @@ decision catalogue D1–D8 and the uncertainty register in
 `selenite-compute/selenite/scenarios/`, `tools/scenario_check.py` printing
 `docs/SCENARIO_REGISTER.md` in CI, and the draft
 `docs/SEL-ECN-023_draft_EclipseOperatingStrategy.md` signed 6 Nov 2026
-(duty cycle, critical fraction 0.18); next is Wave 4B (behaviour, interfaces, software).** Wave 3
+(duty cycle, critical fraction 0.18); the post-Wave-4A verification session
+(6 Nov 2026, `CHANGELOG_VERIFICATION.md`, SEL-ECN-024 … 026 drafts) audited that
+state; next is Wave 4B (behaviour, interfaces, software).** Wave 3
 (closed 19 Sep 2026, SEL-ECN-022)
 delivered gates and the derived programme plan: 81 Decision Framework gates with criteria, thresholds and calcs, every
 phase attribute classified and bound, SEL-REQ-001..016, `tools/plan_check.py`
@@ -57,8 +59,8 @@ install the recommended **Syside Editor** extension when prompted, open any
 ## Toolchain
 
 - **Syside Editor** (free, open source) — VS Code language support
-- **sysml-validate / sysml-diagram** (npm) — headless CLI validation and SVG
-  export, used by Claude, `tools/`, and CI
+- **sysml-validate 0.36.0 / sysml-diagram 0.42.0** (npm, both pinned — W4A-N2)
+  — headless CLI validation and SVG export, used by Claude, `tools/`, and CI
 - **Eclipse SysON** (optional, free, EPL-2.0) — web-based graphical editing
 
 ## Licensing & scope

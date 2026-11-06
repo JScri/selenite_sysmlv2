@@ -216,7 +216,19 @@ tables, useful for requirement/attribute exports.
 
 ## 8. Wave roadmap
 
-See `docs/MIGRATION_PLAN.md`. **Wave 4A delivered (6 Nov 2026,
+See `docs/MIGRATION_PLAN.md`. **Verification after Wave 4A delivered (6 Nov
+2026, `CHANGELOG_VERIFICATION.md`)**: the ten-item audit of the model after
+Waves 1–3, the port, Wave 4A and SEL-ECN-023 — V-N1 … V-N46, every bound
+value supported by its source, determinism and robustness of the scenario
+register confirmed, value-neutral fixes applied, three draft ECNs
+(SEL-ECN-024 D8 / flag F3; SEL-ECN-025 SPA MSR unit #1 binding; SEL-ECN-026
+Rev D thresholds 783/day and 308 circuits) awaiting Jason, and the
+consolidated open-items list (§4 there) that Wave 4B and Wave 5 start from.
+Rules unchanged; two conventions made explicit: the fleet authority
+`SEL_ROBOT_FLEET_v9.md` has no appendix (cite s.20.3, not "App. C"), and
+`mapping/DOCUMENT_FAMILIES.csv` / `UPLOAD_LEDGER.csv` are hand-maintained
+since the F2 correction (repo-authored ECNs are indexed in
+`document_map.csv`). Previous state: **Wave 4A delivered (6 Nov 2026,
 `CHANGELOG_WAVE4A.md`)**: `model/Scenarios.sysml` (decision catalogue
 D1-D8 as variations, the uncertainty register bound to the parameter
 ranges, eight trade studies with `@ToolExecution`, ten named scenarios),

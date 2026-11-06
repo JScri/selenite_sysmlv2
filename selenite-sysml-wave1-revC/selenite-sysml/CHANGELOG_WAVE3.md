@@ -626,3 +626,14 @@ MSR by cargo-mass trade, first unit Y105; asteroid loads eclipse-critical,
 capacity 620) and the seven corrections Rev D needs, with the open Wave 5
 findings listed separately. Rev E is a rendering from the model at Wave 5,
 not a hand rewrite. Wave 3 closed.
+
+## Note — 6 November 2026 (verification: W3-R numbering)
+
+The W3-R row numbers cited in §3 and §6 above are those of the 15 September
+register (55 rows). The 19 September regeneration (DG-8.7 and the SPA MSR
+gates evaluated, the DG-13.4 row dropped as consistent, the two MD-4 rows
+added; 56 rows) moved every row from W3-R24 onward down by one: read W3-R43
+as W3-R42 (ISRU self-sufficiency), W3-R44/45 as W3-R43/44 (EM catcher),
+W3-R47 as W3-R46 (PROBE ISRU fuelling), W3-R48/49 as W3-R47/48 (Mk III
+prospecting role) and W3-R52 as W3-R51 (CAP). W3-R7 and W3-R18 are unchanged.
+The current numbering is `docs/PLAN_REGISTER.md` §3.

@@ -125,7 +125,7 @@ def fmt(x, digits: int = 4) -> str:
     if abs(x) >= 1000:
         return f"{x:,.0f}"
     if abs(x) >= 10:
-        return f"{x:,.{digits - 2}g}" if abs(x) < 100 else f"{x:,.0f}"
+        return f"{x:,.{digits}g}" if abs(x) < 100 else f"{x:,.0f}"
     return f"{x:.{digits}g}"
 
 

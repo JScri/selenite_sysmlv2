@@ -230,7 +230,7 @@ capacity-forced (never on 620 positions, Y31 on 310) and the test outcome
 (0.5); D8 a 0.50 / 0.50 tie that is exactly F3 (floor 0.08 beats the 0.20
 target, 0.43 loses to it), DG-13.7 met by Y120 with probability 0.50.
 
-### 5. Observations W4A-N1 … W4A-N6 (recorded, not resolved)
+### 5. Observations W4A-N1 … W4A-N7 (recorded, not resolved)
 
 | # | Observation | Where |
 |---|---|---|

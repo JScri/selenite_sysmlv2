@@ -45,22 +45,29 @@ discipline all work exactly as they do for code.
 ## 4. CLI tools (mirrors what Claude and CI run)
 
 ```bash
-npm install -g sysml-validate@0.36.0 sysml-diagram
+npm install -g sysml-validate@0.36.0 sysml-diagram@0.42.0   # both pinned (W4A-N2)
 tools/validate.sh              # whole-tree validation, hints included
-tools/render_diagrams.sh       # regenerate diagrams/*.svg
+tools/render_diagrams.sh       # regenerate diagrams/*.svg (seven views)
 python3 tools/scaffold_stubs.py --report   # migration status from the CSV
+pip install -e "../../selenite-compute[test]" && pytest ../../selenite-compute   # 1,565 passed, 33 skipped
+python3 tools/plan_check.py --quiet                # derived-vs-declared register, exit 0 (--markdown docs/PLAN_REGISTER.md)
+python3 tools/scenario_check.py --n 200 --quiet    # decisions under uncertainty, exit 0 (--markdown at n = 2,000)
 ```
 
 ## 5. CI
 
-`.github/workflows/validate.yml` runs on every push and PR: validates
-the model (inline annotations on the diff) and uploads freshly rendered
-diagrams as build artefacts. Nothing to configure.
+`../../.github/workflows/validate.yml` (at the git root) runs on every push
+and PR. The `validate` job validates the model (inline annotations on the
+diff) and uploads freshly rendered diagrams as build artefacts; the
+`compute` job runs `pytest selenite-compute`, `tools/plan_check.py` and
+`tools/scenario_check.py` (n = 500) and uploads both registers. Nothing to
+configure.
 
 ## 6. Diagrams and graphical modelling
 
 - The committed `diagrams/*.svg` (dark theme) come from `sysml-diagram`
-  — General and Interconnection views, viewable straight from GitHub
+  — the programme General and Interconnection views plus the requirements,
+  fleet, software, gates and scenarios views, viewable straight from GitHub
   mobile.
 - When you want interactive graphical/tabular editing, run
   **Eclipse SysON** (free, EPL-2.0, web-based) locally via Docker —
@@ -72,15 +79,15 @@ diagrams as build artefacts. Nothing to configure.
 
 ## 7. Working with Claude on this repo
 
-1. Keep the current repo zip in the Claude project knowledge (replace
-   after each merged change).
-2. In a session, state the task ("Wave 2: migrate MOLE-S and MOLE-I
-   attributes from fleet v9"). Claude follows
-   `docs/CLAUDE_SYSML_CONTEXT.md`: installs the validator in its own
-   environment, edits, validates to exit 0, regenerates diagrams, and
-   returns the repo zip plus an ECN-style change log.
-3. Review the change log, unzip over your working copy, check
-   `git diff`, commit. CI re-validates independently.
+1. Start a Claude Code session on `JScri/selenite_sysmlv2` and paste the
+   wave's brief from `docs/SESSION_BRIEF_*.md`.
+2. State the task ("Wave 4B: SENTINEL states and modes"). Claude follows
+   `docs/CLAUDE_SYSML_CONTEXT.md`: installs the pinned tools in its own
+   environment, edits, validates to exit 0 with zero hints, runs
+   `plan_check` and `scenario_check`, regenerates diagrams, and commits on
+   a branch with an ECN-style change log.
+3. Review the change log and the PR diff; CI re-validates independently;
+   merge.
 
 ## 8. Mobile
 

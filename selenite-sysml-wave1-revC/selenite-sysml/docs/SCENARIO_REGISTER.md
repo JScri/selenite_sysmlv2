@@ -12,12 +12,12 @@ Every entry binds to a ProgrammeParameters attribute and its Low / High twins; a
 
 | Entry | Distribution | Nominal | Low | High | Status | Source |
 |---|---|---|---|---|---|---|
-| thoriumGradePpm | triangular | 12 | 10 | 15 | sampled | ECN-022 s.2.2; fleet v9 s.11; Lawrence et al. 2000, 2003 |
-| acidBakeThoriumCapture | triangular | 0.92 | 0.9 | 0.95 | sampled | ECN-022 s.2.2; DG-7.2 (~90-95 % of Th into ThP2O7) |
+| thoriumGradePpm | triangular | 12.5 | 10 | 15 | sampled | ECN-022 s.2.2; fleet v9 s.8; Lawrence et al. 2000, 2003 |
+| acidBakeThoriumCapture | triangular | 0.92 | 0.9 | 0.95 | sampled | ECN-022 s.2.2; Strategy v3.1 s.8.2 (~90-95 % of Th into ThP2O7); DG-7.2 mechanism |
 | spaDarkFraction | triangular | 0.15 | 0.12 | 0.229 | sampled | VERIFY v5.0 solar.illum 0.85; Glaeser et al. 2014 (Icarus 243) 77.1-88.0 % average illumination |
 | spaLongestEclipseHours | triangular | 72 | 72 | 120 | sampled | Strategy v3.1 s.12.1 72 h design case; Glaeser et al. 2014 longest darkness 3-5 days (W4A-N1) |
 | czochralskiBatchHours | triangular | 48 | 24 | 72 | sampled | Jason, 6 Nov 2026 (open question 3): a batch takes 1-3 days |
-| plantOversizeMassPenaltyKgPerKw | triangular | 70 | 70 | 83 | sampled | PROXY: Decision Framework Rev D s.4 circuit designs 70.0-83.3 kg/kW |
+| plantOversizeMassPenaltyKgPerKw | triangular | 70 | 70 | 83.3 | sampled | PROXY: Decision Framework Rev D s.4 circuit designs 70.0-83.3 kg/kW |
 | eclipseRestartLossDaysPerEclipse | pointValue | - | - | - | point (nominal unbound, evaluator assumption) | UNBOUND - no process source; evaluator ASSUMED 0.5 day per eclipse |
 | spaMsrAvailabilityProbability | pointValue | 1 | - | - | point (range unbound) | Wave 3 assumedOutcome = true (DG-7.5, DG-9.3) restated as 1.0; range unbound |
 | fspUnitMassKg | pointValue | 6,600 | - | - | point (range unbound) | VERIFY v5.0 fsp.mass_kg (ECON v1.3 agrees); range unbound |
@@ -27,7 +27,7 @@ Every entry binds to a ProgrammeParameters attribute and its Low / High twins; a
 | thcl4AvailableYear | triangular | 43 | 43 | 60 | sampled | DG-9.6 declared Y43 (P9), alternate P10 -> Y43-Y60 (W2-N2) |
 | solarInSituStartYear | triangular | 60 | 60 | 80 | sampled | Decision Framework Rev D s.6: a-Si panels in-situ from P11 (Y60-Y80) |
 | msrUnitMassKg | pointValue | 50,000 | - | - | point (range unbound) | ECON v1.3 msr.mass_kg; range unbound |
-| msrEarthFractionFloor | pointValue | 0.3 | - | - | point (range unbound) | ECON v1.3 msr.earth_frac floor 0.3 from Y80; DF s.15.2; range unbound |
+| msrEarthFractionFloor | pointValue | 0.3 | - | - | point (range unbound) | ECON v1.3 msr.earth_frac floor 0.3 from Y80; Strategy v3.1 s.15.2 / DF Rev D P14 Earth-fraction table; range unbound |
 | launchCostMultiplier | triangular | 1 | 0.5 | 1.5 | sampled | ECON v1.4 tornado: launch cost +50 % / -50 % on 6,000 / 4,000 / 2,000 $/kg |
 | discountRateMultiplier | triangular | 1 | 0.4667 | 1.167 | sampled | ECON v1.4 tornado: 1.4 % vs 3.5 % as a multiplier on the 3 / 2.5 / 2 % schedule |
 | reoExternalityUsdPerTonne | triangular | 73,700 | 50,000 | 90,000 | sampled | ECON v1.4 tornado: REO externality $50k vs $90k/t |
@@ -43,7 +43,7 @@ Every entry binds to a ProgrammeParameters attribute and its Low / High twins; a
 | impactSurvivalPassProbability | pointValue | 0.5 | - | - | point (range unbound) | DF s.9 / s.11 item 9: test outcome, probability uninformative 0.5; range unbound |
 | psrMoleICapacityUnits | discrete | 620 | 310 | 620 | sampled | W2-N18: psr_layout 620 (bound) vs fleet v9 / Strategy s.4.4 ~310; equal weights |
 | mkIiiTestPassProbability | pointValue | 0.5 | - | - | point (range unbound) | DG-11.6 ion-SEP / EM-catcher validation; probability uninformative 0.5; range unbound |
-| haulerEarthFractionFloor | discrete | 0.43 | 0.08 | 0.43 | sampled | F3: ECON 0.43 (~57 % in-situ) vs fleet v9 92 % in-situ (0.08); equal weights |
+| haulerEarthFractionFloor | discrete | 0.43 | 0.08 | 0.43 | sampled | F3: ECON 0.43 (~57 % in-situ; fleet v9 s.10.1) vs hauler Rev A / hauler brief 92 % in-situ (0.08, superseded column); equal weights |
 
 Evaluator working assumptions (ASSUMED - no process source; an ECN to `selenite/scenarios/eclipse.py` or a bound parameter replaces them): hold-load fractions cTypeLine 0.25, sTypeLine 0.25, scaledOperations 0.25; restart loss 0.50 day of output per eclipse; oversize plant Earth share the ECON circuit Earth-fraction trajectory. Sampled dimensions: 22; sample hash e38ce8ce00ec (common random numbers).
 
@@ -60,7 +60,7 @@ Stage: now; gates: DG-10.5, DG-11.3, DG-13.4, DG-14.4, DG-14.7; evaluator: `sele
 | carryThroughEclipse | 6,935,154 / 5,548,470 / 6,864,522 / 8,352,573 | 131 / 131 / 131 / 131 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 6,254 / 6,254 / 6,254 / 6,254 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 105 / 105 / 105 / 105 |
 | sunlitDutyCycle | 6,935,326 / 5,548,619 / 6,864,707 / 8,352,815 | 302 / 269 / 298 / 341 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 1,156 / 1,113 / 1,150 / 1,209 | 0 / 0 / 0 / 0 | 157 / 123 / 153 / 196 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 105 / 105 / 105 / 105 |
 | hotStandby | 7,909,452 / 6,515,765 / 7,954,591 / 9,301,854 | 131 / 131 / 131 / 131 | -1,242 / -2,234 / -1,101 / -469 | 0.04994 / 0.03833 / 0.0491 / 0.06266 | 0 / 0 / 0 / 0 | 82,527,674 / 58,144,129 / 82,720,834 / 106,956,109 | 941 / 941 / 941 / 941 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 0.1986 / 0.1644 / 0.1953 / 0.2393 | 974,299 / 756,582 / 958,805 / 1,219,011 | 105 / 105 / 105 / 105 |
-| hybridStorage | 6,988,033 / 5,602,014 / 6,926,440 / 8,406,486 | 53,009 / 44,881 / 51,842 / 63,095 | -1,128 / -2,069 / -993 / -398 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 580 / 558 / 577 / 606 | 52,800 / 44,679 / 51,636 / 62,882 | 78 / 62 / 76 / 98 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 105 / 105 / 105 / 105 |
+| hybridStorage | 6,988,033 / 5,602,014 / 6,926,440 / 8,406,486 | 53,009 / 44,881 / 51,842 / 63,095 | -1,128 / -2,069 / -993 / -398 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 580 / 558 / 577 / 606 | 52,800 / 44,679 / 51,636 / 62,882 | 78.32 / 61.73 / 76.46 / 97.95 | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 105 / 105 / 105 / 105 |
 
 | Alternative | Earth mass P90 (t) | NPV CVaR90 ($B) | Earth mass SE (t) | P(no slip) |
 |---|---|---|---|---|
@@ -77,7 +77,7 @@ Stage: now; gates: DG-10.5, DG-11.3, DG-13.4, DG-14.4, DG-14.7; evaluator: `sele
 | minimaxRegret | carryThroughEclipse | 1.00 | 1.00 |
 | chanceConstrained | carryThroughEclipse | 1.00 | 1.00 |
 
-Declared versus derived eclipse-critical fraction of the asteroid-processing loads (ECN-022 s.2.4 declared 1.0; `SeleniteAnalysis::EclipseCriticalFraction` per strategy):
+Declared versus derived eclipse-critical fraction of the asteroid-processing loads (declared: ProgrammeParameters.spaAsteroidLoadCriticalFraction, 0.18 since SEL-ECN-023 s.5a, 1.0 under ECN-022 s.2.4 before it; `SeleniteAnalysis::EclipseCriticalFraction` per strategy):
 
 | Strategy | Declared | Derived mean / P10 / P50 / P90 | FSP units (fallback, max) | critical load max (kW) |
 |---|---|---|---|---|
@@ -107,7 +107,7 @@ Stage: recourse; gates: DG-9.6, DG-10.5, DG-13.4; evaluator: `selenite.scenarios
 |---|---|---|---|---|---|---|---|
 | nonNuclearOnly | 6,977,140 / 5,590,456 / 6,906,508 / 8,394,559 | -1,126 / -2,062 / -989 / -396 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | never / never / never / never | 0 / 0 / 0 / 0 |
 | msrWhenJustified | 6,935,159 / 5,548,475 / 6,864,527 / 8,352,578 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 105 / 105 / 105 / 105 | 0 / 0 / 0 / 0 |
-| msrAtThcl4Availability | 6,935,186 / 5,548,498 / 6,864,553 / 8,352,608 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 49 / 44 / 48 / 55 | 1 / 1 / 1 / 1 |
+| msrAtThcl4Availability | 6,935,186 / 5,548,498 / 6,864,553 / 8,352,608 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0 / 0 / 0 / 0 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 48.66 / 44 / 48 / 55 | 1 / 1 / 1 / 1 |
 
 | Alternative | Earth mass P90 (t) | NPV CVaR90 ($B) | Earth mass SE (t) | P(no slip) |
 |---|---|---|---|---|
@@ -135,7 +135,7 @@ Stage: now; gates: DG-9.1, DG-14.6; evaluator: `selenite.scenarios.trades.evalua
 |---|---|---|---|---|---|---|---|---|
 | fullParachute | 9,079,848 / 7,321,338 / 9,004,147 / 10,882,811 | 3,479,309 / 2,855,749 / 3,471,085 / 4,119,252 | -1,409 / -2,571 / -1,240 / -513 | 0.04706 / 0.03548 / 0.04635 / 0.0596 | 0 / 0 / 0 / 0 | 91,161,607 / 63,857,557 / 90,482,528 / 118,842,477 | 42 / 42 / 42 / 42 | 1 / 1 / 1 / 1 |
 | minimalDragChute | 8,005,036 / 5,570,285 / 7,776,021 / 10,815,417 | 2,404,497 / 1,095,356 / 2,217,868 / 4,119,252 | -1,262 / -2,332 / -1,093 / -443 | 0.05003 / 0.03753 / 0.04889 / 0.06396 | 0 / 0 / 0 / 0 | 83,476,129 / 51,665,255 / 81,552,265 / 118,359,272 | 29 / 16 / 29 / 42 | 0.5 / 0 / 0.5 / 1 |
-| shuttlecock | 6,980,985 / 4,783,030 / 7,180,643 / 10,710,163 | 1,380,447 / 312,959 / 773,390 / 4,004,829 | -1,123 / -2,058 / -986 / -380 | 0.05312 / 0.03955 / 0.05228 / 0.0681 | 0 / 0 / 0 / 0 | 76,153,945 / 46,178,490 / 77,551,940 / 117,496,921 | 17 / 4.6 / 10 / 42 | 0.5 / 0 / 0.5 / 1 |
+| shuttlecock | 6,980,985 / 4,783,030 / 7,180,643 / 10,710,163 | 1,380,447 / 312,959 / 773,390 / 4,004,829 | -1,123 / -2,058 / -986 / -380 | 0.05312 / 0.03955 / 0.05228 / 0.0681 | 0 / 0 / 0 / 0 | 76,153,945 / 46,178,490 / 77,551,940 / 117,496,921 | 16.68 / 4.6 / 10.3 / 42 | 0.5 / 0 / 0.5 / 1 |
 
 | Alternative | Earth mass P90 (t) | NPV CVaR90 ($B) | Earth mass SE (t) | P(no slip) |
 |---|---|---|---|---|
@@ -211,7 +211,7 @@ Stage: recourse; gates: DG-8.7, DG-9.6; evaluator: `selenite.scenarios.trades.ev
 
 | Alternative | Earth-launched mass (t) mean / P10 / P50 / P90 | NPV with externalities ($B) mean / P10 / P50 / P90 | direct BCR mean / P10 / P50 / P90 | gate slip (yr) mean / P10 / P50 / P90 | launch CO2 (t) mean / P10 / P50 / P90 | DG-8.7 year mean / P10 / P50 / P90 | Th(OH)4 stockpile at Y43 (t) mean / P10 / P50 / P90 | Th(OH)4 per t REO mean / P10 / P50 / P90 |
 |---|---|---|---|---|---|---|---|---|
-| consequenceOfGradeAndCapture | 6,935,068 / 5,548,384 / 6,864,436 / 8,352,487 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0.426 / 0 / 0 / 1 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 37 / 37 / 37 / 38 | 116 / 103 / 115 / 128 | 0.02985 / 0.02656 / 0.02983 / 0.03316 |
+| consequenceOfGradeAndCapture | 6,935,068 / 5,548,384 / 6,864,436 / 8,352,487 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 0.426 / 0 / 0 / 1 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 37.38 / 37 / 37 / 38 | 116 / 103 / 115 / 128 | 0.02985 / 0.02656 / 0.02983 / 0.03316 |
 
 | Alternative | Earth mass P90 (t) | NPV CVaR90 ($B) | Earth mass SE (t) | P(no slip) |
 |---|---|---|---|---|
@@ -235,8 +235,8 @@ Stage: recourse; gates: DG-11.6, DG-11.7; evaluator: `selenite.scenarios.trades.
 
 | Alternative | Earth-launched mass (t) mean / P10 / P50 / P90 | NPV with externalities ($B) mean / P10 / P50 / P90 | direct BCR mean / P10 / P50 / P90 | gate slip (yr) mean / P10 / P50 / P90 | launch CO2 (t) mean / P10 / P50 / P90 | P(capacity-forced) mean / P10 / P50 / P90 | Mk III transition year mean / P10 / P50 / P90 | Mk III fleet Earth mass (t, LEO) mean / P10 / P50 / P90 |
 |---|---|---|---|---|---|---|---|---|
-| capacityForced | 6,935,068 / 5,548,384 / 6,864,436 / 8,352,487 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 68 / 0 / 68 / 135 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 0.5 / 0 / 0.5 / 1 | 31 / 31 / 31 / 31 (never in 50 %) | 5,111 / 0 / 5,111 / 10,223 |
-| testOutcomeDriven | 6,935,068 / 5,548,384 / 6,864,436 / 8,352,487 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 68 / 0 / 68 / 135 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 0.5 / 0 / 0.5 / 1 | 65 / 65 / 65 / 65 (never in 50 %) | 5,111 / 0 / 5,111 / 10,223 |
+| capacityForced | 6,935,068 / 5,548,384 / 6,864,436 / 8,352,487 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 67.5 / 0 / 67.5 / 135 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 0.5 / 0 / 0.5 / 1 | 31 / 31 / 31 / 31 (never in 50 %) | 5,111 / 0 / 5,111 / 10,223 |
+| testOutcomeDriven | 6,935,068 / 5,548,384 / 6,864,436 / 8,352,487 | -1,118 / -2,053 / -980 / -391 | 0.05301 / 0.03986 / 0.05237 / 0.0669 | 67.5 / 0 / 67.5 / 135 | 75,829,372 / 51,491,096 / 75,191,150 / 100,477,001 | 0.5 / 0 / 0.5 / 1 | 65 / 65 / 65 / 65 (never in 50 %) | 5,111 / 0 / 5,111 / 10,223 |
 
 | Alternative | Earth mass P90 (t) | NPV CVaR90 ($B) | Earth mass SE (t) | P(no slip) |
 |---|---|---|---|---|

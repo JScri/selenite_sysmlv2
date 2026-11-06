@@ -1,8 +1,10 @@
 # selenite-compute — Python port of the Selenite computational layer
 
 **Status (14 Sep 2026, night): PORTED. Every current-baseline script is
-reproduced against the runner v2.1 goldens; `pytest` runs 1,443 checks in
-about four seconds.**
+reproduced against the runner v2.1 goldens. Added since: `plan_vectors.py`
+(Wave 3, SEL-ECN-022) and `scenarios/` (Wave 4A: `econ_param`, sampler,
+criteria, D1–D8 evaluators); `pytest` is 1,565 passed, 33 skipped
+(6 Nov 2026).**
 
 The MATLAB scripts remain in `selenite-goldens-runner-v2_1/` as the record
 of what was ported; the Python here is now the computational authority for
@@ -39,12 +41,18 @@ selenite/
   eclss.py verify.py thermal.py econ.py psr_layout.py historical/scale_v1_3.py
   power.py fleet.py isru.py   typed per-phase views over verify.workspace()
   constants.py    shared constants with provenance
+  plan_vectors.py per-phase vectors read by tools/plan_check.py (Wave 3)
+  scenarios/      econ_param, sample, criteria, space, trades, eclipse, run,
+                  modelio — decisions under uncertainty (Wave 4A)
 tests/
   test_goldens.py     one test per comparable golden row (1,437 rows)
   test_console.py     console text vs console_*.txt
   test_invariants.py  golden values behind the model's VC-xx / F5 arbiters
   test_loader.py      oracle loader
   test_sources.py     SHA-256 of the .m sources vs the goldens manifest
+  test_plan_check.py test_plan_vectors.py      Wave 3 plan register (default output fixture)
+  test_econ_param.py test_sample.py test_criteria.py test_scenarios.py test_modelio.py
+                      Wave 4A scenario layer
 ```
 
 Every port module exposes `workspace()` (the script's final variables as
@@ -70,7 +78,7 @@ is in `CHANGELOG_PORT.md`.
 
 ```bash
 pip install -e "selenite-compute[test]"
-pytest selenite-compute                 # 1,443 passed, 33 skipped
+pytest selenite-compute                 # 1,565 passed, 33 skipped (6 Nov 2026)
 python -m selenite.report               # all console outputs
 python -m selenite.report SELENITE_ECON_V1_4
 ```
