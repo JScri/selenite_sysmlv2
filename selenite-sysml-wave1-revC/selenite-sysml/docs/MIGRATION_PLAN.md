@@ -121,7 +121,7 @@ questions 2–4 of the brief are answered in the ECN draft (dark fraction from
 Gläser et al. 2014; a Czochralski batch fits the sunlit window; D3 in
 scope); question 1 (the default criterion) is proposed, not decided.
 
-### Wave 4B — Behaviour, interfaces, software (original Wave 4 scope, unchanged)
+### Wave 4B — Behaviour, interfaces, software (original Wave 4 scope, unchanged; brief: `docs/SESSION_BRIEF_wave4b_behaviour.md`, after the verification session)
 
 Value-chain action flows (v14.1/v15/v16), ports and interfaces, SENTINEL
 states and modes, ECN-014 valve auto-close logic as state machine and
