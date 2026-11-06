@@ -197,26 +197,27 @@ None stubbed. The uncertainty register and the full tables are in
 
 Four strategies on the same 2,000 samples, the FSP-versus-MSR count as the
 recourse per sample. Derived eclipse-critical fraction: A carryThroughEclipse
-1.00 (declared), B sunlitDutyCycle 0.15, C hotStandby 0.15, D hybridStorage
-0.575. SPA power-side Earth mass with the MSR available at the C-type
-arrival (the committed plan, `spaMsrAvailabilityProbability` 1.0): A 135 t,
-B 313 t, C 135 t, D 53,017 t (half of 250 MW on battery through a 72–120 h
-eclipse); without it: A 42,117 t (6,254 FSP), B 7,425 t (941 FSP), C
-7,051 t, D 56,943 t. Hot standby loses 17–25 % of asteroid output, charged
-at about 1.0 Mt of Earth cargo through the circuit Earth-fraction
-reductions the lines enable. Total expected Earth-launched mass: A
-6,935,204 t; B +178 t; C +1.01 Mt; D +52.9 kt; P(no slip) 1.00 for every
-strategy; the SPA MSR's first unit is Y105 under every strategy (matches
-ECN-022 §2.3 / DG-13.4).
+1.00 (declared), B sunlitDutyCycle 0.18 (hold loads as a share of the plant
+oversized ×1.21), C hotStandby 0.15, D hybridStorage 0.59. SPA power-side
+Earth mass with the MSR available at the C-type arrival (the committed plan,
+`spaMsrAvailabilityProbability` 1.0): A 131 t, B 302 t, C 131 t, D 53,009 t
+(half of 250 MW on battery through a 72–120 h eclipse); without it: A about
+42.1 kt (6,254 FSP), B about 8.8 kt (1,156 FSP), C about 7.0 kt, D about
+57.6 kt. Hot standby loses 17–25 % of asteroid output, charged at about
+0.97 Mt of Earth cargo through the circuit Earth-fraction reductions the
+lines enable. Total expected Earth-launched mass: A 6,935,154 t; B +172 t;
+C +974 kt; D +52.9 kt; P(no slip) 1.00 for every strategy; the SPA MSR's
+first unit is Y105 under every strategy (matches ECN-022 §2.3 / DG-13.4).
 
 **Under the default criterion at the committed availability of 1.0 the
-register recommends A, carryThroughEclipse, P(win) 1.00 — by 178 t
-(0.003 % of the programme's Earth-launched mass).** The recommendation
+register recommends A, carryThroughEclipse, P(win) 1.00 — by 172 t
+(0.002 % of the programme's Earth-launched mass).** The recommendation
 flips to B at any MSR availability below **0.995** (break-even; at 0.9 B's
-expected SPA power-side mass is 1,025 t against A's 4,334 t), and minimax
-regret prefers B (worst regret 178 t against A's 34.7 kt). C is never
-better than B; D never beats A. SEL-ECN-023 (draft) puts both readings to
-Jason and recommends B with the fraction rebound to its derived 0.15.
+expected SPA power-side mass is 1,154 t against A's 4,326 t), and minimax
+regret prefers B (worst regret 172 t against A's 33.3 kt). C and D are
+never better than A on this measure. SEL-ECN-023 (draft) puts both
+readings to Jason and recommends B with the fraction rebound to its derived
+0.18.
 
 Headline results of the other decisions (expected cumulative Earth-launched
 mass, default criterion): D2 msrWhenJustified (ECN-022 §2.3 policy) P(win) 1.00, first MSR Y105;
@@ -253,7 +254,7 @@ the MSR, worse without" reported as "above"; the model calc
 and `EclipseCriticalFraction` the oversize factor, because the hold load is
 a share of the plant's rated (oversized) load — the duty cycle's derived
 fraction rises from 0.15 to 0.18 and its fallback FSP count from 941 to
-1,155; each block's battery is placed in its own year; the non-nuclear
+1,156; each block's battery is placed in its own year; the non-nuclear
 cargo is the growth of the running maximum of the fleet the load needs (a
 load that falls and regrows re-uses sunk hardware); ECON's own SPA MSR
 deliveries (`cargo_spa_msr`) are removed from the base for D1 and D2 and
