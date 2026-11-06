@@ -239,7 +239,9 @@ package SeleniteProcessing {
              * eclipse and held warm through it (Jason, 19 Sep 2026: "fine if
              * the power-intensive work is done while the eclipse is not
              * present"); pausable, hold fraction unbound (ASSUMED 0.25 in the
-             * evaluator). Load: Decision Framework s.10.1, 50 MWe from Y105. */
+             * evaluator). Load: Decision Framework s.10.1, 50 MWe from Y105.
+             * SEL-ECN-023 (6 Nov 2026): the sunlit duty cycle is the operating
+             * rule. */
         attribute redefines introducedIn = Phase::P12;
         attribute redefines retiredIn = null;
         attribute redefines pausableThroughEclipse = true;

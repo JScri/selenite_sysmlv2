@@ -295,3 +295,18 @@ Gläser et al. 2014 → `cited_external`.
    would settle D1.
 4. **Hold-load fractions and the restart loss** (W4A-N3): a process source
    or a declared value by ECN.
+
+## Addendum — 6 November 2026 (SEL-ECN-023 signed)
+
+Decision (Jason, 6 Nov 2026): option 3b — the sunlit duty cycle is the SPA
+asteroid-processing operating rule. Applied: `spaAsteroidLoadCriticalFraction`
+1.0 → **0.18** (derived; `Parameters.sysml` spaMsrDoc), `seleniteProgramme.d1`
+:> `sunlitDutyCycle` (`ProgrammeConfiguration.sysml`), ECN status SIGNED;
+supersedes ECN-022 §2.4. Plan register regenerated (the five SPA MSR gates now
+read "eclipse-critical load 132–45,120 kW, 1,129 FSP max"; derived years
+unchanged, Y105); scenario register regenerated with the duty cycle as the
+baseline selection; the plan_check byte-identity fixture re-cut on the new
+register. Hold-load fractions and the restart loss stay declared assumptions
+(W4A-N3). The operating rule becomes a requirement on the asteroid lines at
+Wave 4B. Remaining: Wave 4B (behaviour, interfaces, software), Wave 5
+(quantities, derived timeline).

@@ -190,7 +190,7 @@ package SeleniteParameters {
              * nominal and both range corners. */
 
         attribute spaEclipseCriticalCoverageOnly : Boolean = true;
-        attribute spaAsteroidLoadCriticalFraction : Real = 1.0;
+        attribute spaAsteroidLoadCriticalFraction : Real = 0.18;
         attribute spaMsrFirstUnitRatedKw : Real = 50000.0;
         doc spaMsrDoc /* owner: power | kind: policy / computationalInput |
              * The SPA MSR decision (F5, SpaMsrIntroductionGate) is evaluated
@@ -210,11 +210,18 @@ package SeleniteParameters {
              * asteroid-processing load is eclipse-critical. The derived year
              * (Y105) is the same at 0 and 1 because the cargo-mass crossover
              * comes first. First-unit rating 50 MWe per Decision Framework
-             * s.10.1. Wave 4A (6 Nov 2026): the 1.0 stands as the declared
-             * assumption; its derived twin per eclipse operating strategy
-             * (SeleniteAnalysis::EclipseCriticalFraction, D1 in Scenarios.sysml)
-             * is reported by tools/scenario_check.py, and rebinding it is
-             * SEL-ECN-023 (draft, awaiting Jason). */
+             * s.10.1. SEL-ECN-023 (Jason, 6 Nov 2026) SUPERSEDES the 1.0: the
+             * asteroid lines run on the sunlit duty cycle (D1 alternative B,
+             * selected in the configuration), so only the hold loads - a share
+             * of the plant oversized x1.21 for the dark fraction and restart
+             * losses - are eclipse-critical. 0.18 is the derived value
+             * (SeleniteAnalysis::EclipseCriticalFraction on the ASSUMED
+             * hold-load fractions 0.25, the Decision Framework s.10.1 loads and
+             * the Czochralski batch scheduling; register mean 0.184, 0.04-0.37
+             * across the holdLoadLow / holdLoadHigh scenarios), carried to two
+             * figures. The non-nuclear fallback becomes 1,156 FSP, not 6,254;
+             * the derived MSR year stays Y105. The derived twin remains
+             * reported per strategy by tools/scenario_check.py. */
 
         attribute co2PerLaunchTonnes : Real;
         doc co2Doc /* owner: economics | kind: computationalInput | UNBOUND -

@@ -224,9 +224,9 @@ ranges, eight trade studies with `@ToolExecution`, ten named scenarios),
 Latin-hypercube sampler with common random numbers, criteria, the D1
 eclipse-strategy evaluator and D2-D8), `tools/scenario_check.py` in CI
 printing `docs/SCENARIO_REGISTER.md`, and the draft
-`docs/SEL-ECN-023_draft_EclipseOperatingStrategy.md` awaiting Jason; no
-committed parameter was rebound. Next: Jason's decision on ECN-023 and the
-open questions it records, then Wave 4B (behaviour, interfaces, software)
+`docs/SEL-ECN-023_draft_EclipseOperatingStrategy.md`, **signed 6 Nov 2026**
+(sunlit duty cycle, `spaAsteroidLoadCriticalFraction` 0.18, superseding
+ECN-022 s.2.4). Next: Wave 4B (behaviour, interfaces, software)
 and Wave 5. Previous state: **Wave 3 closed (19 Sep 2026, SEL-ECN-022)**;
 **Wave 4 is split (20 Sep 2026)**: 4A scenarios, uncertainty and decision
 analysis (`docs/SESSION_BRIEF_wave4_scenarios.md`) precedes 4B

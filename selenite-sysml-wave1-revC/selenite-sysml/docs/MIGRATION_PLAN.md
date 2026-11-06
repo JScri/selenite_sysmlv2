@@ -115,7 +115,8 @@ D1–D8 all evaluated stochastically (none stubbed); `econ_param` equals the
 port bit-for-bit at defaults; `plan_check` output byte-identical by default;
 `docs/SCENARIO_REGISTER.md` at n = 2,000 with the convergence line; the D1
 result and the derived `spaAsteroidLoadCriticalFraction` per strategy are in
-`docs/SEL-ECN-023_draft_EclipseOperatingStrategy.md`, awaiting Jason. Open
+`docs/SEL-ECN-023_draft_EclipseOperatingStrategy.md`, signed and applied
+6 Nov 2026 (duty cycle, fraction 0.18). Open
 questions 2–4 of the brief are answered in the ECN draft (dark fraction from
 Gläser et al. 2014; a Czochralski batch fits the sunlit window; D3 in
 scope); question 1 (the default criterion) is proposed, not decided.
