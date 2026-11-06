@@ -88,10 +88,9 @@ Rev A · Base Floor Plan v2.1 · LH₂ transport v4 · EVA contingency (correcte
 
 **Tier 6 — ECN records** — ECN-012, -013, -014 (as amendments), -018, -019,
 -020, -022 (Wave 3 gate decisions, `docs/SEL-ECN-022_DecisionFramework_Wave3.md`),
-**-023 DRAFT** (Wave 4A, `docs/SEL-ECN-023_draft_EclipseOperatingStrategy.md`:
-the SPA eclipse operating strategy and the derived
-`spaAsteroidLoadCriticalFraction`; recommendation only, awaiting Jason —
-ECN-022 values stand until it is signed). ECN-015/-016/-017 exist only as folder names and the fleet ECN-016
+**-023** (Wave 4A, `docs/SEL-ECN-023_draft_EclipseOperatingStrategy.md`, signed
+6 Nov 2026: the sunlit duty cycle as the SPA asteroid-processing operating
+rule, `spaAsteroidLoadCriticalFraction` 1.0 → 0.18; supersedes ECN-022 §2.4). ECN-015/-016/-017 exist only as folder names and the fleet ECN-016
 amendment doc; their content is folded into fleet v9 and Hauler/Catapult Rev B.
 
 ## Excluded / out of scope

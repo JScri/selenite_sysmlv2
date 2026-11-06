@@ -1,8 +1,8 @@
-# SEL-ECN-023 (DRAFT) — SPA eclipse operating strategy for the asteroid-processing loads
+# SEL-ECN-023 — SPA eclipse operating strategy for the asteroid-processing loads
 
 **Reference:** SEL-ECN-022 §2.4 (`spaAsteroidLoadCriticalFraction = 1.0`), `model/Scenarios.sysml` (D1 `EclipseOperatingStrategy`), `model/Parameters.sysml`, `model/Processing.sysml`, `model/ThroughputCalcs.sysml` (`EclipseCriticalFraction`), `docs/SCENARIO_REGISTER.md` §2 D1, `docs/SESSION_BRIEF_wave4_scenarios.md`, `CHANGELOG_WAVE4A.md`
 
-**Date:** 6 November 2026 | **Status:** DRAFT — **awaiting Jason's decision; nothing in this ECN is applied.** SEL-ECN-022 values stand until it is signed. | **Author:** Wave 4A session for Jason (Systems Engineering Lead)
+**Date:** 6 November 2026 | **Status:** **SIGNED and APPLIED (Jason, 6 Nov 2026): option 3b.** `spaAsteroidLoadCriticalFraction` 1.0 → 0.18; `seleniteProgramme.d1` selects `sunlitDutyCycle`; supersedes SEL-ECN-022 §2.4. The file keeps its draft name for the document map. | **Author:** Wave 4A session for Jason (Systems Engineering Lead)
 
 ---
 
@@ -62,6 +62,10 @@ If 3b: `Parameters.sysml` `spaAsteroidLoadCriticalFraction` 1.0 → **0.18** (de
 | SEL-ECN-022 | §2.4 superseded by this ECN |
 | `docs/PLAN_REGISTER.md` | DG-10.5 / DG-11.3 / DG-13.4 / DG-14.4 / DG-14.7 detail "6,254 FSP max" → 1,156 |
 
+## 5a. Decision (Jason, 6 November 2026)
+
+**Option 3b adopted and applied in the same session:** the sunlit duty cycle is the operating rule; `spaAsteroidLoadCriticalFraction` rebound to the derived 0.18; `d1 :> EclipseOperatingStrategy::sunlitDutyCycle`; the plan register's DG-10.5 / 11.3 / 13.4 / 14.4 / 14.7 detail now reads 1,156 FSP max; the scenario register's baseline selection is the duty cycle. The §4 assumptions (hold loads 0.25, restart loss 0.5 day) remain declared, not sourced (W4A-N3); the requirement on the asteroid lines is Wave 4B.
+
 ## 6. Open questions this ECN also records (brief §"Open questions")
 
 1. **Default decision criterion** — PROPOSED and carried as `ProgrammeParameters.decisionCriterion = expectedEarthMassWithSlipChance` with `chanceConstraintThreshold = 0.8`; the register prints expected value, P90, CVaR90, minimax regret and the chance constraint side by side for every decision so the choice can be made on its effect. Jason: confirm, or choose `expectedNpv` / `lexicographicMassThenNpv`.
@@ -71,4 +75,4 @@ If 3b: `Parameters.sysml` `spaAsteroidLoadCriticalFraction` 1.0 → **0.18** (de
 
 ---
 
-*— End of SEL-ECN-023 DRAFT — awaiting Jason —*
+*— End of SEL-ECN-023 — signed 6 Nov 2026 (option 3b applied) —*

@@ -18,8 +18,8 @@ decision catalogue D1–D8 and the uncertainty register in
 `model/Scenarios.sysml`, the stochastic decision engine in
 `selenite-compute/selenite/scenarios/`, `tools/scenario_check.py` printing
 `docs/SCENARIO_REGISTER.md` in CI, and the draft
-`docs/SEL-ECN-023_draft_EclipseOperatingStrategy.md` awaiting Jason's
-decision; next is Wave 4B (behaviour, interfaces, software).** Wave 3
+`docs/SEL-ECN-023_draft_EclipseOperatingStrategy.md` signed 6 Nov 2026
+(duty cycle, critical fraction 0.18); next is Wave 4B (behaviour, interfaces, software).** Wave 3
 (closed 19 Sep 2026, SEL-ECN-022)
 delivered gates and the derived programme plan: 81 Decision Framework gates with criteria, thresholds and calcs, every
 phase attribute classified and bound, SEL-REQ-001..016, `tools/plan_check.py`

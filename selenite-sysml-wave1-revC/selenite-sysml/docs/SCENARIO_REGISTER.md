@@ -51,7 +51,7 @@ Evaluator working assumptions (ASSUMED - no process source; an ECN to `selenite/
 
 ### D1 - SPA eclipse operating strategy for the asteroid-processing loads
 
-Stage: now; gates: DG-10.5, DG-11.3, DG-13.4, DG-14.4, DG-14.7; evaluator: `selenite.scenarios.eclipse.evaluate_d1` (evaluated); baseline selection: carryThroughEclipse; objective: minimise Earth-launched mass (t).
+Stage: now; gates: DG-10.5, DG-11.3, DG-13.4, DG-14.4, DG-14.7; evaluator: `selenite.scenarios.eclipse.evaluate_d1` (evaluated); baseline selection: sunlitDutyCycle; objective: minimise Earth-launched mass (t).
 
 **Recommended under the default criterion (chanceConstrained): `carryThroughEclipse`** - P(win) 1.00, P(no slip) 1.00.
 
@@ -81,10 +81,10 @@ Declared versus derived eclipse-critical fraction of the asteroid-processing loa
 
 | Strategy | Declared | Derived mean / P10 / P50 / P90 | FSP units (fallback, max) | critical load max (kW) |
 |---|---|---|---|---|
-| carryThroughEclipse | 1 | 1 / 1 / 1 / 1 | 6,254 | 250,120 |
-| sunlitDutyCycle | 1 | 0.1843 / 0.1775 / 0.1835 / 0.1928 | 1,156 | 46,203 |
-| hotStandby | 1 | 0.15 / 0.15 / 0.15 / 0.15 | 941 | 37,620 |
-| hybridStorage | 1 | 0.5922 / 0.5887 / 0.5917 / 0.5964 | 580 | 148,161 |
+| carryThroughEclipse | 0.18 | 1 / 1 / 1 / 1 | 6,254 | 250,120 |
+| sunlitDutyCycle | 0.18 | 0.1843 / 0.1775 / 0.1835 / 0.1928 | 1,156 | 46,203 |
+| hotStandby | 0.18 | 0.15 / 0.15 / 0.15 / 0.15 | 941 | 37,620 |
+| hybridStorage | 0.18 | 0.5922 / 0.5887 / 0.5917 / 0.5964 | 580 | 148,161 |
 
 The two worlds D1 turns on (same samples; `spaMsrAvailabilityProbability` = 1 in the committed plan, scenario override none): the SPA MSR carries the asteroid loads through every eclipse when it is available at the C-type arrival; without it the strategy sizes the FSP fleet. Break-even: the MSR-availability probability at which the strategy's expected total Earth-launched mass equals carry-through's ('below': it wins at lower probabilities; 'above': at higher; 'always' / 'never': no worse / no better in either world).
 
@@ -290,17 +290,17 @@ Every gate in the catalogue's Gates column, on the baseline's selected alternati
 | DG-9.6 | D2 / msrWhenJustified | Y43 | Y44 | Y48 | Y55 | 0.06 |  |
 | DG-10.1 | D8 / econFloor | Y45 | Y54 | Y59 | Y64 | 0.00 |  |
 | DG-10.2 | D4 / optimisedDesign | Y48 | Y68 | Y76 | Y84 | 0.00 |  |
-| DG-10.5 | D1 / carryThroughEclipse | Y50 | Y105 | Y105 | Y105 | 0.00 | ECN-022 s.2.3 (Y50 superseded) |
-| DG-11.3 | D1 / carryThroughEclipse | Y70 | Y105 | Y105 | Y105 | 0.00 | ECN-022 s.2.3 (Y70 superseded) |
+| DG-10.5 | D1 / sunlitDutyCycle | Y50 | Y105 | Y105 | Y105 | 0.00 | ECN-022 s.2.3 (Y50 superseded) |
+| DG-11.3 | D1 / sunlitDutyCycle | Y70 | Y105 | Y105 | Y105 | 0.00 | ECN-022 s.2.3 (Y70 superseded) |
 | DG-11.6 | D7 / testOutcomeDriven | Y65 | Y65 | Y65 | Y65 | 0.50 |  |
 | DG-11.7 | D7 / testOutcomeDriven | - | never | never | never | - | no declared year (exogenous) |
 | DG-11.8 | D5 / consequenceOfMTypeArrival | Y75 | Y75 | Y75 | Y75 | 1.00 |  |
 | DG-12.4 | D5 / consequenceOfMTypeArrival | Y85 | Y85 | Y85 | Y85 | 1.00 |  |
-| DG-13.4 | D1 / carryThroughEclipse | Y105 | Y105 | Y105 | Y105 | 1.00 |  |
+| DG-13.4 | D1 / sunlitDutyCycle | Y105 | Y105 | Y105 | Y105 | 1.00 |  |
 | DG-13.7 | D8 / econFloor | Y120 | Y54 | Y54 | Y54 | 0.50 |  |
-| DG-14.4 | D1 / carryThroughEclipse | Y125 | Y105 | Y105 | Y105 | 1.00 |  |
+| DG-14.4 | D1 / sunlitDutyCycle | Y125 | Y105 | Y105 | Y105 | 1.00 |  |
 | DG-14.6 | D3 / shuttlecock | Y140 | never | never | never | 0.00 |  |
-| DG-14.7 | D1 / carryThroughEclipse | Y140 | Y125 | Y125 | Y125 | 1.00 |  |
+| DG-14.7 | D1 / sunlitDutyCycle | Y140 | Y125 | Y125 | Y125 | 1.00 |  |
 
 ## 4. Named scenarios
 

@@ -86,7 +86,7 @@ def test_catalogue_d1_to_d8_with_alternatives_and_evaluators(space):
 
 
 def test_baseline_selections_match_the_catalogue(space):
-    assert space.selections["d1"] == "EclipseOperatingStrategy::carryThroughEclipse"
+    assert space.selections["d1"] == "EclipseOperatingStrategy::sunlitDutyCycle"   # SEL-ECN-023
     assert space.selections["d3"] is None      # open decision stays abstract
     for key, sel in space.selections.items():
         d = space.decision(key.upper())

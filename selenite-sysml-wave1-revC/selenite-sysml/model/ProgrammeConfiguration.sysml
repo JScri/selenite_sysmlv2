@@ -58,11 +58,13 @@ package SeleniteConfigurations {
         part trades : TradeStudySet;
         part scenarios : ScenarioSet;
 
-        part d1 :> EclipseOperatingStrategy::carryThroughEclipse;
-        doc d1Doc /* ECN-022 s.2.4: spaAsteroidLoadCriticalFraction = 1.0, i.e. the
-             * carry-through strategy. Changing this selection is SEL-ECN-023
-             * (docs/SEL-ECN-023_draft_EclipseOperatingStrategy.md, awaiting
-             * Jason). */
+        part d1 :> EclipseOperatingStrategy::sunlitDutyCycle;
+        doc d1Doc /* SEL-ECN-023 (Jason, 6 Nov 2026): the sunlit duty cycle -
+             * pausable steps outside the eclipse, plant oversized for the dark
+             * fraction and restart losses, hold loads only through the eclipse;
+             * spaAsteroidLoadCriticalFraction rebound 1.0 -> 0.18 (derived).
+             * Supersedes ECN-022 s.2.4 (carry-through). The operating rule is
+             * to be recorded as a requirement on the asteroid lines at Wave 4B. */
         part d2 :> SpaPowerSupplyMix::msrWhenJustified;
         doc d2Doc /* ECN-022 s.2.3: the SPA MSR when the cargo-mass trade says so
              * (incremental basis), first unit Y105. */
