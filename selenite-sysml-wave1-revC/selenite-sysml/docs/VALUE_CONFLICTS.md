@@ -30,6 +30,7 @@ conflict in a `doc` comment and carries no numeric attribute for it.
 | VC-20 | CO₂ per Starship launch | ECN-020 §3: **2,683 t** | ECON v1: **2,200 t** (`launch.co2_per_launch`); ECON v1.4 methodology: **2,750 t** declining with DAC methane ramp | Three values for one parameter, used in every environmental claim the programme makes. ECON v1.4 is the current computational authority. |
 | VC-21 | ECN-020 propagation completeness | Treated throughout as fully applied (Strategy v3.1, Fleet v9, Guide v18, Decision Framework Rev D all carry it) | ECN-020 §6 also requires **SEL-CATAPULT-001 Rev B → Rev C** (add §5.1 Parallel Track Architecture). Only Rev A and Rev B exist. | One outstanding propagation. Catapult doc is authoritative for per-driver YBCO, so it is the doc that most needs the track counts. |
 | VC-14 | Scaling model identity | "SELENITE_SCALE v1.3" treated as current | **SCALE v1.3 is pre-ECN-019**: PKT SKIPs (3,557 at P8), tankers, 48,990 MOLE-I at P8, 2.5M circuits at P12, 1 Mt/yr target | Reclassify SCALE v1.3 HISTORICAL. ECON v1.3/v1.4's bottom-up infrastructure derivation is the current scaling authority. |
+| VC-22 | REO canister payload (MD-2) | **3.6 t** (ECN-020 §4; ~694,444 canisters/yr at 2.5 Mt/yr) | **3.5 t** (ECON v1.3 `can.reo_payload_t`; 714,286/yr) | W3-N7. Sampled two-point, equal weights, for D3 (Wave 4A). Not adjudicated. |
 
 ## Consistent (goldens and documents agree)
 MOLE-I dry mass 360.35 kg; tether draw 1,934 W; keep-alive 65 W; transit

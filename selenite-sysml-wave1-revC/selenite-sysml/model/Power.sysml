@@ -123,7 +123,7 @@ package SelenitePower {
     }
 
     part def SpaPowerZone :> PhaseGated {
-        doc /* SPA power zone (SEL-CAD-PZ-001): array + FSP + battery, with the
+        doc /* SPA power zone (SEL-CAD-PZ-001 Rev A): array + FSP + battery, with the
              * SPA MSR slot (F5). Feeds the PSR trunk cable. */
         attribute redefines introducedIn = Phase::P3;
         attribute redefines retiredIn = null;

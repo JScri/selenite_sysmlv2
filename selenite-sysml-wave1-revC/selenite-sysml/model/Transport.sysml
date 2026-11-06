@@ -38,6 +38,8 @@ package SeleniteTransport {
     }
 
     enum def MassDriverId {
+        doc /* The five drivers of SEL-ECN-020 s.2: MD-1 SPA->PKT, MD-2
+             * PKT->Earth, MD-3 PKT->SPA, MD-4 SPA->Earth, MD-5 DRO->SPA. */
         md1; md2; md3; md4; md5;
     }
 
@@ -112,7 +114,7 @@ package SeleniteTransport {
     part def MassDriverMd4 :> MassDriver {
         doc /* MD-4 SPA->Earth, P11 (DG-11.6): PGM exports, single track,
              * foundation sized for a future parallel track. See F6 in MD-3.
-             * Wave 3 ECN (Jason, 19 Sep 2026): operationalFrom is bound in
+             * SEL-ECN-022 s.2.1 (Jason, 19 Sep 2026): operationalFrom is bound in
              * SeleniteConfigurations to DG-12.4 (M-type arrival, Y85 = P12);
              * the P11 here stays as the document value (W3-N2). */
         attribute redefines driverId = MassDriverId::md4;

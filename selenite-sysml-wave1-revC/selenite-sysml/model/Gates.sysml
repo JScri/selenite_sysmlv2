@@ -387,8 +387,9 @@ package SeleniteGates {
         doc /* PKT commitment gate. Decision Framework Rev D: "DG-7.1 (Y20): PKT
              * base commitment - requires DART XRF from >=3 PKT sites confirming
              * >=200 ppm REE + 5-circuit processing facility producing >=0.4 t/yr
-             * REO". Fleet v9 s.20.3 words it "PKT commitment (DG-7.1)" with
-             * "> 500 ppm" - the Decision Framework s.10.2 resolves that as
+             * REO". Fleet v9 s.20.3 words it "PKT commitment (DG-7.1)"; the
+             * scaling page W5_T4_4_JS_scaling_P7_P14.html and final report
+             * Fig. 2 say "> 500 ppm" - the Decision Framework s.10.2 resolves that as
              * ">=200 ppm, target >500 ppm". The DART half is a test outcome
              * (DG-6.3) assumed true; the throughput half is ECON reo_target
              * (0.4 t/yr is the Y25 knot, i.e. the P7/P8 boundary, not Y20). */
@@ -922,7 +923,7 @@ package SeleniteGates {
              * ECON peak of 357 never forces it; (b) MD-4 is triggered when PGM
              * concentrate exceeds ~100 t/yr (ECON total_pgm peaks near 52
              * t/yr, so the trigger as written is never met on the current
-             * economics - W3-N2). ECN (Jason, 19 Sep 2026): MD-4 is bound to
+             * economics - W3-N2). SEL-ECN-022 s.2.1 (Jason, 19 Sep 2026): MD-4 is bound to
              * DG-12.4 (M-type arrival) in the configuration instead of this
              * trigger; the calc stays so the register keeps reporting the
              * trigger against the PGM vector. */
@@ -1018,7 +1019,7 @@ package SeleniteGates {
              * mTypeCaptureYear + asteroidOnlineLagYears in the configuration.
              * ECON captured_asteroid_pgm is non-zero from Y85 (agrees). The DRO
              * node, the first Laser Ablation Truss, the M-type line and - by
-             * ECN (Jason, 19 Sep 2026, W3-N2) - MD-4 SPA->Earth bind here:
+             * SEL-ECN-022 s.2.1 (Jason, 19 Sep 2026, W3-N2) - MD-4 SPA->Earth bind here:
              * the PGM export stream becomes bulk only once the captured
              * asteroid is being ablated. */
         attribute redefines gateId = "DG-12.4";

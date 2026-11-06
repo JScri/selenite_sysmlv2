@@ -66,6 +66,8 @@ If 3b: `Parameters.sysml` `spaAsteroidLoadCriticalFraction` 1.0 → **0.18** (de
 
 **Option 3b adopted and applied in the same session:** the sunlit duty cycle is the operating rule; `spaAsteroidLoadCriticalFraction` rebound to the derived 0.18; `d1 :> EclipseOperatingStrategy::sunlitDutyCycle`; the plan register's DG-10.5 / 11.3 / 13.4 / 14.4 / 14.7 detail now reads 1,156 FSP max; the scenario register's baseline selection is the duty cycle. The §4 assumptions (hold loads 0.25, restart loss 0.5 day) remain declared, not sourced (W4A-N3); the requirement on the asteroid lines is Wave 4B.
 
+> *Verification note (6 Nov 2026, `CHANGELOG_VERIFICATION.md` V-N):* the regenerated plan register reads **1,129 FSP max** for DG-10.5 / 11.3 / 13.4 / 14.4 / 14.7, not 1,156: `plan_check` evaluates the trade at the nominal inputs (dark fraction 0.15, 72 h, hold loads 0.25), while 1,156 is the n = 2,000 scenario-register mean under the sampled inputs (`CHANGELOG_WAVE4A.md` addendum states 1,129 correctly). No value changes; the §5 table's "→ 1,156" reads "→ 1,129 (nominal), 1,156 (register mean)".
+
 ## 6. Open questions this ECN also records (brief §"Open questions")
 
 1. **Default decision criterion** — PROPOSED and carried as `ProgrammeParameters.decisionCriterion = expectedEarthMassWithSlipChance` with `chanceConstraintThreshold = 0.8`; the register prints expected value, P90, CVaR90, minimax regret and the chance constraint side by side for every decision so the choice can be made on its effect. Jason: confirm, or choose `expectedNpv` / `lexicographicMassThenNpv`.

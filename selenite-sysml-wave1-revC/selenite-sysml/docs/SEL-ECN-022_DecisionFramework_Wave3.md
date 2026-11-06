@@ -4,6 +4,8 @@
 
 **Date:** 19 September 2026 | **Status:** APPLIED (model) — Rev E of the Decision Framework is a rendering task, not a rewrite (Wave 3 reframe, 14 Sep 2026: the model plus the Python layer are the source of decisions; documents follow) | **Author:** Jason (Systems Engineering Lead)
 
+> **Superseded in part (6 Nov 2026):** §2.4 (`spaAsteroidLoadCriticalFraction = 1.0`, carry-through) is superseded by SEL-ECN-023 (sunlit duty cycle, 0.18 derived). §2.1–2.3 and §2.5–2.6 stand. Section-number lineage corrected at verification (6 Nov 2026): the Th-grade quote is fleet v9 §8 (not §11), the 90–95 % capture figure is Strategy v3.1 §8.2 (DG-7.2 gives the mechanism only), and the "~310 positions" quote is fleet v9 §4.3 (not §4.1); see `CHANGELOG_VERIFICATION.md`.
+
 ---
 
 ## 1. Problem statement

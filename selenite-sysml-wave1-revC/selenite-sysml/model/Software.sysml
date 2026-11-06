@@ -187,11 +187,12 @@ package SeleniteSoftware {
     }
 
     part def WheelOdometry {
-        doc /* NAV-001 layer 2: six existing wheel encoders. */
+        doc /* NAV-001 layer 2: six existing wheel encoders. Source: SEL-NAV-001 Rev A. */
     }
 
     part def MemsImu {
-        doc /* NAV-001 layer 3: MEMS IMU inside the WEB (SEL-MI-NAV-001). */
+        doc /* NAV-001 layer 3: MEMS IMU inside the WEB (SEL-MI-NAV-001). Source:
+             * SEL-NAV-001 Rev A. */
     }
 
     part def KalmanFusion {

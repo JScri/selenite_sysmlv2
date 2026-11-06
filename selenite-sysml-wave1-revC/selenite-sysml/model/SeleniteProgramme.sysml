@@ -24,6 +24,8 @@ package SeleniteProgramme {
          *   SeleniteTransport       - MD-1..5 (ECN-020), conveyors, links
          *   SeleniteSoftware        - SENTINEL, ECN-014, NAV-001 (structure)
          *   SeleniteParameters      - exogenous inputs and gate thresholds
+         *   SeleniteScenarios       - decisions D1-D8 (variations), uncertainty
+         *                             register, trade studies, named scenarios
          *   SeleniteGates           - 81 decision gates, milestones M0-M8
          *   SeleniteRequirements    - committed architectural principles
          *   SeleniteAnalysis        - calcs (MATLAB remains authority)
@@ -31,7 +33,9 @@ package SeleniteProgramme {
          *
          * Wave 2 (14 September 2026): architecture and temporal skeleton;
          * Wave 3 (15 September 2026): gates, thresholds, phase bindings,
-         * requirements, plan_check register - see CHANGELOG_WAVE3.md.
+         * requirements, plan_check register - see CHANGELOG_WAVE3.md;
+         * Wave 4A (6 November 2026): scenarios, uncertainty and decision
+         * analysis, SEL-ECN-023 signed - see CHANGELOG_WAVE4A.md.
          */
 
     private import SeleniteConfigurations::*;

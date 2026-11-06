@@ -434,7 +434,7 @@ package SeleniteConfigurations {
                 attribute redefines operationalFrom = gates.dgNineSix.derivedPhase;
             }
             part redefines md4 : MassDriverMd4 {
-                doc /* ECN (Jason, 19 Sep 2026): MD-4 is bound to the M-type
+                doc /* SEL-ECN-022 s.2.1 (Jason, 19 Sep 2026): MD-4 is bound to the M-type
                      * arrival (DG-12.4), not to the DG-11.6 PGM-volume trigger,
                      * which the programme's own PGM production never reaches
                      * (W3-N2). The Starship returns therefore retire at the

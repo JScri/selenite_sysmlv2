@@ -299,7 +299,8 @@ def render_d1_extras(sp: spacemod.Space, d: runner.DecisionResult, result: runne
         rows.append([alt, fmt(declared), quantiles_cell(s["derivedCriticalFraction"]), fmt(s["fspUnits"]["mean"]),
                      fmt(s["criticalLoadMaxKw"]["mean"])])
     lines.append("Declared versus derived eclipse-critical fraction of the asteroid-processing loads "
-                 "(ECN-022 s.2.4 declared 1.0; `SeleniteAnalysis::EclipseCriticalFraction` per strategy):")
+                 "(declared: ProgrammeParameters.spaAsteroidLoadCriticalFraction, 0.18 since SEL-ECN-023 s.5a, 1.0 under ECN-022 s.2.4 before it; "
+                 "`SeleniteAnalysis::EclipseCriticalFraction` per strategy):")
     lines.append("")
     lines.append(md_table(["Strategy", "Declared", "Derived mean / P10 / P50 / P90", "FSP units (fallback, max)",
                            "critical load max (kW)"], rows))

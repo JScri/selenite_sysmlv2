@@ -42,27 +42,27 @@ SEL_PROBE_DESIGN_RevB.docx,Rev B,3,SeleniteFleet,model/RobotFleet.sysml,2,archit
 SEL_SENTINEL_DESIGN_RevB.docx,Rev B,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel_sentinel_design
 SEL_SINTER_DESIGN_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel_sinter_design
 SEL_SKIP_DESIGN_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel_skip_design
-SEL_SUBSTATION_DESIGN_v4.docx,v4,3,SeleniteHabitat,model/PsrNetwork.sysml,2,architected,sel_substation_design
+SEL_SUBSTATION_DESIGN_v4.docx,v4,3,SelenitePsrNetwork,model/PsrNetwork.sysml,2,architected,sel_substation_design
 SEL_SURVEY_DESIGN_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel_survey_design
-SEL-CON-001_RevB_updated.docx,Rev B+,4,SeleniteHabitat,model/PsrNetwork.sysml,4,skeleton,sel-con-001
+SEL-CON-001_RevB_updated.docx,Rev B+,4,SelenitePsrNetwork,model/PsrNetwork.sysml,4B,planned,"sel-con-001 — cited in the SelenitePsrNetwork package doc and the MoleI doc (bayonet adapter) only; connector element at Wave 4B (verification, 6 Nov 2026)"
 SEL-ECLSS-001_RevB.docx,Rev B,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-eclss-001
 SEL-ECLSS-002_RevB.docx,Rev B,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-eclss-002
 SEL-ECLSS-SCALING-001_RevB.docx,Rev B,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-eclss-scaling-001
-updated_SEL-ELZ-001_RevA.docx,Rev A+,4,SeleniteSites,model/Sites.sysml,2,architected,sel-elz-001
+updated_SEL-ELZ-001_RevA.docx,Rev A+,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-elz-001
 SEL-FAB-001_RevA.docx,Rev A,4,SeleniteProcessing,model/Processing.sysml,2,architected,sel-fab-001
 SEL-FP-HAB-001_RevB.html,Rev B,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-fp-hab-001
 updated_SEL-HAB-001_RevD.docx,Rev D+,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-hab-001
 SEL-HAB-WALL-XSECTION-001_1.html,-,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-hab-wall-xsection-001
 SEL-ISRU-001_RevD_updated.docx,Rev D+,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-isru-001
-SEL-IZ-001_RevB.docx,Rev B,4,SeleniteSites,model/Sites.sysml,2,architected,sel-iz-001
-SEL-PIPE-001_RevA.docx,Rev A,4,SeleniteHabitat,model/PsrNetwork.sysml,2,architected,sel-pipe-001
+SEL-IZ-001_RevB.docx,Rev B,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-iz-001
+SEL-PIPE-001_RevA.docx,Rev A,4,SelenitePsrNetwork,model/PsrNetwork.sysml,2,architected,sel-pipe-001
 SEL-POWER-001_RevB.docx,Rev B,4,SelenitePower,model/Power.sysml,2,architected,sel-power-001
 SEL-PROC-001_RevB.docx,Rev B,4,SeleniteProcessing,model/Processing.sysml,2,architected,sel-proc-001
 SEL-PROC-PKT-001_RevB.docx,Rev B,4,SeleniteProcessing,model/Processing.sysml,2,architected,sel-proc-pkt-001
 SEL-REAGENT-001_RevA.docx,Rev A,4,SeleniteProcessing,model/Processing.sysml,2,architected,sel-reagent-001
 SEL_EVA_CONTINGENCY_CORRECTED.docx,-+,4,SeleniteHabitat,model/Habitat.sysml,4,planned,sel_eva_contingency
 Selenite_Base_Floor_Plan_v2_1.pdf,v2.1,4,SeleniteHabitat,model/Habitat.sysml,2,reference_only,selenite_base_floor_plan
-selenite_lh2_transport_v4.pdf,v4,4,SeleniteTransport,model/Transport.sysml,2,architected,selenite_lh2_transport — StarshipReturnLink from P5, retirement derived from MD-4 (W2-N15); read via final report Fig. 54 (SEL-TRANSPORT-001C)
+selenite_lh2_transport_v4.pdf,v4,4,SeleniteTransport,model/Transport.sysml,2,architected,"selenite_lh2_transport — StarshipReturnLink from P5, retirement derived from MD-4 (W2-N15); read via final report Fig. 54 (SEL-TRANSPORT-001C)"
 SEL-CAD-AC-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-ac-001
 SEL-CAD-AD-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-ad-001
 SEL-CAD-DT-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-dt-001
@@ -79,7 +79,7 @@ SEL-CAD-SE-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-se-001
 SEL-CAD-SK-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-sk-001
 SEL-CAD-SN-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-sn-001
 ECN-018_InSitu_Reagent_Fabrication_PGM.md,-,6,SeleniteProcessing,model/Processing.sysml,2,folded,ecn-018
-SEL-ECN-012_DrainPipeReroute_v1.docx,v1,6,SeleniteHabitat,model/PsrNetwork.sysml,2,folded,sel-ecn-012
+SEL-ECN-012_DrainPipeReroute_v1.docx,v1,6,SelenitePsrNetwork,model/PsrNetwork.sysml,2,folded,sel-ecn-012
 SEL-ECN-013_Navigation_ARMfix_RFconstruction_v1.docx,v1,6,SeleniteSoftware,model/Software.sysml,4,folded,sel-ecn-013
 W7_T6_5_VL_EnvironmentalCostComparison,v1,-,-,-,-,team_input,"Vincent — Bayan Obo vs Selenite environmental table, 13 refs; recovered 14 Sep 2026"
 Phase1_Economic_Evaluation_(team),-,-,-,-,5,team_input,"Phase 1 base setup US$51-73B, ISS analogue; basis differs from SEL-ECON-001 — see VC-18"

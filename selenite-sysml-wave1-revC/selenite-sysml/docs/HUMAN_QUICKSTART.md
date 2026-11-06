@@ -55,7 +55,7 @@ python3 tools/scaffold_stubs.py --report   # migration status from the CSV
 
 `.github/workflows/validate.yml` runs on every push and PR: validates
 the model (inline annotations on the diff) and uploads freshly rendered
-diagrams as build artifacts. Nothing to configure.
+diagrams as build artefacts. Nothing to configure.
 
 ## 6. Diagrams and graphical modelling
 

@@ -86,8 +86,11 @@ package SeleniteParameters {
 
         attribute permanentCrewAtPkt : Integer = 0;
         attribute spaPermanentCrewAtFullConfiguration : Integer = 20;
-        doc crewDoc /* owner: programme | kind: policy | source: SEL-REQ-002;
-             * Strategy v3.1 s.5.2; HAB-001 Rev D. */
+        doc crewDoc /* owner: programme | kind: policy | source: SEL-REQ-002 and
+             * Strategy v3.1 s.5.2 (zero permanent crew at PKT); Decision
+             * Framework Rev D P12 end-state "20 crew at SPA" and Strategy v3.1
+             * s.5.1 "12-20 crew (P6+)" (SPA 20); HAB-001 Rev D (docx, not in
+             * docs/). */
 
         attribute pktTemporaryCommissioningCrewMax : Integer = 4;
         attribute pktTemporaryCommissioningMonthsMax : Integer = 12;
@@ -118,7 +121,7 @@ package SeleniteParameters {
              * the 3,250 m radius floor (util_pct 47 %), runner v2.1 golden.
              * Bound by rule W2-N18 (the layout computation, not a document, is
              * the arbiter). Superseded document figures, recorded not bound:
-             * fleet v9 s.4.1 and Strategy v3.1 s.4.4 "~310 MOLE-I positions
+             * fleet v9 s.4.3 and Strategy v3.1 s.4.4 "~310 MOLE-I positions
              * (~8.5 km2 usable floor, 62 substations)"; Strategy s.4.3 "62
              * junctions (620 MOLE-I max)"; final report Fig. 11 "~17.5 km2
              * feasible". This cap is an input to DG-11.6 (MkIiiTransitionGate);
@@ -174,15 +177,16 @@ package SeleniteParameters {
         attribute thoriumToReoMassRatio : Real =
             thoriumGradePpm / processingReeGradePpm * acidBakeThoriumCapture * thoriumHydroxideToThoriumMassRatio;
         doc thoriumRatioDoc /* owner: processing | kind: computationalInput |
-             * ECN (Jason, 19 Sep 2026): Th grade at the DART-selected
+             * SEL-ECN-022 s.2.2 (Jason, 19 Sep 2026): Th grade at the DART-selected
              * processing sites 12.5 ppm nominal, range 10-15 ppm (fleet v9
-             * s.11 "10-15 ppm Th vs 1-3 ppm SPA"; Lunar Prospector GRS:
+             * s.8 "10-15 ppm Th vs 1-3 ppm SPA"; Lunar Prospector GRS:
              * Apollo-14-soil-equivalent Fra Mauro 12-13 ppm, PKT hot spots at
              * Aristarchus / Apennine Bench, Lawrence et al. 2000, 2003; KREEP
              * basalt ~15 ppm Th); REE processing grade 500 ppm (Decision
              * Framework Rev D "500 ppm grade clarified as DART-selected site /
              * post-beneficiation concentrate"); acid-bake Th capture 0.92
-             * nominal, range 0.90-0.95 (DG-7.2 "~90-95 % of Th into ThP2O7");
+             * nominal, range 0.90-0.95 (Strategy v3.1 s.8.2 "~90-95% of Th into
+             * insoluble ThP2O7"; DG-7.2 states the mechanism without the figure);
              * Th(OH)4/Th = 300.1/232.0. The ratio is derived, never typed:
              * ~0.030 t Th(OH)4 per t REO, four times the 0.004-0.008 the
              * Decision Framework's DG-11.2 figures imply (387-773 t/yr Th at
@@ -219,7 +223,9 @@ package SeleniteParameters {
              * hold-load fractions 0.25, the Decision Framework s.10.1 loads and
              * the Czochralski batch scheduling; register mean 0.184, 0.04-0.37
              * across the holdLoadLow / holdLoadHigh scenarios), carried to two
-             * figures. The non-nuclear fallback becomes 1,156 FSP, not 6,254;
+             * figures. The non-nuclear fallback becomes 1,156 FSP (scenario register
+             * mean at the sampled 0.1843; the plan register's nominal evaluation
+             * at 0.18 prints 1,129), not 6,254;
              * the derived MSR year stays Y105. The derived twin remains
              * reported per strategy by tools/scenario_check.py. */
 
@@ -451,7 +457,8 @@ package SeleniteParameters {
         attribute reoRampKnotShiftHigh : Integer = 1;
         doc rampVariantDoc /* owner: economics | kind: computationalInput |
              * source: W3-N4 - the ECON v1.3 reo_target knots (100 kt at Y80,
-             * 500 kt at Y121, 1.25 Mt at Y152) are one knot later than the
+             * 500 kt at Y120, 1 Mt at Y140; plan_check meets the gate criteria
+             * at Y80 / Y121 / Y152) are one knot later than the
              * Decision Framework's REO gates (DG-11.1 Y60, DG-12.1 Y80, DG-13.1
              * Y120). 0 = the ECON ramp (the goldens), 1 = the Decision
              * Framework's knots one step earlier. Sampled as a two-point
@@ -463,7 +470,8 @@ package SeleniteParameters {
         doc msrUnitDoc /* owner: power (ECON) | kind: computationalInput |
              * transcribed from ECON v1.3: msr.mass_kg = 50,000 per 100 MWe unit
              * and msr.earth_frac floor 0.3 from Y80 (Ni-201 in-situ vessels,
-             * DG-11.4; Decision Framework Rev D s.15.2 "MSR 30 %"). Points;
+             * DG-11.4; Strategy v3.1 s.15.2 and the Decision Framework Rev D P14
+             * "Earth fraction trajectory" table, MSR 30 %). Points;
              * ranges unbound. Read by the FSP-versus-MSR trade (D1, D2). */
 
         attribute reoPayloadPerCanisterTonnesEcon : Real = 3.5;
@@ -489,7 +497,7 @@ package SeleniteParameters {
 
         attribute psrMoleICapacityUnitsDocument : Integer = 310;
         doc capacityCandidatesDoc /* owner: PSR layout | kind: capacityConstraint
-             * | W2-N18 candidate for D7: fleet v9 s.4.1 / Strategy v3.1 s.4.4
+             * | W2-N18 candidate for D7: fleet v9 s.4.3 / Strategy v3.1 s.4.4
              * "~310 MOLE-I positions" against the bound 620 (psr_layout.py,
              * SEL-REQ-016). Sampled two-point with the bound value, equal
              * weights; the bound value stays bound. The MOLE-I peak need is
@@ -507,8 +515,10 @@ package SeleniteParameters {
         attribute haulerEarthFractionFloorFleetV9 : Real = 0.08;
         doc haulerFloorDoc /* owner: fleet | kind: computationalInput | F3
              * candidates for D8: ECON v1.3 hauler.earth_frac floor 0.43 (the
-             * "~57 % in-situ" reading) and fleet v9 / hauler brief "92 %
-             * in-situ" -> 0.08. The DG-13.7 20 % floor is GateThresholds.
+             * "~57 % in-situ" reading; fleet v9 s.10.1 itself) and the superseded
+             * SEL-HAULER-001 Rev A column / HAULER_SPEC_UPDATE_BRIEF "92 %
+             * in-situ" -> 0.08 (CHANGELOG_WAVE2 F2 diff; DOCUMENT_FAMILIES F3).
+             * The DG-13.7 20 % floor is GateThresholds.
              * haulerEarthFractionFloor. Sampled two-point, equal weights. */
 
         attribute mTypeCaptureYearLow : Integer;
@@ -536,8 +546,10 @@ package SeleniteParameters {
              * Framework. Dimensions are in the names. */
 
         attribute moleIYieldKgPerYear : Real = 5692.0;
-        doc t21 /* DG-2.1. Equal to VERIFY v5.0 mi.prop_yield and Strategy v3.1
-             * s.1 (25 kg/hr x 4.46 % ice x 80 % x 8,760 h x 0.722). */
+        doc t21 /* DG-2.1. Equal to VERIFY v5.0 mi.prop_yield (a typed constant)
+             * and Strategy v3.1 s.1, whose stated product (25 kg/hr x 4.46 % ice
+             * x 80 % x 8,760 h x 0.722) evaluates to 5,642; 5,692 corresponds to
+             * 4.5 % ice. Verification 6 Nov 2026: recorded, not resolved. */
 
         attribute probeIsruFuelledFraction : Real = 0.70;
         doc t32 /* DG-3.2 ">70%" - not a Python vector; recorded for the gate
@@ -547,7 +559,9 @@ package SeleniteParameters {
         attribute dartReePpmMinimum : Real = 200.0;
         attribute spaReoTonnesPerYearAtCommitment : Real = 0.4;
         doc t71 /* DG-7.1 ">=3 PKT sites", ">=200 ppm REE", ">=0.4 t/yr REO".
-             * Fleet v9 s.20.3 quotes ">500 ppm" - Decision Framework Rev D
+             * The scaling page (W5_T4_4_JS_scaling_P7_P14.html "ground-truth
+             * >500 ppm REE"), the extended timeline v3 and final report Fig. 2
+             * quote ">500 ppm"; fleet v9 does not - Decision Framework Rev D
              * s.10.2 resolves it as ">=200 ppm, target >500 ppm"; the target is
              * not a threshold. */
 
