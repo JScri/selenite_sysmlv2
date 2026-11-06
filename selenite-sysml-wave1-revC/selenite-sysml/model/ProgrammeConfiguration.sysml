@@ -37,6 +37,7 @@ package SeleniteConfigurations {
     private import SeleniteProcessing::*;
     private import SelenitePsrNetwork::*;
     private import SeleniteRequirements::*;
+    private import SeleniteScenarios::*;
     private import SeleniteSites::*;
     private import SeleniteSoftware::*;
     private import SeleniteTransport::*;
@@ -47,6 +48,41 @@ package SeleniteConfigurations {
 
         part timeline : ProgrammeTimeline;
         part parameters : ProgrammeParameters;
+
+        // ---- Wave 4A: the sampled space, the decision catalogue and the --
+        // ---- baseline's selections (the alternative each committed decision
+        // ---- assumes; an open decision stays abstract) --------------------
+
+        part uncertainty : UncertaintyRegister;
+        part decisions : DecisionCatalogue;
+        part trades : TradeStudySet;
+        part scenarios : ScenarioSet;
+
+        part d1 :> EclipseOperatingStrategy::carryThroughEclipse;
+        doc d1Doc /* ECN-022 s.2.4: spaAsteroidLoadCriticalFraction = 1.0, i.e. the
+             * carry-through strategy. Changing this selection is SEL-ECN-023
+             * (docs/SEL-ECN-023_draft_EclipseOperatingStrategy.md, awaiting
+             * Jason). */
+        part d2 :> SpaPowerSupplyMix::msrWhenJustified;
+        doc d2Doc /* ECN-022 s.2.3: the SPA MSR when the cargo-mass trade says so
+             * (incremental basis), first unit Y105. */
+        abstract part d3 : CanisterRecoveryOption;
+        doc d3Doc /* DG-9.1 canister recovery is open (canisterEarthContentKg
+             * unbound); the economics assumed option 1b. Jason, 6 Nov 2026: in
+             * scope for Wave 4A - the register carries the recommendation. */
+        part d4 :> ProcessingCircuitDesign::optimisedDesign;
+        doc d4Doc /* Decision Framework Rev D s.4 committed design; SEL-REQ-015. */
+        part d5 :> MdFourRetirementTiming::consequenceOfMTypeArrival;
+        doc d5Doc /* ECN-022 s.2.1 (a consequence, no alternative). */
+        part d6 :> ThoriumStreamSizing::consequenceOfGradeAndCapture;
+        doc d6Doc /* ECN-022 s.2.2 (a consequence, no alternative). */
+        part d7 :> MkIiiTransitionTrigger::testOutcomeDriven;
+        doc d7Doc /* ECN-022 s.2.6: not capacity-forced on the 620-position layout;
+             * rests on the DG-11.6 test outcome. */
+        part d8 :> HaulerInSituFractionPolicy::econFloor;
+        doc d8Doc /* F3 recorded, not resolved: the economics' 0.43 floor with the
+             * M-type bonus is what the plan carries; DG-13.7's 20 % is the gate
+             * threshold the register tests. */
 
         part gates : GateCatalogue {
             doc /* Exogenous gates whose year is a declared parameter carry
@@ -167,6 +203,10 @@ package SeleniteConfigurations {
             }
             part sTypeLine : STypeProcessingLine {
                 attribute redefines introducedIn = gates.dgFourteenThree.derivedPhase;
+                attribute redefines minimumContinuousRunHours = parameters.czochralskiBatchHours;
+                part redefines czochralski : AsteroidProcessStep {
+                    attribute redefines minimumContinuousRunHours = parameters.czochralskiBatchHours;
+                }
             }
 
             // SPA fleet (one usage per class; counts are Wave 5 attributes)

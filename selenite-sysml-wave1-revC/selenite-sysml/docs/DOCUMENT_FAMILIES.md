@@ -87,7 +87,11 @@ Rev A · Base Floor Plan v2.1 · LH₂ transport v4 · EVA contingency (correcte
 `updated_` copy carries the ECN-014 valve-station amendment.
 
 **Tier 6 — ECN records** — ECN-012, -013, -014 (as amendments), -018, -019,
--020, -022 (Wave 3 gate decisions, `docs/SEL-ECN-022_DecisionFramework_Wave3.md`). ECN-015/-016/-017 exist only as folder names and the fleet ECN-016
+-020, -022 (Wave 3 gate decisions, `docs/SEL-ECN-022_DecisionFramework_Wave3.md`),
+**-023 DRAFT** (Wave 4A, `docs/SEL-ECN-023_draft_EclipseOperatingStrategy.md`:
+the SPA eclipse operating strategy and the derived
+`spaAsteroidLoadCriticalFraction`; recommendation only, awaiting Jason —
+ECN-022 values stand until it is signed). ECN-015/-016/-017 exist only as folder names and the fleet ECN-016
 amendment doc; their content is folded into fleet v9 and Hauler/Catapult Rev B.
 
 ## Excluded / out of scope
@@ -139,6 +143,15 @@ amendment doc; their content is folded into fleet v9 and Hauler/Catapult Rev B.
 | W2-N19 | DG-13.2 has two meanings: Decision Framework Rev D §2 defines it as "C-type asteroid redirect initiated (Y95, executed during P12)", while the same document's P12 section says "Laser Ablation Truss (DG-13.2 concept, deployed Y85)" and fleet v9 §17.2 calls the truss method selection DG-13.2. Model carries the gate-list definition. | `Gates.sysml` |
 | W2-N20 | Decision Framework Rev D carries three SPA MSR commissioning gates (DG-10.5 Y50, DG-11.3 Y70, DG-13.4 Y105 "#1") plus #2 (DG-14.4 Y125) and #3 (DG-14.7 Y140); Strategy v3.1 §12.1 says "from Y50" and §5.1 "from Y105". Confirms F5 as a genuinely undecided item, now demand-gated. | `Gates.sysml`, `Power.sysml` |
 | W2-N17 | **Missing element found:** SPA mass driver demonstrator / test track (ECN-020 §5 "Demo" 23 t YBCO; report Fig. 27 "mass driver prototype on crater rim, P9 test track 100 m → 500 m at P9–P10", listed under Key P7 additions; baseline P7 "YBCO for MD-1 delivered"). Added as `MassDriverDemonstrator`, bound P7; P9–P10 wording recorded. | `Transport.sysml` |
+
+## Wave 4A observations
+W4A-N1 … W4A-N7 (the Gläser 3–5 day longest darkness against the 72 h
+design case; the sysml-diagram 0.54.0 SSM079 regression; the hold-load and
+restart-loss assumptions without a process source; the VC-22 canister
+payload and the F3 hauler floor as sampled two-point candidates; the capture
+years without a sourced range; the lost-throughput gearing; the two
+eclipse-frequency readings) are tabled in `CHANGELOG_WAVE4A.md` §5; the
+machine-generated register is `docs/SCENARIO_REGISTER.md`.
 
 ## Wave 3 observations
 W3-N1 … W3-N20 (Decision Framework gate years versus the ECON ramp, gates

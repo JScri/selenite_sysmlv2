@@ -26,7 +26,7 @@ Claude's container has Node and npm with registry access. Install the
 headless toolchain before touching any `.sysml` file:
 
 ```bash
-npm install -g sysml-validate@0.36.0 sysml-diagram
+npm install -g sysml-validate@0.36.0 sysml-diagram@0.42.0
 ```
 
 Both bundle the OMG standard library (`ScalarValues`, `ISQ`, `SI`, ...)
@@ -82,6 +82,27 @@ uploads) is read-only — copy it to `/home/claude/` before editing.
    document phases as `candidateIntroduction*` attributes, and let Wave 5
    evaluate the gate on Python-sourced vectors. Phase labels in documents
    are candidates, not decisions.
+5d. **Uncertain values and the scenario discipline (Wave 4A).** An input
+   that is not deterministic is carried with its variability, never as a
+   second point value: an `UncertainReal` entry in
+   `SeleniteScenarios::UncertaintyRegister` whose `nominal` / `low` / `high`
+   are bound to the existing `ProgrammeParameters` attribute and its
+   `...Low` / `...High` twins (never retyped). A range is typed only from an
+   existing Low/High pair or a cited source; otherwise the entry is a point
+   at nominal, its `low` / `high` stay unbound, and the register says "range
+   unbound". A quantity the evaluator must assume without a source is a
+   named constant in the Python module (`ASSUMED_...`), marked ASSUMED in the
+   register, with a named scenario in `ScenarioSet` carrying its
+   sensitivity - sensitivities without a source are scenarios, not
+   distributions. Decisions are `variation part def`s in
+   `DecisionCatalogue` (metadata in a `...Decision` supertype: every usage
+   nested in a variation is a variant, SSM030); the baseline's choice is a
+   `part dN :> Variation::variant;` in the configuration and an open
+   decision stays `abstract part`. Every comparison runs on common random
+   numbers under a fixed seed, results are quantiles, a recommendation
+   carries its criterion and win probability, and the wave produces
+   recommendations and draft ECNs - it never rebinds a committed parameter
+   (`tools/scenario_check.py`, `docs/SCENARIO_REGISTER.md`).
 6. **Every definition carries provenance**: a `doc` comment citing
    source document + revision (`Source: SEL_MOLES_DESIGN_RevA.`).
    Unmigrated content gets an explicit `TODO Wave N.` marker.
@@ -123,6 +144,17 @@ uploads) is read-only — copy it to `/home/claude/` before editing.
   with thresholds from `SeleniteParameters::GateThresholds`, never literals.
   `tools/plan_check.py` must exit 0 (structural checks) before delivery; its
   register (`docs/PLAN_REGISTER.md`) is regenerated with `--markdown`.
+- **Scenario register** (Wave 4A): `tools/scenario_check.py` must exit 0
+  (structural checks: every catalogued variation has an evaluator or a
+  declared stub, every register entry is sampled or a point, every `#moe`
+  is reported); `docs/SCENARIO_REGISTER.md` is regenerated with
+  `--markdown` at the default n = 2,000 (CI runs n = 500, seed 20260920).
+  `plan_check.py --with-scenarios` appends the gate probabilities; the
+  default `plan_check` output stays byte-identical (a test diffs it).
+- **Diagram CLI pinned**: `sysml-diagram@0.42.0`. 0.54.0 rejects the gate
+  binding idiom (`attribute redefines introducedIn = gates.x.derivedPhase`,
+  SSM079 "replaces a fixed value") that `sysml-validate` 0.36.0 accepts;
+  the pin keeps CI's render step green (W4A-N2).
 - A requirement `subject` typed by an abstract definition is declared
   `abstract subject x : AbstractDef;` (clears SSM021).
 - Fleet-scale counts stay as configuration **attributes**
@@ -175,6 +207,8 @@ Map updates: <document_map.csv rows touched>
 | SSM021 | usage typed only by an abstract definition (enum defs count) | phase idiom in §4; never type a usage `: Phase` directly |
 | SSM036 | enum def body may hold only enum values | year windows live in `ProgrammeTimeline`, not on `Phase` |
 | STYL007 | single-element body on one line | expand to multiple lines |
+| SSM030 | attribute variant not compatible with its part variation | every usage nested in a `variation part def` is a variant: put metadata attributes in a supertype |
+| SSM079 | redefinition replaces a fixed value (sysml-diagram >= 0.5x only) | pin `sysml-diagram@0.42.0`; the validator accepts the Wave 3 gate-binding idiom |
 
 Project root detection for the diagram CLI requires `.vscode/sysml/`
 (present, `project.json` = `{}`) or a git repo. `--view grv` emits CSV
@@ -182,9 +216,20 @@ tables, useful for requirement/attribute exports.
 
 ## 8. Wave roadmap
 
-See `docs/MIGRATION_PLAN.md`. **Wave 3 closed (19 Sep 2026, SEL-ECN-022)**;
+See `docs/MIGRATION_PLAN.md`. **Wave 4A delivered (6 Nov 2026,
+`CHANGELOG_WAVE4A.md`)**: `model/Scenarios.sysml` (decision catalogue
+D1-D8 as variations, the uncertainty register bound to the parameter
+ranges, eight trade studies with `@ToolExecution`, ten named scenarios),
+`selenite/scenarios/` (parametrised ECON equal to the port at defaults,
+Latin-hypercube sampler with common random numbers, criteria, the D1
+eclipse-strategy evaluator and D2-D8), `tools/scenario_check.py` in CI
+printing `docs/SCENARIO_REGISTER.md`, and the draft
+`docs/SEL-ECN-023_draft_EclipseOperatingStrategy.md` awaiting Jason; no
+committed parameter was rebound. Next: Jason's decision on ECN-023 and the
+open questions it records, then Wave 4B (behaviour, interfaces, software)
+and Wave 5. Previous state: **Wave 3 closed (19 Sep 2026, SEL-ECN-022)**;
 **Wave 4 is split (20 Sep 2026)**: 4A scenarios, uncertainty and decision
-analysis (`docs/SESSION_BRIEF_wave4_scenarios.md`, next) precedes 4B
+analysis (`docs/SESSION_BRIEF_wave4_scenarios.md`) precedes 4B
 behaviour, interfaces and software (original scope). Wave 3 delivered
 (15 Sep 2026): 81 gates,
 thresholds, calcs, phase bindings, SEL-REQ-001..016, `tools/plan_check.py`

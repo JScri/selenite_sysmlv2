@@ -13,8 +13,14 @@ steady state (~Y180). Baseline: **ECN-019 Rev C + ECN-020**.
 > PROC-001, ISRU-001, MTL Guide and Strategy. The model must not adopt
 > ECN-021 content until those source documents are revised.
 
-**State: Wave 3 closed (19 Sep 2026, SEL-ECN-022); next is Wave 4A, scenarios
-and decision analysis (`docs/SESSION_BRIEF_wave4_scenarios.md`).** Wave 3
+**State: Wave 4A delivered (6 Nov 2026, `CHANGELOG_WAVE4A.md`): the
+decision catalogue D1–D8 and the uncertainty register in
+`model/Scenarios.sysml`, the stochastic decision engine in
+`selenite-compute/selenite/scenarios/`, `tools/scenario_check.py` printing
+`docs/SCENARIO_REGISTER.md` in CI, and the draft
+`docs/SEL-ECN-023_draft_EclipseOperatingStrategy.md` awaiting Jason's
+decision; next is Wave 4B (behaviour, interfaces, software).** Wave 3
+(closed 19 Sep 2026, SEL-ECN-022)
 delivered gates and the derived programme plan: 81 Decision Framework gates with criteria, thresholds and calcs, every
 phase attribute classified and bound, SEL-REQ-001..016, `tools/plan_check.py`
 printing the derived-vs-declared register (`docs/PLAN_REGISTER.md`); see
@@ -37,7 +43,7 @@ single source of truth as migration waves complete (see
 | `docs/` | Quickstart, Claude session protocol, migration plan |
 | `mapping/document_map.csv` | Master document→model migration index |
 | `diagrams/` | Generated SVGs (regenerate via `tools/render_diagrams.sh`) |
-| `tools/` | Validation, diagram export, stub scaffolding, `plan_check.py` (register) |
+| `tools/` | Validation, diagram export, stub scaffolding, `plan_check.py` (plan register), `scenario_check.py` (scenario register) |
 | `.vscode/` | Syside extension recommendation and the `sysml/project.json` marker the diagram CLI needs |
 | `../../.github/workflows/` | CI at the git root: validate + render on every push |
 | `CHANGELOG_WAVE*.md` | ECN-style change logs per wave |

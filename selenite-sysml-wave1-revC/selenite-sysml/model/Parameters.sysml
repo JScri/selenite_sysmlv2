@@ -27,6 +27,18 @@ package SeleniteParameters {
         policy; computationalInput; capacityConstraint;
     }
 
+    enum def DecisionCriterion {
+        doc /* Wave 4A (6 Nov 2026): the default criterion the scenario register
+             * leads with (SESSION_BRIEF_wave4_scenarios.md, open question 1).
+             * expectedEarthMassWithSlipChance: minimise expected cumulative
+             * Earth-launched mass subject to P(no milestone slip) >= the chance
+             * threshold, NPV and CVaR reported beside it; expectedNpv: maximise
+             * expected NPV with externalities; lexicographicMassThenNpv: mass
+             * first, NPV breaks ties. Every criterion is reported side by side
+             * by tools/scenario_check.py; the parameter only selects the lead. */
+        expectedEarthMassWithSlipChance; expectedNpv; lexicographicMassThenNpv;
+    }
+
     part def ProgrammeParameters {
         doc /* Single instance in SeleniteConfigurations. Values with
              * provenance; unbound attributes are Wave 5 inputs. */
@@ -198,7 +210,11 @@ package SeleniteParameters {
              * asteroid-processing load is eclipse-critical. The derived year
              * (Y105) is the same at 0 and 1 because the cargo-mass crossover
              * comes first. First-unit rating 50 MWe per Decision Framework
-             * s.10.1. */
+             * s.10.1. Wave 4A (6 Nov 2026): the 1.0 stands as the declared
+             * assumption; its derived twin per eclipse operating strategy
+             * (SeleniteAnalysis::EclipseCriticalFraction, D1 in Scenarios.sysml)
+             * is reported by tools/scenario_check.py, and rebinding it is
+             * SEL-ECN-023 (draft, awaiting Jason). */
 
         attribute co2PerLaunchTonnes : Real;
         doc co2Doc /* owner: economics | kind: computationalInput | UNBOUND -
@@ -232,6 +248,273 @@ package SeleniteParameters {
              * -> 5 (ECON tug_fleet from Y65 / Y85 / Y105; Strategy v3.1 s.11.2).
              * Estimates, not decisions; the DG-14.9 thresholds below carry the
              * gate's own figures. */
+
+        // ---- Wave 4A: decision criterion, SPA eclipse strategy (D1) and ------
+        // ---- the sampled scenario inputs (U-set) --------------------------------
+
+        attribute decisionCriterion = DecisionCriterion::expectedEarthMassWithSlipChance;
+        attribute chanceConstraintThreshold : Real = 0.8;
+        doc criterionDoc /* owner: programme | kind: policy | PROPOSED (Wave 4A,
+             * 6 Nov 2026, open question 1; Jason to confirm by ECN-023): minimise
+             * expected cumulative Earth-launched mass, the programme's own
+             * Earth-independence measure (DG-14.6), subject to P(no milestone
+             * slip) >= 0.8. Consistent with Wave 3 practice: the SPA MSR
+             * decision (ECN-022 s.2.3) was made on Earth-launched cargo mass,
+             * and the ECON NPV (-0.49 T, BCR 0.50 direct / 2.06 with
+             * externalities) is dominated by externality assumptions. Jason,
+             * 20 Sep 2026: "the most economical decision"; the alternatives
+             * (expected NPV; lexicographic) are reported beside it. */
+
+        attribute spaIlluminatedFraction : Real = 0.85;
+        attribute spaDarkFraction : Real = 1.0 - spaIlluminatedFraction;
+        attribute spaDarkFractionLow : Real = 0.12;
+        attribute spaDarkFractionHigh : Real = 0.229;
+        doc darkDoc /* owner: power (VERIFY) | kind: computationalInput | source:
+             * VERIFY v5.0 solar.illum = 0.85, the annual-average illumination of
+             * the SPA site; the dark fraction is derived (1 - illumination),
+             * never typed. Range: Glaeser et al. 2014 (Icarus 243, 78-90 and
+             * EPSC 2014-136), average illumination 77.1-88.0 % at the
+             * Shackleton-rim and Connecting Ridge candidate sites 2 m above
+             * ground, the maximum on the ridge between Shackleton and de
+             * Gerlache -> dark fraction 0.120-0.229; VERIFY's 0.15 lies inside
+             * it (Power.sysml already cites the paper for the array). Wave 4A
+             * (6 Nov 2026, open question 2): the NASA South Pole-Aitken basin
+             * page Jason offered describes the basin's geology and gives no
+             * illumination figure, so it is not the source. The brief's fallback
+             * (triangular 0.10-0.20, source unbound) is superseded. */
+
+        attribute spaDesignEclipseHours : Real = 72.0;
+        attribute spaLongestEclipseHoursLow : Real = 72.0;
+        attribute spaLongestEclipseHoursHigh : Real = 120.0;
+        doc eclipseDoc /* owner: power | kind: policy / computationalInput |
+             * source: Strategy v3.1 s.12.1 "72-hr eclipse design case"; VERIFY
+             * v5.0 eclipse_hr = 72. Range of the longest eclipse: Glaeser et al.
+             * 2014 "longest continuous periods in darkness typically only 3-5
+             * days" at the candidate sites -> 72-120 h, the design case at the
+             * low end (W4A-N1, recorded not resolved: a five-day eclipse
+             * exceeds the design case). FSP units are sized on power and do not
+             * move with it; the hybrid strategy's battery and the hold energy
+             * are sized on the sampled length. */
+
+        attribute lunarSynodicPeriodHours : Real = 708.7;
+        doc synodicDoc /* owner: power | kind: computationalInput | source: the
+             * lunar synodic month, 29.53 days (astronomical constant). The
+             * sunlit window between successive eclipses is at least the synodic
+             * period less the longest eclipse (589-637 h on the range above);
+             * SunlitWindowGate compares a Czochralski batch against it. */
+
+        attribute czochralskiBatchHours : Real = 48.0;
+        attribute czochralskiBatchHoursLow : Real = 24.0;
+        attribute czochralskiBatchHoursHigh : Real = 72.0;
+        doc czochralskiDoc /* owner: processing | kind: computationalInput |
+             * source: Jason, 6 Nov 2026 (open question 3): "reading says a
+             * batch takes 1-3 days" -> 24-72 h, nominal the midpoint. Czochralski
+             * growth cannot pause mid-crystal (Wave 4A brief s.2), so the S-type
+             * furnace is batch-scheduled between eclipses, not held: a batch
+             * fits when its hours do not exceed the minimum sunlit window, which
+             * every sampled value satisfies with at least eight times margin
+             * (SunlitWindowGate; (708.7 - 120) / 72 at the worst corner). External figures found 6 Nov 2026 (200 mm
+             * cycles ~1-2 days; 300 mm pulls 60-100 h, vendor data, unverified)
+             * are recorded here, not bound. */
+
+        attribute plantOversizeMassPenaltyKgPerKw : Real = 70.0;
+        attribute plantOversizeMassPenaltyKgPerKwLow : Real = 70.0;
+        attribute plantOversizeMassPenaltyKgPerKwHigh : Real = 83.3;
+        doc oversizeDoc /* owner: processing | kind: computationalInput | PROXY,
+             * flagged in the scenario register: no document gives the asteroid
+             * processing lines' mass per kW. Decision Framework Rev D s.4 gives
+             * a processing plant of the same kind at 28,000 kg / 400 kW = 70.0
+             * (optimised, committed), 22,000 / 300 = 73.3 (continuous-flow) and
+             * 15,000 / 180 = 83.3 kg/kW (batch); carried as the range. The
+             * Earth-launched share of oversize plant follows the ECON circuit
+             * Earth-fraction trajectory (0.10 falling to 0.03 after the C-type
+             * and 0.008 after the S-type arrival); the named scenario
+             * earthBuiltAsteroidPlant tests an all-Earth plant. */
+
+        attribute eclipseRestartLossDaysPerEclipse : Real;
+        doc restartDoc /* owner: processing | kind: computationalInput | UNBOUND:
+             * production lost per restart after an eclipse pause, in days of
+             * output. No process source exists (SEL-PROC-C-001 and
+             * SEL-PROC-S-001 are not written). The Python evaluator carries a
+             * declared working assumption (selenite.scenarios.eclipse
+             * ASSUMED_RESTART_LOSS_DAYS = 0.5, a half day per eclipse) and the
+             * register marks it ASSUMED; the evaluator's eclipse count per year
+             * is the dark fraction divided by the sampled longest eclipse (the
+             * fewest, longest eclipses - a lower bound on restarts, 11-18 a
+             * year). W4A-N7 (recorded, not resolved): VERIFY's 0.85 illumination
+             * with a 72 h longest eclipse implies about 18 dark periods a year,
+             * more than one per synodic month, while the Glaeser 3-5 day
+             * darkness is consistent with 11-13; the sunlit-window gate assumes
+             * at most one dark period per synodic month. */
+
+        attribute hybridStoredLoadFraction : Real = 0.5;
+        doc hybridDoc /* owner: power | kind: policy | source: Wave 4A brief D1
+             * alternative D, "battery or thermal storage carries a chosen
+             * fraction": the chosen fraction is a design parameter of that
+             * alternative, not an uncertainty; 0.5 is the declared design
+             * point. The rest of the load follows the sunlit duty cycle. */
+
+        attribute spaMsrAvailabilityProbability : Real = 1.0;
+        doc msrAvailDoc /* owner: power | kind: policy | source: Wave 3 - the
+             * thorium MSR line rests on test outcomes the plan assumes true
+             * (DG-7.5 breeding ratio, DG-9.3 first PKT MSR, assumedOutcome =
+             * true) and on MD-3 (DG-9.6). 1.0 is that assumption restated as a
+             * probability that the SPA MSR is available when the asteroid loads
+             * arrive; range unbound (no source states a probability). D1 turns
+             * on it: with the MSR present the eclipse strategy costs nothing
+             * extra under carry-through, without it the strategy sizes the FSP
+             * fleet. The named scenarios msrUnavailable (0.0) and msrUncertain
+             * (0.9) carry the sensitivity; the register prints the break-even
+             * probability. */
+
+        attribute batterySpecificEnergyWhPerKg : Real = 250.0;
+        attribute batteryMarginFactor : Real = 1.2;
+        attribute fspUnitPowerKw : Real = 40.0;
+        attribute fspUnitMassKg : Real = 6600.0;
+        attribute solarPanelMassKgPerM2 : Real = 3.0;
+        doc powerUnitDoc /* owner: power (VERIFY) | kind: computationalInput |
+             * transcribed from VERIFY v5.0: batt_Whkg = 250 and batt_margin =
+             * 1.20 (eclipse battery rule bkWh = shortfall x eclipse_hr x
+             * margin); fsp.pwr_kW = 40, fsp.mass_kg = 6,600 (ECON v1.3 fsp
+             * agrees); panel mass 3 kg/m2 (ph.panel_kg = panel_m2 x 3). Points;
+             * ranges unbound (no second source). scenario_check asserts the
+             * transcription against verify.workspace(). */
+
+        attribute thcl4AvailableYear : Integer = 43;
+        attribute thcl4AvailableYearLow : Integer = 43;
+        attribute thcl4AvailableYearHigh : Integer = 60;
+        doc thcl4Doc /* owner: transport | kind: computationalInput | source:
+             * DG-9.6 "PKT->SPA mass driver operational - ThCl4 fuel for SPA MSR"
+             * declared Y43 (P9) with declaredPhaseAlternate P10 (W2-N2: fleet v9
+             * s.16 and Decision Framework s.3 "P9-P10 (Y43)"); the range is the
+             * gate's own two phases, Y43 to the end of P10 (Y60). The
+             * exogenous gate itself stays declared; this is the sampled twin
+             * the FSP-versus-MSR trade reads. */
+
+        attribute solarInSituStartYear : Integer = 60;
+        attribute solarInSituStartYearLow : Integer = 60;
+        attribute solarInSituStartYearHigh : Integer = 80;
+        attribute solarInSituEarthFraction : Real = 0.3;
+        doc solarInSituDoc /* owner: power | kind: computationalInput | source:
+             * Decision Framework Rev D s.6 (P11 row): a-Si panels in-situ from
+             * P11 -> the P11 window Y60-Y80 (ProgrammeTimeline) is the range,
+             * Y60 the nominal plan_check uses. The Earth fraction of in-situ
+             * array mass, 0.3, mirrors the ECON MSR floor as plan_vectors
+             * assumed it (point, range unbound). */
+
+        attribute launchCostMultiplier : Real = 1.0;
+        attribute launchCostMultiplierLow : Real = 0.5;
+        attribute launchCostMultiplierHigh : Real = 1.5;
+        doc launchMultDoc /* owner: economics | kind: computationalInput | source:
+             * ECON v1.4 tornado "Launch cost (+50% vs -50%)" applied to the v1.3
+             * era schedule 6,000 / 4,000 / 2,000 $/kg (W3-N18: per kg, not per
+             * flight). */
+
+        attribute discountRateMultiplier : Real = 1.0;
+        attribute discountRateMultiplierLow : Real = 0.4667;
+        attribute discountRateMultiplierHigh : Real = 1.1667;
+        doc discountDoc /* owner: economics | kind: computationalInput | source:
+             * ECON v1.3 schedule 3 / 2.5 / 2 % (to Y30 / Y75 / after); ECON
+             * v1.4 tornado bounds 1.4 % and 3.5 % as flat rates. Modelled as a
+             * multiplier on the schedule so that the first-era rate spans
+             * 1.4-3.5 % (0.4667 = 1.4/3.0, 1.1667 = 3.5/3.0); a convention,
+             * stated in the register. */
+
+        attribute reoExternalityUsdPerTonne : Real = 73700.0;
+        attribute reoExternalityUsdPerTonneLow : Real = 50000.0;
+        attribute reoExternalityUsdPerTonneHigh : Real = 90000.0;
+        attribute h2AttributionFraction : Real = 0.5;
+        attribute h2AttributionFractionLow : Real = 0.25;
+        attribute h2AttributionFractionHigh : Real = 1.0;
+        attribute geoInsuranceUsdMPerYear : Real = 15000.0;
+        attribute geoInsuranceUsdMPerYearLow : Real = 0.0;
+        attribute geoInsuranceUsdMPerYearHigh : Real = 25000.0;
+        attribute circuitMaintenanceFractionPerYear : Real = 0.005;
+        attribute circuitMaintenanceFractionPerYearLow : Real = 0.0025;
+        attribute circuitMaintenanceFractionPerYearHigh : Real = 0.005;
+        doc tornadoDoc /* owner: economics | kind: computationalInput | source:
+             * ECON v1.4 sensitivity tornado: REO externality $73,700/t ($50k vs
+             * $90k); H2 attribution 0.50 (25 % vs 100 %); geo insurance
+             * $15 B/yr ($0 vs $25 B); circuit maintenance 0.5 %/yr (0.5 % vs
+             * 0.25 %; Decision Framework Rev D s.4 "revised from 2%"). The
+             * nominals are the v1.3 values the goldens carry. */
+
+        attribute reoRampKnotShift : Integer = 0;
+        attribute reoRampKnotShiftLow : Integer = 0;
+        attribute reoRampKnotShiftHigh : Integer = 1;
+        doc rampVariantDoc /* owner: economics | kind: computationalInput |
+             * source: W3-N4 - the ECON v1.3 reo_target knots (100 kt at Y80,
+             * 500 kt at Y121, 1.25 Mt at Y152) are one knot later than the
+             * Decision Framework's REO gates (DG-11.1 Y60, DG-12.1 Y80, DG-13.1
+             * Y120). 0 = the ECON ramp (the goldens), 1 = the Decision
+             * Framework's knots one step earlier. Sampled as a two-point
+             * discrete variable with equal weights (uninformative; stated in
+             * the register). */
+
+        attribute msrUnitMassKg : Real = 50000.0;
+        attribute msrEarthFractionFloor : Real = 0.3;
+        doc msrUnitDoc /* owner: power (ECON) | kind: computationalInput |
+             * transcribed from ECON v1.3: msr.mass_kg = 50,000 per 100 MWe unit
+             * and msr.earth_frac floor 0.3 from Y80 (Ni-201 in-situ vessels,
+             * DG-11.4; Decision Framework Rev D s.15.2 "MSR 30 %"). Points;
+             * ranges unbound. Read by the FSP-versus-MSR trade (D1, D2). */
+
+        attribute reoPayloadPerCanisterTonnesEcon : Real = 3.5;
+        attribute reoPayloadPerCanisterTonnesEcn020 : Real = 3.6;
+        doc canisterPayloadCandidatesDoc /* owner: transport | kind:
+             * computationalInput | W3-N7 / VC-22 candidates for the unbound
+             * reoPayloadPerCanisterTonnes (rule 5b): ECON v1.3 can.reo_payload_t
+             * = 3.5 t (714,286 canisters/yr) and ECN-020 s.4 3.6 t (694,444/yr).
+             * Sampled two-point, equal weights, for D3. */
+
+        attribute canisterEarthContentFullParachuteKg : Real = 73.0;
+        attribute canisterEarthContentDragChuteKg : Real = 28.0;
+        attribute canisterEarthContentShuttlecockKg : Real = 8.0;
+        attribute impactSurvivalPassProbability : Real = 0.5;
+        doc canisterOptionsDoc /* owner: transport | kind: computationalInput |
+             * source: Decision Framework Rev D s.9 / DG-9.1 options 1a, 1b
+             * (RECOMMENDED; ECON v1.3 can.earth_kg = 28 assumes it) and 2
+             * (needs impact-survival validation, DF s.11 item 9). The
+             * impact-survival test outcome is a sampled Boolean (D3 recourse:
+             * a failed test falls back to the next safer option); 0.5 is an
+             * uninformative probability, range unbound - DF s.9 rates the risk
+             * MED / HIGH without a number. Jason, 6 Nov 2026: D3 in scope. */
+
+        attribute psrMoleICapacityUnitsDocument : Integer = 310;
+        doc capacityCandidatesDoc /* owner: PSR layout | kind: capacityConstraint
+             * | W2-N18 candidate for D7: fleet v9 s.4.1 / Strategy v3.1 s.4.4
+             * "~310 MOLE-I positions" against the bound 620 (psr_layout.py,
+             * SEL-REQ-016). Sampled two-point with the bound value, equal
+             * weights; the bound value stays bound. The MOLE-I peak need is
+             * ECON's vector (357 at Y35; VC-07 documents say ~355), not a
+             * parameter. */
+
+        attribute mkIiiTestPassProbability : Real = 0.5;
+        doc mkIiiTestDoc /* owner: fleet | kind: computationalInput | source:
+             * DG-11.6 is a derivable gate resting on the ion-SEP / EM-catcher
+             * validation (Strategy v3.1 s.16 "Ion SEP validated; EM catcher
+             * operational"); 0.5 is an uninformative probability for D7, range
+             * unbound. */
+
+        attribute haulerEarthFractionFloorEcon : Real = 0.43;
+        attribute haulerEarthFractionFloorFleetV9 : Real = 0.08;
+        doc haulerFloorDoc /* owner: fleet | kind: computationalInput | F3
+             * candidates for D8: ECON v1.3 hauler.earth_frac floor 0.43 (the
+             * "~57 % in-situ" reading) and fleet v9 / hauler brief "92 %
+             * in-situ" -> 0.08. The DG-13.7 20 % floor is GateThresholds.
+             * haulerEarthFractionFloor. Sampled two-point, equal weights. */
+
+        attribute mTypeCaptureYearLow : Integer;
+        attribute mTypeCaptureYearHigh : Integer;
+        attribute asteroidOnlineLagYearsLow : Integer;
+        attribute asteroidOnlineLagYearsHigh : Integer;
+        doc captureRangeDoc /* owner: programme | kind: computationalInput |
+             * UNBOUND ranges: no document states a range for the capture years
+             * or the redirect-to-arrival lag (every source gives Y75 -> Y85,
+             * Y95 -> Y105, Y115 -> Y125). D5 and the gate-year distributions
+             * therefore carry the capture years as points; the named scenario
+             * lateMType (capture Y85) carries the sensitivity. Binding a range
+             * is an ECN with a source (tug readiness, DG-11.8). */
 
         part gateThresholds : GateThresholds;
     }

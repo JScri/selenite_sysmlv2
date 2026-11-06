@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Regenerate the committed SVG diagram set.
+# Regenerate the committed SVG diagram set (sysml-diagram 0.42.0; see validate.yml).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 mkdir -p diagrams
@@ -16,4 +16,6 @@ sysml-diagram export --file model/Software.sysml --view gv \
     --workspace . --out diagrams/software_view.svg
 sysml-diagram export --file model/Gates.sysml --view gv \
     --workspace . --out diagrams/gates_view.svg
+sysml-diagram export --file model/Scenarios.sysml --view gv \
+    --workspace . --out diagrams/scenarios_view.svg
 echo "Diagrams written to diagrams/"
