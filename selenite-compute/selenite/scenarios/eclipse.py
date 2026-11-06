@@ -14,8 +14,10 @@ uncertainty register, with the FSP-versus-MSR count as the recourse
 
 * A ``carryThroughEclipse`` - every asteroid load eclipse-critical.
 * B ``sunlitDutyCycle``    - pausable steps run only in sunlight; the plant is
-  oversized by 1 / (1 - dark fraction) so annual throughput is kept; only the
-  hold loads go through the eclipse; a restart loss per eclipse.
+  oversized by 1 / ((1 - dark fraction)(1 - restart loss)) so annual
+  throughput is kept despite the dark time and the output lost to restarts;
+  only the hold loads - a fraction of the oversized plant's rated load - go
+  through the eclipse.
 * C ``hotStandby``         - as B but no oversize: throughput falls by the dark
   fraction plus restart losses.
 * D ``hybridStorage``      - a chosen fraction (``hybridStoredLoadFraction``)
@@ -137,8 +139,13 @@ class StrategyProfile:
 
 
 def profile(strategy: str, block: LoadBlock, dark: float, hold: float, stored: float,
-            restart_days: float, batch_hours: float, design_eclipse_hours: float) -> StrategyProfile:
-    eclipses_per_year = dark * HOURS_PER_YEAR / design_eclipse_hours
+            restart_days: float, batch_hours: float, eclipse_hours: float) -> StrategyProfile:
+    """The per-block factors of a strategy. ``eclipse_hours`` is the sampled
+    longest eclipse: the dark fraction divided by it is the fewest, longest
+    eclipses a year (a lower bound on restarts, W4A-N7). The hold load is a
+    fraction of the plant's RATED load, so under a duty cycle it scales with
+    the oversize factor (SeleniteAnalysis::EclipseCriticalFraction)."""
+    eclipses_per_year = dark * HOURS_PER_YEAR / eclipse_hours
     restart_loss = eclipses_per_year * restart_days / 365.0
     if block.batch_scheduled:
         # Czochralski: no hold (cold between batches); the cost is scheduling
@@ -151,12 +158,12 @@ def profile(strategy: str, block: LoadBlock, dark: float, hold: float, stored: f
     if strategy == "carryThroughEclipse":
         return StrategyProfile(1.0, 1.0, 0.0, 1.0, 0.0)
     if strategy == "sunlitDutyCycle":
-        return StrategyProfile(hold, hold, 0.0, keep, 0.0)
+        return StrategyProfile(hold * keep, hold * keep, 0.0, keep, 0.0)
     if strategy == "hotStandby":
         return StrategyProfile(hold, hold, 0.0, 1.0, dark + restart_loss)
     if strategy == "hybridStorage":
         rest = 1.0 - stored
-        return StrategyProfile(stored + rest * hold, rest * hold, stored, 1.0 + rest * (keep - 1.0), 0.0)
+        return StrategyProfile(stored + rest * hold * keep, rest * hold * keep, stored, 1.0 + rest * (keep - 1.0), 0.0)
     raise KeyError(strategy)
 
 
@@ -202,6 +209,7 @@ def evaluate_strategy(strategy: str, x: SampleInputs, c: SiteConstants) -> dict[
     carried = np.zeros_like(c.base_critical_kw)
     fsp_sized = np.zeros_like(carried)
     battery_kwh = 0.0
+    battery_cargo_kg = np.zeros_like(carried)       # each block's battery in the block's year
     oversize_kw = np.zeros_like(carried)
     oversize_mass_kg = np.zeros_like(carried)       # Earth-launched, placed in the block's year
     lost_weight = 0.0
@@ -210,12 +218,15 @@ def evaluate_strategy(strategy: str, x: SampleInputs, c: SiteConstants) -> dict[
     profiles = []
     for b in blocks:
         pr = profile(strategy, b, x.dark, x.hold[b.line], x.stored, x.restart_days,
-                     x.batch_hours, x.design_eclipse_h)
+                     x.batch_hours, x.longest_eclipse_h)
         profiles.append(pr)
         on = Y >= b.year
         carried[on] += b.kw * pr.carried_fraction
         fsp_sized[on] += b.kw * pr.fsp_fraction
-        battery_kwh += b.kw * pr.stored_fraction * x.longest_eclipse_h * x.batt_margin
+        block_kwh = b.kw * pr.stored_fraction * x.longest_eclipse_h * x.batt_margin
+        battery_kwh += block_kwh
+        if b.year <= NEVER:
+            battery_cargo_kg[b.year] += block_kwh * 1000.0 / x.batt_wh_kg
         extra_kw = b.kw * (pr.oversize_factor - 1.0)
         oversize_kw[on] += extra_kw
         if b.year <= NEVER:
@@ -248,25 +259,26 @@ def evaluate_strategy(strategy: str, x: SampleInputs, c: SiteConstants) -> dict[
     first = int(idx[0]) if idx.size else None
 
     # Earth-launched mass of the SPA power side under the recourse policy:
-    # the non-nuclear fleet built before the MSR year (hardware is sunk), the
-    # MSR units built from that year (ECON cargo rule: increments x mass x
-    # Earth fraction in the build year), the battery and the oversize plant.
+    # the non-nuclear fleet built before the MSR year (hardware is sunk, so
+    # cargo is the growth of the RUNNING MAXIMUM of the fleet the load needs
+    # - a load that falls and regrows re-uses the fleet already built), the
+    # MSR units built from that year (ECON cargo rule: increments of the
+    # running maximum x mass x Earth fraction in the build year), each
+    # block's battery in the block's year and the oversize plant.
     cut = NEVER + 1 if first is None else first
-    fsp_built_kg = float(fsp_mass[:cut].max()) if cut > 0 else 0.0
-    solar_built_kg = float(solar_mass[:cut].max()) if cut > 0 else 0.0
+    nn_cargo_kg = np.zeros_like(carried)
+    nn_built_kg = 0.0
+    if cut > 0:
+        built = np.maximum.accumulate(fsp_mass[:cut] + solar_mass[:cut])
+        nn_cargo_kg[:cut] = np.diff(np.concatenate([[0.0], built]))
+        nn_built_kg = float(built[-1])
+    fsp_built_kg = float(np.maximum.accumulate(fsp_mass[:cut])[-1]) if cut > 0 else 0.0
+    solar_built_kg = float(np.maximum.accumulate(solar_mass[:cut])[-1]) if cut > 0 else 0.0
     msr_cargo_kg = np.zeros_like(carried)
     if first is not None:
-        d_units = np.maximum(0.0, np.diff(np.concatenate([[0.0], units[first:]])))
+        built_units = np.maximum.accumulate(units[first:])
+        d_units = np.diff(np.concatenate([[0.0], built_units]))
         msr_cargo_kg[first:] = d_units * x.msr_mass_kg * ef[first:]
-    # Place the non-nuclear cargo in the years the fleet grows, for the NPV delta.
-    nn_cargo_kg = np.zeros_like(carried)
-    if cut > 0:
-        growth = np.maximum(0.0, np.diff(np.concatenate([[0.0], fsp_mass[:cut] + solar_mass[:cut]])))
-        nn_cargo_kg[:cut] = growth
-    battery_cargo_kg = np.zeros_like(carried)
-    first_load_year = min(b.year for b in blocks)
-    if first_load_year <= NEVER:
-        battery_cargo_kg[first_load_year] = battery_kg
     cargo_kg = nn_cargo_kg + msr_cargo_kg + battery_cargo_kg + oversize_mass_kg
     earth_mass_t = float(cargo_kg.sum()) / 1000.0
     npv_delta_usd_m = -float(np.sum(cargo_kg * x.launch_cost * x.contingency * x.df)) / 1e6
@@ -282,6 +294,8 @@ def evaluate_strategy(strategy: str, x: SampleInputs, c: SiteConstants) -> dict[
         "earthMassSpaPowerTonnes": earth_mass_t,
         "throughputLostCTypeLine": lost_by_line.get("cTypeLine", 0.0),
         "throughputLostSTypeLine": lost_by_line.get("sTypeLine", 0.0),
+        "throughputLostScaledOperations": lost_by_line.get("scaledOperations", 0.0),
+        "nonNuclearBuiltTonnes": nn_built_kg / 1000.0,
         "fspBuiltTonnes": fsp_built_kg / 1000.0,
         "solarBuiltTonnes": solar_built_kg / 1000.0,
         "msrEarthTonnes": float(msr_cargo_kg.sum()) / 1000.0,
@@ -310,24 +324,30 @@ def evaluate_d1(space, samples, runs, assumptions):
 
 
 def break_even_probability(mass_msr_world: dict[str, float], mass_fsp_world: dict[str, float],
-                           reference: str = "carryThroughEclipse") -> dict[str, float]:
-    """For each alternative, the MSR-availability probability below which it
-    beats the reference on expected Earth mass: p* = (cost_alt - cost_ref)
-    in the MSR world over the same difference plus the saving in the
-    FSP-only world. 1.0 means the alternative never beats the reference;
-    0.0 means it always does."""
+                           reference: str = "carryThroughEclipse") -> dict[str, dict[str, float | str]]:
+    """For each alternative, the MSR-availability probability at which its
+    expected Earth-launched mass equals the reference's, from the two worlds:
+    extra = cost above the reference when the MSR is available, saving =
+    saving against the reference when it is not. Returns ``{"p": p*,
+    "wins": how}`` with ``how`` one of: "always" (no worse in either world),
+    "never" (no better in either world), "below" (beats the reference at
+    availability probabilities below p* = saving / (saving + extra)) or
+    "above" (better with the MSR, worse without: beats the reference above
+    p* = |saving| / (|saving| + |extra|))."""
     out = {}
     for alt in mass_msr_world:
         if alt == reference:
             continue
-        extra_msr = mass_msr_world[alt] - mass_msr_world[reference]       # cost in the MSR world
-        saving_fsp = mass_fsp_world[reference] - mass_fsp_world[alt]      # saving in the FSP-only world
-        if extra_msr <= 0 and saving_fsp >= 0:
-            out[alt] = 1.0            # no worse in either world: beats the reference at any probability
-        elif saving_fsp <= 0:
-            out[alt] = float("nan")   # no better in either world: never
-        else:
-            out[alt] = saving_fsp / (saving_fsp + extra_msr)
+        extra = mass_msr_world[alt] - mass_msr_world[reference]        # cost in the MSR world
+        saving = mass_fsp_world[reference] - mass_fsp_world[alt]       # saving in the FSP-only world
+        if extra <= 0 and saving >= 0:
+            out[alt] = {"p": 1.0, "wins": "always"}
+        elif extra >= 0 and saving <= 0:
+            out[alt] = {"p": float("nan"), "wins": "never"}
+        elif extra > 0 and saving > 0:
+            out[alt] = {"p": saving / (saving + extra), "wins": "below"}
+        else:   # extra < 0 and saving < 0: better with the MSR, worse without
+            out[alt] = {"p": abs(saving) / (abs(saving) + abs(extra)), "wins": "above"}
     return out
 
 

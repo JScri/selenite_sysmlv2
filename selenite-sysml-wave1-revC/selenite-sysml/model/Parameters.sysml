@@ -312,8 +312,8 @@ package SeleniteParameters {
              * growth cannot pause mid-crystal (Wave 4A brief s.2), so the S-type
              * furnace is batch-scheduled between eclipses, not held: a batch
              * fits when its hours do not exceed the minimum sunlit window, which
-             * every sampled value satisfies with about nine times margin
-             * (SunlitWindowGate). External figures found 6 Nov 2026 (200 mm
+             * every sampled value satisfies with at least eight times margin
+             * (SunlitWindowGate; (708.7 - 120) / 72 at the worst corner). External figures found 6 Nov 2026 (200 mm
              * cycles ~1-2 days; 300 mm pulls 60-100 h, vendor data, unverified)
              * are recorded here, not bound. */
 
@@ -338,9 +338,14 @@ package SeleniteParameters {
              * SEL-PROC-S-001 are not written). The Python evaluator carries a
              * declared working assumption (selenite.scenarios.eclipse
              * ASSUMED_RESTART_LOSS_DAYS = 0.5, a half day per eclipse) and the
-             * register marks it ASSUMED; the register's eclipse count per year
-             * is the dark fraction divided by the design eclipse length (the
-             * fewest, longest eclipses - a lower bound on restarts). */
+             * register marks it ASSUMED; the evaluator's eclipse count per year
+             * is the dark fraction divided by the sampled longest eclipse (the
+             * fewest, longest eclipses - a lower bound on restarts, 11-18 a
+             * year). W4A-N7 (recorded, not resolved): VERIFY's 0.85 illumination
+             * with a 72 h longest eclipse implies about 18 dark periods a year,
+             * more than one per synodic month, while the Glaeser 3-5 day
+             * darkness is consistent with 11-13; the sunlit-window gate assumes
+             * at most one dark period per synodic month. */
 
         attribute hybridStoredLoadFraction : Real = 0.5;
         doc hybridDoc /* owner: power | kind: policy | source: Wave 4A brief D1

@@ -73,7 +73,7 @@ class EconRuns:
             "haulers_needed", "conv_km_needed", "circuits_needed", "canisters_yr", "total_pgm",
             "captured_asteroid_pgm", "mkiii_active", "insitu_total", "earth_cargo", "cargo_circuits", "d_circuits",
             "cargo_haulers", "d_haulers", "supply_frac", "spa_msr_count", "cargo_mkiii_leo", "maint_haulers",
-            "cargo_canisters", "power_kw")
+            "cargo_canisters", "power_kw", "cargo_spa_msr", "maint_spa_msr")
 
 
 def run_econ(values: dict[str, np.ndarray], n: int, base: EconRuns | None = None,
@@ -123,6 +123,19 @@ def programme_moes(runs: EconRuns) -> dict[str, np.ndarray]:
         "directBcr": m["bcr_direct"].copy(),
         "launchCo2Tonnes": m["cum_co2_rockets_t"].copy(),
     }
+
+
+def econ_spa_msr_deliveries(runs: EconRuns) -> tuple[np.ndarray, np.ndarray]:
+    """ECON v1.3's own SPA MSR unit deliveries (cargo_spa_msr: 100 MWe units at
+    Y105 / Y125 / Y140 x Earth fraction) per sample - the tonnes and their
+    launch cost in $B - which the SPA power trades (D1, D2) replace with the
+    units their recourse builds. ECON's maintenance line (maint_spa_msr)
+    stays in the base: neither side models MSR maintenance otherwise."""
+    v = runs.vectors
+    tonnes = v["cargo_spa_msr"].sum(axis=1)
+    cost = np.array([np.sum(v["cargo_spa_msr"][i] * 1000.0 * v["launch_cost"][i] * v["contingency"][i] * v["df"][i]) / 1e9
+                     for i in range(runs.n)])
+    return tonnes, cost
 
 
 def pv_launch_cost_usd_b(cargo_kg_by_year: np.ndarray, runs: EconRuns, i: int) -> float:
@@ -190,9 +203,10 @@ def evaluate_d2(values: dict[str, np.ndarray], runs: EconRuns, site, msr_rated_k
             out[alt]["npvDeltaUsdB"][i] = -pv_launch_cost_usd_b(cargo, runs, i)
             # Slip against DG-13.4 (Y105): the first MSR after the C-type arrival.
             out[alt]["milestoneSlipYears"][i] = max(0.0, (NEVER if first is None else first) - 105.0)
+    econ_msr_t, econ_msr_cost = econ_spa_msr_deliveries(runs)
     for alt in out:
-        out[alt]["earthLaunchedMassTonnes"] = base["earthLaunchedMassTonnes"] + out[alt]["spaPowerEarthMassTonnes"]
-        out[alt]["npvUsdB"] = base["npvUsdB"] + out[alt]["npvDeltaUsdB"]
+        out[alt]["earthLaunchedMassTonnes"] = base["earthLaunchedMassTonnes"] - econ_msr_t + out[alt]["spaPowerEarthMassTonnes"]
+        out[alt]["npvUsdB"] = base["npvUsdB"] + econ_msr_cost + out[alt]["npvDeltaUsdB"]
         out[alt]["directBcr"] = base["directBcr"]
         out[alt]["launchCo2Tonnes"] = base["launchCo2Tonnes"]
         out[alt]["probabilityMsrBeforeY105"] = np.where(np.isnan(out[alt]["spaMsrFirstYear"]), 0.0,

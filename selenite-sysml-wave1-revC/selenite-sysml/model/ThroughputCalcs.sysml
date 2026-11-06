@@ -300,25 +300,34 @@ package SeleniteAnalysis {
              * load that must be carried through an eclipse under an operating
              * strategy: the non-pausable part in full, the pausable part at its
              * hold-load fraction, and under the hybrid strategy the stored part
-             * (carried by battery) in full. Carry-through: pausable = 0, so the
-             * fraction is 1. Evaluated per strategy and per sample by
+             * (carried by battery) in full. The hold load is a share of the
+             * plant's RATED load, so under a duty cycle it scales with the
+             * oversize factor (1 for carry-through and hot standby).
+             * Carry-through: pausable = 0, so the fraction is 1. Evaluated per
+             * strategy and per sample by
              * selenite.scenarios.eclipse; the scenario register prints the
              * declared value and the derived values side by side. */
         in pausableLoadKw : Real;
         in nonPausableLoadKw : Real;
         in holdLoadFraction : Real;
         in storedLoadFraction : Real;
+        in oversizeFactor : Real;
         return criticalFraction : Real =
-            (nonPausableLoadKw + pausableLoadKw * (storedLoadFraction + (1.0 - storedLoadFraction) * holdLoadFraction))
+            (nonPausableLoadKw
+                + pausableLoadKw * (storedLoadFraction + (1.0 - storedLoadFraction) * holdLoadFraction * oversizeFactor))
             / (pausableLoadKw + nonPausableLoadKw);
     }
 
     calc def PlantOversizeFactor {
         doc /* Sunlit duty cycle (D1 alternatives B and D): a plant that runs only
              * while the site is lit keeps its annual throughput when its rated
-             * capacity is scaled by 1 / (1 - dark fraction). */
+             * capacity is scaled by 1 / ((1 - dark fraction)(1 - restart loss)),
+             * the restart loss being the share of annual output lost to the
+             * restarts after each eclipse (or, for a batch process, to the
+             * scheduling slack before each eclipse). */
         in darkFraction : Real;
-        return oversizeFactor : Real = 1.0 / (1.0 - darkFraction);
+        in restartLossFraction : Real;
+        return oversizeFactor : Real = 1.0 / ((1.0 - darkFraction) * (1.0 - restartLossFraction));
     }
 
     calc def EclipseBatteryMass {

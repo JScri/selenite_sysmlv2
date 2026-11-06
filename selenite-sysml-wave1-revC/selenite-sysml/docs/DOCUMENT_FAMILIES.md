@@ -145,11 +145,12 @@ amendment doc; their content is folded into fleet v9 and Hauler/Catapult Rev B.
 | W2-N17 | **Missing element found:** SPA mass driver demonstrator / test track (ECN-020 §5 "Demo" 23 t YBCO; report Fig. 27 "mass driver prototype on crater rim, P9 test track 100 m → 500 m at P9–P10", listed under Key P7 additions; baseline P7 "YBCO for MD-1 delivered"). Added as `MassDriverDemonstrator`, bound P7; P9–P10 wording recorded. | `Transport.sysml` |
 
 ## Wave 4A observations
-W4A-N1 … W4A-N6 (the Gläser 3–5 day longest darkness against the 72 h
+W4A-N1 … W4A-N7 (the Gläser 3–5 day longest darkness against the 72 h
 design case; the sysml-diagram 0.54.0 SSM079 regression; the hold-load and
 restart-loss assumptions without a process source; the VC-22 canister
 payload and the F3 hauler floor as sampled two-point candidates; the capture
-years without a sourced range) are tabled in `CHANGELOG_WAVE4A.md` §5; the
+years without a sourced range; the lost-throughput gearing; the two
+eclipse-frequency readings) are tabled in `CHANGELOG_WAVE4A.md` §5; the
 machine-generated register is `docs/SCENARIO_REGISTER.md`.
 
 ## Wave 3 observations

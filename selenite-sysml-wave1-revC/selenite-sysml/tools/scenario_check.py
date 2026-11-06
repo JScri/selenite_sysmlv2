@@ -311,16 +311,22 @@ def render_d1_extras(sp: spacemod.Space, d: runner.DecisionResult, result: runne
         for alt in d.alternatives:
             wa = worlds["msrAvailable"][alt]
             wu = worlds["msrUnavailable"][alt]
-            b = be.get(alt)
-            btxt = "reference" if alt == "carryThroughEclipse" else ("always" if b == 1.0 else ("never" if b is None or (isinstance(b, float) and math.isnan(b)) else f"{b:.4f}"))
+            b = be.get(alt) or {}
+            if alt == "carryThroughEclipse":
+                btxt = "reference"
+            elif b.get("wins") in ("always", "never"):
+                btxt = b["wins"]
+            else:
+                btxt = f"{b.get('p', float('nan')):.4f} ({b.get('wins', '?')})"
             rows.append([alt, fmt(wa["earthMassSpaPowerTonnes"]["mean"]), fmt(wa["earthLaunchedMassTonnes"]["mean"]),
                          fmt(wu["earthMassSpaPowerTonnes"]["mean"]), fmt(wu["earthLaunchedMassTonnes"]["mean"]), btxt])
         p = sp.params.get("spaMsrAvailabilityProbability")
         lines.append(f"The two worlds D1 turns on (same samples; `spaMsrAvailabilityProbability` = {fmt(p)} in the committed plan, "
                      f"scenario override {result.overrides.get('spaMsrAvailabilityProbability', 'none')}): the SPA MSR carries "
                      "the asteroid loads through every eclipse when it is available at the C-type arrival; without it the "
-                     "strategy sizes the FSP fleet. Break-even: the availability probability below which the strategy beats "
-                     "carry-through on expected Earth-launched mass.")
+                     "strategy sizes the FSP fleet. Break-even: the MSR-availability probability at which the strategy's "
+                     "expected total Earth-launched mass equals carry-through's ('below': it wins at lower probabilities; "
+                     "'above': at higher; 'always' / 'never': no worse / no better in either world).")
         lines.append("")
         lines.append(md_table(["Strategy", "MSR available: SPA power mass (t)", "MSR available: total Earth mass (t)",
                                "MSR unavailable: SPA power mass (t)", "MSR unavailable: total Earth mass (t)",

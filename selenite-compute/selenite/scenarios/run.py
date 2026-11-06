@@ -165,6 +165,17 @@ def circuit_earth_fraction_by_year(p: trades.econ_param.Params) -> np.ndarray:
 _LOSS_RUN_CACHE: dict[tuple, dict[str, np.ndarray]] = {}
 
 
+def samples_content_hash(samples: Samples) -> str:
+    """SHA-256 over every value column (not only the uniform matrix), so two
+    sample sets that differ only by a scenario override hash differently."""
+    import hashlib
+    h = hashlib.sha256()
+    for name in sorted(samples.values):
+        h.update(name.encode())
+        h.update(np.ascontiguousarray(samples.values[name], dtype=float).tobytes())
+    return h.hexdigest()
+
+
 def evaluate_d1(space: Space, samples: Samples, runs: trades.EconRuns, assumptions: dict[str, object]) -> dict[str, dict[str, np.ndarray]]:
     v = samples.values
     n = samples.n
@@ -177,6 +188,11 @@ def evaluate_d1(space: Space, samples: Samples, runs: trades.EconRuns, assumptio
     stored = float(space.params["hybridStoredLoadFraction"])
     design_h = float(space.params["spaDesignEclipseHours"])
     base = trades.programme_moes(runs)
+    econ_msr_t, econ_msr_cost = trades.econ_spa_msr_deliveries(runs)
+    content_hash = samples_content_hash(samples)
+    ct_red = np.array([p.ctype_reduction for p in runs.params])
+    st_red = np.array([p.stype_reduction for p in runs.params])
+    kw = {b.line: b.kw for b in eclipse.load_blocks(105, 125)}   # block loads, for the line-weighted loss
     out: dict[str, dict[str, list[float]]] = {s: {} for s in eclipse.STRATEGIES}
     for i in range(n):
         g = lambda name: float(v[name][i])  # noqa: E731
@@ -203,22 +219,28 @@ def evaluate_d1(space: Space, samples: Samples, runs: trades.EconRuns, assumptio
     result: dict[str, dict[str, np.ndarray]] = {}
     for strategy, cols in out.items():
         m = {k: np.asarray(val, dtype=float) for k, val in cols.items()}
-        lost_c, lost_s = m["throughputLostCTypeLine"], m["throughputLostSTypeLine"]
+        # Lost output per line, the Y140 scaled-operations block shared between
+        # the two lines by load, scales the circuit Earth-fraction reductions
+        # the lines enable (the sample's own Params values).
+        lost_scaled = m["throughputLostScaledOperations"]
+        lost_c = (kw["cTypeLine"] * m["throughputLostCTypeLine"] + 0.5 * kw["scaledOperations"] * lost_scaled) / (kw["cTypeLine"] + 0.5 * kw["scaledOperations"])
+        lost_s = (kw["sTypeLine"] * m["throughputLostSTypeLine"] + 0.5 * kw["scaledOperations"] * lost_scaled) / (kw["sTypeLine"] + 0.5 * kw["scaledOperations"])
         if np.any(lost_c > 0) or np.any(lost_s > 0):
-            # Lost output scales the circuit Earth-fraction reductions the lines
-            # enable; the loss does not depend on the MSR world, so the re-run
-            # is cached across the worlds of one sample set.
-            key = (samples.hash, strategy, lost_c.tobytes(), lost_s.tobytes(), runs.n)
+            # The loss does not depend on the MSR world, so the re-run is
+            # cached across the worlds of one sample set (content-hashed).
+            key = (content_hash, strategy, lost_c.tobytes(), lost_s.tobytes(), runs.n)
             if key not in _LOSS_RUN_CACHE:
-                _LOSS_RUN_CACHE.clear() if len(_LOSS_RUN_CACHE) > 16 else None
+                if len(_LOSS_RUN_CACHE) > 16:
+                    _LOSS_RUN_CACHE.clear()
                 _LOSS_RUN_CACHE[key] = trades.programme_moes(trades.run_econ(
                     v, n, base=runs,
-                    per_sample={"ctype_reduction": 0.07 * (1.0 - lost_c), "stype_reduction": 0.022 * (1.0 - lost_s)}))
+                    per_sample={"ctype_reduction": ct_red * (1.0 - lost_c), "stype_reduction": st_red * (1.0 - lost_s)}))
             prog = _LOSS_RUN_CACHE[key]
         else:
             prog = base
-        m["earthLaunchedMassTonnes"] = prog["earthLaunchedMassTonnes"] + m["earthMassSpaPowerTonnes"]
-        m["npvUsdB"] = prog["npvUsdB"] + m["npvDeltaUsdM"] / 1000.0
+        # ECON's own SPA MSR deliveries are replaced by the trade's units.
+        m["earthLaunchedMassTonnes"] = prog["earthLaunchedMassTonnes"] - econ_msr_t + m["earthMassSpaPowerTonnes"]
+        m["npvUsdB"] = prog["npvUsdB"] + econ_msr_cost + m["npvDeltaUsdM"] / 1000.0
         m["directBcr"] = prog["directBcr"]
         m["launchCo2Tonnes"] = prog["launchCo2Tonnes"]
         m["throughputPenaltyTonnes"] = prog["earthLaunchedMassTonnes"] - base["earthLaunchedMassTonnes"]
@@ -254,8 +276,9 @@ def d1_worlds(space: Space, samples: Samples, runs: trades.EconRuns, assumptions
             s.values["spaMsrAvailabilityProbability"][:] = available
             r = evaluate_d1(space, s, runs, assumptions)
         worlds[name] = {alt: {k: criteria.summarise(val) for k, val in m.items()} for alt, m in r.items()}
-    mass_msr = {alt: worlds["msrAvailable"][alt]["earthMassSpaPowerTonnes"]["mean"] for alt in eclipse.STRATEGIES}
-    mass_fsp = {alt: worlds["msrUnavailable"][alt]["earthMassSpaPowerTonnes"]["mean"] for alt in eclipse.STRATEGIES}
+    # Break-even on the objective itself: total expected Earth-launched mass.
+    mass_msr = {alt: worlds["msrAvailable"][alt]["earthLaunchedMassTonnes"]["mean"] for alt in eclipse.STRATEGIES}
+    mass_fsp = {alt: worlds["msrUnavailable"][alt]["earthLaunchedMassTonnes"]["mean"] for alt in eclipse.STRATEGIES}
     return {"worlds": worlds, "breakEvenProbability": eclipse.break_even_probability(mass_msr, mass_fsp)}
 
 

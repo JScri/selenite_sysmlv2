@@ -238,7 +238,31 @@ target, 0.43 loses to it), DG-13.7 met by Y120 with probability 0.50.
 | W4A-N3 | Hold-load fractions (0.25 per line) and the restart loss (0.5 day per eclipse) are evaluator working assumptions without a process source; the register prints them ASSUMED and the `holdLoadLow` / `holdLoadHigh` scenarios bracket them (0.05–0.50). Binding them is an ECN with a process source. | `eclipse.py`, `Processing.sysml`, register §1 |
 | W4A-N4 | Two-point conflicts (REO ramp knots, canister payload, PSR capacity, hauler floor) and the test outcomes (impact survival, Mk III validation) are sampled with equal / 0.5 weights, uninformative; the register says so per row. A sourced probability replaces the weight. | register §1 |
 | W4A-N5 | No document states a range for the capture years or the redirect-to-arrival lag, so D5's "year distribution" is a point; `lateMType` carries the sensitivity. | `Parameters.sysml` captureRangeDoc |
-| W4A-N6 | The value of lost asteroid throughput is not in ECON (no revenue line for C/S-type products); it is charged through the circuit Earth-fraction reductions the lines enable, which makes 1 % of planned output worth roughly 30 kt of Earth cargo — a strong gearing that rests on ECON's own substitution model. | `eclipse.py`, `run.evaluate_d1` |
+| W4A-N6 | The value of lost asteroid throughput is not in ECON (no revenue line for C/S-type products); it is charged through the circuit Earth-fraction reductions the lines enable (the sample's own `ctype_reduction` / `stype_reduction`, the Y140 scaled-operations block shared by load), which makes 1 % of planned C-type output worth roughly 45 kt of Earth cargo — a strong gearing that rests on ECON's own substitution model. | `eclipse.py`, `run.evaluate_d1` |
+| W4A-N7 | Two eclipse-frequency readings coexist: VERIFY's 0.85 illumination with a 72 h longest eclipse implies about 18 dark periods a year (more than one per synodic month), while Gläser's 3–5 day longest darkness is consistent with 11–13. The evaluator counts restarts as the dark fraction divided by the sampled longest eclipse (the fewest, longest eclipses, a lower bound) and the sunlit-window gate assumes at most one dark period per synodic month. An illumination time series for the site would settle both. | `Parameters.sysml` restartDoc, `eclipse.profile` |
+
+### 5a. Review findings applied (6 Nov 2026, same session)
+
+An adversarial review of the D1 evaluator before delivery found ten defects;
+all applied: the hot-standby ECON re-run cache was keyed on the uniform
+matrix only (scenario runs at one seed shared it) — now content-hashed; the
+break-even probability was computed on the SPA power-side mass, not the
+objective — now on total Earth-launched mass, with the case "better with
+the MSR, worse without" reported as "above"; the model calc
+`PlantOversizeFactor` now carries the restart-loss term the evaluator uses
+and `EclipseCriticalFraction` the oversize factor, because the hold load is
+a share of the plant's rated (oversized) load — the duty cycle's derived
+fraction rises from 0.15 to 0.18 and its fallback FSP count from 941 to
+1,155; each block's battery is placed in its own year; the non-nuclear
+cargo is the growth of the running maximum of the fleet the load needs (a
+load that falls and regrows re-uses sunk hardware); ECON's own SPA MSR
+deliveries (`cargo_spa_msr`) are removed from the base for D1 and D2 and
+replaced by the trade's units; restarts are counted on the sampled longest
+eclipse (W4A-N7); the throughput coupling reads the sample's reduction
+parameters and shares the scaled-operations block between the lines. The
+review's model, trades, tools and brief-compliance passes did not complete
+(session usage limit); their scope was checked by the tests and the
+structural checks instead.
 
 ### 6. Validation
 

@@ -403,8 +403,9 @@ package SeleniteScenarios {
         }
         variant part sunlitDutyCycle : EclipseStrategyOption {
             doc /* B: pausable steps scheduled outside the eclipse, plant oversized
-                 * by 1 / (1 - dark fraction) to keep annual throughput, hold loads
-                 * only through the eclipse; restart losses per eclipse. */
+                 * by 1 / ((1 - dark fraction)(1 - restart loss)) to keep annual
+                 * throughput despite the dark time and the restarts; only the hold
+                 * loads (a share of the oversized plant) go through the eclipse. */
             attribute redefines source = "Wave 4A brief D1 (Jason, 19 Sep 2026 reading)";
         }
         variant part hotStandby : EclipseStrategyOption {

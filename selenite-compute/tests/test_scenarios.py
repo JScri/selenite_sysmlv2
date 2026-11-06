@@ -181,7 +181,9 @@ def test_duty_cycle_keeps_throughput_hot_standby_does_not(site):
     c = eclipse.evaluate_strategy("hotStandby", _inputs(0.25), site)
     assert b["throughputLostFraction"] == 0.0 and b["oversizeMassTonnes"] > 0
     assert c["throughputLostFraction"] > 0.15 and c["oversizeMassTonnes"] == 0
-    assert abs(b["derivedCriticalFraction"] - c["derivedCriticalFraction"]) < 1e-12
+    # The duty cycle's hold load is a share of the oversized plant, so its derived fraction is higher.
+    assert b["derivedCriticalFraction"] > c["derivedCriticalFraction"]
+    assert abs(c["derivedCriticalFraction"] - 0.25 * 150.0 / 250.0) < 1e-9
 
 
 def test_hybrid_battery_follows_the_verify_rule(site):
@@ -199,11 +201,12 @@ def test_msr_world_makes_carry_through_free(site):
 
 
 def test_break_even_probability_shape():
-    be = eclipse.break_even_probability({"a": 100.0, "b": 200.0, "c": 100.0, "d": 1000.0},
-                                        {"a": 10000.0, "b": 1000.0, "c": 1000.0, "d": 20000.0}, reference="a")
-    assert abs(be["b"] - 9000.0 / 9100.0) < 1e-12
-    assert be["c"] == 1.0                       # no worse in either world
-    assert np.isnan(be["d"])                    # no better in either world
+    be = eclipse.break_even_probability({"a": 100.0, "b": 200.0, "c": 100.0, "d": 1000.0, "e": 50.0},
+                                        {"a": 10000.0, "b": 1000.0, "c": 1000.0, "d": 20000.0, "e": 12000.0}, reference="a")
+    assert be["b"]["wins"] == "below" and abs(be["b"]["p"] - 9000.0 / 9100.0) < 1e-12
+    assert be["c"]["wins"] == "always"                       # no worse in either world
+    assert be["d"]["wins"] == "never" and np.isnan(be["d"]["p"])   # no better in either world
+    assert be["e"]["wins"] == "above" and abs(be["e"]["p"] - 2000.0 / 2050.0) < 1e-12
 
 
 def test_d1_register_run_recommends_and_reports_the_derived_fraction(small_run):
