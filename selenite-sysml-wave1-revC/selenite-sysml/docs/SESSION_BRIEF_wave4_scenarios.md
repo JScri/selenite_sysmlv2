@@ -1,8 +1,11 @@
 # Session Brief — Wave 4A: Scenarios, uncertainty and decision analysis
 
-> **Status: kick-off 20 Sep 2026, not started.** Wave 4 is split: **4A** is this
+> **Status: delivered 6 Nov 2026 (`CHANGELOG_WAVE4A.md`, PR open);**
+> kick-off 20 Sep 2026. Wave 4 is split: **4A** is this
 > brief; **4B** (behaviour, interfaces, software) is the original Wave 4 scope
-> in `docs/MIGRATION_PLAN.md`, unchanged, for a separate session.
+> in `docs/MIGRATION_PLAN.md`, unchanged, for a separate session. Note for
+> re-runs: `npm install -g sysml-validate@0.36.0 sysml-diagram@0.42.0` (the
+> diagram CLI is pinned, W4A-N2).
 
 **Scope:** one session, two if the parametrised economics take longer than
 expected. Turn the deterministic derived plan of Wave 3 into a *decision

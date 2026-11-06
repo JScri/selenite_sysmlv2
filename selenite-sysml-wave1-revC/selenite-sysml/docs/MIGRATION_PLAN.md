@@ -90,7 +90,7 @@ Framework is a Wave 5 rendering.
 
 ## Wave 4 — split 20 Sep 2026 into 4A (scenarios) and 4B (behaviour)
 
-### Wave 4A — Scenarios, uncertainty and decision analysis (next; brief: `docs/SESSION_BRIEF_wave4_scenarios.md`)
+### Wave 4A — Scenarios, uncertainty and decision analysis ✅ DELIVERED (6 Nov 2026; brief: `docs/SESSION_BRIEF_wave4_scenarios.md`)
 
 Decision (Jason, 20 Sep 2026): the model must parameterise per scenario,
 compute and compare alternatives under uncertainty and guide the selection;
@@ -107,6 +107,18 @@ defaults, common-random-number sampler, criteria), `tools/scenario_check.py`
 printing `docs/SCENARIO_REGISTER.md` in CI, and a draft ECN-023 for the
 eclipse strategy. Committed parameters are never rebound by the wave; the
 draft ECN carries the recommendation to Jason.
+
+Delivered 6 Nov 2026 — see `CHANGELOG_WAVE4A.md`. D1–D8 catalogued as
+variations with their trade studies; the uncertainty register binds 32
+entries (18 sampled from sourced ranges, 14 points with the reason stated);
+D1–D8 all evaluated stochastically (none stubbed); `econ_param` equals the
+port bit-for-bit at defaults; `plan_check` output byte-identical by default;
+`docs/SCENARIO_REGISTER.md` at n = 2,000 with the convergence line; the D1
+result and the derived `spaAsteroidLoadCriticalFraction` per strategy are in
+`docs/SEL-ECN-023_draft_EclipseOperatingStrategy.md`, awaiting Jason. Open
+questions 2–4 of the brief are answered in the ECN draft (dark fraction from
+Gläser et al. 2014; a Czochralski batch fits the sunlit window; D3 in
+scope); question 1 (the default criterion) is proposed, not decided.
 
 ### Wave 4B — Behaviour, interfaces, software (original Wave 4 scope, unchanged)
 

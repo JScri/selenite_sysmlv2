@@ -291,4 +291,64 @@ package SeleniteAnalysis {
         in depletionFraction : Real;
         return satisfied : Boolean = cumulativeOreTonnes >= depletionFraction * tierResourceTonnes;
     }
+
+    // ---- Wave 4A: SPA eclipse operating strategy (D1) --------------------
+
+    calc def EclipseCriticalFraction {
+        doc /* D1 derived twin of ProgrammeParameters.spaAsteroidLoadCriticalFraction
+             * (ECN-022 s.2.4, declared 1.0). The share of an asteroid-processing
+             * load that must be carried through an eclipse under an operating
+             * strategy: the non-pausable part in full, the pausable part at its
+             * hold-load fraction, and under the hybrid strategy the stored part
+             * (carried by battery) in full. Carry-through: pausable = 0, so the
+             * fraction is 1. Evaluated per strategy and per sample by
+             * selenite.scenarios.eclipse; the scenario register prints the
+             * declared value and the derived values side by side. */
+        in pausableLoadKw : Real;
+        in nonPausableLoadKw : Real;
+        in holdLoadFraction : Real;
+        in storedLoadFraction : Real;
+        return criticalFraction : Real =
+            (nonPausableLoadKw + pausableLoadKw * (storedLoadFraction + (1.0 - storedLoadFraction) * holdLoadFraction))
+            / (pausableLoadKw + nonPausableLoadKw);
+    }
+
+    calc def PlantOversizeFactor {
+        doc /* Sunlit duty cycle (D1 alternatives B and D): a plant that runs only
+             * while the site is lit keeps its annual throughput when its rated
+             * capacity is scaled by 1 / (1 - dark fraction). */
+        in darkFraction : Real;
+        return oversizeFactor : Real = 1.0 / (1.0 - darkFraction);
+    }
+
+    calc def EclipseBatteryMass {
+        doc /* VERIFY v5.0 eclipse battery rule: bkWh = shortfall x eclipse hours x
+             * margin; mass = bkWh x 1000 / (Wh/kg). Inputs from ProgrammeParameters
+             * (batteryMarginFactor, batterySpecificEnergyWhPerKg). */
+        in carriedLoadKw : Real;
+        in eclipseHours : Real;
+        in marginFactor : Real;
+        in specificEnergyWhPerKg : Real;
+        return batteryMassKg : Real = carriedLoadKw * eclipseHours * marginFactor * 1000.0 / specificEnergyWhPerKg;
+    }
+
+    calc def SunlitWindowGate {
+        doc /* Czochralski batch scheduling (open question 3): a batch that cannot
+             * pause mid-crystal is schedulable between eclipses when its length
+             * does not exceed the minimum sunlit window, the synodic period less
+             * the longest eclipse. */
+        in batchHours : Real;
+        in synodicPeriodHours : Real;
+        in longestEclipseHours : Real;
+        return fits : Boolean = batchHours <= synodicPeriodHours - longestEclipseHours;
+    }
+
+    calc def FspUnitsForLoad {
+        doc /* VERIFY sizing: FSP units are the eclipse-critical load divided by
+             * the unit rating, rounded up (plan_vectors.fsp_msr_trade). Written
+             * as a real ratio here; the Python layer applies the ceiling. */
+        in criticalLoadKw : Real;
+        in fspUnitPowerKw : Real;
+        return unitsRatio : Real = criticalLoadKw / fspUnitPowerKw;
+    }
 }

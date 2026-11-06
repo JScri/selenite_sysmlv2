@@ -14,6 +14,7 @@ package SeleniteProcessing {
 
     private import ScalarValues::*;
     private import SelenitePhases::*;
+    private import SeleniteScenarios::*;
     private import SeleniteSites::*;
 
     abstract part def ProcessingFacility :> PhaseGated {
@@ -176,26 +177,80 @@ package SeleniteProcessing {
              * values Wave 5). */
     }
 
+    part def AsteroidProcessStep {
+        doc /* One process of an asteroid line, with its eclipse operating
+             * behaviour (Wave 4A, D1). pausableThroughEclipse: the step can be
+             * scheduled outside the eclipse (or, for a batch process, scheduled
+             * as whole batches between eclipses). holdLoadFraction: the share of
+             * the step's rated electrical load that must be carried through an
+             * eclipse to hold it (thermal keep-warm, controls) - UNBOUND unless
+             * a process source gives a value; SEL-PROC-C-001 / SEL-PROC-S-001 do
+             * not exist, Decision Framework s.10.1 and Strategy v3.1 s.5.1 give
+             * loads, not hold fractions. The Python evaluator carries a declared
+             * working assumption per step (selenite.scenarios.eclipse
+             * ASSUMED_HOLD_LOAD_FRACTION) and the register marks it ASSUMED.
+             * minimumContinuousRunHours: the run that cannot be interrupted
+             * (a Czochralski batch), compared with the sunlit window by
+             * SeleniteAnalysis::SunlitWindowGate. */
+        attribute stepName : String;
+        attribute pausableThroughEclipse : Boolean;
+        attribute holdLoadFraction : PointReal;
+        attribute minimumContinuousRunHours : Real [0..1];
+    }
+
     abstract part def AsteroidProcessingLine :> ProcessingFacility {
         doc /* Captured-asteroid concentrate processing at SPA (all asteroid
-             * processing at SPA, never PKT - fleet v9 s.1 item 6). */
+             * processing at SPA, never PKT - fleet v9 s.1 item 6). Wave 4A: the
+             * line carries its eclipse operating behaviour (D1) as a whole and
+             * per step; the Decision Framework s.10.1 loads (50 MWe at Y105 for
+             * the C-type line, 100 MWe at Y125 for the S-type line, +100 MWe at
+             * Y140 scaled operations) are per line, so the line-level hold
+             * fraction is what the evaluator reads; the step split is recorded
+             * for the process sources that will bind it. */
         attribute redefines location = SiteId::spa;
+        attribute pausableThroughEclipse : Boolean;
+        attribute holdLoadFraction : PointReal;
+        attribute minimumContinuousRunHours : Real [0..1];
     }
 
     part def MTypeProcessingLine :> AsteroidProcessingLine {
         doc /* M-type: magnetic separation -> chlorination -> PGM; Fe-Ni to the
-             * PKT foundry via MD-1. Online Y85 (P12). Source: fleet v9 s.17.3. */
+             * PKT foundry via MD-1. Online Y85 (P12). Source: fleet v9 s.17.3.
+             * Wave 4A: aqueous hydrometallurgy can pause between leach batches;
+             * no Decision Framework s.10.1 load is sized for it (the SPA MSRs
+             * are sized for the C-type and S-type lines), so D1 carries it
+             * without a load. */
         attribute redefines introducedIn = Phase::P12;
         attribute redefines retiredIn = null;
+        attribute redefines pausableThroughEclipse = true;
+        part hydromet : AsteroidProcessStep {
+            attribute redefines stepName = "PGM hydromet (magnetic separation, chlorination, leach)";
+            attribute redefines pausableThroughEclipse = true;
+        }
     }
 
     part def CTypeProcessingLine :> AsteroidProcessingLine {
         doc /* C-type: pyrolysis + Fischer-Tropsch (water, carbon, nitrogen;
              * propellant independence). Online Y105 = P12 by the year table
              * (W2-N7 resolved 14 Sep 2026: years authoritative; documents
-             * that file this under P13 carry a stale phase label). */
+             * that file this under P13 carry a stale phase label).
+             * Wave 4A (D1): both steps are continuous thermal processes
+             * (ECN-022 s.2.4) that can nevertheless be scheduled outside the
+             * eclipse and held warm through it (Jason, 19 Sep 2026: "fine if
+             * the power-intensive work is done while the eclipse is not
+             * present"); pausable, hold fraction unbound (ASSUMED 0.25 in the
+             * evaluator). Load: Decision Framework s.10.1, 50 MWe from Y105. */
         attribute redefines introducedIn = Phase::P12;
         attribute redefines retiredIn = null;
+        attribute redefines pausableThroughEclipse = true;
+        part pyrolysis : AsteroidProcessStep {
+            attribute redefines stepName = "pyrolysis (water, volatiles)";
+            attribute redefines pausableThroughEclipse = true;
+        }
+        part fischerTropsch : AsteroidProcessStep {
+            attribute redefines stepName = "Fischer-Tropsch (carbon, hydrocarbons)";
+            attribute redefines pausableThroughEclipse = true;
+        }
     }
 
     part def STypeProcessingLine :> AsteroidProcessingLine {
@@ -203,8 +258,25 @@ package SeleniteProcessing {
              * wiring). Online Y125 = P13 by the year table (W2-N7 resolved:
              * years authoritative; the P14 label in the documents is stale).
              * P14 therefore has no new asteroid arrival - it is the scale-up
-             * to 2.5 Mt/yr with all three streams flowing. */
+             * to 2.5 Mt/yr with all three streams flowing.
+             * Wave 4A (D1): Czochralski growth cannot pause mid-crystal, so its
+             * eclipse strategy is scheduling whole batches between eclipses
+             * (open question 3: a 1-3 day batch fits the sunlit window,
+             * SunlitWindowGate); the furnace is cold between batches, so its
+             * hold load is nil and the eclipse cost is scheduling slack.
+             * Copper electrolysis can pause. minimumContinuousRunHours is bound
+             * in the configuration to ProgrammeParameters.czochralskiBatchHours.
+             * Load: Decision Framework s.10.1, 100 MWe from Y125. */
         attribute redefines introducedIn = Phase::P13;
         attribute redefines retiredIn = null;
+        attribute redefines pausableThroughEclipse = true;
+        part czochralski : AsteroidProcessStep {
+            attribute redefines stepName = "Czochralski silicon growth (batch)";
+            attribute redefines pausableThroughEclipse = true;
+        }
+        part copperElectrolysis : AsteroidProcessStep {
+            attribute redefines stepName = "copper electrolysis";
+            attribute redefines pausableThroughEclipse = true;
+        }
     }
 }

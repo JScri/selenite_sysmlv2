@@ -4,6 +4,9 @@ on: [push, pull_request]
 # The SysML v2 project lives in a subfolder of this repository; every step
 # runs there. Restored Wave 2 from Jason's original workflow (which assumed
 # the model folder was the repository root).
+# sysml-diagram is pinned to 0.42.0 (Wave 4A, 6 Nov 2026): 0.54.0 rejects the
+# Wave 3 gate-binding idiom (SSM079 on 'attribute redefines x = gates.y.derivedPhase')
+# that sysml-validate 0.36.0 accepts; W4A-N2.
 defaults:
   run:
     working-directory: selenite-sysml-wave1-revC/selenite-sysml
@@ -17,7 +20,7 @@ jobs:
         with:
           node-version: 20
       - name: Install SysML v2 CLI tools
-        run: npm install -g sysml-validate@0.36.0 sysml-diagram
+        run: npm install -g sysml-validate@0.36.0 sysml-diagram@0.42.0
       - name: Validate model
         run: sysml-validate model --workspace . --all --format github
       - name: Render diagrams
@@ -49,3 +52,10 @@ jobs:
         with:
           name: plan-register
           path: plan_register.md
+      - name: Scenario check (decisions under uncertainty, Wave 4A)
+        run: python selenite-sysml-wave1-revC/selenite-sysml/tools/scenario_check.py --n 500 --seed 20260920 --markdown scenario_register.md --quiet
+      - name: Upload scenario register
+        uses: actions/upload-artifact@v4
+        with:
+          name: scenario-register
+          path: scenario_register.md
