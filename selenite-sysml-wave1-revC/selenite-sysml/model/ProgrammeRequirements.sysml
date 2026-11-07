@@ -67,10 +67,14 @@ package SeleniteRequirements {
              * to the L1 fuel depot via MD-2, not vented or dumped. Source as
              * carried since Wave 1: "Strategy v3.1, Decision Framework Rev D"
              * - W4B-N4 (Wave 4B): neither document, nor fleet v9 nor ECN-020,
-             * names the depot or the O2 loft; W4B-N18 (addendum): ECN-019 Rev
-             * C, now in docs/, does not either (MD-2 is "REO canisters" PKT ->
-             * Earth, s.18.1). The requirement is kept as written and the
-             * depot's provenance is a question for Jason. Subject since Wave 4B: the
+             * names the depot or the O2 loft; W4B-N18 (addendum): the source
+             * is SEL-ECON-001 Rev A revised s.8.4 (LOX canisters "launched via
+             * MD-2 to an Earth-Moon L1 orbital fuel depot", P14+, DG-14.4);
+             * ECN-019 Rev C names no depot (MD-2 "REO canisters", s.18.1).
+             * W4B-N27: ECON s.8.4 "this oxygen is initially vented or stored"
+             * (P8-P14) against this requirement's "not vented or dumped" -
+             * recorded, the requirement kept as written, a question for Jason.
+             * Subject since Wave 4B: the
              * SeleniteSites::L1OxygenDepot element, which exists from the
              * phase MD-2 is operational; the O2 stream is the MD-2 loft branch
              * of SeleniteBehaviour::PktKreepToEarth. The constraint checks

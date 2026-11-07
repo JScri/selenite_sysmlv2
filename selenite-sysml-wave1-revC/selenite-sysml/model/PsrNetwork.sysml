@@ -171,20 +171,22 @@ package SelenitePsrNetwork {
     }
 
     part def BayonetTapSocket {
-        doc /* A standardised 20 mm bayonet tap socket with two L-slot pins
-             * (construction tap on the branch cable every 100 m with its
-             * retraction spool, the SATS construction tap, the substation
-             * construction tap SEL-SUB-BUS-030, the CAP floor docking pad tap)
-             * that the MOLE-I motorised adapter engages push-and-twist and
-             * holds on a passive detent. The SEL-CON-001 Rev B updated
+        doc /* The standardised 20 mm two-L-slot bayonet power interface the
+             * MOLE-I motorised adapter engages push-and-twist and holds on a
+             * passive detent. Two forms: fixed sockets (the SATS construction
+             * tap, the substation construction tap SEL-SUB-BUS-030, the CAP
+             * floor docking pad tap) and, at each branch construction tap
+             * every 100 m, the bayonet plug "integrated at the free end of the
+             * tether" wound on the retraction spool (ECN-013 Rev 3) - the
+             * rover mates with the spool tether's plug, not a socket on the
+             * cable; electrically the same tap. The SEL-CON-001 Rev B updated
              * connector element (V-N7); the engagement sequence is
-             * SeleniteSoftware::BayonetEngagementStates. The branch connector
-             * is make-before-break: the solenoid closes after the connector is
-             * fully seated (SEL-SW-SUB-001 Rev C s.6). Socket counts (~9
-             * spools per 450 m branch) and the 1,000 VDC rating stay in the
-             * source (rule 3). Source: SEL-CON-001 Rev B updated s.3.1 and
-             * ECN-013 Rev 2 / Rev 3 and CAP reservations; SEL-SW-SUB-001 Rev
-             * C s.6, ECN-013 Rev 3 part; fleet v9 s.4.1. */
+             * SeleniteSoftware::BayonetEngagementStates. The substation's own
+             * branch connector is make-before-break (SEL-SW-SUB-001 Rev C
+             * s.6). Socket counts (~9 spools per 450 m branch) and the 1,000
+             * VDC rating stay in the source (rule 3). Source: SEL-CON-001 Rev
+             * B updated s.3.1 and ECN-013 Rev 2 / Rev 3 and CAP reservations;
+             * SEL-SW-SUB-001 Rev C s.6, ECN-013 Rev 3 part; fleet v9 s.4.1. */
         port socket : BayonetTapPort;
     }
 
@@ -199,8 +201,9 @@ package SelenitePsrNetwork {
         port substationTaps : PowerPort;
         part retractionSpools : RetractionSpool[0..*];
         part constructionTaps : BayonetTapSocket[0..*] {
-            doc /* Construction taps every 100 m with a retraction spool each
-                 * (ECN-013 R3 via fleet v9 s.13.4). */
+            doc /* Construction taps every 100 m, each a spring spool whose
+                 * tether ends in the bayonet plug the rover engages (SEL-CON-001
+                 * Rev B updated, ECN-013 Rev 3; fleet v9 s.13.4). */
         }
     }
 

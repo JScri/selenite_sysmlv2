@@ -172,11 +172,14 @@ first modelled without its primary sources (W4B-N1) from fleet v9, Strategy
 v3.1, Decision Framework Rev D and ECN-020; the same-day addendum
 (`CHANGELOG_WAVE4B.md` §9) committed the sources Jason supplied to `docs/`
 and `docs/sources/`, closed the TODOs, bound the triggers they give (ECN-012
-dump sequence, ECN-014 returns, no-contact mode, PLC / UHF switchover, tether
-port breakers, bayonet engagement, construction tap hop, CAP mission with
-SPE abort), moved the polar fix to the substation (ECN-013 §3.2) and left
-two triggers unbound where the sources are silent (W4B-N21, N22). No value
-rebound, no ECN raised. Observations W4B-N1 … N22; open items in
+dump sequence and cell-complete depth, no-contact mode, PLC / UHF
+switchover, tether port breakers, bayonet engagement, construction tap hop,
+CAP mission with SPE abort), moved the polar fix to the substation (ECN-013
+§3.2), verified every binding adversarially against the sources and left
+the triggers unbound where the sources are silent (SENTINEL modes, ECN-014
+returns, drill-resistance offset, construction role — W4B-N21, N22). The L1
+O2 depot's source was found in SEL-ECON-001 Rev A revised §8.4 (W4B-N18 /
+N27). No value rebound, no ECN raised. Observations W4B-N1 … N28; open items in
 `CHANGELOG_WAVE4B.md` §8; the Wave 5 brief is
 `docs/SESSION_BRIEF_wave5_quantities.md`.
 

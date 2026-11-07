@@ -43,27 +43,31 @@ package SeleniteHabitat {
         attribute h3ModuleFrom = Phase::P7;
         part referenceModule : HabModule;
         port o2SupplyLine : ~OxygenPort {
-            doc /* Low-pressure stainless O2 line with double-block-and-bleed
-                 * isolation at hab entry (Strategy v3.1 s.5.1; HAB-001 s.10)
-                 * and, per the ECN-014 amendment, a dome-loaded fail-closed
-                 * regulator at the ISRU exit, a relief valve venting to vacuum,
-                 * a SENTINEL-triggered fail-closed isolation valve and a check
-                 * valve at hab entry against reverse flow - four independent
-                 * barriers between the PEM output and the hab atmosphere (set
-                 * points stay in the source, rule 3). Monitored and
-                 * auto-closed by SeleniteSoftware::O2SupplyLineMonitoringFunction.
-                 * Source: SEL-ISRU-001 Rev D updated s.8.2 (ECN-014 amendment);
+            doc /* Low-pressure stainless O2 line. Per the ECN-014 amendment
+                 * (SEL-ISRU-001 Rev D updated s.8.2) the line carries (1) a
+                 * dome-loaded fail-closed pressure regulator at the ISRU exit,
+                 * (2) a spring-loaded relief valve downstream venting to
+                 * vacuum and (3) a pneumatically actuated fail-closed isolation
+                 * valve, SENTINEL-triggered - "in addition to the existing
+                 * double-block-and-bleed at hab entry (HAB-001 s.10)"
+                 * (Strategy v3.1 s.5.1); "the combined system provides four
+                 * independent barriers" (the source does not enumerate the
+                 * four; the count stays in the doc, rule 3). A check valve at
+                 * hab entry, upstream of the double-block-and-bleed, prevents
+                 * reverse flow during hab depressurisation. Set points stay in
+                 * the source. Monitored and auto-closed by
+                 * SeleniteSoftware::O2SupplyLineMonitoringFunction. Source:
+                 * SEL-ISRU-001 Rev D updated s.8.2 (ECN-014 amendment);
                  * updated_SEL-CAD-ISRU-001 Rev A ECN-014 amendment
                  * (SEL-ISRU-REG-001). */
         }
         port o2LineSensors : SensorPort;
         port o2LineAutoClose : ~HardwiredClosePort;
-        attribute o2LineIndependentBarriers : Integer = 4;
         attribute o2IsolationValveFailClosed : Boolean = true;
-        assert constraint o2LineFourBarriers {
-            doc /* "The combined system provides four independent barriers"
-                 * (SEL-ISRU-001 Rev D updated s.8.2). */
-            o2LineIndependentBarriers == 4 and o2IsolationValveFailClosed == true
+        assert constraint o2IsolationFailClosed {
+            doc /* "(3) pneumatically actuated isolation valve, fail-closed ...
+                 * SENTINEL-triggered" (SEL-ISRU-001 Rev D updated s.8.2). */
+            o2IsolationValveFailClosed == true
         }
     }
 
@@ -115,30 +119,32 @@ package SeleniteHabitat {
     }
 
     enum def ValvePosition {
-        doc /* Commanded / confirmed position of a cryo isolation valve pair
+        doc /* Commanded / confirmed position of a cryo isolation ball valve
              * (ECN-014 via fleet v9 s.9.2: closure confirmed by limit switch). */
         open; closed;
     }
 
     part def CryoIsolationValveStation {
-        doc /* Isolation valve station on the ISRU-IZ cryo transfer line: two
-             * valves, pneumatic actuators with spring-return fail-closed,
-             * hardwired 24 VDC close line, limit switches, ECN-014 sensor set.
-             * Monitored by SeleniteSoftware::CryoValveMonitoringFunction, whose
-             * state machine commands it; the hardware facts ECN-014 fixes are
-             * asserted here (Wave 4B). Addendum (7 Nov 2026) from the sources
-             * now in docs/: each station is a pneumatically actuated cryogenic
-             * ball valve (fail-closed, GN2 actuator + spring return) plus a
+        doc /* Isolation valve station on the ISRU-IZ cryo transfer line.
+             * From the ECN-014 extract in fleet v9 s.9.2 (the only repository
+             * text for these facts): "hardwired 24 VDC signal to pneumatic
+             * actuator (NOT CAN bus or SpaceWire). Closure confirmed by limit
+             * switch". Monitored by SeleniteSoftware::CryoValveMonitoringFunction,
+             * whose state machine commands it; the hardware facts are asserted
+             * here (Wave 4B). Addendum (7 Nov 2026) from the sources now in
+             * docs/: each station is one pneumatically actuated cryogenic ball
+             * valve (fail-closed, GN2 actuator + spring return) plus one
              * passive excess-flow check valve that trips on its own at a
              * multiple of normal flow, a burst disc on the ISRU-end stations
              * venting to vacuum through a directed nozzle, two catalytic H2
              * sensors and a UV flame detector, in a sintered shelter; the
              * valves stay open in normal continuous flow. Closure times,
              * trip ratios and set pressures stay in the source (rule 3).
-             * Source: ECN-014 extract in fleet v9 s.9.2 and s.12.4;
-             * SEL-ISRU-001 Rev D updated s.7.4 (ECN-014 amendment);
-             * updated_SEL-CAD-ISRU-001 Rev A ECN-014 amendment (valve station
-             * geometry, SEL-ISRU-VLV-001 / -002). */
+             * Source: fleet v9 s.9.2 (hardwired close, limit switch) and
+             * s.12.4; SEL-ISRU-001 Rev D updated s.7.4 (ECN-014 amendment:
+             * ball valve, check valve, burst disc, sensors, open in normal
+             * flow); updated_SEL-CAD-ISRU-001 Rev A ECN-014 amendment (valve
+             * station geometry, SEL-ISRU-VLV-001 / -002). */
         port sensorOutput : SensorPort;
         port hardwiredCloseInput : ~HardwiredClosePort;
         port limitSwitchOutput : LimitSwitchPort;

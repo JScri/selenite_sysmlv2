@@ -112,10 +112,13 @@ Superseded copies that arrived in the same batch (SENTINEL design Rev A+,
 CAP-001 Rev A) are kept under `docs/sources/` with their extracts and mapped
 `superseded`. One uploaded MOLE-I design v5 copy was not a docx (plain text)
 and was not kept. The document map carries the per-file status; the
-addendum's observations are W4B-N18 … N22 in `CHANGELOG_WAVE4B.md` §9
-(ECN-019 Rev C names no L1 O2 depot; the value-chain conflicts; the SENTINEL
-first-phase evidence; no SENTINEL mode table; the MOLE-I drill-resistance
-offset rule).
+addendum's observations are W4B-N18 … N28 in `CHANGELOG_WAVE4B.md` §9
+(the L1 O2 depot's source found in SEL-ECON-001 Rev A revised §8.4, with its
+phase conflict; the value-chain conflicts; the SENTINEL first-phase
+evidence; no SENTINEL mode table; the MOLE-I drill-resistance offset rule;
+the ECN-012 heater phase, the substation connector, the no-contact wordings,
+the CAP work window). Every binding of the addendum was adversarially
+verified against the sources (§9.5 there).
 
 ## Excluded / out of scope
 - `SEL-ECN-021_PKT_ProcessWater.md` — source recovered 14 Sep 2026, now in
@@ -171,7 +174,7 @@ offset rule).
 W4B-N1 … W4B-N17 (none of the wave's primary sources in the repository; the
 validator's silent acceptance of unresolved connection endpoints and
 `tools/connect_check.py`; the guard-payload and parameter-name quirks; the
-unsourced L1 O2 depot of SEL-REQ-005; the PROBE-era SPA PGM hydromet added;
+L1 O2 depot of SEL-REQ-005, unsourced until the addendum found it in SEL-ECON-001 Rev A revised §8.4 (W4B-N18 / N27); the PROBE-era SPA PGM hydromet added;
 the ECN-014 thresholds as document constants without a Python source; the
 transitions left unbound; SENTINEL P2 vs P3; the plan register's five new
 rows) are tabled in `CHANGELOG_WAVE4B.md` §6. "App. C" citations of the

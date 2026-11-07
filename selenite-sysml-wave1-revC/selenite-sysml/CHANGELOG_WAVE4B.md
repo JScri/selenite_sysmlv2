@@ -275,7 +275,7 @@ new elements.
 `molei_operating_states`. The interconnection view grew with the interface
 usages (720 kB).
 
-### 6. Observations W4B-N1 … W4B-N17 (recorded, not resolved; W4B-N18 … N26 in §9.4–9.5)
+### 6. Observations W4B-N1 … W4B-N17 (recorded, not resolved; W4B-N18 … N28 in §9.4–9.5)
 
 | # | Observation | Where |
 |---|---|---|
@@ -357,7 +357,9 @@ Baseline out: 18 model files, exit 0, zero hints; tools/connect_check.py 796
               action-flow and five state-transition views); 110 document-map
               rows (107 + 3). docs/ gains 23 originals under docs/sources/,
               19 markdown extracts, the three value-chain html and ECN-019
-              Rev C.
+              Rev C. Two commits: the fold-in with the first seven
+              verification verdicts applied, then the remaining four and the
+              completeness critic (s.9.5, s.9.8).
 ```
 
 ### 9. The addendum
@@ -394,13 +396,13 @@ each source now binds.
 | `AnomalyResponseWorkflow` (new) | — | the six steps detect → classify → isolate → diagnose and recommend → respond → verify and close, performed by `SentinelSystem` and allocated to the edge and Earth tiers (design Rev B §4.3); `AnomalySeverity`, `AuthorityLevel` enums; SPA / PKT EMERGENCY scopes and the GATE no-timeout rule as attributes and `gateNeedsHumanApproval` (design §5, §8.4) |
 | `EarthContactStates` (new) | — | no-contact autonomous mode beyond the threshold (24 hr quoted, UNBOUND), GATE to local crew (P4+) or suspended (P2–P3), gate requests queued (SW-SENTINEL §12.2) |
 | PKT escalation | — | `PktEscalationTier` T0–T3 and `relayNeverInSafetyPath` asserted on `SentinelEdgeTier` (SW-SENTINEL §15.2–15.3) |
-| ECN-014 returns | `alertCleared`, `standDown`, `resolved` unbound | all three accept `AnomalyTicketClosed` — the workflow's step 6 closure after verification (design §4.3 steps 5–6; ISRU-001 Rev D §8.2 amendment for the O2 valve) |
+| ECN-014 returns | `alertCleared`, `standDown`, `resolved` unbound | **still unbound** after the sources (the verification reversed a first binding to the step 6 ticket closing — §9.5): the only documented return is the per-station crew re-open with four sensor preconditions; the docs now name the sources read and the candidates |
 | `CryoIsolationValveStation` | hardwired close, spring return, limit switch | plus the passive excess-flow check valve, burst disc, two catalytic sensors + UV, valves open in normal flow (ISRU-001 Rev D §7.4 amendment; CAD-ISRU ECN-014 amendment); `deadManFailClosed` extended |
-| Habitat O2 line | double-block-and-bleed | four independent barriers with the SENTINEL-triggered fail-closed isolation valve (`o2LineFourBarriers`; ISRU-001 Rev D §8.2 amendment) |
+| Habitat O2 line | double-block-and-bleed | the ECN-014 amendment's regulator, relief valve and SENTINEL-triggered fail-closed isolation valve in addition to the double-block-and-bleed, and the hab-entry check valve; "four independent barriers" quoted, not typed (`o2IsolationFailClosed`; ISRU-001 Rev D §8.2 amendment) |
 | `BayonetEngagementStates` (new), `ConstructionTapHop` (new) | `BayonetAdapter` / `BayonetTapSocket` with TODOs | push-and-twist engage / disengage, detent hold without power asserted (`passiveDetentHold`); the six-step tap hop allocated to the adapter from `MoleIFlightSoftware` (CON-001 Rev B updated ECN-013 Rev 2 / Rev 3) |
-| `CapMissionStates` (new) | `Cap` structural only | at rim (GATE go / no-go) → descending → docked at floor → floor ops (work limit UNBOUND, 2 h quoted) → ascending, SPE abort from every below-rim state (CAP-001 §2–3; EVA contingency §4.6, §4.8); `Cap` gains the guide-cable and floor-power ports and `dedicatedCrewRatedWinch`; `ClpJunction.capDockingPadTap` and `CrewWinch.phase1Reservations` (CAP-001 §5); two configuration interfaces (`capOnGuideCable`, `capFloorPower`) |
+| `CapMissionStates` (new) | `Cap` structural only | at rim (GATE go / no-go) → descending → docked at floor → floor ops (work limit UNBOUND, 2 h quoted; the limit ends floor work) → ingressing → ascending, SPE abort from every below-rim state (CAP-001 §2–3; EVA contingency §4.6, §4.8); `Cap` gains the guide-cable and floor-power ports and `dedicatedCrewRatedWinch`; `ClpJunction.capDockingPadTap` and `CrewWinch.phase1Reservations` (CAP-001 §5); two configuration interfaces (`capOnGuideCable`, `capFloorPower` — power flow only, the pod-side engagement is CAP-001 §8 item 4 OPEN) |
 | Value-chain streams | TODO naming the html | docs name the html sections; topology confirmed; conflicts W4B-N20 |
-| `L1OxygenDepot`, SEL-REQ-005, `OxygenPayload` | "source needed: ECN-019 Rev C" | ECN-019 Rev C read: it names no depot (W4B-N18); kept as the requirement states it |
+| `L1OxygenDepot`, SEL-REQ-005, `OxygenPayload` | "source needed: ECN-019 Rev C" | ECN-019 Rev C names no depot; the verification found the source in SEL-ECON-001 Rev A revised §8.4 — LOX canisters on MD-2 to an Earth–Moon L1 fuel depot at P14+ (W4B-N18 corrected); its phase and "vented or stored" against the requirement and the derived `existsFrom` are W4B-N27; nothing rebound |
 
 Rule 3 held throughout: the new UNBOUND attributes (`tankFullFraction`,
 `purgeHoldMinutes`, `noContactThresholdHours`, `floorWorkLimitHours`) quote
@@ -423,16 +425,18 @@ phase and the configuration gained interfaces only.
   (`controller.tetherOut.fix` → `tetherDrums.tether.fix`) validates and
   resolves.
 
-#### 9.4 Observations W4B-N18 … W4B-N23 (recorded, not resolved)
+#### 9.4 Observations W4B-N18 … W4B-N23 and W4B-N27 … N28 (recorded, not resolved)
 
 | # | Observation | Where |
 |---|---|---|
-| W4B-N18 | ECN-019 Rev C (now `docs/ECN-019_Programme_Wide_Design_Revision.md`, status PROPOSED) names no L1 / EML-2 O2 depot and no O2 loft: §18.1 gives MD-2 the single purpose "REO canisters" PKT → Earth; §15.1 makes SPA itself the P14+ "propellant depot" (value chain v16 agrees). SEL-REQ-005's depot therefore rests on the requirement alone. Kept as written — W4B-N4 is now a question with its evidence complete. | `Sites.sysml`, `ProgrammeRequirements.sysml`, `Interfaces.sysml` |
+| W4B-N18 | ECN-019 Rev C (now `docs/ECN-019_Programme_Wide_Design_Revision.md`, status PROPOSED) names no L1 / EML-2 O2 depot and no O2 loft: §18.1 gives MD-2 the single purpose "REO canisters" PKT → Earth; §15.1 makes SPA the P14+ "deep-space launch hub" (value chain v16 and ECON §8.2: "cislunar launch hub: propellant depot"). **Corrected by the verification (§9.5):** the depot's source is `docs/SEL-ECON-001_RevA_revised.md` §8.4 — PKT's by-product oxygen "liquefied using MSR-powered cryocoolers … loaded into Fe-Ni canisters … and launched via MD-2 to an Earth–Moon L1 orbital fuel depot", "a natural P14+ decision gate (DG-14.4)"; conclusion 9 the same. W4B-N4 is answered; what it opens is W4B-N27. | `Sites.sysml`, `ProgrammeRequirements.sysml`, `Interfaces.sysml`, `Behaviour.sysml` |
 | W4B-N19 | SENTINEL first phase, more evidence for W4B-N8: SENTINEL design Rev B §7 places "2× inspection rovers" in its "P2–P3 (pre-crew)" row; its Rev A history line says "2 rovers (P3) → 4 (P7+)"; the fleet ECN-019 amendment table starts at P7 ("4+"); fleet v9 §9.2 says "2 initial (P3)". `SentinelRover.introducedIn = P2` kept. | `RobotFleet.sysml` |
 | W4B-N20 | Value-chain html against the streams: v14.1 labels the Starship return "P7–P8" while its own Phase 2 panel has the first export batch at M116 / Y10 (the model binds DG-5.4); v15 carries the pre-ECN-020 "~303 t YBCO" (W3-N7 territory) and "MD-3 ThCl₄ (P10)" against ECN-019 §18.1 Y43 P9–P10 and the model's DG-9.6; v16 sends S-type Si / Cu "to PKT via MD-3" although MD-3 is PKT → SPA in ECN-019 §18.1 and the model carries them on MD-1. Nothing in the streams changed. | `Behaviour.sysml` |
 | W4B-N21 | Neither SW-SENTINEL Rev B nor SENTINEL design Rev B carries a three-mode table: the modes are a baseline construct (ARCHITECTURE_BASELINE.md §7); the documents' behaviour is the five-level authority model and the anomaly workflow, now modelled beside the modes. `toLocalAi` / `backToPlan` stay unbound; Wave 5 may retire the mode machine in favour of `AuthorityLevel`. | `Software.sysml` |
 | W4B-N22 | First recorded as "NAV-001 gives no cell-completion rule"; the verification (§9.5) found it in §3.2 (excavate to depth, retract, advance 2 m) and `moveOn` is bound on the depth. What stays unbound is the lateral offset on unexpected drill resistance (§2.2, no criterion). | `Software.sysml` |
-| W4B-N23 | Three H₂ thresholds in three contexts, recorded for the W4B-N6 rule: SENTINEL design §4.3 WARNING "H₂ detected at > 10 ppm"; ECN-014 (fleet v9 §9.2, ISRU-001 Rev D §7.4) 100 ppm alert / 1,000 ppm auto-close at the valve stations; SW-SENTINEL §5 P0 EMERGENCY at 4 % LEL (40,000 ppm) with re-power at < 100 ppm. Different sensors and zones, not a conflict — but the binding rule must keep them apart. | `Software.sysml` docs |
+| W4B-N23 | Three H₂ thresholds in three contexts, recorded for the W4B-N6 rule: SENTINEL design §4.3 WARNING "H₂ detected at > 10 ppm" (and a WARNING isolates — valve closure ≤ 30 s — where ECN-014's 100 ppm is alert-only); ECN-014 (fleet v9 §9.2, ISRU-001 Rev D §7.4) 100 ppm alert / 1,000 ppm auto-close at the valve stations; SW-SENTINEL §5 P0 EMERGENCY at 4 % LEL (40,000 ppm) with re-power at < 100 ppm. Different sensors and zones, but the design §4.3 isolate-on-WARNING rule and the ECN-014 alert-only row are a conflict at 10–100 ppm; recorded. | `Software.sysml` docs |
+| W4B-N27 | SEL-ECON-001 Rev A revised §8.4 places the L1 depot at P14+ (DG-14.4) with PKT's oxygen "initially vented or stored" through P8–P14 — against SEL-REQ-005 "not vented or dumped" and against the configuration's derived `existsFrom = md2.operationalFrom` (P9, a model idiom bound before any document gave the depot a phase); and it makes PKT the "interplanetary fuel depot" where ECON §8.2 / ECN-019 §15.1 / v16 make SPA the launch hub with the propellant depot — two depot roles. Recorded; the binding and the requirement text unchanged (no decision changed); Jason's call. | `ProgrammeConfiguration.sysml`, `Sites.sysml`, `ProgrammeRequirements.sysml` |
+| W4B-N28 | CAP floor work window: CAP-001 §2 "2-hour hard limit" / §6 "hard constraint on work duration" against the EVA contingency §4.5 "2–4 hr work window at floor". The machine's limit is UNBOUND; recorded. | `Software.sysml` |
 
 #### 9.5 Adversarial verification
 
@@ -452,16 +456,103 @@ commit (the first seven):
 | SENTINEL workflow and authority | overreach | the mode escalations restored to the Wave 4B ECN-014 form (`accept SensorReading`) with the severity-based candidate recorded, not bound — no document equates the three modes with the §4.3 severities or the tiers; `humanResolution` UNBOUND again (step 5 gives the disposition, not the return to plan); `respond` allocated to both the Earth and edge tiers; "MSR scram" → the source's "MSR emergency shutdown (control rod drop)" |
 | No-contact mode, PKT tiers | overreach | three wordings of the no-contact rule recorded (SW §12.2 transfer-or-suspend by phase; design §3.7 suspend, crew may approve locally; design §9 transfer, no threshold — **W4B-N26**); T0–T3 wording aligned to §15.3; the §8.2 "Tier 1 / Tier 2" naming clash noted; queueing a `do action` |
 
-The remaining four groups (ECN-014 returns on the ticket closing; valve
-hardware; bayonet / CAP; the W4B-N18–N20 quotations) and the completeness
-critic were still running at this commit; their verdicts and fixes follow in
-the next commit on this branch.
+The remaining four groups, applied in the second commit:
+
+| Group | Verdict | Applied |
+|---|---|---|
+| Valve hardware | rule 3 | `o2LineIndependentBarriers = 4` was a document constant typed into an attribute — removed, "four independent barriers" quoted in the doc only, the constraint reduced to the fail-closed fact; the O2 line doc re-cut to §8.2's own structure (three new items "in addition to" the double-block-and-bleed, the hab-entry check valve named separately, the four not enumerated by the source); "two valves" → one ball valve plus one passive check valve; the hardwired / never-fieldbus / limit-switch facts re-cited to their only repository text (fleet v9 §9.2) rather than §7.4 |
+| ECN-014 returns | overreach | the step 6 ticket closing is record-keeping after the recovery, and the only documented return is the crew re-open with sensor preconditions (fleet v9 §9.2; SW-SENTINEL §5 makes every recovery a crew command after a measured condition): `alertCleared`, `standDown` and `resolved` are **UNBOUND again**, their docs naming the sources read and the candidates; the item doc and the package doc corrected; W4B-N7 stays open for these three; the WARNING-isolates vs ECN-014 alert-only clash added to W4B-N23 |
+| Depot and the quotations (W4B-N18–N20) | unsupported (N18) | **SEL-ECON-001 Rev A revised §8.4 names the depot** — a document the same addendum committed; W4B-N18 corrected in the model and here, W4B-N27 recorded (phase, "vented or stored", two depot roles), the ECN-019 §15.1 misattribution fixed ("deep-space launch hub"; "propellant depot" is v16 / ECON §8.2), `OxygenPayload` says LOX, the v15 quotation completed ("MD-3 ThCl₄ fuel (P10)"); N19 and the rest of N20 confirmed |
+| Bayonet / CAP | misread | the work limit ends floor operations, it does not command ascent: `ingressing` state added, `workLimitReached` → `ingressing`, `workComplete` UNBOUND, `ingress` from `ingressing`, SPE abort from `ingressing` too; `egress` and `backAtRim` declared UNBOUND; the 2 h vs 2–4 h window recorded (W4B-N28); the CAP's floor-power coupling documented as power flow only (the pod-side engagement is CAP-001 §8 item 4, OPEN); the branch construction tap re-described as the plug at the free end of the spool tether (ECN-013 Rev 3), not a socket on the cable; the winch quotation restored verbatim; the disengage and abort docs re-sourced |
+
+The completeness critic's findings, if any, are in §9.8.
 
 | # | Observation (from the verification) | Where |
 |---|---|---|
 | W4B-N24 | ECN-012 §3.3.3 "the heater only runs during non-drilling phases (retraction and dump)" against its own §3.3.2 step 1 "continues drilling for final ~4.5 hours of fill" and ISRU-001 Rev D step D "Drilling continues normally". Modelled as the steps say; recorded. | `Software.sysml` |
 | W4B-N25 | SW-SUB Rev C §6 states make-before-break for the branch connector (the substation's input socket) and "same spec" for the construction tap; the per-port breakers "close on command" by docking status (§7.2) with no connector named. The MOLE-I tether is permanent, so a dump docking is not a plug-in. Recorded. | `Software.sysml` |
 | W4B-N26 | The no-contact rule in three wordings (SW-SENTINEL §12.2; SENTINEL design §3.7; design §9). The machine follows §12.2; the others are recorded in its doc. | `Software.sysml` |
+
+#### 9.8 Completeness critic
+
+A final reviewer read `Software.sysml` in full, the behaviour elements of
+the fleet, PSR network and habitat packages, and all twelve source extracts,
+and asked what behaviour the sources describe that the model still does not
+carry. Its answer is a backlog, not a defect list: the brief's build steps
+(value-chain flows, SENTINEL states, ECN-014 auto-close, NAV-001 fusion,
+the MOLE-I / substation / CAP operating behaviour the sources give) are met,
+and the sources describe a great deal more control behaviour than those
+steps asked for. One item was cheap and belonged to a machine this addendum
+built, so it was added (`CapMissionStates.suitFailureRetreat`: floor ops →
+docked at floor as shelter, CAP-001 §2 / EVA contingency §5, trigger
+UNBOUND). The rest is recorded here for the next behaviour wave (the Wave 5
+brief §0 points at it), grouped:
+
+- **SENTINEL emergency responses and recoveries** (SW-SENTINEL §5; design
+  §3.2, §3.6, §5): fire with 2-of-3 smoke / CO / thermal voting (H₂ does
+  not vote), rapid depressurisation, explosive H₂ (zone power cut, vent,
+  geofence), each with its crew-directed recovery; the H₂ patrol rule
+  "a leak terminates all propellant ops immediately" as an interlock on
+  the IZ and farm; the SPE shelter transition for the habitat (§3.6).
+- **SENTINEL platform states** (SW §2.1, §3.1; design §2.1, §9): primary /
+  hot-standby failover on a missed watchdog, the both-servers-fail degraded
+  mode (robots on last schedule, ECLSS to local PID, GATE suspended), UHF
+  relay failure, inspection rover loss, sensor failure handling.
+- **Eclipse and power** (SW §8; design §3.3–3.4): the pre-eclipse sequence
+  two hours before onset, eclipse declared at the solar threshold, the
+  post-eclipse reverse, the five-tier load-shedding order, and the FSP
+  authority rule (SENTINEL requests, FSP confirms, never controls nuclear
+  parameters) — today only the ECN-023 interface constraint exists.
+- **Fleet scheduling and geofence** (SW §9.1–9.2, §11; design §3.1, §3.6):
+  priority tiers 1–5 and the four constraint checks; breach → stop, shared
+  cell → lower priority yields; EVA boundary breach → halt all robots in
+  zone; suit HUD warning and lockout radii.
+- **GATE catalogue and the departure rule** (design §3.1, §5): "SENTINEL can
+  HALT a departure autonomously but cannot AUTHORISE one"; ARM-C heavy lift,
+  SINTER reactor restart, crew EVA authorisation, pre-crew structural
+  clearance as gate waits; the structural clearance sweep (PASS / FAIL per
+  structure, §3.5 / §7) as a rover behaviour feeding DG-3.1.
+- **ISRU process interlocks** (SW §7; design §3.3; ISRU-001 Rev D §6.3,
+  §7.3, §10, §13; CAD-ISRU §3): water-quality divert and electrolyser input
+  closure (two auto-divert figures, SW / design vs CAD-ISRU — record), pipeline
+  section isolation on a pressure deviation (SW §7 and design §3.3 state the
+  criterion differently — record), trunk pump active / cold spare, cryo tank
+  level management and the propellant allocation order, IZ propellant
+  transfer interlocks (EVA only outside transfer periods).
+- **SENTINEL rover and PKT node behaviour** (design §2.2, §4.1–4.2, §8.2–8.4;
+  SW §15.2–15.4): patrol routes by priority and the optics-cleaning retreat;
+  the T0–T3 protocol as transitions; node failure → sector absorption; hauler
+  sector handoff; MSR start / stop as GATE via SPA; first-launch-of-day GATE;
+  circuit auto-shutdown and QC restart; conveyor segment auto-stop; the
+  expanded EXECUTE scope at PKT.
+- **MOLE-I and substation detail** (NAV-001 §2.1, §3.2; ISRU-001 Rev D
+  §4.2, §5.1.2; ECN-012 §5.2; SW-SUB Rev C §5, §7.2–9, §10, §13; MOLE-I
+  design v5 §9): the lawn-mower turn-around at the tether limit and the
+  resume-at-stored-cell rule after a dump; the docking handover from the
+  polar fix to the proximity sensors; the mini-VEX batch cycle steps A–F;
+  the interrupted-purge freeze and its recovery by the next pre-heat;
+  substation-side dump coordination (funnel lip heater, manifold level →
+  transfer pump); drum failure → spare-port replacement; the substation
+  transit and anchoring sequence to "operational".
+- **Construction and commissioning** (CON-001 Rev B §3.1–3.4, §5.1, §6–7;
+  ECN-013 §4.2 and Rev 2 Stage B; NAV-001 §4): the branch build-out steps
+  (pull, stake, tilt-up with the wheel-current latch confirmation, guy-wire
+  passes, towing) with GATE 1–4 as waits on the construction gate requests
+  the model already emits; the Stage B gate-only check; the CLP
+  commissioning sequence (SATS+WEB pushed into place, tap engaged, bayonet
+  seated).
+- **CAP** (CAP-001 §2–3, §7; EVA contingency §6): the go / no-go
+  preconditions as the guard of `goNoGo`; the pre-crew cargo-carrier use of
+  the guide cable (recorded, flag only).
+- **Prospecting** (ISRU-001 Rev D §2.3.3, §13): GATE 0 / 1 / 1B / 2 with the
+  Cabeus fallback and the no-irreversible-actions hold between GATE 0 and
+  GATE 2 — `Gates.sysml` territory.
+
+Two further source conflicts the critic noted for the record: the pipeline
+leak criterion (SW-SENTINEL §7 adjacent-sensor deviation vs design §3.3
+percentage drop over a period) and the water-quality divert figures
+(SW-SENTINEL §7 / design §3.3 / ISRU-001 §7.3 vs CAD-ISRU §3). Neither
+changes a bound value.
 
 #### 9.6 Map and doc updates
 
@@ -481,8 +572,12 @@ views (`anomaly_workflow_action_flow`, `construction_tap_hop_action_flow`,
 
 #### 9.7 Open for Jason (addendum)
 
-W4B-N4 / N18 (does SEL-REQ-005's L1 O2 depot stand, now that ECN-019 Rev C
-is read and does not carry it?), W4B-N8 / N19 (SENTINEL's first phase),
+W4B-N4 / N18 / N27 (SEL-REQ-005's L1 O2 depot now has its source, SEL-ECON-001
+Rev A revised §8.4, which puts it at P14+ with the oxygen vented or stored
+before — does the requirement's "not vented or dumped" stand, and should
+`existsFrom` follow DG-14.4 rather than MD-2's phase?), W4B-N8 / N19
+(SENTINEL's first phase), W4B-N28 (the CAP work window, 2 h or 2–4 h),
+W4B-N25 (which connector the port breakers wait on),
 W4B-N20 (should the value-chain html be re-cut to ECN-020 — YBCO, MD-3 phase,
 MD-3 direction?), W4B-N21 (retire the three-mode machine?), W4B-N6 / N23
 (the document-constant rule, with the three H₂ thresholds as its test

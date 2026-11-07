@@ -264,13 +264,17 @@ Rev C, CON-001 Rev B, ECN-012, ECN-013, ISRU-001 Rev D + CAD-ISRU, CAP-001,
 EVA contingency, value chain v14.1 / v15 / v16, ECN-019 Rev C); they are in
 `docs/` (markdown extracts, originals under `docs/sources/`), the TODOs that
 named them are closed, the transitions they give are bound (ECN-012 dump
-sequence, ECN-014 returns on the anomaly ticket closing, no-contact mode,
+sequence, no-contact mode,
 PLC / UHF switchover, bayonet engagement, tether port breakers, CAP mission
 with SPE abort), the polar fix moved to the substation (ECN-013 §3.2) and
-the register stayed byte-identical. Still unbound: the SENTINEL mode
-transitions (no mode table in the sources, W4B-N21) and the MOLE-I
-drill-resistance offset (W4B-N22). No value rebound, no ECN raised; W4B-N1 …
-N22 and the open items are in the changelog; next is Wave 5
+the register stayed byte-identical; every binding was then adversarially
+verified against the sources and corrected where it overreached (§9.5).
+Still unbound: the SENTINEL mode transitions (no mode table in the sources,
+W4B-N21), the ECN-014 returns (crew re-open is the only documented return),
+the MOLE-I drill-resistance offset (W4B-N22) and the construction role
+assignment. The L1 O2 depot's source turned out to be SEL-ECON-001 Rev A
+revised §8.4 (W4B-N18 / N27). No value rebound, no ECN raised; W4B-N1 …
+N28 and the open items are in the changelog; next is Wave 5
 (`docs/SESSION_BRIEF_wave5_quantities.md`). The document_map status
 vocabulary gains `behaviour_modelled`. Previous state:
 **Verification after Wave 4A delivered (6 Nov

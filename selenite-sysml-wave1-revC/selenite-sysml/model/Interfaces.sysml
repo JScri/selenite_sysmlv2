@@ -238,12 +238,12 @@ package SeleniteInterfaces {
 
     item def OxygenPayload :> CanisterPayload {
         doc /* O2 by-product lofted on MD-2 to the L1 depot (SEL-REQ-005; the
-             * SeleniteTransport::MassDriverMd2 doc). W4B-N4 / W4B-N18: the
-             * depot and this stream are named only by SEL-REQ-005 (Wave 1);
-             * no repository document carries them, and ECN-019 Rev C (in
-             * docs/ since 7 Nov 2026) gives MD-2 the purpose "REO canisters"
-             * PKT -> Earth (s.18.1) with no O2 loft. Kept as the requirement
-             * states it; a question for Jason. */
+             * SeleniteTransport::MassDriverMd2 doc) - as LOX: "liquefied using
+             * MSR-powered cryocoolers ... loaded into Fe-Ni canisters
+             * (identical to REO export canisters)" (SEL-ECON-001 Rev A revised
+             * s.8.4, the source found by the 7 Nov 2026 verification, W4B-N18;
+             * ECN-019 Rev C names no O2 loft, s.18.1). Phase and "vented or
+             * stored" conflicts: W4B-N27. */
         item oxygen : Oxygen;
     }
 

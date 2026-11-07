@@ -41,9 +41,12 @@ layer `selenite-compute/`. First commit: set this banner to "started
   `SeleniteBehaviour` action parameters, from `econ.workspace()` and
   `verify` vectors.
 - **Elements this wave may re-source:** `L1OxygenDepot` and the MD-2 O2 loft
-  (W4B-N4 / W4B-N18 — no repository document names them, and ECN-019 Rev C,
-  now in `docs/`, gives MD-2 the single purpose "REO canisters"; Jason's
-  call whether SEL-REQ-005 stands);
+  (W4B-N4 / W4B-N18 / W4B-N27 — the source is SEL-ECON-001 Rev A revised
+  §8.4 in `docs/`: LOX canisters on MD-2 to an L1 fuel depot at P14+ /
+  DG-14.4 with the oxygen "initially vented or stored" before; the model's
+  `existsFrom = md2.operationalFrom` (P9) and SEL-REQ-005's "not vented or
+  dumped" are Jason's call — this wave may re-derive `existsFrom` from
+  DG-14.4 if he rules so);
   `SpaPgmHydromet` (W4B-N5, bound to DG-5.4 from Decision Framework s.10.1 /
   s.3.2 and M6); the SENTINEL first phase (W4B-N8); the SPA P7 Th(OH)4
   destination before MD-1 (W4B-N9).
@@ -55,8 +58,11 @@ layer `selenite-compute/`. First commit: set this banner to "started
   model, not a mode table; a Wave 5 option is to retire the three-mode
   machine in favour of `AuthorityLevel`) and the MOLE-I `offsetOnResistance` drill-resistance offset (W4B-N22,
   re-stated after verification: the cell-complete depth rule of NAV-001
-  §3.2 is bound). W4B-N18 (ECN-019 Rev C names no L1 O2 depot)
-  and W4B-N19 / N20 (SENTINEL first phase, value-chain conflicts) are
+  §3.2 is bound). Also still unbound after the adversarial verification:
+  the ECN-014 returns `alertCleared` / `standDown` / `resolved` (the only
+  documented return is the crew re-open with sensor preconditions) and the
+  construction role assignment. W4B-N18 / N27 (the depot's phase), W4B-N19
+  / N20 (SENTINEL first phase, value-chain conflicts), W4B-N25 and N28 are
   questions for Jason, not bindings.
 - **`prerequisites` / `gatedElements` promotion (W4B-N12)** is this wave's
   call: if promoted, use one `connection` usage per edge with `attribute
@@ -65,6 +71,15 @@ layer `selenite-compute/`. First commit: set this banner to "started
   `md4.operationalFrom` keep their meaning, update
   `selenite.scenarios.modelio.parse_gates` to read the links, and keep the
   plan register byte-identical by a test before and after.
+- **Behaviour backlog from the sources (`CHANGELOG_WAVE4B.md` §9.8):** the
+  completeness critic of the Wave 4B addendum listed the control behaviour
+  the twelve primary sources describe beyond the Wave 4B build steps
+  (SENTINEL emergency responses and platform states, the eclipse sequence
+  and load-shedding order, geofence and scheduler rules, the GATE catalogue
+  and structural clearance sweep, ISRU interlocks, PKT node behaviour,
+  MOLE-I / substation detail, construction and commissioning sequences,
+  prospecting gates). It is a behaviour wave of its own (Wave 4C) or a
+  Wave 5 side task; nothing there binds a quantity.
 - **A stream register (W4B-N15)** is optional: the performed streams bind
   their phase to their performer with `:>>` and plan_check does not list
   them; a `--streams` table would show each stream's performer-derived phase

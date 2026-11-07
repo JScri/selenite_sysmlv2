@@ -386,7 +386,13 @@ package SeleniteFleet {
         attribute winchCrewRated : Boolean = true;
         attribute winchIndependentOfMoleIInfrastructure : Boolean = true;
         port guideCable : ~GuideCablePort;
-        port floorPowerUmbilical : ~BayonetTapPort;
+        port floorPowerUmbilical : ~BayonetTapPort {
+            doc /* "1000 VDC tap from SATS/CLP trunk cable via umbilical"
+                 * (CAP-001 s.3 Power (floor ops)); the pad's socket is the
+                 * CON-001 bayonet tap socket (CAP reservations item 3); how the
+                 * pod's umbilical engages it is CAP-001 s.8 item 4, OPEN -
+                 * BayonetEngagementStates does not apply to the CAP. */
+        }
         exhibit state mission : CapMissionStates {
             :>> floorWorkLimitHours = floorWorkLimitHours;
             :>> floorWorkElapsedHours = floorWorkElapsedHours;
@@ -394,11 +400,12 @@ package SeleniteFleet {
             :>> ingressComplete = ingressComplete;
         }
         assert constraint dedicatedCrewRatedWinch {
-            doc /* "Completely independent dedicated winch: separate cable,
-                 * separate mounting structure, separate power feed ... nothing
+            doc /* "a completely independent dedicated winch: separate cable,
+                 * separate mounting structure at the rim, separate power feed.
+                 * It may tap the trunk cable for electrical power but nothing
                  * in its mechanical chain touches the MOLE-I infrastructure"
-                 * (EVA contingency corrected s.4.6); "crew-rated" (CAP-001
-                 * s.3). */
+                 * (EVA contingency corrected s.4.6); "Crew-rated" (CAP-001
+                 * s.3 Winch). */
             winchCrewRated == true and winchIndependentOfMoleIInfrastructure == true
         }
     }

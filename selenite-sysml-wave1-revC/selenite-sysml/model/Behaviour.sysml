@@ -34,12 +34,13 @@ package SeleniteBehaviour {
          * (W4B-N20: v14.1 labels the Starship return "P7-P8" while its own
          * Phase 2 panel has the first export batch at M116 / Y10 and the model
          * binds DG-5.4; v15 carries the pre-ECN-020 "~303 t YBCO" and
-         * "MD-3 (P10)" against ECN-019 s.18.1 Y43 P9-P10 and the model's
+         * "MD-3 ThCl4 fuel (P10)" against ECN-019 s.18.1 Y43 P9-P10 and the model's
          * DG-9.6; v16 sends S-type Si / Cu "to PKT via MD-3" although MD-3 is
          * PKT -> SPA in ECN-019 s.18.1 and the model carries them on MD-1).
-         * Nothing in the streams changed. SEL-REQ-005's L1 depot stream has
-         * no repository source (W4B-N4 / W4B-N18: ECN-019 Rev C does not name
-         * it either). */
+         * Nothing in the streams changed. SEL-REQ-005's L1 depot stream is
+         * sourced by SEL-ECON-001 Rev A revised s.8.4 (LOX canisters on MD-2
+         * to an Earth-Moon L1 fuel depot, P14+) - W4B-N18 corrected; its
+         * phase against the stream's is W4B-N27. */
 
     private import ScalarValues::*;
     private import SeleniteInterfaces::*;
@@ -476,8 +477,9 @@ package SeleniteBehaviour {
              * steel conveyor Tier 3 -> spine input -> circuits (the flowsheet
              * with in-situ reagents) -> REO concentrate -> canister -> MD-2
              * (P9, DG-9.1) -> Earth recovery and individual SX. The O2
-             * by-product is lofted on MD-2 to the L1 depot (SEL-REQ-005; no
-             * repository source, W4B-N4). Th(OH)4 leaves to ThoriumToMsrFuel.
+             * by-product is lofted on MD-2 as LOX to the L1 depot (SEL-REQ-005;
+             * SEL-ECON-001 Rev A revised s.8.4 places it at P14+ with the O2
+             * vented or stored before - W4B-N27). Th(OH)4 leaves to ThoriumToMsrFuel.
              * Source: fleet v9 s.10-11, s.14, s.16; Strategy v3.1 s.7, s.9,
              * s.10; ECN-020 s.2.1, s.4; Decision Framework Rev D s.9;
              * docs/selenite_value_chain_v15.html (MD-2 REO P9; pre-ECN-020

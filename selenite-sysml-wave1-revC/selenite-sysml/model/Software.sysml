@@ -29,16 +29,20 @@ package SeleniteSoftware {
          * SEL_EVA_CONTINGENCY corrected. From them: the ECN-012 dump sequence
          * triggers, the NAV-001 dock-cycle resets and grid upload, the
          * SENTINEL anomaly workflow, authority levels, no-contact mode and
-         * PKT escalation tiers, the ECN-014 clear / stand-down / resolved
-         * triggers (the anomaly ticket closing at workflow step 6), the
-         * substation port allocation and breaker logic, the polar fix
+         * PKT escalation tiers, the substation port allocation and breaker
+         * logic, the polar fix
          * computed on the substation (correcting the Wave 4B rover-side
          * ReadTetherPolarFix), construction navigation by tap count, the
          * PLC / UHF switchover, the bayonet engagement, the construction tap
          * hop and the CAP mission sequence with its SPE abort. Still UNBOUND
-         * after the sources: the three SENTINEL mode transitions (the
-         * documents carry an authority model, not a mode table - W4B-N21) and
-         * the MOLE-I "cell exhausted" criterion (NAV-001 is silent). Earlier
+         * after the sources: the SENTINEL mode transitions (the documents
+         * carry an authority model, not a mode table - W4B-N21), the ECN-014
+         * clear / stand-down / O2 resolved returns (the sources give a crew
+         * re-open with sensor preconditions for the cryo stations and nothing
+         * for the rest - the anomaly ticket closing at workflow step 6 is
+         * record-keeping, recorded as a candidate only), the MOLE-I
+         * drill-resistance offset (W4B-N22) and the construction role
+         * assignment. Earlier
          * sources: SEL_ROBOT_FLEET_v9.md s.4.1, s.9.2 (ECN-014 extract),
          * s.10.1, s.13.4; SEL-T1.1-STRATEGY v3.1 s.4.2, s.5.1;
          * ARCHITECTURE_BASELINE.md s.7. */
@@ -158,9 +162,10 @@ package SeleniteSoftware {
     item def AnomalyTicketClosed :> DataItem {
         doc /* Anomaly workflow step 6: after the corrective action SENTINEL
              * re-inspects, confirms the anomaly resolved and closes the ticket
-             * in the maintenance database. It is the trigger every ECN-014
-             * machine returns on (alert clear, Tier 1 stand-down, O2 line
-             * resolved). Source: SEL_SENTINEL_DESIGN Rev B s.4.3 step 6. */
+             * in the maintenance database - a record-keeping step that follows
+             * the recovery; no document makes it the event that lifts an
+             * alert or re-opens a valve. Source: SEL_SENTINEL_DESIGN Rev B
+             * s.4.3 step 6. */
     }
 
     item def CrewDisposition :> DataItem {
@@ -664,13 +669,15 @@ package SeleniteSoftware {
         }
         transition alertCleared
             first alert
-            accept AnomalyTicketClosed
             then open {
-            doc /* Bound 7 Nov 2026: an alert that does not escalate clears when
-                 * the anomaly workflow verifies it resolved and closes the
-                 * ticket (step 6); until then the Ops Hub notification stands.
-                 * The ECN-014 table itself gives no clearing condition.
-                 * Source: SEL_SENTINEL_DESIGN Rev B s.4.3 step 6. */
+            doc /* Trigger UNBOUND: the ECN-014 table (fleet v9 s.9.2; ISRU-001
+                 * Rev D updated s.7.4) gives no clearing condition for an alert
+                 * that does not escalate, and SEL-SW-SENTINEL-001 Rev B s.5,
+                 * s.13, s.15.4 give none. Candidates recorded, not bound: the
+                 * anomaly ticket closing at workflow step 6 (SEL_SENTINEL_DESIGN
+                 * Rev B s.4.3 - record-keeping after the corrective action);
+                 * a crew command after a measured condition (SW-SENTINEL s.5
+                 * recovery column). */
         }
     }
 
@@ -697,15 +704,17 @@ package SeleniteSoftware {
         }
         transition standDown
             first tier1Emergency
-            accept AnomalyTicketClosed
             then normal {
-            doc /* Bound 7 Nov 2026: an EMERGENCY response has already executed;
-                 * the crew assesses damage and plans recovery (step 5), and
-                 * the function stands down when SENTINEL verifies the anomaly
-                 * resolved and closes the ticket (step 6). Each station then
-                 * still needs its own crew re-open. Source: SEL_SENTINEL_DESIGN
-                 * Rev B s.4.3 steps 5-6; SEL-SW-SENTINEL-001 Rev B s.5
-                 * (crew-directed recovery column). */
+            doc /* Trigger UNBOUND: no stand-down criterion in fleet v9 s.9.2,
+                 * ISRU-001 Rev D updated s.7.4 or SEL-SW-SENTINEL-001 Rev B
+                 * s.5 / s.13 / s.15.4. The only documented return of an
+                 * ECN-014 valve is the per-station crew re-open with four
+                 * sensor preconditions (fleet v9 s.9.2), and SW-SENTINEL s.5
+                 * makes every recovery a crew command gated on a measured
+                 * condition; SEL_SENTINEL_DESIGN Rev B s.4.3 step 5 "crew
+                 * assesses damage and plans recovery". A crew-command trigger
+                 * is the candidate; the ticket closing at step 6 is
+                 * record-keeping. */
         }
     }
 
@@ -742,13 +751,14 @@ package SeleniteSoftware {
         }
         transition resolved
             first autoClosed
-            accept AnomalyTicketClosed
             then open {
-            doc /* Bound 7 Nov 2026: "until resolved" is the anomaly workflow's
-                 * step 6 closure after the corrective action on the
-                 * SENTINEL-triggered fail-closed isolation valve (ISRU-001 Rev
-                 * D updated s.8.2 amendment). Source: SEL_SENTINEL_DESIGN Rev B
-                 * s.4.3 step 6; SEL-ISRU-001 Rev D updated s.8.2. */
+            doc /* Trigger UNBOUND: "Hab O2 on 90-day reserve until resolved"
+                 * (fleet v9 s.9.2) is the whole source; ISRU-001 Rev D updated
+                 * s.8.2 specifies the SENTINEL-triggered fail-closed isolation
+                 * valve, not its re-open; SEL-SW-SENTINEL-001 Rev B gives no
+                 * O2 re-open criterion. Re-opening the hab O2 supply
+                 * autonomously on the step 6 ticket closing would be control
+                 * logic no document states (candidate recorded only). */
         }
     }
 
@@ -1383,7 +1393,8 @@ package SeleniteSoftware {
             first engaged
             if disengageCommanded
             then disengaged {
-            doc /* Motor reverses the twist; the spool retracts the tether
+            doc /* The DC motor's disengage cycle (ECN-013 Rev 2; SEL_MOLEI_
+                 * DESIGN v5 "90 deg twist"); the spool retracts the tether
                  * (SEL-CON-001 Rev B updated, ECN-013 Rev 3 step 5). */
         }
     }
@@ -1609,8 +1620,15 @@ package SeleniteSoftware {
              * hard work limit, ingress, ascent. The standing abort protocol
              * of the corrected EVA contingency s.4.8 ascends immediately on
              * any SPE forecast from any state below the rim. The work limit
-             * (2 h design target), speeds and times stay in the source (rule
-             * 3). Source: SEL-CAP-001 Rev A updated s.2-3; SEL_EVA_CONTINGENCY
+             * ends floor operations; the source does not say the limit itself
+             * commands ascent - ingress (de-suit, stow) precedes it. Conflict
+             * recorded, not resolved (W4B-N28): CAP-001 s.2 "2-hour hard
+             * limit" / s.6 "hard constraint on work duration" against the EVA
+             * contingency s.4.5 "2-4 hr work window at floor". A suit
+             * failure during floor operations returns the crew to the pod as
+             * shelter without ascent (s.2; EVA contingency s.5). The limit,
+             * speeds and times stay in the source (rule 3). Source:
+             * SEL-CAP-001 Rev A updated s.2-3, s.6; SEL_EVA_CONTINGENCY
              * corrected s.4.5-4.8, s.5; fleet v9 s.13.5. */
         attribute floorWorkLimitHours : Real;
         attribute floorWorkElapsedHours : Real;
@@ -1629,6 +1647,10 @@ package SeleniteSoftware {
         state floorOps {
             doc /* Crew outside in 40 K-rated suits; pod pressurised as
                  * shelter and abort refuge. */
+        }
+        state ingressing {
+            doc /* "Crew return to pod. Doff EVA suits. Repressurize if needed.
+                 * Stow equipment." (SEL-CAP-001 Rev A updated s.2 Ingress). */
         }
         state ascending {
             doc /* Return transit; also the abort state. */
@@ -1652,23 +1674,46 @@ package SeleniteSoftware {
         transition egress
             first dockedAtFloor
             then floorOps {
-            doc /* Suits donned inside the pod; egress through the EVA hatch
-                 * (s.2 arrival / floor ops). */
+            doc /* Trigger UNBOUND: "Crew don xEMU suits inside pod. Egress
+                 * through EVA hatch." (s.2 Arrival) names the activity, not the
+                 * event. */
         }
-        transition ingress
+        transition workComplete
             first floorOps
-            if ingressComplete
-            then ascending {
-            doc /* Crew back in the pod, suits doffed, equipment stowed, then
-                 * ascent (s.2 ingress / ascent). */
+            then ingressing {
+            doc /* Trigger UNBOUND: s.2 gives no work-complete event. */
         }
         transition workLimitReached
             first floorOps
             if floorWorkElapsedHours >= floorWorkLimitHours
+            then ingressing {
+            doc /* "2-hour hard limit (xEMU thermal design point)" (s.2 Floor
+                 * ops) - a design target, not a tested result (EVA contingency
+                 * s.2.1); limit UNBOUND. The limit ends floor work; ingress
+                 * follows. */
+        }
+        transition ingress
+            first ingressing
+            if ingressComplete
             then ascending {
-            doc /* "2-hour hard limit (xEMU thermal design point)" - a design
-                 * target, not a tested result (EVA contingency s.2.1); limit
-                 * UNBOUND. */
+            doc /* Crew back in the pod, suits doffed, equipment stowed, then
+                 * ascent (s.2 Ingress / Ascent). */
+        }
+        transition speAbortIngressing
+            first ingressing
+            accept SpeForecast
+            then ascending {
+            doc /* The same abort during ingress (still below the rim). */
+        }
+        transition suitFailureRetreat
+            first floorOps
+            then dockedAtFloor {
+            doc /* Trigger UNBOUND: "Pod remains pressurised as shelter - crew
+                 * can return if suit issue arises" (SEL-CAP-001 Rev A updated
+                 * s.2 Floor ops; EVA contingency corrected s.5 "if a suit
+                 * failure occurs ... crew can retreat inside without
+                 * completing ascent") - the suit-failure event is not an item
+                 * any source defines. */
         }
         transition speAbortDescending
             first descending
@@ -1687,13 +1732,13 @@ package SeleniteSoftware {
             first floorOps
             accept SpeForecast
             then ascending {
-            doc /* The same abort during floor operations (crew retreat to the
-                 * pod, then ascent). */
+            doc /* The same abort during floor operations; the pod is the
+                 * emergency shelter the crew retreat to (EVA contingency s.5). */
         }
         transition backAtRim
             first ascending
             then atRim {
-            doc /* Arrival at the rim station. */
+            doc /* Trigger UNBOUND: no source gives the rim-arrival event. */
         }
     }
 }

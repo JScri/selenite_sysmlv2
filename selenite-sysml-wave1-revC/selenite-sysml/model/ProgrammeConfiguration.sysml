@@ -401,7 +401,9 @@ package SeleniteConfigurations {
             interface drillProductToTramway : IcyRegolithTransfer connect moleIMkI.drillProduct to psrNetwork.tramwayFloorLoad;
         }
         // Addendum 7 Nov 2026: the CAP on its guide cable and on the CLP floor
-        // docking pad power tap (SEL-CAP-001 Rev A updated s.2-3, s.5)
+        // docking pad power tap (SEL-CAP-001 Rev A updated s.2-3, s.5). The pod
+        // side of the tap coupling is CAP-001 s.8 item 4 (OPEN): the interface
+        // carries the power flow only, not the rover's engagement sequence.
         interface capOnGuideCable : GuideCableLink connect shackletonPsrFloor.psrNetwork.capGuideCable.floorDockingPad to shackletonHub.cap.guideCable;
         interface capFloorPower : BayonetCoupling connect shackletonPsrFloor.psrNetwork.clp.capDockingPadTap.socket to shackletonHub.cap.floorPowerUmbilical;
 
@@ -537,8 +539,13 @@ package SeleniteConfigurations {
         part l1OxygenDepot : L1OxygenDepot {
             doc /* Wave 4B: the SEL-REQ-005 O2 depot. Exists when MD-2, which
                  * lofts the O2, is operational - derived through the driver's
-                 * own phase (the StarshipReturnLink idiom); no document gives
-                 * it a phase of its own (W4B-N4). */
+                 * own phase (the StarshipReturnLink idiom), bound before any
+                 * document gave it a phase (W4B-N4). W4B-N27 (addendum): SEL-
+                 * ECON-001 Rev A revised s.8.4 (docs/) places the depot at P14+
+                 * (DG-14.4) with the O2 "initially vented or stored" through
+                 * P8-P14 - against this derivation (P9) and against SEL-REQ-005
+                 * "not vented or dumped". Recorded, not resolved; the binding
+                 * is unchanged (no decision changed) and raised to Jason. */
             attribute redefines nodeName = "L1 / EML-2 O2 depot";
             attribute redefines role = "sink for the process by-product O2 lofted on MD-2 (SEL-REQ-005)";
             attribute redefines existsFrom = massDriverNetwork.md2.operationalFrom;

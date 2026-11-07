@@ -125,14 +125,21 @@ package SeleniteSites {
              * no repository document names this depot - not Strategy v3.1, not
              * Decision Framework Rev D, not fleet v9, not ECN-020; the Wave 1
              * requirement cites "Strategy v3.1, Decision Framework Rev D" and
-             * neither carries it. W4B-N18 (7 Nov 2026): ECN-019 Rev C
-             * (docs/ECN-019_Programme_Wide_Design_Revision.md, status
-             * PROPOSED) does not name an L1 / EML-2 depot or an O2 loft
-             * either - its s.18.1 gives MD-2 the single purpose "REO
-             * canisters" PKT -> Earth, and its s.15.1 names SPA as the
-             * "propellant depot" of the P14+ cislunar launch hub (value chain
-             * v16 says the same). The depot therefore rests on SEL-REQ-005
-             * alone; kept as the requirement states it and raised to Jason. */
+             * neither carries it. W4B-N18 (7 Nov 2026, corrected by the
+             * verification): the source is SEL-ECON-001 Rev A revised s.8.4
+             * (docs/SEL-ECON-001_RevA_revised.md): PKT by-product oxygen,
+             * "liquefied using MSR-powered cryocoolers ... loaded into Fe-Ni
+             * canisters ... and launched via MD-2 to an Earth-Moon L1 orbital
+             * fuel depot", at P14+ as "a natural P14+ decision gate (DG-14.4)";
+             * ECN-019 Rev C itself names no depot and gives MD-2 only "REO
+             * canisters" (s.18.1); its s.15.1 makes SPA the P14+ "deep-space
+             * launch hub", value chain v16 and ECON s.8.2 the "cislunar launch
+             * hub: propellant depot". W4B-N27: ECON s.8.4 says the oxygen is
+             * "initially vented or stored" through P8-P14 and the depot is
+             * P14+, against SEL-REQ-005 "not vented or dumped" and against the
+             * configuration's existsFrom = MD-2's phase (P9); and PKT as the
+             * "interplanetary fuel depot" against SPA's propellant depot -
+             * two depot roles. Recorded, not resolved; nothing rebound. */
         attribute redefines nodeId = SiteId::l1Depot;
         port oxygenReceipt : ~CanisterPort;
     }
