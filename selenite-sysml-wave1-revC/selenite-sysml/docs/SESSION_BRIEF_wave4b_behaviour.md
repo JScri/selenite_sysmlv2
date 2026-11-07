@@ -1,16 +1,112 @@
 # Session Brief — Wave 4B: Behaviour, interfaces and software
 
-> **Status: drafted 6 Nov 2026, not started.** Starts once the post-Wave-4A
-> verification session (`docs/SESSION_BRIEF_verification_post_wave4a.md`) is
-> merged and its `CHANGELOG_VERIFICATION.md` open-items list exists. This is
-> the original Wave 4 scope of `docs/MIGRATION_PLAN.md`; Wave 5 (quantities
-> bound from the Python layer, the derived timeline) follows it.
+> **Status: ready to start (amended 7 Nov 2026 after the verification
+> session merged, PR #12 / 4e78eee).** This is the original Wave 4 scope of
+> `docs/MIGRATION_PLAN.md`; Wave 5 (quantities bound from the Python layer,
+> the derived timeline) follows it. The verification's `CHANGELOG_VERIFICATION.md`
+> records V-N1 … V-N46 and the consolidated open-items list in its §4;
+> SEL-ECN-024, 025 and 026 were signed (option 2a each) and applied in the
+> same PR. The amendments in §0 below carry what moved since the brief was
+> drafted; the build steps, rules and done-when are unchanged.
 
 Paste into a fresh Claude Code session on `JScri/selenite_sysmlv2`, branch
 from `main`. Model folder `selenite-sysml-wave1-revC/selenite-sysml/`, Python
-layer `selenite-compute/`. If the verification session raised ECNs Jason has
-not yet decided, the first message says so and the session carries them as
-recorded, not applied.
+layer `selenite-compute/`. First commit: set this banner to "started
+<date>".
+
+## 0. Amendments after the verification session (7 Nov 2026)
+
+- **Start-up counts.** `pytest selenite-compute` is 1,565 passed, 33 skipped.
+  `plan_check --quiet` and `scenario_check --n 200 --quiet` exit 0. The
+  plan_check default output is byte-identical to
+  `selenite-compute/tests/fixtures/plan_check_stdout_wave3.txt` (re-cut on
+  7 Nov 2026 after ECN-026); `docs/PLAN_REGISTER.md` has 55 W3-R rows.
+- **Reading list additions**, after `CHANGELOG_VERIFICATION.md`: the three
+  signed ECNs `docs/SEL-ECN-024_draft_HaulerInSituFractionCandidates.md`
+  (flag F3 closed; the hauler floor a point at the ECON 0.43),
+  `docs/SEL-ECN-025_draft_SpaMsrUnitOneBinding.md` (SPA MSR unit #1 bound to
+  DG-13.4), `docs/SEL-ECN-026_draft_RevDThresholdsCarriedVerbatim.md`
+  (DG-12.3 1,903/day, DG-8.5 105 circuits). They keep their draft file names
+  for the document map; their status lines say SIGNED.
+- **ECN numbering.** Anything that would change a bound value, threshold,
+  selection or decision is a draft ECN from **SEL-ECN-027** onward, never
+  applied.
+- **Decisions still open for Jason** (carry as recorded, do not resolve):
+  the D8 hauler policy (after ECN-024 the register recommends `targetFloor`,
+  the DG-13.7 20 % floor, over the baseline's `econFloor`; the selection
+  `d8 :> econFloor` stands); the default decision criterion
+  (`decisionCriterion` PROPOSED); `spaMsrAvailabilityProbability` 1.0; the
+  hold-load fractions 0.25 and restart loss 0.5 day (W4A-N3; SEL-REQ-017
+  cites them as declared assumptions); VC-22 canister payload 3.5 vs 3.6 t;
+  the W3-N4 REO ramp; D7; D3. `CHANGELOG_VERIFICATION.md` §4 "Needs Jason's
+  decision now" is the list.
+- **Verification carry-overs that belong to this wave**
+  (`CHANGELOG_VERIFICATION.md` §4 "Wave 4B must start from"), in addition
+  to build steps 1–7:
+  (a) SEL-REQ-017 is build step 5; `AsteroidProcessStep.pausableThroughEclipse`
+  already exists on the C/S-type steps — make the constraint read it.
+  (b) SEL-REQ-005 keeps `ProgrammeContext` until an L1 / EML-2 O₂ depot
+  element exists — add the element in step 1 (the O₂ stream to MD-2) and
+  rebind the subject.
+  (c) Gated elements that do not exist and carry "TODO Wave 4" strings in
+  `Gates.sysml`: the SPA reagent pilot / production (DG-5.3, DG-7.4), the
+  PKT oxalic-acid line (DG-9.5), the SEL-CON-001 MOLE-I bayonet connector
+  (document_map row now `4B, planned`) — create them or re-mark the TODOs
+  with the source needed.
+  (d) The ECN-014 literals in `Software.sysml` and `Habitat.sysml` (valve
+  stations 4, monitors 4, preconditions 4, table 11, patterns 201–206) cite
+  a document that is not in `docs/` (V-N19): bring SEL-SW-SENTINEL-001
+  Rev B's ECN-014 extract into `docs/` with a document_map row, or state
+  that it cannot be and keep the TODO.
+  (e) Hygiene: about 44 definitions carry a doc with no named source and
+  12 name a source without a revision (V-N3) — cite as you touch those
+  files; `Milestone` is a concrete part def holding an abstract attribute
+  (V-N8) — make it abstract or record why not; the ten model files without
+  a view (V-N9) get views where this wave adds behaviour; the "App. C"
+  citations in `Phases.sysml` (×3), `docs/ARCHITECTURE_BASELINE.md` and
+  `docs/DOCUMENT_FAMILIES.md` read fleet v9 s.20.3 (V-N27: the markdown
+  authority has no appendix); the "Wave 4" placeholders in
+  `Software.sysml`, `Processing.sysml` and `Gates.sysml` are re-labelled
+  4B as you reach them.
+  (f) `prerequisites` and `gatedElements` are strings today ("Wave 4 may
+  promote them"): if you promote them to semantic links, keep the designed
+  indirect cases (DG-7.1 "via", the DG-9.1 / DG-12.4 chained retirements
+  through `md2` / `md4.operationalFrom`, DG-3.2 "partial") and say how in
+  the changelog.
+  (g) Decide where `SEL_EVA_CONTINGENCY_CORRECTED.docx` (map row wave 4,
+  `planned`, named in no brief) is consumed — this wave or Wave 5.
+- **Conventions made explicit at verification** (`docs/CLAUDE_SYSML_CONTEXT.md`
+  §8): cite the fleet authority `SEL_ROBOT_FLEET_v9.md` by section (s.20.3,
+  not "App. C"); `mapping/DOCUMENT_FAMILIES.csv` and `UPLOAD_LEDGER.csv` are
+  hand-maintained since the F2 correction and repo-authored records are
+  indexed in `document_map.csv` only; the document_map status vocabulary is
+  the list in `docs/MIGRATION_PLAN.md` — add `behaviour_modelled` to that
+  sentence when you first use it.
+- **plan_check byte-identity.** The DEFAULT output does not change unless
+  this wave adds or moves a phase binding or a gated element; if it does (a
+  new phase-gated element bound to a gate, or a promoted `gatedElements`
+  link that plan_check reads through `selenite/scenarios/modelio.py`),
+  regenerate `docs/PLAN_REGISTER.md`, re-cut the fixture in the same commit
+  and list the changed rows in `CHANGELOG_WAVE4B.md`.
+  `docs/SCENARIO_REGISTER.md` is regenerated only if `Scenarios.sysml` or
+  `Parameters.sysml` change (n = 2,000, seed 20260920, about five minutes;
+  CI runs n = 500) — dropping or adding a sampled entry re-draws the common
+  random numbers, which moves every mean by a few hundred tonnes; say so if
+  it happens.
+- **Diagrams.** `sysml-diagram` 0.42.0 is pinned (0.54.0 rejects the
+  gate-binding idiom, W4A-N2). Use the views it supports for the new
+  packages (gv for `Behaviour.sysml` / `Interfaces.sysml` at least); if it
+  has no action-flow or state view, say so in the changelog rather than
+  skipping the view silently.
+- **Step 7's Wave 5 brief** (`docs/SESSION_BRIEF_wave5_quantities.md`)
+  starts from `CHANGELOG_VERIFICATION.md` §4 "Wave 5 must start from": bind
+  `derivedPhase` for the 89 bindings, rewrite `SpaMsrIntroductionGate` to
+  mirror `plan_vectors.fsp_msr_trade` (V-N24), bind
+  `UncertaintyRegister.parameters` to the programme instance (V-N10), the
+  `declaredPhaseAlternate` rule (V-N30), DG-POST.1/2 tier tonnages, the
+  never-met gates DG-14.6 and DG-13.7, the VC adjudications, the Rev E
+  rendering, the unbound Python-supplied inputs, and the ECON items by ECN
+  plus new golden.
 
 ## Start-up (mandatory, in order)
 
@@ -81,7 +177,7 @@ them from the Python layer). Behaviour mirrors the documents, it does not
 invent control logic: where a document is silent, leave the transition or
 guard unbound with a `doc` naming the source needed. No committed parameter
 rebound, no decision changed — anything of that kind is a draft ECN
-(SEL-ECN-024 onward) for Jason. Conflicts recorded, not resolved. Goldens,
+(SEL-ECN-027 onward) for Jason. Conflicts recorded, not resolved. Goldens,
 `econ.py`, `verify.py`, `thermal.py`, `psr_layout.py` and their tests
 untouched; `plan_check` default output byte-identical. Australian spelling.
 Flat `model/` (new files only where a new top-level package needs one, e.g.
