@@ -7,9 +7,13 @@ package SeleniteTransport {
          * Sources: SEL-ECN-020, SEL_ROBOT_FLEET_v9.md s.10.6, s.11, s.16,
          * s.19, SEL-CATAPULT-001 Rev B (heritage; Rev C outstanding, VC-21),
          * SEL-CONVEYOR-001 Rev A, Strategy v3.1 s.9, ARCHITECTURE_BASELINE.md
-         * s.5. */
+         * s.5. Wave 4B (7 Nov 2026): ports typed by SeleniteInterfaces (a
+         * driver's launch input and receiver output carry CanisterPayload,
+         * ore links carry OreFeed); the canisters carry their typed payload
+         * item; the streams the links carry are SeleniteBehaviour actions. */
 
     private import ScalarValues::*;
+    private import SeleniteInterfaces::*;
     private import SelenitePhases::*;
     private import SeleniteSites::*;
 
@@ -56,14 +60,17 @@ package SeleniteTransport {
         abstract attribute driverId : MassDriverId;
         attribute trackCount : Integer;
         part tracks : MassDriverTrack[1..*];
-        port launchInput;
-        port receiverOutput;
+        port launchInput : ~CanisterPort;
+        port receiverOutput : CanisterPort;
+        port powerIn : ~PowerPort;
+        flow launchInput.load to receiverOutput.load;
     }
 
     part def MassDriverMd1 :> MassDriver {
         doc /* MD-1 SPA->PKT, P8 (DG-8.0): propellant, reagents, Fe-Ni foundry
              * feedstock, Th(OH)4, spares. Sole inter-site link, hence 2 tracks
-             * (1 primary + 1 warm-standby redundant). */
+             * (1 primary + 1 warm-standby redundant). Source: SEL-ECN-020
+             * s.2.2; fleet v9 s.16. */
         attribute redefines driverId = MassDriverId::md1;
         attribute redefines introducedIn = Phase::P8;
         attribute redefines operationalFrom = Phase::P8;
@@ -130,7 +137,7 @@ package SeleniteTransport {
 
     part def MassDriverMd5 :> MassDriver {
         doc /* MD-5 DRO->SPA, P12 (M-type online Y85): asteroid concentrate,
-             * single track. */
+             * single track. Source: SEL-ECN-020 s.2.3; fleet v9 s.16. */
         attribute redefines driverId = MassDriverId::md5;
         attribute redefines introducedIn = Phase::P12;
         attribute redefines operationalFrom = Phase::P12;
@@ -164,7 +171,8 @@ package SeleniteTransport {
     }
 
     enum def CanisterKind {
-        doc /* Payload families carried by the network. */
+        doc /* Payload families carried by the network. Source: SEL-ECN-020
+             * s.2; fleet v9 s.16 purpose column. */
         reoExport; interSiteCargo; thcl4Fuel; pgmExport; asteroidConcentrate; mkIiiFeNi;
     }
 
@@ -177,34 +185,46 @@ package SeleniteTransport {
     }
 
     part def ReoExportCanister :> Canister {
-        doc /* MD-2 REO export canister with minimal drag chute for Earth arrival. */
+        doc /* MD-2 REO export canister with minimal drag chute for Earth
+             * arrival (the DG-9.1 option 1b the economics assumed; D3 open).
+             * Source: SEL-ECN-020 s.4; Decision Framework Rev D s.9. */
         attribute redefines kind = CanisterKind::reoExport;
+        item payload : ReoPayload;
     }
 
     part def InterSiteCargoCanister :> Canister {
-        doc /* MD-1 SPA->PKT cargo canister (propellant, reagents, Fe-Ni, spares). */
+        doc /* MD-1 SPA->PKT cargo canister (propellant, reagents, Fe-Ni,
+             * Th(OH)4, spares). Source: fleet v9 s.16. */
         attribute redefines kind = CanisterKind::interSiteCargo;
+        item payload : InterSiteCargo;
     }
 
     part def ThCl4Canister :> Canister {
-        doc /* MD-3 PKT->SPA thorium chloride fuel canister. */
+        doc /* MD-3 PKT->SPA thorium chloride fuel canister. Source: fleet v9
+             * s.16; Strategy v3.1 s.8.4. */
         attribute redefines kind = CanisterKind::thcl4Fuel;
+        item payload : ThCl4Payload;
     }
 
     part def PgmExportCanister :> Canister {
-        doc /* MD-4 SPA->Earth PGM export canister. */
+        doc /* MD-4 SPA->Earth PGM export canister. Source: fleet v9 s.16. */
         attribute redefines kind = CanisterKind::pgmExport;
+        item payload : PgmPayload;
     }
 
     part def ConcentrateCanister :> Canister {
-        doc /* MD-5 DRO->SPA asteroid concentrate canister. */
+        doc /* MD-5 DRO->SPA asteroid concentrate canister. Source: fleet v9
+             * s.16; Decision Framework Rev D s.3.2. */
         attribute redefines kind = CanisterKind::asteroidConcentrate;
+        item payload : ConcentratePayload;
     }
 
     part def MkIiiPayloadCanister :> Canister {
         doc /* PROBE Mk III Fe-Ni/PGM canister ejected from LLO; cold-gas kick
-             * motor for trajectory shaping; received by the EM catcher. */
+             * motor for trajectory shaping; received by the EM catcher.
+             * Source: fleet v9 s.2.4; SEL-PROBE-MkIII-001 Rev A. */
         attribute redefines kind = CanisterKind::mkIiiFeNi;
+        item payload : MkIiiFeNiPayload;
     }
 
     part def EmCatcher :> LogisticsLink {
@@ -222,12 +242,15 @@ package SeleniteTransport {
         attribute redefines retiredIn = null;
         attribute redefines fromNode = SiteId::cislunar;
         attribute redefines toNode = SiteId::spa;
-        port inboundCanisters;
+        port inboundCanisters : ~CanisterPort;
+        port concentrateOut : OrePort;
+        port powerIn : ~PowerPort;
     }
 
     enum def PktTransportTier {
         doc /* PKT surface transport tiers: haulers Tier 1-2, conveyors Tier 3
-             * (50-150 km). No SKIPs, no catapults. */
+             * (50-150 km). No SKIPs, no catapults. Source: fleet v9 s.11;
+             * Strategy v3.1 s.7.3. */
         tier1; tier2; tier3;
     }
 
@@ -244,12 +267,17 @@ package SeleniteTransport {
         attribute tier = PktTransportTier::tier3;
         attribute redefines oreTransportMode = OreTransportMode::conveyor;
         attribute throughputTonnesPerYear : Real;
+        port oreIn : ~OrePort;
+        port oreOut : OrePort;
+        port drivePowerIn : ~PowerPort;
+        flow oreIn.ore to oreOut.ore;
     }
 
     part def ConveyorNetwork :> PhaseGated {
         doc /* Dendritic trunk + branch conveyor network at PKT (route counts
              * and km per phase are Wave 5; VC-10 87,500 vs 137,500 km
-             * recorded). Pilot P9, deploying from P10. */
+             * recorded). Pilot P9, deploying from P10. Source: SEL-CONVEYOR-001
+             * Rev A; fleet v9 s.11; Strategy v3.1 s.7.3. */
         attribute redefines introducedIn = Phase::P9;
         attribute redefines retiredIn = null;
         attribute deployingFrom = Phase::P10;
@@ -260,13 +288,19 @@ package SeleniteTransport {
              * mass drivers and the EM catcher. */
         part referenceTrunk : SteelApronConveyor;
         part referenceBranch : SteelApronConveyor;
-        port spineDelivery;
-        connect referenceBranch.receiverOutput to referenceTrunk.launchInput;
+        port haulerTipIn : ~OrePort;
+        port spineDelivery : OrePort;
+        bind haulerTipIn = referenceBranch.oreIn;
+        interface branchToTrunk : OreTransfer connect referenceBranch.oreOut to referenceTrunk.oreIn;
+        bind spineDelivery = referenceTrunk.oreOut;
     }
 
     part def HaulerRoadNetwork :> LogisticsLink {
         doc /* PKT sintered road network for hauler Tier 1-2 transport from P8
-             * day one (haulers from the first construction wave). */
+             * day one (haulers from the first construction wave). Haulers tip
+             * at the conveyor hoppers or the spine input (fleet v9 s.10.3).
+             * Source: fleet v9 s.10.3, s.10.6; Decision Framework Rev D s.10.2
+             * roads row. */
         attribute redefines introducedIn = Phase::P8;
         attribute redefines operationalFrom = Phase::P8;
         attribute redefines retiredIn = null;
@@ -274,29 +308,41 @@ package SeleniteTransport {
         attribute redefines toNode = SiteId::pkt;
         attribute tiers = (PktTransportTier::tier1, PktTransportTier::tier2);
         attribute redefines oreTransportMode = OreTransportMode::hauler;
+        doc portsDoc /* No ports: the haulers (SeleniteFleet::HaulerRevB) carry
+             * the ore and connect to the conveyor hoppers and the spine; the
+             * road network is the medium and the MineByHauler step is
+             * allocated to the haulers. */
     }
 
     part def SkipHopLink :> LogisticsLink {
         doc /* SKIP hops SPA <-> SPA Basin KREEP exposures, P4-P9 (SKIP retired
-             * P9). SPA Basin KREEP only. Never PKT. */
+             * P9). SPA Basin KREEP only. Never PKT. Source: fleet v9 s.7;
+             * Strategy v3.1 s.6. */
         attribute redefines introducedIn = Phase::P4;
         attribute redefines operationalFrom = Phase::P4;
         attribute redefines retiredIn = Phase::P9;
         attribute redefines fromNode = SiteId::spa;
         attribute redefines toNode = SiteId::spa;
         attribute redefines oreTransportMode = OreTransportMode::skip;
+        doc portsDoc /* No ports: the SKIP vehicle (SeleniteFleet::Skip) carries
+             * the KREEP container and is fuelled; the HopKreepBySkip step is
+             * allocated to the vehicle, the link is the route. */
     }
 
     part def StarshipCargoLink :> LogisticsLink {
         doc /* Earth -> SPA (P1) and Earth -> PKT (P8, four construction waves)
              * cargo; diminishing to <1 % of mass by P14. Never retired
-             * (irreducible avionics/BMS imports). */
+             * (irreducible avionics/BMS imports). Source: fleet v9 s.20.3;
+             * Strategy v3.1 s.7.2; Decision Framework Rev D s.8. */
         attribute redefines introducedIn = Phase::P1;
         attribute redefines operationalFrom = Phase::P1;
         attribute redefines retiredIn = null;
         attribute redefines fromNode = SiteId::earth;
         attribute redefines toNode = (SiteId::spa, SiteId::pkt);
         attribute pktDeliveriesFrom = Phase::P8;
+        port cargoIn : ~CargoPort;
+        port spaDelivery : CargoPort;
+        port pktDelivery : CargoPort;
     }
 
     part def StarshipReturnLink :> LogisticsLink {
@@ -316,6 +362,9 @@ package SeleniteTransport {
         attribute redefines operationalFrom = Phase::P5;
         attribute redefines fromNode = SiteId::spa;
         attribute redefines toNode = SiteId::earth;
+        port payloadIn : ~ProductPort;
+        port earthDelivery : ProductPort;
+        port propellantIn : ~PropellantPort;
     }
 
     part def MassDriverDemonstrator :> PhaseGated {
@@ -333,18 +382,22 @@ package SeleniteTransport {
 
     part def ProbeReturnLink :> LogisticsLink {
         doc /* Asteroids -> SPA: Mk I/II land at the IZ (P3 onwards); Mk III
-             * canisters to the EM catcher (P11 onwards). */
+             * canisters to the EM catcher (P11 onwards). Source: fleet v9
+             * s.2.2-2.4, s.19; Decision Framework Rev D s.3.2. */
         attribute redefines introducedIn = Phase::P3;
         attribute redefines operationalFrom = Phase::P3;
         attribute redefines retiredIn = null;
         attribute redefines fromNode = SiteId::cislunar;
         attribute redefines toNode = SiteId::spa;
         attribute mkIiiCanisterStreamFrom = Phase::P11;
+        doc portsDoc /* No ports: the PROBE classes connect to the IZ collars and
+             * the EM catcher themselves; this link is the route they fly. */
     }
 
     part def PsrAccessLink :> LogisticsLink {
         doc /* SPA rim <-> PSR floor: winches, trunk cable, tramway (P3),
-             * heated pipeline (P4+). Physical elements in SelenitePsrNetwork. */
+             * heated pipeline (P4+). Physical elements in SelenitePsrNetwork.
+             * Source: fleet v9 s.13; ARCHITECTURE_BASELINE.md s.5. */
         attribute redefines introducedIn = Phase::P3;
         attribute redefines operationalFrom = Phase::P3;
         attribute redefines retiredIn = null;

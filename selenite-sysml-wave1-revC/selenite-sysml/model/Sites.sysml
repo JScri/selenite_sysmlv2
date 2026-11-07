@@ -7,20 +7,28 @@ package SeleniteSites {
          * Strategy v3.1, Decision Framework v4 (F1: taken as "Rev D"),
          * ECN-019 Rev C, W4_T3_3_JS_Selenite_site_selection_v1 (GIS, LOLA 5 m).
          * Coordinates and crew ramp values arrive from the Python layer
-         * (Wave 5); only phase gates and committed policy are bound here. */
+         * (Wave 5); only phase gates and committed policy are bound here.
+         * Wave 4B (7 Nov 2026): nodes carry typed mass-driver dispatch /
+         * receipt and supervision ports (SeleniteInterfaces) so every
+         * node-to-link connection in SeleniteConfigurations goes through an
+         * interface; the L1 O2 depot of SEL-REQ-005 is added as a node. */
 
     private import ScalarValues::*;
+    private import SeleniteInterfaces::*;
     private import SelenitePhases::*;
 
     enum def SiteId {
-        doc /* Node identifiers used by fleet homeSite and logistics links. */
-        earth; emL2; spa; psrFloor; pkt; pktRelay; dro; cislunar;
+        doc /* Node identifiers used by fleet homeSite and logistics links.
+             * l1Depot added at Wave 4B (SEL-REQ-005). Source:
+             * ARCHITECTURE_BASELINE.md s.2. */
+        earth; emL2; spa; psrFloor; pkt; pktRelay; dro; cislunar; l1Depot;
     }
 
     abstract part def ProgrammeNode {
         doc /* Any node in the programme network. existsFrom is the phase in
              * which the node first exists physically (hardware landed, satellite
-             * deployed, asteroid captured). */
+             * deployed, asteroid captured). Source: ARCHITECTURE_BASELINE.md
+             * s.2. */
         abstract attribute nodeId : SiteId;
         abstract attribute existsFrom : Phase;
         attribute nodeName : String;
@@ -31,12 +39,19 @@ package SeleniteSites {
         doc /* Lunar surface site. permanentCrew is the committed steady-state
              * permanent complement (0 or 20 are policy, not estimates);
              * latitude/longitude are GIS values populated at Wave 5 from the
-             * W4_T3_3 site-selection dataset (LOLA 5 m DEM). */
+             * W4_T3_3 site-selection dataset (LOLA 5 m DEM). canisterDispatch
+             * and canisterReceipt are the site ends of the mass driver legs
+             * (ECN-020); supervision is the site's SENTINEL node. Source:
+             * ARCHITECTURE_BASELINE.md s.2, s.5, s.7. */
         attribute latitudeDeg : Real;
         attribute longitudeDeg : Real;
         attribute permanentCrew : Integer;
         attribute skipOperationsPermitted : Boolean;
         attribute gisProvenance : String = "W4_T3_3_JS_Selenite_site_selection_v1 (LOLA 5 m)";
+        port canisterDispatch : CanisterPort;
+        port canisterReceipt : ~CanisterPort;
+        port cargoLanding : ~CargoPort;
+        port supervision : SupervisionPort;
     }
 
     part def CrewedHub :> LunarSite {
@@ -53,6 +68,15 @@ package SeleniteSites {
         attribute crewedFrom = Phase::P4;
         attribute fullConfigurationFrom = Phase::P7;
         attribute opsHubFrom = Phase::P4;
+        port opsHubSupervisor : ~SupervisionPort {
+            doc /* The SPA Ops Hub: supervises the SENTINEL edge from P4 and,
+                 * through the PKT relay, PKT at 0.5 s from P8
+                 * (ARCHITECTURE_BASELINE.md s.7). */
+        }
+        port returnPayloadDispatch : ProductPort {
+            doc /* REO / PGM concentrate to the Starship return capsule
+                 * (StarshipReturnLink, P5 until MD-4). */
+        }
     }
 
     part def PsrFloor :> LunarSite {
@@ -86,7 +110,38 @@ package SeleniteSites {
     }
 
     abstract part def OrbitalNode :> ProgrammeNode {
-        doc /* Orbital or deep-space node (no surface, no crew). */
+        doc /* Orbital or deep-space node (no surface, no crew). Source:
+             * ARCHITECTURE_BASELINE.md s.2. */
+    }
+
+    part def L1OxygenDepot :> OrbitalNode {
+        doc /* The L1 / EML-2 O2 fuel depot that SEL-REQ-005 routes the
+             * process by-product O2 to via MD-2 ("not vented or dumped").
+             * Added at Wave 4B so SEL-REQ-005 has a subject (verification
+             * item (b)). existsFrom is UNBOUND at definition level and
+             * DERIVED in SeleniteConfigurations as the phase MD-2 becomes
+             * operational (the depot cannot receive before its driver exists),
+             * the StarshipReturnLink idiom. W4B-N4 (recorded, not resolved):
+             * no repository document names this depot - not Strategy v3.1, not
+             * Decision Framework Rev D, not fleet v9, not ECN-020; the Wave 1
+             * requirement cites "Strategy v3.1, Decision Framework Rev D" and
+             * neither carries it. W4B-N18 (7 Nov 2026, corrected by the
+             * verification): the source is SEL-ECON-001 Rev A revised s.8.4
+             * (docs/SEL-ECON-001_RevA_revised.md): PKT by-product oxygen,
+             * "liquefied using MSR-powered cryocoolers ... loaded into Fe-Ni
+             * canisters ... and launched via MD-2 to an Earth-Moon L1 orbital
+             * fuel depot", at P14+ as "a natural P14+ decision gate (DG-14.4)";
+             * ECN-019 Rev C itself names no depot and gives MD-2 only "REO
+             * canisters" (s.18.1); its s.15.1 makes SPA the P14+ "deep-space
+             * launch hub", value chain v16 and ECON s.8.2 the "cislunar launch
+             * hub: propellant depot". W4B-N27: ECON s.8.4 says the oxygen is
+             * "initially vented or stored" through P8-P14 and the depot is
+             * P14+, against SEL-REQ-005 "not vented or dumped" and against the
+             * configuration's existsFrom = MD-2's phase (P9); and PKT as the
+             * "interplanetary fuel depot" against SPA's propellant depot -
+             * two depot roles. Recorded, not resolved; nothing rebound. */
+        attribute redefines nodeId = SiteId::l1Depot;
+        port oxygenReceipt : ~CanisterPort;
     }
 
     part def RelaySatellite {
@@ -103,6 +158,10 @@ package SeleniteSites {
         attribute redefines existsFrom = Phase::P1;
         attribute builtIn = Phase::P0;
         part relaySatellites : RelaySatellite[3];
+        port southPoleComms : SupervisionPort {
+            doc /* Continuous south-pole comms the Earth ops hub supervises SPA
+                 * through in P2-P3 (ARCHITECTURE_BASELINE.md s.7). */
+        }
     }
 
     part def PktRelaySatellite :> OrbitalNode {
@@ -110,6 +169,10 @@ package SeleniteSites {
              * Source: ARCHITECTURE_BASELINE.md s.2 and s.7. */
         attribute redefines nodeId = SiteId::pktRelay;
         attribute redefines existsFrom = Phase::P8;
+        port supervisionTrunk : SupervisionPort {
+            doc /* The 0.5 s SPA <-> PKT supervision link passes through the
+                 * relay; the SENTINEL edge's pktRelayLink connects here. */
+        }
     }
 
     part def DroStation :> OrbitalNode {
@@ -120,6 +183,8 @@ package SeleniteSites {
              * Source: fleet v9 s.17, Strategy v3.1. */
         attribute redefines nodeId = SiteId::dro;
         attribute redefines existsFrom = Phase::P12;
+        port canisterDispatch : CanisterPort;
+        port supervision : SupervisionPort;
     }
 
     part def EarthNode :> ProgrammeNode {
@@ -128,5 +193,13 @@ package SeleniteSites {
              * Source: ARCHITECTURE_BASELINE.md s.2 and s.7. */
         attribute redefines nodeId = SiteId::earth;
         attribute redefines existsFrom = Phase::P0;
+        port opsHub : ~SupervisionPort {
+            doc /* Earth ops hub: direct supervision of SPA at 2.56 s RTT in
+                 * P2-P3, strategic oversight after (ARCHITECTURE_BASELINE.md
+                 * s.7). */
+        }
+        port canisterReceipt : ~CanisterPort;
+        port returnPayloadReceipt : ~ProductPort;
+        port cargoOrigin : CargoPort;
     }
 }

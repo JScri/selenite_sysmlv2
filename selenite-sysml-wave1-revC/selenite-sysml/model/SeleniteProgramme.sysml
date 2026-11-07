@@ -22,7 +22,12 @@ package SeleniteProgramme {
          *   SelenitePower           - SPA/PKT power, MSR fleet, F5
          *   SeleniteProcessing      - REE value chain, flowsheet, Th/U stage
          *   SeleniteTransport       - MD-1..5 (ECN-020), conveyors, links
-         *   SeleniteSoftware        - SENTINEL, ECN-014, NAV-001 (structure)
+         *   SeleniteInterfaces      - items, port defs, interface defs
+         *                             (every connection typed, Wave 4B)
+         *   SeleniteBehaviour       - the value chain as phase-gated action
+         *                             flows (Wave 4B)
+         *   SeleniteSoftware        - SENTINEL states and modes, ECN-014
+         *                             auto-close machines, NAV-001 fusion
          *   SeleniteParameters      - exogenous inputs and gate thresholds
          *   SeleniteScenarios       - decisions D1-D8 (variations), uncertainty
          *                             register, trade studies, named scenarios
@@ -35,7 +40,9 @@ package SeleniteProgramme {
          * Wave 3 (15 September 2026): gates, thresholds, phase bindings,
          * requirements, plan_check register - see CHANGELOG_WAVE3.md;
          * Wave 4A (6 November 2026): scenarios, uncertainty and decision
-         * analysis, SEL-ECN-023 signed - see CHANGELOG_WAVE4A.md.
+         * analysis, SEL-ECN-023 signed - see CHANGELOG_WAVE4A.md;
+         * Wave 4B (7 November 2026): behaviour, interfaces and software -
+         * see CHANGELOG_WAVE4B.md.
          */
 
     private import SeleniteConfigurations::*;

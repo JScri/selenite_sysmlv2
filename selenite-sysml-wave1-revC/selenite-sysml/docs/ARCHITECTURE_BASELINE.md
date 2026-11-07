@@ -30,7 +30,7 @@ are open flags (see that document).
 
 Corrected 14 Sep 2026 (W2-N7): the online years Y85/Y105/Y125 are the
 authoritative sequence (20-year redirect→arrive cadence); the phase labels
-in fleet v9 App. C, the extended timeline and the final report's Figure 2/34
+in fleet v9 s.20.3, the extended timeline and the final report's Figure 2/34
 had drifted one phase late for C-type and S-type. Years win.
 | P14+ | Y180+ | **Steady state 2.5 Mt/yr REO.** Mission achieved | permanent |
 

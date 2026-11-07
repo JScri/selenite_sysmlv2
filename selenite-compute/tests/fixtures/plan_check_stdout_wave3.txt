@@ -1,6 +1,6 @@
 # Selenite plan check - derived-versus-declared register
 
-Gates: 81; derivable 39, testOutcome 13, exogenous 29. Element bindings: 89. Python layer: loaded.
+Gates: 81; derivable 39, testOutcome 13, exogenous 29. Element bindings: 94. Python layer: loaded.
 
 Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a boundary year belongs to both phases (Y25 = P7/P8). Verdicts compare the derived phase with declaredPhase and declaredPhaseAlternate. 'never met on current vectors' means the criterion as written is false in every year to Y200 of the ECON v1.3/v1.4 port - a finding, not a decision.
 
@@ -110,6 +110,9 @@ Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a bou
 | shackletonHub.industrialZone.emCatcher.operationalFrom | EmCatcher | P11 | DG-9.6 (P9, alt P10, Y43) | declared | - | def P11 vs gate P9/P10 |
 | shackletonHub.crewReturnVehicle.introducedIn | CrewReturnVehicle | P4 | DG-4.1 (P4, Y7) | assumed | - | def = gate |
 | shackletonHub.powerZone.spaMsr.introducedIn | SpaThoriumMSR | unbound | DG-13.4 (P13, alt P12, Y105) | Y105 (P12) | Y105 (P12) - ECON spa_msr_count first non-zero (the economics' assumption, F5) | def unbound -> gate; vector P12 vs def None |
+| shackletonHub.reagentPilot.introducedIn | SpaReagentPilot | P5 | DG-5.3 (P5, Y10) | declared | - | def = gate |
+| shackletonHub.reagentPilot.productionScaleFrom | SpaReagentPilot | P7 | DG-7.4 (P7, Y22) | Y26 (P8) | - | def = gate |
+| shackletonHub.pgmHydromet.introducedIn | SpaPgmHydromet | P5 | DG-5.4 (P5, Y10) | declared | - | def = gate |
 | shackletonHub.mTypeLine.introducedIn | MTypeProcessingLine | P12 | DG-12.4 (P12, Y85) | Y85 (P12) | Y85 (P12) - ECON captured_asteroid_pgm first non-zero | def = gate; vector = def |
 | shackletonHub.cTypeLine.introducedIn | CTypeProcessingLine | P12 | DG-13.3 (P13, alt P12, Y105) | Y105 (P12) | - | def = gate |
 | shackletonHub.sTypeLine.introducedIn | STypeProcessingLine | P13 | DG-14.3 (P14, alt P13, Y125) | Y125 (P13) | - | def = gate |
@@ -143,6 +146,7 @@ Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a bou
 | pktFactory.temporaryCrewOnlyIn | AutonomousFactory | P8 | DG-8.6 (P8, Y28) | declared | - | def = gate |
 | pktFactory.processingSpine.introducedIn | PktProcessingSpine | P8 | DG-8.1 (P8, Y25) | declared | Y28 (P8) - ECON circuits_needed >= 100 (first PKT tranche, DG-8.2) | def = gate; vector = def |
 | pktFactory.reagentPlant.introducedIn | ReagentPlant | P8 | DG-8.3 (P8, Y25) | declared | - | def = gate |
+| pktFactory.reagentPlant.oxalicAcidLine.introducedIn | OxalicAcidLine | P9 | DG-9.5 (P9, Y42) | declared | - | def = gate |
 | pktFactory.foundry.introducedIn | Foundry | P8 | DG-8.6 (P8, Y28) | declared | Y26 (P8) - ECON insitu_total first non-zero (in-situ manufacture) | def = gate; vector = def |
 | pktFactory.foundry.atScaleFrom | Foundry | P9 | DG-9.4 (P9, Y42) | Y28 (P8) | - | def = gate |
 | pktFactory.relayDepot.introducedIn | RelayDepot | unbound | DG-POST.1 (P14plus, Y280) | None | - | def unbound -> gate |
@@ -169,6 +173,7 @@ Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a bou
 | droStation.laserAblationTruss.introducedIn | LaserAblationTruss | P12 | DG-12.4 (P12, Y85) | Y85 (P12) | Y85 (P12) - ECON captured_asteroid_pgm first non-zero | def = gate; vector = def |
 | droStation.redirectTug.introducedIn | RedirectTug | P11 | DG-11.8 (P11, Y75) | Y75 (P11) | Y65 (P11) - ECON tug_fleet first non-zero (build precedes the Y75 redirect) | def = gate; vector = def |
 | droStation.redirectTug.firstCaptureIn | RedirectTug | P11 | DG-11.8 (P11, Y75) | Y75 (P11) | - | def = gate |
+| l1OxygenDepot.existsFrom | L1OxygenDepot | unbound | massDriverNetwork.md2.operationalFrom | - | - | - |
 | massDriverNetwork.introducedIn | MassDriverNetwork | P8 | DG-8.0 (P8, Y25) | declared | - | def = gate |
 | massDriverNetwork.md1.introducedIn | MassDriverMd1 | P8 | DG-8.0 (P8, Y25) | declared | - | def = gate |
 | massDriverNetwork.md1.operationalFrom | MassDriverMd1 | P8 | DG-8.0 (P8, Y25) | declared | - | def = gate |

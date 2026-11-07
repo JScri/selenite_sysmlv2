@@ -157,6 +157,31 @@ uploads) is read-only — copy it to `/home/claude/` before editing.
   the pin keeps CI's render step green (W4A-N2).
 - A requirement `subject` typed by an abstract definition is declared
   `abstract subject x : AbstractDef;` (clears SSM021).
+- **Interfaces and behaviour (Wave 4B, 7 Nov 2026).** Every port is typed by
+  a `SeleniteInterfaces` port def — the supplying direction is the
+  definition, the receiver is the conjugate (`port p : ~WaterPort;`) — and
+  every connection is an `interface u : L connect a.p to b.q;` typed by an
+  interface def with its `flow`; a composite's boundary port is delegated to
+  an internal part with `bind outer = inner.port;`. Items the ports carry
+  are `item def`s; the generic bases (`Material`, `OreFeed`, …) are concrete
+  because a port typed by an abstract item def raises SSM021. Behaviour is
+  `action def`s with `in item` / `out item` parameters, nested actions,
+  typed `flow`s and explicit `succession`s; a pass-through step names its
+  output `…Out` (an `in` and an `out` of the same name is RES017). Streams
+  are phase-gated by `SeleniteBehaviour::MaterialStream` (the Wave 2 idiom
+  on an action def) and the configuration rebinds a performed stream's phase
+  to its performer with `:>>` inside `perform action … { action redefines s
+  : S { :>> introducedIn = part.attr; } }` — the `:>>` form keeps the streams
+  out of `plan_check`'s register by design (W4B-N15). State machines are
+  `state def`s exhibited by the part (`exhibit state s : S { :>> attr =
+  ownAttr; }`); guards read state-def attributes the exhibiting part binds,
+  because a guard can reference an `accept` payload only under a
+  single-letter name (W4B-N3); a transition the documents do not give is
+  declared with its trigger unbound and a `doc` naming the source needed.
+  `allocate step to part;` carries the allocation; `tools/connect_check.py`
+  must report 0 unresolved before delivery, because sysml-validate 0.36.0
+  does not resolve feature chains in `connect` / `bind` / `allocate` /
+  `flow` (W4B-N2).
 - Fleet-scale counts stay as configuration **attributes**
   (`circuitCountAtP14`), not part multiplicities, until multiplicities
   earn their keep. Exception: genuinely enumerable assets
@@ -171,8 +196,10 @@ uploads) is read-only — copy it to `/home/claude/` before editing.
 3. Make the session's changes. Whole-file rewrites are fine; keep
    diffs reviewable per commit-sized chunk of intent.
 4. Validate (hard rule 1). Fix until exit 0 and hints are clean. Run
-   `python tools/plan_check.py --quiet` (exit 0) whenever gates, thresholds,
-   calcs or configuration bindings change.
+   `python tools/connect_check.py` (0 unresolved) whenever a connection,
+   bind, allocation or flow changes, and `python tools/plan_check.py
+   --quiet` (exit 0) whenever gates, thresholds, calcs or configuration
+   bindings change.
 5. If structure changed, regenerate `diagrams/` via
    `tools/render_diagrams.sh` (add new views to that script when new
    anchors matter).
@@ -209,6 +236,9 @@ Map updates: <document_map.csv rows touched>
 | STYL007 | single-element body on one line | expand to multiple lines |
 | SSM030 | attribute variant not compatible with its part variation | every usage nested in a `variation part def` is a variant: put metadata attributes in a supertype |
 | SSM079 | redefinition replaces a fixed value (sysml-diagram >= 0.5x only) | pin `sysml-diagram@0.42.0`; the validator accepts the Wave 3 gate-binding idiom |
+| RES017 | member name declared twice in a namespace | an action def's `in` and `out` parameters need different names (`…Out`) |
+| RES001 on a guard payload | `accept x : T if x.a …` resolves only when `x` is a single letter (W4B-N3) | guard on state-def attributes bound by the exhibiting part, or a single-letter payload |
+| (none) | unresolved feature chain in `connect` / `bind` / `allocate` / `flow` passes silently (W4B-N2) | run `tools/connect_check.py` |
 
 Project root detection for the diagram CLI requires `.vscode/sysml/`
 (present, `project.json` = `{}`) or a git repo. `--view grv` emits CSV
@@ -216,7 +246,38 @@ tables, useful for requirement/attribute exports.
 
 ## 8. Wave roadmap
 
-See `docs/MIGRATION_PLAN.md`. **Verification after Wave 4A delivered (6 Nov
+See `docs/MIGRATION_PLAN.md`. **Wave 4B delivered (7 Nov 2026,
+`CHANGELOG_WAVE4B.md`)**: behaviour, interfaces and software —
+`model/Interfaces.sysml` (items, port defs, interface defs, the ECN-023
+`EclipseGatedPowerSupply` constraint), `model/Behaviour.sysml` (seven
+phase-gated material streams as typed action flows, performed and allocated
+in the configuration), every port typed and every connection an interface,
+SENTINEL supervision location and modes, the ECN-014 cryo-valve and O2-line
+auto-close state machines with the dead-man logic asserted, NAV-001 fusion
+allocated to the MOLE-I software, SEL-REQ-017 (ECN-023 rule) satisfied on the
+three asteroid lines, SEL-REQ-005 on the new L1 O2 depot, the "TODO Wave 4"
+gated elements created and bound (plan register 94 bindings),
+`tools/connect_check.py` in CI, 32 diagrams. **Addendum, same day
+(`CHANGELOG_WAVE4B.md` §9):** Jason supplied the wave's primary sources
+(SW-SENTINEL Rev B, SENTINEL design Rev B, NAV-001, SW-MOLEI Rev D, SW-SUB
+Rev C, CON-001 Rev B, ECN-012, ECN-013, ISRU-001 Rev D + CAD-ISRU, CAP-001,
+EVA contingency, value chain v14.1 / v15 / v16, ECN-019 Rev C); they are in
+`docs/` (markdown extracts, originals under `docs/sources/`), the TODOs that
+named them are closed, the transitions they give are bound (ECN-012 dump
+sequence, no-contact mode,
+PLC / UHF switchover, bayonet engagement, tether port breakers, CAP mission
+with SPE abort), the polar fix moved to the substation (ECN-013 §3.2) and
+the register stayed byte-identical; every binding was then adversarially
+verified against the sources and corrected where it overreached (§9.5).
+Still unbound: the SENTINEL mode transitions (no mode table in the sources,
+W4B-N21), the ECN-014 returns (crew re-open is the only documented return),
+the MOLE-I drill-resistance offset (W4B-N22) and the construction role
+assignment. The L1 O2 depot's source turned out to be SEL-ECON-001 Rev A
+revised §8.4 (W4B-N18 / N27). No value rebound, no ECN raised; W4B-N1 …
+N28 and the open items are in the changelog; next is Wave 5
+(`docs/SESSION_BRIEF_wave5_quantities.md`). The document_map status
+vocabulary gains `behaviour_modelled`. Previous state:
+**Verification after Wave 4A delivered (6 Nov
 2026, `CHANGELOG_VERIFICATION.md`)**: the ten-item audit of the model after
 Waves 1–3, the port, Wave 4A and SEL-ECN-023 — V-N1 … V-N46, every bound
 value supported by its source, determinism and robustness of the scenario

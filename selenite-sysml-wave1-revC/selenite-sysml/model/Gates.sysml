@@ -41,7 +41,12 @@ package SeleniteGates {
          *   2026) is literal in the model.
          * - prerequisites and gatedElements are strings naming gate ids and
          *   model elements (a dependency graph for the diagrams and the
-         *   checker, not a semantic link - Wave 4 may promote them).
+         *   checker, not a semantic link). Wave 4B (7 Nov 2026) kept them
+         *   as strings: tools/plan_check.py reads them by name, the designed
+         *   indirect cases (DG-7.1 "via", the DG-9.1 / DG-12.4 chained
+         *   retirements through md2 / md4.operationalFrom, DG-3.2 "partial")
+         *   have no single link semantics, and promotion is a Wave 5 item
+         *   with the convention it needs (CHANGELOG_WAVE4B.md).
          * - consequenceIfNotMet is the Strategy v3.1 s.16 wording where that
          *   table has a row for the gate.
          * Sources: SEL-DECISION-001 Rev D s.2, s.3, s.4, s.9, s.10.2;
@@ -303,14 +308,15 @@ package SeleniteGates {
 
     part def DgFiveThree :> ExogenousGate {
         doc /* "DG-5.3 (Y10): Troilite H2SO4 pilot commissioned (M115) - first
-             * in-situ chemical production." The SPA reagent pilot has no
-             * element yet (SEL-REAGENT-001 Rev A is the PKT plant): TODO Wave 4. */
+             * in-situ chemical production." The SPA reagent pilot is
+             * SeleniteProcessing::SpaReagentPilot (Wave 4B; SEL-REAGENT-001
+             * Rev A is the PKT plant), bound to this gate in the configuration. */
         attribute redefines gateId = "DG-5.3";
         attribute redefines criterion = "Troilite H2SO4 pilot commissioned (M115) - first in-situ chemical production. 5,000 kg pilot equipment, 50 kW, 1-5 t/yr H2SO4.";
         attribute redefines declaredPhase = Phase::P5;
         attribute redefines declaredYear = 10.0;
         attribute redefines prerequisites = ("DG-5.2");
-        attribute redefines gatedElements = ("SPA reagent pilot (no element; TODO Wave 4)", "DG-7.4");
+        attribute redefines gatedElements = ("SpaReagentPilot.introducedIn", "DG-7.4");
     }
 
     part def DgFiveFour :> ExogenousGate {
@@ -322,7 +328,7 @@ package SeleniteGates {
         attribute redefines declaredPhase = Phase::P5;
         attribute redefines declaredYear = 10.0;
         attribute redefines prerequisites = ("DG-5.2");
-        attribute redefines gatedElements = ("StarshipReturnLink.introducedIn", "StarshipReturnLink.operationalFrom");
+        attribute redefines gatedElements = ("StarshipReturnLink.introducedIn", "StarshipReturnLink.operationalFrom", "SpaPgmHydromet.introducedIn (Wave 4B: the batch is asteroid Ni-Fe/PGM + KREEP concentrate, M6)");
     }
 
     // =====================================================================
@@ -442,7 +448,7 @@ package SeleniteGates {
         attribute redefines declaredPhase = Phase::P7;
         attribute redefines declaredYear = 22.0;
         attribute redefines prerequisites = ("DG-5.3", "DG-6.2");
-        attribute redefines gatedElements = ("SPA reagent production (no element; TODO Wave 4)");
+        attribute redefines gatedElements = ("SpaReagentPilot.productionScaleFrom");
         calc substitutionCheck : ReagentSubstitutionGate;
     }
 
@@ -655,7 +661,7 @@ package SeleniteGates {
         attribute redefines declaredPhase = Phase::P9;
         attribute redefines declaredYear = 35.0;
         attribute redefines prerequisites = ("DG-8.0", "DG-8.X", "DG-8.8");
-        attribute redefines gatedElements = ("MassDriverMd2.introducedIn", "MassDriverMd2.operationalFrom", "ReoExportCanister", "Skip.retiredIn", "SkipHopLink.retiredIn");
+        attribute redefines gatedElements = ("MassDriverMd2.introducedIn", "MassDriverMd2.operationalFrom", "ReoExportCanister", "Skip.retiredIn", "SkipHopLink.retiredIn", "L1OxygenDepot.existsFrom (via MassDriverMd2.operationalFrom, Wave 4B)");
         attribute redefines consequenceIfNotMet = "Full parachute (+$26B/yr vs minimal chute) (Strategy v3.1 s.16)";
         attribute canisterRecoveryOptionSelected : String [0..1];
         attribute canisterRecoveryOptionEconAssumed : String = "1b minimal drag chute - ECON v1.3 can.earth_kg = 28 kg";
@@ -707,13 +713,14 @@ package SeleniteGates {
 
     part def DgNineFive :> ExogenousGate {
         doc /* "DG-9.5 (Y42): Oxalic acid pilot at PKT (CO2 electroreduction)".
-             * No element (reagent plant sub-line): TODO Wave 4. */
+             * The reagent plant sub-line is SeleniteProcessing::OxalicAcidLine
+             * (Wave 4B), bound to this gate in the configuration. */
         attribute redefines gateId = "DG-9.5";
         attribute redefines criterion = "Oxalic acid pilot at PKT (CO2 electroreduction)";
         attribute redefines declaredPhase = Phase::P9;
         attribute redefines declaredYear = 42.0;
         attribute redefines prerequisites = ("DG-8.3");
-        attribute redefines gatedElements = ("ReagentPlant (oxalic acid line; no element, TODO Wave 4)");
+        attribute redefines gatedElements = ("OxalicAcidLine.introducedIn");
     }
 
     part def DgNineSix :> ExogenousGate {
@@ -1395,7 +1402,7 @@ package SeleniteGates {
     // Milestones
     // =====================================================================
 
-    part def Milestone {
+    abstract part def Milestone {
         doc /* One formally defined programme milestone (MTL v8.5 convention:
              * nine milestones M0-M8, each verified by SENTINEL, crew or Earth
              * mission control before subsequent activities are authorised).

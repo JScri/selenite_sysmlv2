@@ -1,7 +1,10 @@
 # Session Brief — Wave 4B: Behaviour, interfaces and software
 
-> **Status: ready to start (amended 7 Nov 2026 after the verification
-> session merged, PR #12 / 4e78eee).** This is the original Wave 4 scope of
+> **Status: delivered 7 Nov 2026 (`CHANGELOG_WAVE4B.md`, PR open; addendum
+> the same day on the same PR once the primary sources arrived — §9 there;
+> started
+> 7 Nov 2026; amended 7 Nov 2026 after the verification session merged,
+> PR #12 / 4e78eee).** This is the original Wave 4 scope of
 > `docs/MIGRATION_PLAN.md`; Wave 5 (quantities bound from the Python layer,
 > the derived timeline) follows it. The verification's `CHANGELOG_VERIFICATION.md`
 > records V-N1 … V-N46 and the consolidated open-items list in its §4;

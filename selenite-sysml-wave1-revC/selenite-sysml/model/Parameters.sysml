@@ -13,9 +13,10 @@ package SeleniteParameters {
          * Wave 3 (15 Sep 2026): completed from SEL-DECISION-001 Rev D and
          * SEL-T1.1-STRATEGY v3.1; GateThresholds added so that every numeric
          * gate criterion is one attribute here and never a literal inside a
-         * SeleniteAnalysis calc def. ECN-019 Rev C itself is not in the
-         * repository; its committed decisions are cited through Strategy v3.1,
-         * which integrates them in its body text. */
+         * SeleniteAnalysis calc def. ECN-019 Rev C is in docs/ since 7 Nov
+         * 2026 (Wave 4B addendum); its committed decisions were cited through
+         * Strategy v3.1, which integrates them in its body text, and those
+         * citations stand. */
 
     private import ScalarValues::*;
     private import SelenitePhases::*;

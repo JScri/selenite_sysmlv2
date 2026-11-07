@@ -10,35 +10,61 @@ package SelenitePsrNetwork {
          * Sources: SEL_ROBOT_FLEET_v9.md s.13, SEL_SUBSTATION_DESIGN_v4,
          * SEL-PIPE-001 Rev A, SEL-CON-001 Rev B updated, SEL-ECN-012 (drain
          * reroute, pipeline integration), SEL-ECN-013 (SATS+WEB, spools),
-         * SEL-CAP-001 Rev A updated, ARCHITECTURE_BASELINE.md s.2 and s.4. */
+         * SEL-CAP-001 Rev A updated, ARCHITECTURE_BASELINE.md s.2 and s.4.
+         * Wave 4B (7 Nov 2026): every port typed by SeleniteInterfaces and
+         * every internal connection an interface (power path, water path,
+         * crew access); the CON-001 bayonet tap sockets and the ECN-013 UHF
+         * construction link added; the MOLE-I side of the tether and the
+         * bayonet adapter are in SeleniteFleet::MoleI. Boundary ports are
+         * delegated to the internal parts with 'bind'. Addendum (7 Nov
+         * 2026): the sources are in docs/; the tether drum carries a sensing
+         * port (payout + DRM-040 encoder) into the controller, which computes
+         * the polar fix the drum sends down the tether (ECN-013 s.3.2); the
+         * CLP carries the CAP floor docking pad power tap (CAP-001 s.5);
+         * construction tap counts per branch and the SATS / substation tap
+         * are documented, not multiplied (rule 3). */
 
     private import ScalarValues::*;
+    private import SeleniteInterfaces::*;
     private import SelenitePhases::*;
     private import SeleniteSites::*;
     private import SeleniteSoftware::*;
 
     abstract part def PsrNetworkElement :> PhaseGated {
-        doc /* Base for fixed PSR-access infrastructure. */
+        doc /* Base for fixed PSR-access infrastructure. Source: fleet v9 s.13;
+             * ARCHITECTURE_BASELINE.md s.4. */
         abstract attribute location : SiteId;
     }
 
     part def DescentWinch :> PsrNetworkElement {
         doc /* Rim-anchored MOLE-I descent winch (IW-1 / IW-2), Kevlar or
              * Vectran cable only (Dyneema excluded at cryogenic temperatures).
-             * Optional retrieval for major maintenance. From P3. */
+             * Optional retrieval for major maintenance. From P3. Source:
+             * fleet v9 s.13.1; ARCHITECTURE_BASELINE.md s.4. */
         attribute redefines introducedIn = Phase::P3;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::spa;
-        port cableToFloor;
+        port cableToFloor : WinchCablePort;
     }
 
     part def CrewWinch :> PsrNetworkElement {
         doc /* IW-CAP crew-rated winch for the Crater Access Pod, dedicated guide
-             * cable, anchors reserved at P1. Operational P4 with the CAP. */
+             * cable, redundant braking, independent of all MOLE-I and
+             * infrastructure winches. Operational P4 with the CAP. Phase 1
+             * reservations (SEL-CAP-001 Rev A updated s.5; SEL-CON-001 Rev B
+             * updated, CAP reservations): guide cable anchor sockets along the
+             * wall route, the rim winch pad (SINTER-built), the floor docking
+             * pad with power tap (SelenitePsrNetwork::ClpJunction), and a
+             * lateral cable routing corridor. Source: SEL-CAP-001 Rev A
+             * updated s.3, s.5; fleet v9 s.13.5. */
         attribute redefines introducedIn = Phase::P4;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::spa;
         attribute anchorsReservedFrom = Phase::P1;
+        attribute phase1Reservations = (
+            "guide cable anchor sockets", "rim winch pad",
+            "floor docking pad with power tap", "lateral cable routing corridor"
+        );
     }
 
     part def CapGuideCable :> PsrNetworkElement {
@@ -49,28 +75,32 @@ package SelenitePsrNetwork {
         attribute redefines introducedIn = Phase::P4;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::psrFloor;
-        port rimEnd;
-        port floorDockingPad;
+        port rimEnd : ~GuideCablePort;
+        port floorDockingPad : GuideCablePort;
     }
 
     part def CableTramway :> PsrNetworkElement {
         doc /* Aerial cable tramway carrying icy-regolith containers PSR -> rim
              * during P3 (before the pipeline); retained as backup thereafter,
-             * so never retired. */
+             * so never retired. Source: fleet v9 s.13.2. */
         attribute redefines introducedIn = Phase::P3;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::psrFloor;
         attribute primaryRoleUntil = Phase::P3;
+        port floorLoad : ~IcyRegolithPort;
+        port rimUnload : IcyRegolithPort;
+        flow floorLoad.regolith to rimUnload.regolith;
     }
 
     part def TrunkCable :> PsrNetworkElement {
         doc /* 1,000 VDC OFHC copper trunk from the rim power zone down the
-             * western wall to the CLP. From P3. */
+             * western wall to the CLP. From P3. Source: fleet v9 s.13.4;
+             * SEL_SUBSTATION_DESIGN_v4. */
         attribute redefines introducedIn = Phase::P3;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::psrFloor;
-        port rimFeed;
-        port clpEnd;
+        port rimFeed : ~PowerPort;
+        port clpEnd : PowerPort;
     }
 
     part def RimLogisticsPoint :> PsrNetworkElement {
@@ -83,9 +113,14 @@ package SelenitePsrNetwork {
         attribute redefines introducedIn = Phase::P3;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::spa;
-        port rimPowerIn;
-        port trunkCableOut;
-        port pipelineRimEnd;
+        port rimPowerIn : ~PowerPort;
+        port trunkCableOut : PowerPort;
+        port pipelineRimEnd : ~WaterPort;
+        port waterToIsru : WaterPort;
+        port tramwayUnload : ~IcyRegolithPort;
+        port regolithToIsru : IcyRegolithPort;
+        port capRimAnchor : GuideCablePort;
+        port winchAnchor : WinchCablePort;
     }
 
     part def ClpJunction :> PsrNetworkElement {
@@ -98,26 +133,61 @@ package SelenitePsrNetwork {
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::psrFloor;
         part trunkPump : TrunkPump;
-        port trunkCableIn;
-        port spineOut;
-        port trunkPipeIn;
-        port pipelineOut;
+        part capDockingPadTap : BayonetTapSocket {
+            doc /* CAP floor docking pad: flat Ti anchor plate adjacent to the
+                 * SATS+WEB with a 1,000 VDC bayonet power tap socket, installed
+                 * during Stage A by the construction MOLE-I (Phase 1
+                 * reservation). Source: SEL-CAP-001 Rev A updated s.5;
+                 * SEL-CON-001 Rev B updated, CAP Phase 1 reservations item 3. */
+        }
+        port trunkCableIn : ~PowerPort;
+        port spineOut : PowerPort;
+        port trunkPipeIn : ~WaterPort;
+        port pipelineOut : WaterPort;
+        port capDockingPad : ~GuideCablePort;
+        port winchLanding : ~WinchCablePort;
+        bind trunkPipeIn = trunkPump.waterIn;
+        bind pipelineOut = trunkPump.waterOut;
     }
 
     part def TrunkPump {
         doc /* Trunk water pump at the CLP lifting product water to the rim
              * ISRU (values Wave 5). Source: SEL-PIPE-001 Rev A, fleet v9 s.13.3. */
+        port waterIn : ~WaterPort;
+        port waterOut : WaterPort;
+        flow waterIn.water to waterOut.water;
     }
 
     part def Spine :> PsrNetworkElement {
         doc /* Floor-level spine along the highest ice-concentration zones from
              * the CLP; branches leave it toward confirmed ice (>= threshold,
-             * SURVEY-mapped). Adaptive, incrementally extendable. */
+             * SURVEY-mapped). Adaptive, incrementally extendable. Source:
+             * fleet v9 s.13.4. */
         attribute redefines introducedIn = Phase::P3;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::psrFloor;
-        port clpIn;
-        port branchTaps;
+        port clpIn : ~PowerPort;
+        port branchTaps : PowerPort;
+    }
+
+    part def BayonetTapSocket {
+        doc /* The standardised 20 mm two-L-slot bayonet power interface the
+             * MOLE-I motorised adapter engages push-and-twist and holds on a
+             * passive detent. Two forms: fixed sockets (the SATS construction
+             * tap, the substation construction tap SEL-SUB-BUS-030, the CAP
+             * floor docking pad tap) and, at each branch construction tap
+             * every 100 m, the bayonet plug "integrated at the free end of the
+             * tether" wound on the retraction spool (ECN-013 Rev 3) - the
+             * rover mates with the spool tether's plug, not a socket on the
+             * cable; electrically the same tap. The SEL-CON-001 Rev B updated
+             * connector element (V-N7); the engagement sequence is
+             * SeleniteSoftware::BayonetEngagementStates. The substation's own
+             * branch connector is make-before-break (SEL-SW-SUB-001 Rev C
+             * s.6). Socket counts (~9 spools per 450 m branch) and the 1,000
+             * VDC rating stay in the source (rule 3). Source: SEL-CON-001 Rev
+             * B updated s.3.1 and ECN-013 Rev 2 / Rev 3 and CAP reservations;
+             * SEL-SW-SUB-001 Rev C s.6, ECN-013 Rev 3 part; fleet v9 s.4.1. */
+        port socket : BayonetTapPort;
     }
 
     part def Branch :> PsrNetworkElement {
@@ -127,9 +197,14 @@ package SelenitePsrNetwork {
         attribute redefines introducedIn = Phase::P3;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::psrFloor;
-        port spineTap;
-        port substationTaps;
+        port spineTap : ~PowerPort;
+        port substationTaps : PowerPort;
         part retractionSpools : RetractionSpool[0..*];
+        part constructionTaps : BayonetTapSocket[0..*] {
+            doc /* Construction taps every 100 m, each a spring spool whose
+                 * tether ends in the bayonet plug the rover engages (SEL-CON-001
+                 * Rev B updated, ECN-013 Rev 3; fleet v9 s.13.4). */
+        }
     }
 
     part def RetractionSpool {
@@ -150,19 +225,43 @@ package SelenitePsrNetwork {
         part controller : SubstationController;
         part tetherDrums : TetherDrum[0..*];
         part waterManifold : WaterManifold;
-        port branchTap;
-        port moleITethers;
-        port waterOut;
+        part tapSocket : BayonetTapSocket;
+        port branchTap : ~PowerPort;
+        port moleITethers : TetherPort;
+        port waterOut : WaterPort;
+        port constructionRadio : ConstructionRadioPort;
+        port supervision : SupervisionPort;
+        bind moleITethers = tetherDrums.tether;
+        bind waterOut = waterManifold.branchPipeOut;
+        bind constructionRadio = controller.constructionRadio;
+        bind supervision = controller.supervision;
+        // ECN-013 s.3.2: drum sensing into the controller, the computed fix
+        // back out on the drum's tether port
+        interface drumSensing : DrumSensingLine connect tetherDrums.sensing to controller.drumSensing;
+        flow controller.tetherOut.fix to tetherDrums.tether.fix;
     }
 
     part def TetherDrum {
         doc /* Constant-tension MOLE-I tether drum with cable-drum heater (on the
-             * substation, not the rover). */
+             * substation, not the rover), 50 N tension loop, payout encoder,
+             * and the DRM-040 two-axis angle encoder on the guide roller
+             * (ECN-013). The drum end of the tether link carries power and
+             * the controller-computed polar fix to the rover, water batches
+             * and telemetry back; the sensing port carries payout and roller
+             * angle to the controller. Source: SEL-SW-SUB-001 Rev C s.5 and
+             * ECN-013 addition; SEL-NAV-001 Rev A s.2.1; fleet v9 s.4.1,
+             * s.13.4; SEL_SUBSTATION_DESIGN_v4. */
+        port tether : TetherPort;
+        port sensing : DrumSensingPort;
     }
 
     part def WaterManifold {
         doc /* Ground-level manifold inside the WEB receiving MOLE-I batch dumps
-             * and lifting them into the elevated branch pipe. */
+             * and lifting them into the elevated branch pipe. Source: fleet v9
+             * s.4.1 "Mini-VEX water path", s.13.4. */
+        port batchIn : ~WaterPort;
+        port branchPipeOut : WaterPort;
+        flow batchIn.water to branchPipeOut.water;
     }
 
     part def HeatedPipeline :> PsrNetworkElement {
@@ -175,8 +274,13 @@ package SelenitePsrNetwork {
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::psrFloor;
         attribute dualParallelTrunkFrom = Phase::P5;
-        port branchInlets;
-        port rimIsruOutlet;
+        port branchInlets : ~WaterPort;
+        port trunkPumpOut : WaterPort;
+        port trunkPumpIn : ~WaterPort;
+        port rimIsruOutlet : WaterPort;
+        port traceHeatingIn : ~PowerPort;
+        flow branchInlets.water to trunkPumpOut.water;
+        flow trunkPumpIn.water to rimIsruOutlet.water;
     }
 
     part def PsrNetwork :> PsrNetworkElement {
@@ -202,23 +306,42 @@ package SelenitePsrNetwork {
         part substations : Substation[0..*];
         part pipeline : HeatedPipeline;
 
-        port rimPowerFeed;
-        port rimIsruWaterReturn;
-        port moleIFleetTethers;
+        port rimPowerFeed : ~PowerPort;
+        port rimIsruWaterReturn : WaterPort;
+        port rimIsruRegolith : IcyRegolithPort;
+        port moleIFleetTethers : TetherPort;
+        port moleIConstructionRadio : ConstructionRadioPort;
+        port tramwayFloorLoad : ~IcyRegolithPort;
+        port supervision : SupervisionPort;
+
+        // boundary delegation
+        bind rimPowerFeed = rimClp.rimPowerIn;
+        bind rimIsruWaterReturn = rimClp.waterToIsru;
+        bind rimIsruRegolith = rimClp.regolithToIsru;
+        bind moleIFleetTethers = substations.moleITethers;
+        bind moleIConstructionRadio = substations.constructionRadio;
+        bind tramwayFloorLoad = tramway.floorLoad;
+        bind supervision = substations.supervision;
 
         // power and control path: rim -> trunk -> CLP -> spine -> branch -> substation
-        connect rimClp.trunkCableOut to trunkCable.rimFeed;
-        connect trunkCable.clpEnd to clp.trunkCableIn;
-        connect clp.spineOut to spine.clpIn;
-        connect spine.branchTaps to branches.spineTap;
-        connect branches.substationTaps to substations.branchTap;
+        interface rimToTrunk : PowerBus connect rimClp.trunkCableOut to trunkCable.rimFeed;
+        interface trunkToClp : PowerBus connect trunkCable.clpEnd to clp.trunkCableIn;
+        interface clpToSpine : PowerBus connect clp.spineOut to spine.clpIn;
+        interface spineToBranches : PowerBus connect spine.branchTaps to branches.spineTap;
+        interface branchesToSubstations : PowerBus connect branches.substationTaps to substations.branchTap;
 
         // water path: substation -> branch/trunk pipe -> CLP pump -> pipeline -> rim ISRU
-        connect substations.waterOut to pipeline.branchInlets;
-        connect pipeline.branchInlets to clp.trunkPipeIn;
-        connect clp.pipelineOut to pipeline.rimIsruOutlet;
+        interface substationsToPipe : WaterTransfer connect substations.waterOut to pipeline.branchInlets;
+        interface pipeToPump : WaterTransfer connect pipeline.trunkPumpOut to clp.trunkPipeIn;
+        interface pumpToRimPipe : WaterTransfer connect clp.pipelineOut to pipeline.trunkPumpIn;
+        interface pipeToRim : WaterTransfer connect pipeline.rimIsruOutlet to rimClp.pipelineRimEnd;
 
-        // crew contingency access
-        connect capGuideCable.floorDockingPad to clp.trunkCableIn;
+        // P3 tramway: floor containers -> rim
+        interface tramwayToRim : IcyRegolithTransfer connect tramway.rimUnload to rimClp.tramwayUnload;
+
+        // descent winches and crew contingency access
+        interface winchToFloor : WinchCableLink connect descentWinches.cableToFloor to clp.winchLanding;
+        interface capRimToCable : GuideCableLink connect rimClp.capRimAnchor to capGuideCable.rimEnd;
+        interface capCableToFloor : GuideCableLink connect capGuideCable.floorDockingPad to clp.capDockingPad;
     }
 }

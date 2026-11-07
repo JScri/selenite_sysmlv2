@@ -5,7 +5,9 @@ package SelenitePhases {
          * Sources: docs/ARCHITECTURE_BASELINE.md s.1 (skeleton of record),
          * selenite_extended_timeline_v3_revised.html (P7-P14+),
          * W2_T1_1_JS_MTL_v8_5.html (P0-P7), MTL_GUIDE_v18_revised,
-         * SEL_ROBOT_FLEET_v9.md App. C. Baseline ECN-019 Rev C + ECN-020.
+         * SEL_ROBOT_FLEET_v9.md s.20.3 (cited as "App. C" until Wave 4B; the
+         * markdown authority has no appendix, V-N27). Baseline ECN-019 Rev C +
+         * ECN-020.
          *
          * Idiom (decided Wave 2, see CHANGELOG_WAVE2.md): sysml-validate 0.36.0
          * treats an enum def as abstract, so any usage typed ': Phase' raises
@@ -28,7 +30,8 @@ package SelenitePhases {
     }
 
     abstract part def PhaseGated {
-        doc /* Base for every element with a phase of introduction and an
+        doc /* Source: ARCHITECTURE_BASELINE.md s.1 modelling note.
+             * Base for every element with a phase of introduction and an
              * optional phase of retirement. Concrete definitions bind both;
              * 'retiredIn = null' means never retired within the programme.
              * An unbound 'introducedIn' on a concrete definition is deliberate
@@ -39,7 +42,8 @@ package SelenitePhases {
 
     attribute def PhaseWindow {
         doc /* Programme-year window of one phase (inclusive, Y = programme
-             * year). endYear absent means open-ended. */
+             * year). endYear absent means open-ended. Source:
+             * ARCHITECTURE_BASELINE.md s.1. */
         attribute startYear : Integer;
         attribute endYear : Integer [0..1];
     }
@@ -47,9 +51,9 @@ package SelenitePhases {
     part def ProgrammeTimeline {
         doc /* Year ranges per phase. Source: ARCHITECTURE_BASELINE.md s.1
              * (which consolidates Extended Timeline v3 revised, MTL v8.5 and
-             * fleet v9 App. C). Windows overlap by design at P1/P2/P3 (P1 Y2-4,
+             * fleet v9 s.20.3). Windows overlap by design at P1/P2/P3 (P1 Y2-4,
              * P2 Y4-6, P3 Y4-7): parallel work streams, not drift.
-             * Note (not an F-flag): fleet v9 App. C gives P0 as Y0-Y3 where
+             * Note (not an F-flag): fleet v9 s.20.3 gives P0 as Y0-Y3 where
              * the baseline gives Y1-3; the baseline value is carried. */
 
         attribute p0 : PhaseWindow {

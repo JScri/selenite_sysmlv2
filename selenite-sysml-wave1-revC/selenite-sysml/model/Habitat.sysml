@@ -8,15 +8,20 @@ package SeleniteHabitat {
          * Rev B, HAB-WALL-XSECTION-001, SEL-ECLSS-001/002/SCALING Rev B,
          * SEL-ISRU-001 Rev D updated (+ CAD-ISRU ECN-014 amendment),
          * SEL-IZ-001 Rev B, SEL-ELZ-001 Rev A updated, sabatier.m (ECLSS
-         * scenario authority), ARCHITECTURE_BASELINE.md s.4. */
+         * scenario authority), ARCHITECTURE_BASELINE.md s.4. Wave 4B (7 Nov
+         * 2026): every port typed by SeleniteInterfaces, the ISRU chain
+         * connected through interfaces, the habitat O2 line and the
+         * cryo valve stations carrying the ECN-014 ports. */
 
     private import ScalarValues::*;
+    private import SeleniteInterfaces::*;
     private import SelenitePhases::*;
     private import SeleniteProcessing::*;
     private import SeleniteSites::*;
 
     abstract part def Facility :> PhaseGated {
-        doc /* Base for fixed facilities. */
+        doc /* Base for fixed facilities. Source: ARCHITECTURE_BASELINE.md s.4
+             * (the facility list this package carries). */
         abstract attribute location : SiteId;
     }
 
@@ -37,7 +42,33 @@ package SeleniteHabitat {
         attribute crewedFrom = Phase::P4;
         attribute h3ModuleFrom = Phase::P7;
         part referenceModule : HabModule;
-        port o2SupplyLine;
+        port o2SupplyLine : ~OxygenPort {
+            doc /* Low-pressure stainless O2 line. Per the ECN-014 amendment
+                 * (SEL-ISRU-001 Rev D updated s.8.2) the line carries (1) a
+                 * dome-loaded fail-closed pressure regulator at the ISRU exit,
+                 * (2) a spring-loaded relief valve downstream venting to
+                 * vacuum and (3) a pneumatically actuated fail-closed isolation
+                 * valve, SENTINEL-triggered - "in addition to the existing
+                 * double-block-and-bleed at hab entry (HAB-001 s.10)"
+                 * (Strategy v3.1 s.5.1); "the combined system provides four
+                 * independent barriers" (the source does not enumerate the
+                 * four; the count stays in the doc, rule 3). A check valve at
+                 * hab entry, upstream of the double-block-and-bleed, prevents
+                 * reverse flow during hab depressurisation. Set points stay in
+                 * the source. Monitored and auto-closed by
+                 * SeleniteSoftware::O2SupplyLineMonitoringFunction. Source:
+                 * SEL-ISRU-001 Rev D updated s.8.2 (ECN-014 amendment);
+                 * updated_SEL-CAD-ISRU-001 Rev A ECN-014 amendment
+                 * (SEL-ISRU-REG-001). */
+        }
+        port o2LineSensors : SensorPort;
+        port o2LineAutoClose : ~HardwiredClosePort;
+        attribute o2IsolationValveFailClosed : Boolean = true;
+        assert constraint o2IsolationFailClosed {
+            doc /* "(3) pneumatically actuated isolation valve, fail-closed ...
+                 * SENTINEL-triggered" (SEL-ISRU-001 Rev D updated s.8.2). */
+            o2IsolationValveFailClosed == true
+        }
     }
 
     part def Eclss :> Facility {
@@ -52,32 +83,95 @@ package SeleniteHabitat {
 
     part def VolatileExtractionUnit {
         doc /* VEX thermal desorption unit; throughput matched to the MOLE-I
-             * fleet. Source: fleet v9 s.12.1. */
+             * fleet. Water in from the PSR (pipeline P4+, tramway containers
+             * P3). Source: fleet v9 s.12.1. */
+        port regolithIn : ~IcyRegolithPort;
+        port waterIn : ~WaterPort;
+        port waterOut : WaterPort;
+        flow waterIn.water to waterOut.water;
     }
 
     part def PemElectrolyserStack {
         doc /* PEM electrolyser stack (ISS OGA heritage); stack count per phase
              * is a Wave 5 value (F8 / VC-04 ISRU power 1,090 / 1,171 / 1,360 /
-             * 1,627 kW recorded, none bound). */
+             * 1,627 kW recorded, none bound). Source: fleet v9 s.12.2. */
+        port waterIn : ~WaterPort;
+        port hydrogenOut : HydrogenPort;
+        port oxygenOut : OxygenPort;
     }
 
     part def CryocoolerPlant {
-        doc /* H2/O2 liquefaction (turbo-Brayton or pulse-tube, ZBO heritage). */
+        doc /* H2/O2 liquefaction (turbo-Brayton or pulse-tube, ZBO heritage).
+             * Source: fleet v9 s.12.3. */
+        port hydrogenIn : ~HydrogenPort;
+        port oxygenIn : ~OxygenPort;
+        port propellantOut : PropellantPort;
     }
 
     part def CryogenicStorage {
         doc /* LH2/LOX propellant farm adjacent to the IZ. VC-13 (LH2 buffer
-             * volume 175 vs 196 m3) recorded, not bound. */
+             * volume 175 vs 196 m3) recorded, not bound. Source: fleet v9
+             * s.12.4. */
+        port propellantIn : ~PropellantPort;
+        port propellantOut : PropellantPort;
+        port oxygenToHabitat : OxygenPort;
+        flow propellantIn.propellant to propellantOut.propellant;
+    }
+
+    enum def ValvePosition {
+        doc /* Commanded / confirmed position of a cryo isolation ball valve
+             * (ECN-014 via fleet v9 s.9.2: closure confirmed by limit switch). */
+        open; closed;
     }
 
     part def CryoIsolationValveStation {
-        doc /* Isolation valve station on the ISRU-IZ cryo transfer line: two
-             * valves, pneumatic actuators with spring-return fail-closed,
-             * hardwired 24 VDC close line, limit switches, ECN-014 sensor set.
-             * Monitored by SeleniteSoftware::CryoValveMonitoringFunction. */
-        port sensorOutput;
-        port hardwiredCloseInput;
-        port limitSwitchOutput;
+        doc /* Isolation valve station on the ISRU-IZ cryo transfer line.
+             * From the ECN-014 extract in fleet v9 s.9.2 (the only repository
+             * text for these facts): "hardwired 24 VDC signal to pneumatic
+             * actuator (NOT CAN bus or SpaceWire). Closure confirmed by limit
+             * switch". Monitored by SeleniteSoftware::CryoValveMonitoringFunction,
+             * whose state machine commands it; the hardware facts are asserted
+             * here (Wave 4B). Addendum (7 Nov 2026) from the sources now in
+             * docs/: each station is one pneumatically actuated cryogenic ball
+             * valve (fail-closed, GN2 actuator + spring return) plus one
+             * passive excess-flow check valve that trips on its own at a
+             * multiple of normal flow, a burst disc on the ISRU-end stations
+             * venting to vacuum through a directed nozzle, two catalytic H2
+             * sensors and a UV flame detector, in a sintered shelter; the
+             * valves stay open in normal continuous flow. Closure times,
+             * trip ratios and set pressures stay in the source (rule 3).
+             * Source: fleet v9 s.9.2 (hardwired close, limit switch) and
+             * s.12.4; SEL-ISRU-001 Rev D updated s.7.4 (ECN-014 amendment:
+             * ball valve, check valve, burst disc, sensors, open in normal
+             * flow); updated_SEL-CAD-ISRU-001 Rev A ECN-014 amendment (valve
+             * station geometry, SEL-ISRU-VLV-001 / -002). */
+        port sensorOutput : SensorPort;
+        port hardwiredCloseInput : ~HardwiredClosePort;
+        port limitSwitchOutput : LimitSwitchPort;
+        attribute springReturnFailClosed : Boolean = true;
+        attribute closeCommandHardwired : Boolean = true;
+        attribute closeCommandOverFieldbus : Boolean = false;
+        attribute closureConfirmedByLimitSwitch : Boolean = true;
+        attribute passiveExcessFlowCheckValve : Boolean = true;
+        attribute openInNormalContinuousFlow : Boolean = true;
+        abstract attribute positionOnLossOfSignal : ValvePosition;
+        assert constraint deadManFailClosed {
+            doc /* ECN-014: loss of the hardwired signal fails the valves
+                 * closed by spring return; the close path is never a fieldbus;
+                 * a passive excess-flow check valve backs the active close
+                 * (ISRU-001 Rev D updated s.7.4). */
+            springReturnFailClosed == true
+                and closeCommandHardwired == true
+                and closeCommandOverFieldbus == false
+                and closureConfirmedByLimitSwitch == true
+                and passiveExcessFlowCheckValve == true
+        }
+    }
+
+    part def IsruCryoValveStation :> CryoIsolationValveStation {
+        doc /* The concrete ECN-014 station (binds the fail-closed position so
+             * the usage is complete). */
+        attribute redefines positionOnLossOfSignal = ValvePosition::closed;
     }
 
     part def IsruPlant :> Facility {
@@ -97,18 +191,56 @@ package SeleniteHabitat {
         part electrolyser : PemElectrolyserStack;
         part cryocooler : CryocoolerPlant;
         part propellantFarm : CryogenicStorage;
-        part cryoTransferValveStations : CryoIsolationValveStation[4];
-        port psrWaterInlet;
-        port propellantToIz;
-        connect vex to electrolyser;
-        connect electrolyser to cryocooler;
-        connect cryocooler to propellantFarm;
+        part cryoTransferValveStations : IsruCryoValveStation[4];
+        port psrWaterInlet : ~WaterPort;
+        port tramwayRegolithInlet : ~IcyRegolithPort;
+        port propellantToIz : PropellantPort;
+        port oxygenToHabitat : OxygenPort;
+        port powerIn : ~PowerPort;
+        port supervision : SupervisionPort;
+        interface psrWaterToVex : WaterTransfer connect psrWaterInlet to vex.waterIn;
+        interface tramwayToVex : IcyRegolithTransfer connect tramwayRegolithInlet to vex.regolithIn;
+        interface vexToElectrolyser : WaterTransfer connect vex.waterOut to electrolyser.waterIn;
+        interface hydrogenToCryo : HydrogenTransfer connect electrolyser.hydrogenOut to cryocooler.hydrogenIn;
+        interface oxygenToCryo : OxygenTransfer connect electrolyser.oxygenOut to cryocooler.oxygenIn;
+        interface cryoToFarm : PropellantTransfer connect cryocooler.propellantOut to propellantFarm.propellantIn;
+        interface farmToIz : PropellantTransfer connect propellantFarm.propellantOut to propellantToIz;
+        interface farmOxygenToHab : OxygenTransfer connect propellantFarm.oxygenToHabitat to oxygenToHabitat;
+    }
+
+    part def ByProductOxygenStore {
+        doc /* Base-side store for process by-product oxygen (electrolysis O2
+             * beyond the habitat and propellant draw at SPA; the KREEP
+             * processing by-product at PKT). SEL-ECN-027 (Jason, 7 Nov 2026):
+             * dump as little as possible - excess is stored, and only when
+             * storage is exhausted is oxygen dumped; the feasible capacity
+             * under the base's space constraints is a Wave 5 quantity
+             * (storageCapacity UNBOUND), and the closed-circuit uses of the
+             * oxygen (habitat ECLSS, LOX for the depot and the IZ farm, process
+             * oxidant) are the Wave 5 balance task. Source: SEL-ECN-027;
+             * SEL-ECON-001 Rev A revised s.8.4 ("initially vented or stored"
+             * - the stored branch is now the rule); SEL-REQ-005 / -018. */
+        attribute storageCapacity : Real;
+        attribute excessStored : Boolean = true;
+        attribute dumpOnlyWhenStorageExhausted : Boolean = true;
+        port oxygenIn : ~OxygenPort;
+        port oxygenOut : OxygenPort;
+        assert constraint storeBeforeDump {
+            doc /* SEL-ECN-027: store excess, dump only when storage is used up. */
+            excessStored == true and dumpOnlyWhenStorageExhausted == true
+        }
     }
 
     part def DockingCollar {
         doc /* PROBE docking collar: horizontal cylinder in a single linear row,
              * soft capture + conductive charging + SpaceWire. One ARM-D per
-             * collar. Source: SEL-IZ-001 Rev B, SEL-CAD-IZ-001. */
+             * collar. Ore containers leave through the dust vestibule to
+             * beneficiation; the PROBE is refuelled at the collar (Decision
+             * Framework Rev D s.3.2). Source: SEL-IZ-001 Rev B, SEL-CAD-IZ-001. */
+        port oreFromProbe : ~OrePort;
+        port oreOut : OrePort;
+        port propellantToProbe : PropellantPort;
+        flow oreFromProbe.ore to oreOut.ore;
     }
 
     part def IndustrialZone :> Facility {
@@ -120,14 +252,21 @@ package SeleniteHabitat {
              * enumerated multiplicity. Mk III PROBEs never dock here. A
              * provisional non-pressurised collar arrives with Cargo Launch 1
              * (P1) for PROBE-Scout data receipt before the IZ proper (final
-             * report Fig. 26). */
+             * report Fig. 26).
+             * Source: SEL-IZ-001 Rev B; fleet v9 s.19; ARCHITECTURE_BASELINE.md s.4. */
         attribute redefines introducedIn = Phase::P3;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::spa;
         part dockingCollars : DockingCollar[8];
         part beneficiation : BeneficiationPlant;
-        port propellantFromIsru;
-        port emCatcherBerth;
+        port propellantFromIsru : ~PropellantPort;
+        port emCatcherBerth : ~CanisterPort;
+        port skipOreIn : ~OrePort;
+        port concentrateOut : OrePort;
+        port powerIn : ~PowerPort;
+        interface collarsToBeneficiation : OreTransfer connect dockingCollars.oreOut to beneficiation.oreIn;
+        interface skipToBeneficiation : OreTransfer connect skipOreIn to beneficiation.oreIn;
+        interface beneficiationOut : OreTransfer connect beneficiation.concentrateOut to concentrateOut;
     }
 
     part def LandingPad {
@@ -147,10 +286,13 @@ package SeleniteHabitat {
             doc /* From P6. */
         }
         attribute padsThreeAndFourFrom = Phase::P6;
+        port cargoLanding : ~CargoPort;
     }
 
     part def Greenhouse :> Facility {
-        doc /* SPA aeroponic greenhouse from P6, tended by HARVEST. */
+        doc /* SPA aeroponic greenhouse from P6, tended by HARVEST. Source:
+             * ARCHITECTURE_BASELINE.md s.3 and s.4; SEL_HARVEST_DESIGN Rev A
+             * updated. */
         attribute redefines introducedIn = Phase::P6;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::spa;
@@ -168,16 +310,19 @@ package SeleniteHabitat {
     part def PktTemporaryCrewHab :> Facility {
         doc /* Temporary commissioning crew habitat at PKT, P8 only (3-4 crew,
              * 6-12 months): introduced and retired in the same phase. Baseline
-             * per DOCUMENT_FAMILIES.md resolved conflicts. */
+             * per DOCUMENT_FAMILIES.md resolved conflicts. Source: Decision
+             * Framework Rev D DG-8.6 and s.10.2; Strategy v3.1 s.5.2. */
         attribute redefines introducedIn = Phase::P8;
         attribute redefines retiredIn = Phase::P8;
         attribute redefines location = SiteId::pkt;
     }
 
     part def PktLandingZone :> Facility {
-        doc /* PKT ELZ for the four-wave construction campaign, P8. */
+        doc /* PKT ELZ for the four-wave construction campaign, P8. Source:
+             * Strategy v3.1 s.7.2; ARCHITECTURE_BASELINE.md s.4. */
         attribute redefines introducedIn = Phase::P8;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::pkt;
+        port cargoLanding : ~CargoPort;
     }
 }
