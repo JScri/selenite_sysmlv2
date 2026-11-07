@@ -8,8 +8,10 @@ package SeleniteRequirements {
          * in the repository), SEL-ECN-020 and SEL-DECISION-001 Rev D. Every
          * requirement with a require constraint is machine-checkable on the
          * instance tree in SeleniteConfigurations, where the satisfy links
-         * live. SEL-REQ-005 keeps the ProgrammeContext subject: the L1 O2
-         * depot it names has no element yet (Wave 4). */
+         * live. Wave 4B (7 Nov 2026): SEL-REQ-005's subject is the L1 O2
+         * depot element (SeleniteSites::L1OxygenDepot) in place of the
+         * ProgrammeContext placeholder, which is retired; SEL-REQ-017 carries
+         * the SEL-ECN-023 operating rule on the SPA asteroid lines. */
 
     private import ScalarValues::*;
     private import SeleniteFleet::*;
@@ -19,12 +21,6 @@ package SeleniteRequirements {
     private import SeleniteProcessing::*;
     private import SeleniteSites::*;
     private import SeleniteTransport::*;
-
-    part def ProgrammeContext {
-        doc /* Governance subject for programme-wide requirements that are
-             * not bound to a single site or subsystem (SEL-REQ-005 only,
-             * after Wave 3). */
-    }
 
     requirement def <'SEL-REQ-001'> SteadyStateReoTarget {
         doc /* The programme shall achieve 2.5 Mt/yr rare earth oxide
@@ -67,11 +63,18 @@ package SeleniteRequirements {
 
     requirement def <'SEL-REQ-005'> AllByProductsUsedAtScale {
         doc /* All process by-products shall be used at scale; O2 routed
-             * to the L1 fuel depot via MD-2, not vented or dumped.
-             * Source: Strategy v3.1, Decision Framework Rev D. Not yet
-             * checkable: the L1 depot and the O2 stream have no element
-             * (Wave 4 value-chain flows). */
-        subject programme : ProgrammeContext;
+             * to the L1 fuel depot via MD-2, not vented or dumped. Source as
+             * carried since Wave 1: "Strategy v3.1, Decision Framework Rev D"
+             * - W4B-N4 (Wave 4B): neither document, nor fleet v9 nor ECN-020,
+             * names the depot or the O2 loft; the committed source is ECN-019
+             * Rev C, not in the repository. Subject since Wave 4B: the
+             * SeleniteSites::L1OxygenDepot element, which exists from the
+             * phase MD-2 is operational; the O2 stream is the MD-2 loft branch
+             * of SeleniteBehaviour::PktKreepToEarth. The constraint checks
+             * that the depot is the MD-2 O2 sink; "at scale" becomes
+             * quantitative at Wave 5. */
+        subject depot : L1OxygenDepot;
+        require constraint { depot.nodeId == SiteId::l1Depot }
     }
 
     requirement def <'SEL-REQ-006'> OreTransportByConveyor {
@@ -179,6 +182,29 @@ package SeleniteRequirements {
         require constraint {
             params.circuitReoTonnesPerYear >= params.gateThresholds.circuitThroughputMinimumTonnesPerYear
         }
+    }
+
+    requirement def <'SEL-REQ-017'> AsteroidProcessingPausableThroughEclipse {
+        doc /* SEL-ECN-023 (Jason, 6 Nov 2026, option 3b) as a requirement: the
+             * SPA asteroid processing lines shall run on the sunlit duty cycle
+             * - every power-intensive step pausable through the eclipse (or,
+             * for the Czochralski batch, scheduled as whole batches between
+             * eclipses, SeleniteAnalysis::SunlitWindowGate), the plant
+             * oversized for the dark fraction and the restart losses
+             * (SeleniteAnalysis::PlantOversizeFactor) so that annual output is
+             * kept, and only the hold loads carried through the eclipse
+             * (SeleniteAnalysis::EclipseCriticalFraction, bound at 0.18 in
+             * ProgrammeParameters.spaAsteroidLoadCriticalFraction). Subject:
+             * each SPA asteroid line (M / C / S-type); checkable on the line's
+             * pausableThroughEclipse, which Wave 4A bound. The hold-load
+             * fractions (0.25) and restart loss (0.5 day) remain declared
+             * assumptions (W4A-N3), cited, not bound. The same rule is the
+             * interface constraint SeleniteInterfaces::EclipseGatedPowerSupply
+             * on the lines' power supply. Source: SEL-ECN-023 s.3 and s.5a;
+             * CHANGELOG_VERIFICATION.md s.4 (Wave 4B item). */
+        abstract subject line : AsteroidProcessingLine;
+        attribute operatingRule : String = "sunlit duty cycle (SEL-ECN-023 option 3b)";
+        require constraint { line.pausableThroughEclipse == true }
     }
 
     requirement def <'SEL-REQ-016'> PsrCapacityFromLayout {

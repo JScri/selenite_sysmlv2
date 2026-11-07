@@ -8,10 +8,15 @@ package SeleniteFleet {
          * Quantities (mass, power, per-phase counts) arrive from the Python
          * layer at Wave 5; dryMass/peakPower remain unbound declarations.
          * Fleet-scale counts stay configuration attributes, not part
-         * multiplicities. */
+         * multiplicities. Wave 4B (7 Nov 2026): typed ports
+         * (SeleniteInterfaces) on the classes that carry material or are
+         * fuelled, supervision ports on every asset (SENTINEL fleet tier), the
+         * MOLE-I tether receptacle, bayonet adapter (CON-001) and UHF
+         * construction link. */
 
     private import ISQ::*;
     private import ScalarValues::*;
+    private import SeleniteInterfaces::*;
     private import SelenitePhases::*;
     private import SeleniteSites::*;
     private import SeleniteSoftware::*;
@@ -22,20 +27,25 @@ package SeleniteFleet {
              * classes fielded at both (SINTER, ARM-C, SENTINEL); pktFrom on
              * those gives the phase their PKT complement begins.
              * canEnterPsr defaults false: only cryogenically hardened classes
-             * (MOLE-I) and the CAP may go below the rim. */
+             * (MOLE-I) and the CAP may go below the rim. supervision is the
+             * asset's end of the SENTINEL fleet tier (SAE Level 4 autonomy,
+             * fleet v9 s.1). Source: fleet v9 s.1; ARCHITECTURE_BASELINE.md
+             * s.3. */
         abstract attribute homeSite : SiteId [1..*];
         attribute canEnterPsr : Boolean = false;
         attribute countedInOperationalFleet : Boolean = true;
+        port supervision : SupervisionPort;
     }
 
     abstract part def SurfaceRobot :> FleetAsset {
-        doc /* Lunar surface or PSR rover. */
+        doc /* Lunar surface or PSR rover. Source: fleet v9 s.1 (the twelve
+             * classes). */
         attribute dryMass :> ISQ::mass;
         attribute peakPower :> ISQ::power;
     }
 
     abstract part def Spacecraft :> FleetAsset {
-        doc /* Orbital or interplanetary vehicle. */
+        doc /* Orbital or interplanetary vehicle. Source: fleet v9 s.1, s.2. */
         attribute dryMass :> ISQ::mass;
     }
 
@@ -65,6 +75,8 @@ package SeleniteFleet {
         attribute redefines homeSite = SiteId::spa;
         attribute isruFuelledFrom = Phase::P4;
         attribute peakFleetIn = Phase::P8;
+        port propellantIn : ~PropellantPort;
+        port oreOut : OrePort;
     }
 
     part def ProbeMkII :> Spacecraft {
@@ -76,6 +88,8 @@ package SeleniteFleet {
         attribute redefines retiredIn = null;
         attribute redefines homeSite = SiteId::spa;
         attribute peakFleetIn = Phase::P11;
+        port propellantIn : ~PropellantPort;
+        port oreOut : OrePort;
     }
 
     part def ProbeMkIII :> Spacecraft {
@@ -90,6 +104,7 @@ package SeleniteFleet {
         attribute neverLands : Boolean = true;
         attribute usesIsruPropellant : Boolean = false;
         attribute prospectingRoleFrom = Phase::P13;
+        port canisterEjection : CanisterPort;
         assert constraint mkIiiNeverLands {
             doc /* Committed by ECN-019 Rev C / DG-11.6. */
             neverLands == true and usesIsruPropellant == false
@@ -133,6 +148,31 @@ package SeleniteFleet {
         attribute redefines canEnterPsr = true;
         attribute permanentPsrResidence : Boolean = true;
         part flightSoftware : MoleIFlightSoftware;
+        part bayonetAdapter : BayonetAdapter;
+        port tetherReceptacle : ~TetherPort {
+            doc /* The rover end of the substation tether: 1,000 VDC power and
+                 * the encoder fix in, water batches and telemetry out (fleet
+                 * v9 s.4.1). */
+        }
+        port constructionRadio : ~ConstructionRadioPort {
+            doc /* UHF link used while the rover is untethered during PSR
+                 * network construction (ECN-013 RF construction). */
+        }
+        port drillProduct : IcyRegolithPort {
+            doc /* Icy regolith to the P3 tramway containers before the
+                 * mini-VEX water path carries everything (fleet v9 s.13.2). */
+        }
+        bind constructionRadio = flightSoftware.navigation.constructionLink.radio;
+    }
+
+    part def BayonetAdapter {
+        doc /* Motorised bayonet adapter SEL-MI-CON-001 on the chassis
+             * underside: 28 V DC motor inside the WEB, 90 deg twist-lock into
+             * any standardised tap socket, passive detent hold (ECN-013 R2 via
+             * fleet v9 s.4.1; Strategy v3.1 s.4.2). The CON-001 connector
+             * element (V-N7). TODO: SEL-CON-001 Rev B updated is not in the
+             * repository. */
+        port plug : ~BayonetTapPort;
     }
 
     part def MoleIMkI :> MoleI {
@@ -217,7 +257,8 @@ package SeleniteFleet {
         doc /* ARM-D docking/maintenance variant at the SPA IZ; 1:1 with
              * docking collars (1 -> 2 -> 4 -> 6 -> 8 through P7, 30+ by P11).
              * The count is therefore SeleniteHabitat::IndustrialZone's collar
-             * count, not a fleet attribute. */
+             * count, not a fleet attribute. Source: fleet v9 s.9.1, s.19;
+             * SEL_ARM_DESIGN_RevA_updated. */
         attribute redefines introducedIn = Phase::P3;
         attribute redefines retiredIn = null;
         attribute redefines homeSite = SiteId::spa;
@@ -252,6 +293,8 @@ package SeleniteFleet {
         attribute redefines retiredIn = Phase::P9;
         attribute redefines homeSite = SiteId::spa;
         attribute peakFleetIn = Phase::P7;
+        port propellantIn : ~PropellantPort;
+        port oreOut : OrePort;
         assert constraint skipNeverAtPkt {
             doc /* ECN-019 Rev C committed constraint; SEL-REQ-003. */
             homeSite == SiteId::spa
@@ -269,6 +312,7 @@ package SeleniteFleet {
         attribute redefines homeSite = SiteId::spa;
         attribute pktSiteConfirmationIn = Phase::P7;
         attribute pktBasedFrom = Phase::P8;
+        port propellantIn : ~PropellantPort;
     }
 
     part def Harvest :> SurfaceRobot {
@@ -306,7 +350,8 @@ package SeleniteFleet {
 
     part def HaulerFrontEnd {
         doc /* Swappable front-end attachment (bucket / blade), electric
-             * linear actuation, Fe-Ni in-situ wear parts, ARM-swappable ORU. */
+             * linear actuation, Fe-Ni in-situ wear parts, ARM-swappable ORU.
+             * Source: fleet v9 s.10.1; SEL-HAULER-001 Rev B. */
     }
 
     part def HaulerRevB :> SurfaceRobot {
@@ -326,6 +371,8 @@ package SeleniteFleet {
             HaulerMode::trench, HaulerMode::transport
         );
         part frontEnd : HaulerFrontEnd;
+        port oreOut : OrePort;
+        port chargeIn : ~PowerPort;
         assert constraint haulerPktOnly {
             doc /* ECN-019 Rev C committed constraint (fleet v9 s.1 item 3). */
             homeSite == SiteId::pkt
@@ -357,5 +404,6 @@ package SeleniteFleet {
         attribute redefines retiredIn = null;
         attribute redefines homeSite = SiteId::dro;
         attribute onePerCapturedAsteroid : Boolean = true;
+        port concentrateOut : OrePort;
     }
 }

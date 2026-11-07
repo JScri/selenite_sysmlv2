@@ -10,16 +10,24 @@ package SeleniteProcessing {
          * Strategy v3.1 s.10, Decision Framework v4, fleet v9 s.14,
          * ARCHITECTURE_BASELINE.md s.4 and s.6. ECN-021 (PKT process water)
          * is drafted and NOT modelled - excluded until its five source
-         * documents are revised (VC-15/16/17). */
+         * documents are revised (VC-15/16/17). Wave 4B (7 Nov 2026): ports
+         * typed by SeleniteInterfaces; the flowsheet steps linked through
+         * ProcessStreamLink; the SPA reagent pilot (DG-5.3 / DG-7.4) and the
+         * PKT oxalic-acid line (DG-9.5) added as the gated elements the Wave 3
+         * catalogue named with "TODO Wave 4"; the value-chain behaviour that
+         * these facilities perform is in SeleniteBehaviour. */
 
     private import ScalarValues::*;
+    private import SeleniteInterfaces::*;
     private import SelenitePhases::*;
     private import SeleniteScenarios::*;
     private import SeleniteSites::*;
 
     abstract part def ProcessingFacility :> PhaseGated {
-        doc /* Base for fixed processing infrastructure. */
+        doc /* Base for fixed processing infrastructure. Source:
+             * ARCHITECTURE_BASELINE.md s.4 and s.6. */
         abstract attribute location : SiteId;
+        port powerIn : ~PowerPort;
     }
 
     part def ProcessingCircuit :> PhaseGated {
@@ -29,14 +37,65 @@ package SeleniteProcessing {
              * mismatch). First five circuits at SPA in P7; PKT spine from P8. */
         attribute redefines introducedIn = Phase::P7;
         attribute redefines retiredIn = null;
+        port oreIn : ~OrePort;
+        port reagentIn : ~ReagentPort;
+        port reoOut : ProductPort;
+        port thoriumOut : ThoriumPort;
     }
 
     part def BeneficiationPlant :> ProcessingFacility {
         doc /* KREEP beneficiation (10x upgrade) in the SPA Industrial Zone from
-             * P5; first export Y10. Source: SEL-IZ-001 Rev B, baseline s.4. */
+             * P5; first export Y10. Stage 1 physical only: jaw crusher, screens,
+             * magnetic drums (Strategy v3.1 s.5.1 item 4). Also the first
+             * stage for asteroid ore from the IZ collars and the EM catcher
+             * (Decision Framework Rev D s.3.2). Source: SEL-IZ-001 Rev B,
+             * baseline s.4. */
         attribute redefines introducedIn = Phase::P5;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::spa;
+        port oreIn : ~OrePort;
+        port concentrateOut : OrePort;
+    }
+
+    part def SpaPgmHydromet :> ProcessingFacility {
+        doc /* SPA PGM hydromet for PROBE-returned asteroid ore: chlorination
+             * separation of the PGM concentrate from the beneficiated Fe-Ni /
+             * PGM ore, Fe-Ni bulk to PKT on MD-1 (Decision Framework Rev D
+             * s.3.2 steps 4-6 and s.10.1 "existing PGM hydromet from P5+ PROBE
+             * heritage"; fleet v9 s.19). From P5: the first export batch (M6,
+             * DG-5.4, Y10) is "asteroid Ni-Fe/PGM + KREEP REE concentrate"
+             * (MilestoneSet m6). Created at Wave 4B when the value chain could
+             * not allocate the PGM separation step before the M-type line
+             * (P12) exists - W4B-N5; introducedIn bound in
+             * SeleniteConfigurations to DG-5.4. The captured-asteroid scale-up
+             * of the same chemistry is MTypeProcessingLine. No SPA hydromet
+             * document exists (TODO naming it when written). */
+        attribute redefines introducedIn = Phase::P5;
+        attribute redefines retiredIn = null;
+        attribute redefines location = SiteId::spa;
+        port oreIn : ~OrePort;
+        port pgmOut : ProductPort;
+        port feNiOut : ProductPort;
+    }
+
+    part def SpaReagentPilot :> ProcessingFacility {
+        doc /* SPA troilite H2SO4 pilot - "first in-situ chemical production"
+             * (Decision Framework Rev D DG-5.3, Y10 = P5), growing into the
+             * progressive reagent substitution at SPA (DG-7.4, Y22 = P7: 10 % ->
+             * 50 % in-situ H2SO4, Ca(OH)2 replaces NaOH). One element with two
+             * phase attributes, both bound in SeleniteConfigurations to their
+             * gates. The pilot equipment figures (5,000 kg, 50 kW, 1-5 t/yr)
+             * stay in the gate criterion text (rule 3). Created at Wave 4B for
+             * the "TODO Wave 4" gated element of DG-5.3 / DG-7.4; the PKT
+             * plant is SEL-REAGENT-001 Rev A (ReagentPlant). Source: Decision
+             * Framework Rev D P5 / P7 gates and s.1 transition 3; Strategy
+             * v3.1 s.10.1. No SPA reagent document exists - TODO naming it
+             * when written. */
+        attribute redefines introducedIn = Phase::P5;
+        attribute redefines retiredIn = null;
+        attribute redefines location = SiteId::spa;
+        attribute productionScaleFrom = Phase::P7;
+        port reagentOut : ReagentPort;
     }
 
     part def SpaProcessingFacility :> ProcessingFacility {
@@ -50,6 +109,14 @@ package SeleniteProcessing {
         part referenceCircuit : ProcessingCircuit;
         part flowsheet : ZeroCarbonFlowsheet;
         part thUStage : ThUSeparationStage;
+        port concentrateIn : ~OrePort;
+        port reagentIn : ~ReagentPort;
+        port reoOut : ProductPort;
+        port thoriumOut : ThoriumPort;
+        interface feedToCircuit : OreTransfer connect concentrateIn to referenceCircuit.oreIn;
+        interface reagentToCircuit : ReagentTransfer connect reagentIn to referenceCircuit.reagentIn;
+        interface circuitReoOut : ProductTransfer connect referenceCircuit.reoOut to reoOut;
+        interface circuitThoriumOut : ThoriumTransfer connect referenceCircuit.thoriumOut to thoriumOut;
     }
 
     part def PktProcessingSpine :> ProcessingFacility {
@@ -65,19 +132,42 @@ package SeleniteProcessing {
         }
         part flowsheet : ZeroCarbonFlowsheet;
         part thUStage : ThUSeparationStage;
-        port oreInput;
-        port reagentInput;
-        port reoOutput;
-        port thoriumOutput;
+        port oreInput : ~OrePort;
+        port reagentInput : ~ReagentPort;
+        port reoOutput : ProductPort;
+        port thoriumOutput : ThoriumPort;
+        port canisterDispatch : CanisterPort;
+        interface feedToCircuit : OreTransfer connect oreInput to referenceCircuit.oreIn;
+        interface reagentToCircuit : ReagentTransfer connect reagentInput to referenceCircuit.reagentIn;
+        interface circuitReoOut : ProductTransfer connect referenceCircuit.reoOut to reoOutput;
+        interface circuitThoriumOut : ThoriumTransfer connect referenceCircuit.thoriumOut to thoriumOutput;
+    }
+
+    part def OxalicAcidLine :> ProcessingFacility {
+        doc /* Oxalic acid pilot at PKT by CO2 electroreduction (Decision
+             * Framework Rev D DG-9.5, Y42 = P9) - a sub-line of the PKT
+             * reagent plant. Created at Wave 4B for the "TODO Wave 4" gated
+             * element of DG-9.5; bound to the gate in SeleniteConfigurations.
+             * Source: Decision Framework Rev D P9 gates. The process is not in
+             * SEL-REAGENT-001 Rev A as cited by the model - TODO naming the
+             * reagent document revision that carries it. */
+        attribute redefines introducedIn = Phase::P9;
+        attribute redefines retiredIn = null;
+        attribute redefines location = SiteId::pkt;
+        port reagentOut : ReagentPort;
     }
 
     part def ReagentPlant :> ProcessingFacility {
         doc /* PKT reagent plant from P8: H2SO4 from troilite, Ca(OH)2, in-situ
-             * reagent fabrication per ECN-018. Source: SEL-REAGENT-001 Rev A. */
+             * reagent fabrication per ECN-018; the oxalic-acid pilot line from
+             * P9 (DG-9.5). Source: SEL-REAGENT-001 Rev A. */
         attribute redefines introducedIn = Phase::P8;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::pkt;
-        port reagentOutput;
+        part oxalicAcidLine : OxalicAcidLine;
+        port reagentOutput : ReagentPort;
+        port reagentFromSpaIn : ~ReagentPort;
+        interface oxalicOut : ReagentTransfer connect oxalicAcidLine.reagentOut to reagentOutput;
     }
 
     part def Foundry :> ProcessingFacility {
@@ -88,6 +178,8 @@ package SeleniteProcessing {
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::pkt;
         attribute atScaleFrom = Phase::P9;
+        port feedstockIn : ~ProductPort;
+        port metalOut : ProductPort;
     }
 
     part def RelayDepot :> ProcessingFacility {
@@ -102,11 +194,13 @@ package SeleniteProcessing {
     }
 
     part def FlowsheetStep {
-        doc /* One unit operation of the zero-carbon flowsheet; chemistry,
-             * temperatures and reagents are Wave 4 attributes. */
+        doc /* One unit operation of the zero-carbon flowsheet (Strategy v3.1
+             * s.10.1); the unit operation it performs is an action in
+             * SeleniteBehaviour::KreepFlowsheet. Chemistry, temperatures and
+             * reagent rates are SEL-PROC-001 Rev B values bound at Wave 5. */
         attribute stepName : String;
-        port feed;
-        port product;
+        port feed : ~ProcessStreamPort;
+        port product : ProcessStreamPort;
     }
 
     part def ZeroCarbonFlowsheet {
@@ -149,21 +243,23 @@ package SeleniteProcessing {
         part thoriumConversion : FlowsheetStep {
             attribute redefines stepName = "Th(OH)4 -> ThCl4";
         }
-        connect acidBake.product to calciumHydroxidePrecipitation.feed;
-        connect calciumHydroxidePrecipitation.product to uraniumPeroxideRemoval.feed;
-        connect uraniumPeroxideRemoval.product to ceriumOxidation.feed;
-        connect ceriumOxidation.product to lreeHreeSplit.feed;
-        connect lreeHreeSplit.product to lreeAmmoniumSulfate.feed;
-        connect lreeHreeSplit.product to hreePhosphoric.feed;
-        connect lreeAmmoniumSulfate.product to calcination.feed;
-        connect hreePhosphoric.product to calcination.feed;
-        connect acidBake.product to thoriumConversion.feed;
+        interface bakeToPrecipitation : ProcessStreamLink connect acidBake.product to calciumHydroxidePrecipitation.feed;
+        interface precipitationToUranium : ProcessStreamLink connect calciumHydroxidePrecipitation.product to uraniumPeroxideRemoval.feed;
+        interface uraniumToCerium : ProcessStreamLink connect uraniumPeroxideRemoval.product to ceriumOxidation.feed;
+        interface ceriumToSplit : ProcessStreamLink connect ceriumOxidation.product to lreeHreeSplit.feed;
+        interface splitToLree : ProcessStreamLink connect lreeHreeSplit.product to lreeAmmoniumSulfate.feed;
+        interface splitToHree : ProcessStreamLink connect lreeHreeSplit.product to hreePhosphoric.feed;
+        interface lreeToCalcination : ProcessStreamLink connect lreeAmmoniumSulfate.product to calcination.feed;
+        interface hreeToCalcination : ProcessStreamLink connect hreePhosphoric.product to calcination.feed;
+        interface bakeToThorium : ProcessStreamLink connect acidBake.product to thoriumConversion.feed;
     }
 
     part def ThUSeparationStage {
         doc /* Organic-solvent-free Th/U separation from KREEP leach liquor.
              * Candidate architectures per the Th/U preprint; selection OPEN
-             * (TODO Wave 4). Constraint: no D2EHPA (SEL-REQ-004). */
+             * (waits on the preprint - out of Wave 4B scope by the brief s.6;
+             * TODO naming the preprint when it is in docs/). Constraint: no
+             * D2EHPA (SEL-REQ-004). */
         attribute usesD2ehpa : Boolean = false;
         assert constraint noOrganicSolventExtraction {
             doc /* Whatever architecture the preprint selects, it is
@@ -211,11 +307,14 @@ package SeleniteProcessing {
         attribute pausableThroughEclipse : Boolean;
         attribute holdLoadFraction : PointReal;
         attribute minimumContinuousRunHours : Real [0..1];
+        port concentrateIn : ~OrePort;
+        port productOut : ProductPort;
     }
 
     part def MTypeProcessingLine :> AsteroidProcessingLine {
         doc /* M-type: magnetic separation -> chlorination -> PGM; Fe-Ni to the
-             * PKT foundry via MD-1. Online Y85 (P12). Source: fleet v9 s.17.3.
+             * PKT foundry via MD-1. Online Y85 (P12); the captured-asteroid
+             * scale-up of the PROBE-era SpaPgmHydromet. Source: fleet v9 s.17.3.
              * Wave 4A: aqueous hydrometallurgy can pause between leach batches;
              * no Decision Framework s.10.1 load is sized for it (the SPA MSRs
              * are sized for the C-type and S-type lines), so D1 carries it

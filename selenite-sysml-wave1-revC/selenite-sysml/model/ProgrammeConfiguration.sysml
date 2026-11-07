@@ -25,12 +25,33 @@ package SeleniteConfigurations {
          *     the catalogue below and the element binds to the gate.
          * (c) FIXED by architecture or policy (relay constellation P1, the
          *     PSR network with its floor, the SPA processing facility that
-         *     ECN-015 made unconditional): left as defined. */
+         *     ECN-015 made unconditional): left as defined.
+         *
+         * Wave 4B (7 Nov 2026) - behaviour, interfaces and software. Every
+         * connection in this tree is an interface usage typed by
+         * SeleniteInterfaces (material, power, canister, supervision, sensor
+         * and hardwired-close links); boundary ports of a usage are delegated
+         * to internal parts with 'bind'. The value chain
+         * (SeleniteBehaviour::ValueChain) is performed once here and every
+         * step is allocated to the part that performs it; each performed
+         * stream's phase is rebound by ':>>' to the phase of its performing
+         * element, so the streams are gated by the same derived plan as the
+         * elements (and tools/plan_check.py, which registers the
+         * 'attribute redefines' bindings of parts, is unchanged by them).
+         * The gated elements the Wave 3 catalogue named with "TODO Wave 4"
+         * exist and are bound here (SpaReagentPilot to DG-5.3 / DG-7.4,
+         * OxalicAcidLine to DG-9.5), with SpaPgmHydromet (DG-5.4) and the L1
+         * O2 depot (existsFrom derived from MD-2's phase) - these are the
+         * bindings that change the plan register this wave. The ECN-023
+         * operating rule is the EclipseGatedPowerSupply interface on each
+         * asteroid line and SEL-REQ-017, satisfied below. */
 
     private import ScalarValues::*;
+    private import SeleniteBehaviour::*;
     private import SeleniteFleet::*;
     private import SeleniteGates::*;
     private import SeleniteHabitat::*;
+    private import SeleniteInterfaces::*;
     private import SeleniteParameters::*;
     private import SelenitePhases::*;
     private import SelenitePower::*;
@@ -133,6 +154,7 @@ package SeleniteConfigurations {
                 attribute redefines operationalFrom = gates.dgOneOne.derivedPhase;
                 attribute redefines pktDeliveriesFrom = gates.dgEightOne.derivedPhase;
             }
+            interface cargoToStarship : CargoDelivery connect cargoOrigin to starshipCargo.cargoIn;
         }
 
         part emL2Relays : RelayConstellation {
@@ -201,6 +223,17 @@ package SeleniteConfigurations {
             part processingFacility : SpaProcessingFacility {
                 doc /* Fixed (c): processing is a core element, not conditional
                      * (ECN-015 retired the Y12 gate, DG-6.1). */
+            }
+            part reagentPilot : SpaReagentPilot {
+                doc /* Wave 4B: the DG-5.3 pilot and the DG-7.4 production scale
+                     * (the "TODO Wave 4" gated elements of the Wave 3 catalogue). */
+                attribute redefines introducedIn = gates.dgFiveThree.derivedPhase;
+                attribute redefines productionScaleFrom = gates.dgSevenFour.derivedPhase;
+            }
+            part pgmHydromet : SpaPgmHydromet {
+                doc /* Wave 4B (W4B-N5): PROBE-era PGM separation, in the first
+                     * export batch (DG-5.4). */
+                attribute redefines introducedIn = gates.dgFiveFour.derivedPhase;
             }
             part mTypeLine : MTypeProcessingLine {
                 attribute redefines introducedIn = gates.dgTwelveFour.derivedPhase;
@@ -279,9 +312,63 @@ package SeleniteConfigurations {
             }
             part psrAccess : PsrAccessLink;
 
-            connect isru.propellantToIz to industrialZone.propellantFromIsru;
-            connect industrialZone.emCatcherBerth to emCatcher.inboundCanisters;
-            connect industrialZone.beneficiation to processingFacility;
+            // ---- Wave 4B: every SPA connection through an interface ------
+            bind returnPayloadDispatch = processingFacility.reoOut;
+            bind cargoLanding = landingZone.cargoLanding;
+
+            // ISRU chain: propellant to the IZ and the fuelled fleet, O2 to the habitat
+            interface isruToIz : PropellantTransfer connect isru.propellantToIz to industrialZone.propellantFromIsru;
+            interface isruOxygenToHabitat : OxygenTransfer connect isru.oxygenToHabitat to habComplex.o2SupplyLine;
+            interface collarFuelsProbeMkI : PropellantTransfer connect industrialZone.dockingCollars.propellantToProbe to probeMkI.propellantIn;
+            interface collarFuelsProbeMkII : PropellantTransfer connect industrialZone.dockingCollars.propellantToProbe to probeMkII.propellantIn;
+            interface farmFuelsSkip : PropellantTransfer connect isru.propellantToIz to skip.propellantIn;
+            interface farmFuelsDart : PropellantTransfer connect isru.propellantToIz to dart.propellantIn;
+            interface farmFuelsStarshipReturn : PropellantTransfer connect isru.propellantToIz to starshipReturn.propellantIn;
+
+            // KREEP and asteroid ore into the IZ, concentrate on to processing
+            interface skipOreToIz : OreTransfer connect skip.oreOut to industrialZone.skipOreIn;
+            interface probeMkIOreToCollar : OreTransfer connect probeMkI.oreOut to industrialZone.dockingCollars.oreFromProbe;
+            interface probeMkIIOreToCollar : OreTransfer connect probeMkII.oreOut to industrialZone.dockingCollars.oreFromProbe;
+            interface mkIiiCanistersToCatcher : CanisterLink connect probeMkIII.canisterEjection to industrialZone.emCatcher.inboundCanisters;
+            interface catcherToBeneficiation : OreTransfer connect industrialZone.emCatcher.concentrateOut to industrialZone.beneficiation.oreIn;
+            interface concentrateToProcessing : OreTransfer connect industrialZone.concentrateOut to processingFacility.concentrateIn;
+            interface concentrateToPgmHydromet : OreTransfer connect industrialZone.concentrateOut to pgmHydromet.oreIn;
+            interface concentrateToMTypeLine : OreTransfer connect industrialZone.emCatcher.concentrateOut to mTypeLine.concentrateIn;
+            interface concentrateToCTypeLine : OreTransfer connect industrialZone.emCatcher.concentrateOut to cTypeLine.concentrateIn;
+            interface concentrateToSTypeLine : OreTransfer connect industrialZone.emCatcher.concentrateOut to sTypeLine.concentrateIn;
+            interface reagentsToProcessing : ReagentTransfer connect reagentPilot.reagentOut to processingFacility.reagentIn;
+            interface pgmToReturn : ProductTransfer connect pgmHydromet.pgmOut to starshipReturn.payloadIn;
+            interface reoToReturn : ProductTransfer connect processingFacility.reoOut to starshipReturn.payloadIn;
+
+            // power: base bus to the facilities; the asteroid lines on the ECN-023 rule
+            interface powerToIsru : PowerBus connect powerZone.baseBus to isru.powerIn;
+            interface powerToIz : PowerBus connect powerZone.baseBus to industrialZone.powerIn;
+            interface powerToProcessing : PowerBus connect powerZone.baseBus to processingFacility.powerIn;
+            interface powerToCatcher : PowerBus connect powerZone.baseBus to industrialZone.emCatcher.powerIn;
+            interface mTypeLineSupply : EclipseGatedPowerSupply connect powerZone.asteroidLineSupply to mTypeLine.powerIn {
+                doc /* SEL-ECN-023 on the M-type line: pausable, hold loads only
+                     * through the eclipse, plant oversized. holdLoadFraction is
+                     * the line's unbound PointReal nominal (W4A-N3). */
+                :>> pausableThroughEclipse = mTypeLine.pausableThroughEclipse;
+                :>> holdLoadFraction = mTypeLine.holdLoadFraction.nominal;
+                :>> eclipseCarriedFraction = mTypeLine.holdLoadFraction.nominal;
+                :>> oversizedForDarkFraction = true;
+            }
+            interface cTypeLineSupply : EclipseGatedPowerSupply connect powerZone.asteroidLineSupply to cTypeLine.powerIn {
+                doc /* SEL-ECN-023 on the C-type line (pyrolysis, Fischer-Tropsch). */
+                :>> pausableThroughEclipse = cTypeLine.pausableThroughEclipse;
+                :>> holdLoadFraction = cTypeLine.holdLoadFraction.nominal;
+                :>> eclipseCarriedFraction = cTypeLine.holdLoadFraction.nominal;
+                :>> oversizedForDarkFraction = true;
+            }
+            interface sTypeLineSupply : EclipseGatedPowerSupply connect powerZone.asteroidLineSupply to sTypeLine.powerIn {
+                doc /* SEL-ECN-023 on the S-type line (Czochralski batches between
+                     * eclipses, copper electrolysis). */
+                :>> pausableThroughEclipse = sTypeLine.pausableThroughEclipse;
+                :>> holdLoadFraction = sTypeLine.holdLoadFraction.nominal;
+                :>> eclipseCarriedFraction = sTypeLine.holdLoadFraction.nominal;
+                :>> oversizedForDarkFraction = true;
+            }
         }
 
         part shackletonPsrFloor : PsrFloor {
@@ -302,12 +389,20 @@ package SeleniteConfigurations {
             part moleIMkII : MoleIMkII {
                 attribute redefines declineDrivenByMkIIIFrom = gates.dgElevenSix.derivedPhase;
             }
-            connect psrNetwork.moleIFleetTethers to moleIMkI;
-            connect psrNetwork.moleIFleetTethers to moleIMkII;
+            // Wave 4B: tether, bayonet tap and UHF construction link to each MOLE-I class
+            interface tetherMkI : TetherLink connect psrNetwork.moleIFleetTethers to moleIMkI.tetherReceptacle;
+            interface tetherMkII : TetherLink connect psrNetwork.moleIFleetTethers to moleIMkII.tetherReceptacle;
+            interface tapMkI : BayonetCoupling connect psrNetwork.substations.tapSocket.socket to moleIMkI.bayonetAdapter.plug;
+            interface tapMkII : BayonetCoupling connect psrNetwork.substations.tapSocket.socket to moleIMkII.bayonetAdapter.plug;
+            interface constructionRadioMkI : ConstructionRadioLink connect psrNetwork.moleIConstructionRadio to moleIMkI.constructionRadio;
+            interface constructionRadioMkII : ConstructionRadioLink connect psrNetwork.moleIConstructionRadio to moleIMkII.constructionRadio;
+            interface drillProductToTramway : IcyRegolithTransfer connect moleIMkI.drillProduct to psrNetwork.tramwayFloorLoad;
         }
 
-        connect shackletonHub.powerZone.psrTrunkFeed to shackletonPsrFloor.psrNetwork.rimPowerFeed;
-        connect shackletonPsrFloor.psrNetwork.rimIsruWaterReturn to shackletonHub.isru.psrWaterInlet;
+        // rim <-> floor: trunk power down, water and P3 tramway regolith up
+        interface psrTrunkPower : PowerBus connect shackletonHub.powerZone.psrTrunkFeed to shackletonPsrFloor.psrNetwork.rimPowerFeed;
+        interface psrWaterToIsru : WaterTransfer connect shackletonPsrFloor.psrNetwork.rimIsruWaterReturn to shackletonHub.isru.psrWaterInlet;
+        interface tramwayRegolithToIsru : IcyRegolithTransfer connect shackletonPsrFloor.psrNetwork.rimIsruRegolith to shackletonHub.isru.tramwayRegolithInlet;
 
         // ---- PKT Procellarum ------------------------------------------
 
@@ -336,6 +431,10 @@ package SeleniteConfigurations {
             }
             part reagentPlant : ReagentPlant {
                 attribute redefines introducedIn = gates.dgEightThree.derivedPhase;
+                part redefines oxalicAcidLine : OxalicAcidLine {
+                    doc /* Wave 4B: the DG-9.5 gated element. */
+                    attribute redefines introducedIn = gates.dgNineFive.derivedPhase;
+                }
             }
             part foundry : Foundry {
                 attribute redefines introducedIn = gates.dgEightSix.derivedPhase;
@@ -397,9 +496,19 @@ package SeleniteConfigurations {
             doc dartNote /* DART (single unit, shackletonHub.dart) is PKT-based on
                  * surface power from P8 (Dart.pktBasedFrom); not a second usage. */
 
-            connect conveyorNetwork.spineDelivery to processingSpine.oreInput;
-            connect reagentPlant.reagentOutput to processingSpine.reagentInput;
-            connect processingSpine.thoriumOutput to powerSystem.thcl4FuelInlet;
+            // ---- Wave 4B: every PKT connection through an interface ------
+            bind canisterDispatch = processingSpine.canisterDispatch;
+            bind cargoLanding = landingZone.cargoLanding;
+            interface haulerToConveyor : OreTransfer connect hauler.oreOut to conveyorNetwork.haulerTipIn;
+            interface haulerToSpine : OreTransfer connect hauler.oreOut to processingSpine.oreInput;
+            interface conveyorToSpine : OreTransfer connect conveyorNetwork.spineDelivery to processingSpine.oreInput;
+            interface reagentsToSpine : ReagentTransfer connect reagentPlant.reagentOutput to processingSpine.reagentInput;
+            interface thoriumToMsr : ThoriumTransfer connect processingSpine.thoriumOutput to powerSystem.thcl4FuelInlet;
+            interface spinePower : PowerBus connect powerSystem.spineBus to processingSpine.powerIn;
+            interface reagentPlantPower : PowerBus connect powerSystem.spineBus to reagentPlant.powerIn;
+            interface foundryPower : PowerBus connect powerSystem.spineBus to foundry.powerIn;
+            interface conveyorPower : PowerBus connect powerSystem.spineBus to conveyorNetwork.referenceTrunk.drivePowerIn;
+            interface haulerCharging : PowerBus connect powerSystem.haulerCharging to hauler.chargeIn;
         }
 
         // ---- DRO --------------------------------------------------------
@@ -417,6 +526,16 @@ package SeleniteConfigurations {
                 attribute redefines introducedIn = gates.dgElevenEight.derivedPhase;
                 attribute redefines firstCaptureIn = gates.dgElevenEight.derivedPhase;
             }
+        }
+
+        part l1OxygenDepot : L1OxygenDepot {
+            doc /* Wave 4B: the SEL-REQ-005 O2 depot. Exists when MD-2, which
+                 * lofts the O2, is operational - derived through the driver's
+                 * own phase (the StarshipReturnLink idiom); no document gives
+                 * it a phase of its own (W4B-N4). */
+            attribute redefines nodeName = "L1 / EML-2 O2 depot";
+            attribute redefines role = "sink for the process by-product O2 lofted on MD-2 (SEL-REQ-005)";
+            attribute redefines existsFrom = massDriverNetwork.md2.operationalFrom;
         }
 
         // ---- Logistics network ----------------------------------------
@@ -452,16 +571,27 @@ package SeleniteConfigurations {
                 attribute redefines operationalFrom = gates.dgTwelveFive.derivedPhase;
             }
         }
-        connect shackletonHub to massDriverNetwork.md1;
-        connect massDriverNetwork.md1 to pktFactory;
-        connect pktFactory to massDriverNetwork.md2;
-        connect massDriverNetwork.md2 to earth;
-        connect pktFactory to massDriverNetwork.md3;
-        connect massDriverNetwork.md3 to shackletonHub.industrialZone.emCatcher;
-        connect shackletonHub to massDriverNetwork.md4;
-        connect massDriverNetwork.md4 to earth;
-        connect droStation to massDriverNetwork.md5;
-        connect massDriverNetwork.md5 to shackletonHub.industrialZone.emCatcher;
+        // Wave 4B: the ten mass driver legs (plus the MD-2 O2 loft) as CanisterLinks
+        interface spaToMd1 : CanisterLink connect shackletonHub.canisterDispatch to massDriverNetwork.md1.launchInput;
+        interface md1ToPkt : CanisterLink connect massDriverNetwork.md1.receiverOutput to pktFactory.canisterReceipt;
+        interface pktToMd2 : CanisterLink connect pktFactory.canisterDispatch to massDriverNetwork.md2.launchInput;
+        interface md2ToEarth : CanisterLink connect massDriverNetwork.md2.receiverOutput to earth.canisterReceipt;
+        interface md2ToDepot : CanisterLink connect massDriverNetwork.md2.receiverOutput to l1OxygenDepot.oxygenReceipt;
+        interface pktToMd3 : CanisterLink connect pktFactory.canisterDispatch to massDriverNetwork.md3.launchInput;
+        interface md3ToCatcher : CanisterLink connect massDriverNetwork.md3.receiverOutput to shackletonHub.industrialZone.emCatcher.inboundCanisters;
+        interface spaToMd4 : CanisterLink connect shackletonHub.canisterDispatch to massDriverNetwork.md4.launchInput;
+        interface md4ToEarth : CanisterLink connect massDriverNetwork.md4.receiverOutput to earth.canisterReceipt;
+        interface droToMd5 : CanisterLink connect droStation.canisterDispatch to massDriverNetwork.md5.launchInput;
+        interface md5ToCatcher : CanisterLink connect massDriverNetwork.md5.receiverOutput to shackletonHub.industrialZone.emCatcher.inboundCanisters;
+        interface md1Power : PowerBus connect shackletonHub.powerZone.baseBus to massDriverNetwork.md1.powerIn;
+        interface md2Power : PowerBus connect pktFactory.powerSystem.spineBus to massDriverNetwork.md2.powerIn;
+        interface md3Power : PowerBus connect pktFactory.powerSystem.spineBus to massDriverNetwork.md3.powerIn;
+        interface md4Power : PowerBus connect shackletonHub.powerZone.baseBus to massDriverNetwork.md4.powerIn;
+
+        // Starship cargo and return legs
+        interface cargoToSpa : CargoDelivery connect earth.starshipCargo.spaDelivery to shackletonHub.cargoLanding;
+        interface cargoToPkt : CargoDelivery connect earth.starshipCargo.pktDelivery to pktFactory.cargoLanding;
+        interface returnToEarth : ProductTransfer connect shackletonHub.starshipReturn.earthDelivery to earth.returnPayloadReceipt;
 
         // ---- Supervision --------------------------------------------------
 
@@ -476,12 +606,143 @@ package SeleniteConfigurations {
                 attribute redefines introducedIn = gates.dgFourTwo.derivedPhase;
             }
         }
-        connect sentinelSystem.earthLink to earth;
-        connect sentinelSystem.pktRelayLink to pktRelay;
-        connect sentinelSystem.cryoValveMonitoring.monitoredStations
-            to shackletonHub.isru.cryoTransferValveStations;
-        connect sentinelSystem.o2SupplyMonitoring.o2LineSensors
-            to shackletonHub.habComplex.o2SupplyLine;
+        // Wave 4B: supervision through SupervisionLink, ECN-014 through the sensor,
+        // hardwired-close and limit-switch interfaces
+        interface earthSupervision : SupervisionLink connect sentinelSystem.earthLink to earth.opsHub;
+        interface relaysSupervisedFromEarth : SupervisionLink connect emL2Relays.southPoleComms to earth.opsHub;
+        interface spaOpsHubSupervision : SupervisionLink connect sentinelSystem.spaOpsHubLink to shackletonHub.opsHubSupervisor;
+        interface pktRelaySupervision : SupervisionLink connect pktRelay.supervisionTrunk to sentinelSystem.pktRelayLink;
+        interface pktNodeSupervision : SupervisionLink connect pktFactory.supervision to sentinelSystem.pktRelayLink;
+        interface spaNodeSupervision : SupervisionLink connect shackletonHub.supervision to sentinelSystem.fleetLink;
+        interface droSupervision : SupervisionLink connect droStation.supervision to sentinelSystem.fleetLink;
+        interface isruSupervision : SupervisionLink connect shackletonHub.isru.supervision to sentinelSystem.fleetLink;
+        interface psrNetworkSupervision : SupervisionLink connect shackletonPsrFloor.psrNetwork.supervision to sentinelSystem.fleetLink;
+        interface moleIMkISupervision : SupervisionLink connect shackletonPsrFloor.moleIMkI.supervision to sentinelSystem.fleetLink;
+        interface moleIMkIISupervision : SupervisionLink connect shackletonPsrFloor.moleIMkII.supervision to sentinelSystem.fleetLink;
+        interface probeMkISupervision : SupervisionLink connect shackletonHub.probeMkI.supervision to sentinelSystem.fleetLink;
+        interface probeMkIISupervision : SupervisionLink connect shackletonHub.probeMkII.supervision to sentinelSystem.fleetLink;
+        interface probeMkIIISupervision : SupervisionLink connect shackletonHub.probeMkIII.supervision to sentinelSystem.fleetLink;
+        interface surveySupervision : SupervisionLink connect shackletonHub.survey.supervision to sentinelSystem.fleetLink;
+        interface moleSSupervision : SupervisionLink connect shackletonHub.moleS.supervision to sentinelSystem.fleetLink;
+        interface sinterSupervision : SupervisionLink connect shackletonHub.sinter.supervision to sentinelSystem.fleetLink;
+        interface armCSupervision : SupervisionLink connect shackletonHub.armC.supervision to sentinelSystem.fleetLink;
+        interface armDSupervision : SupervisionLink connect shackletonHub.armD.supervision to sentinelSystem.fleetLink;
+        interface sentinelRoverSupervision : SupervisionLink connect shackletonHub.sentinelRover.supervision to sentinelSystem.fleetLink;
+        interface skipSupervision : SupervisionLink connect shackletonHub.skip.supervision to sentinelSystem.fleetLink;
+        interface dartSupervision : SupervisionLink connect shackletonHub.dart.supervision to sentinelSystem.fleetLink;
+        interface harvestSupervision : SupervisionLink connect shackletonHub.harvest.supervision to sentinelSystem.fleetLink;
+        interface capSupervision : SupervisionLink connect shackletonHub.cap.supervision to sentinelSystem.fleetLink;
+        interface haulerSupervision : SupervisionLink connect pktFactory.hauler.supervision to sentinelSystem.pktRelayLink;
+        interface sinterPktSupervision : SupervisionLink connect pktFactory.sinterPkt.supervision to sentinelSystem.pktRelayLink;
+        interface armCPktSupervision : SupervisionLink connect pktFactory.armCPkt.supervision to sentinelSystem.pktRelayLink;
+        interface sentinelRoverPktSupervision : SupervisionLink connect pktFactory.sentinelRoverPkt.supervision to sentinelSystem.pktRelayLink;
+        interface redirectTugSupervision : SupervisionLink connect droStation.redirectTug.supervision to sentinelSystem.fleetLink;
+        interface laserTrussSupervision : SupervisionLink connect droStation.laserAblationTruss.supervision to sentinelSystem.fleetLink;
+
+        interface cryoStationSensing : SensorLink connect shackletonHub.isru.cryoTransferValveStations.sensorOutput
+            to sentinelSystem.cryoValveMonitoring.stationMonitors.stationSensorInput;
+        interface cryoStationClose : HardwiredCloseLine connect sentinelSystem.cryoValveMonitoring.stationMonitors.hardwiredCloseSignal
+            to shackletonHub.isru.cryoTransferValveStations.hardwiredCloseInput;
+        interface cryoStationLimitSwitch : LimitSwitchLine connect shackletonHub.isru.cryoTransferValveStations.limitSwitchOutput
+            to sentinelSystem.cryoValveMonitoring.stationMonitors.limitSwitchFeedback;
+        interface o2LineSensing : SensorLink connect shackletonHub.habComplex.o2LineSensors
+            to sentinelSystem.o2SupplyMonitoring.o2LineSensors;
+        interface o2LineClose : HardwiredCloseLine connect sentinelSystem.o2SupplyMonitoring.o2AutoCloseSignal
+            to shackletonHub.habComplex.o2LineAutoClose;
+
+        // ---- Wave 4B: the value chain, performed and allocated -----------
+
+        perform action valueChain : ValueChain {
+            doc /* Every stream's phase follows its performing element (':>>'
+                 * bindings below) - the derived plan gates the behaviour as it
+                 * gates the structure. */
+            action redefines psrIceToPropellant : PsrIceToPropellant {
+                :>> introducedIn = shackletonHub.isru.introducedIn;
+            }
+            action redefines spaKreepToExport : SpaKreepToExport {
+                :>> introducedIn = shackletonHub.skipHops.operationalFrom;
+                :>> retiredIn = shackletonHub.skipHops.retiredIn;
+            }
+            action redefines pktKreepToEarth : PktKreepToEarth {
+                :>> introducedIn = pktFactory.processingSpine.introducedIn;
+            }
+            action redefines thoriumToMsrFuel : ThoriumToMsrFuel {
+                :>> introducedIn = pktFactory.processingSpine.introducedIn;
+            }
+            action redefines probeOreToPgmAndFeNi : ProbeOreToPgmAndFeNi {
+                :>> introducedIn = shackletonHub.probeMkI.introducedIn;
+            }
+            action redefines capturedAsteroidToProducts : CapturedAsteroidToProducts {
+                :>> introducedIn = droStation.existsFrom;
+            }
+            action redefines interSiteCargoToPkt : InterSiteCargoToPkt {
+                :>> introducedIn = massDriverNetwork.md1.operationalFrom;
+            }
+        }
+
+        // PSR ice -> propellant
+        allocate valueChain.psrIceToPropellant.drill to shackletonPsrFloor.moleIMkI;
+        allocate valueChain.psrIceToPropellant.drill to shackletonPsrFloor.moleIMkII;
+        allocate valueChain.psrIceToPropellant.dump to shackletonPsrFloor.psrNetwork.substations;
+        allocate valueChain.psrIceToPropellant.tramway to shackletonPsrFloor.psrNetwork.tramway;
+        allocate valueChain.psrIceToPropellant.pump to shackletonPsrFloor.psrNetwork.clp.trunkPump;
+        allocate valueChain.psrIceToPropellant.pump to shackletonPsrFloor.psrNetwork.pipeline;
+        allocate valueChain.psrIceToPropellant.desorb to shackletonHub.isru.vex;
+        allocate valueChain.psrIceToPropellant.electrolyse to shackletonHub.isru.electrolyser;
+        allocate valueChain.psrIceToPropellant.liquefy to shackletonHub.isru.cryocooler;
+        allocate valueChain.psrIceToPropellant.store to shackletonHub.isru.propellantFarm;
+        allocate valueChain.psrIceToPropellant.fuel to shackletonHub.industrialZone.dockingCollars;
+        allocate valueChain.psrIceToPropellant.habitatO2 to shackletonHub.habComplex;
+        // SPA KREEP -> export
+        allocate valueChain.spaKreepToExport.hop to shackletonHub.skip;
+        allocate valueChain.spaKreepToExport.beneficiate to shackletonHub.industrialZone.beneficiation;
+        allocate valueChain.spaKreepToExport.flowsheet to shackletonHub.processingFacility.flowsheet;
+        allocate valueChain.spaKreepToExport.returnToEarth to shackletonHub.starshipReturn;
+        allocate valueChain.spaReagents to shackletonHub.reagentPilot;
+        // PKT KREEP -> Earth
+        allocate valueChain.pktKreepToEarth.mine to pktFactory.hauler;
+        allocate valueChain.pktKreepToEarth.convey to pktFactory.conveyorNetwork;
+        allocate valueChain.pktKreepToEarth.flowsheet to pktFactory.processingSpine.flowsheet;
+        allocate valueChain.pktKreepToEarth.loadReo to pktFactory.processingSpine;
+        allocate valueChain.pktKreepToEarth.launchMd2 to massDriverNetwork.md2;
+        allocate valueChain.pktKreepToEarth.recover to earth;
+        allocate valueChain.pktKreepToEarth.loadOxygen to pktFactory;
+        allocate valueChain.pktKreepToEarth.launchOxygenMd2 to massDriverNetwork.md2;
+        allocate valueChain.pktReagents to pktFactory.reagentPlant;
+        // thorium -> MSR fuel
+        allocate valueChain.thoriumToMsrFuel.loadMd1 to shackletonHub.processingFacility;
+        allocate valueChain.thoriumToMsrFuel.launchMd1 to massDriverNetwork.md1;
+        allocate valueChain.thoriumToMsrFuel.stockpile to pktFactory.processingSpine;
+        allocate valueChain.thoriumToMsrFuel.chlorinate to pktFactory.processingSpine.flowsheet.thoriumConversion;
+        allocate valueChain.thoriumToMsrFuel.fuelPkt to pktFactory.powerSystem.referenceMsr;
+        allocate valueChain.thoriumToMsrFuel.loadMd3 to pktFactory.processingSpine;
+        allocate valueChain.thoriumToMsrFuel.launchMd3 to massDriverNetwork.md3;
+        allocate valueChain.thoriumToMsrFuel.catchAtSpa to shackletonHub.industrialZone.emCatcher;
+        allocate valueChain.thoriumToMsrFuel.fuelSpa to shackletonHub.powerZone.spaMsr;
+        // PROBE ore -> PGM and Fe-Ni
+        allocate valueChain.probeOreToPgmAndFeNi.probeMission to shackletonHub.probeMkI;
+        allocate valueChain.probeOreToPgmAndFeNi.probeMission to shackletonHub.probeMkII;
+        allocate valueChain.probeOreToPgmAndFeNi.mkIiiMission to shackletonHub.probeMkIII;
+        allocate valueChain.probeOreToPgmAndFeNi.catchMkIii to shackletonHub.industrialZone.emCatcher;
+        allocate valueChain.probeOreToPgmAndFeNi.beneficiate to shackletonHub.industrialZone.beneficiation;
+        allocate valueChain.probeOreToPgmAndFeNi.separate to shackletonHub.pgmHydromet;
+        allocate valueChain.probeOreToPgmAndFeNi.exportPgm to shackletonHub.starshipReturn;
+        allocate valueChain.probeOreToPgmAndFeNi.loadFeNi to shackletonHub.pgmHydromet;
+        allocate valueChain.probeOreToPgmAndFeNi.launchMd1 to massDriverNetwork.md1;
+        allocate valueChain.probeOreToPgmAndFeNi.fabricate to pktFactory.foundry;
+        // captured asteroids -> products
+        allocate valueChain.capturedAsteroidToProducts.ablate to droStation.laserAblationTruss;
+        allocate valueChain.capturedAsteroidToProducts.loadMd5 to droStation;
+        allocate valueChain.capturedAsteroidToProducts.launchMd5 to massDriverNetwork.md5;
+        allocate valueChain.capturedAsteroidToProducts.catchAtSpa to shackletonHub.industrialZone.emCatcher;
+        allocate valueChain.capturedAsteroidToProducts.mTypeLine to shackletonHub.mTypeLine;
+        allocate valueChain.capturedAsteroidToProducts.cTypeLine to shackletonHub.cTypeLine;
+        allocate valueChain.capturedAsteroidToProducts.sTypeLine to shackletonHub.sTypeLine;
+        allocate valueChain.capturedAsteroidToProducts.loadProductsMd1 to shackletonHub;
+        allocate valueChain.capturedAsteroidToProducts.launchMd1 to massDriverNetwork.md1;
+        // MD-1 cargo
+        allocate valueChain.interSiteCargoToPkt.load to shackletonHub;
+        allocate valueChain.interSiteCargoToPkt.launch to massDriverNetwork.md1;
 
         // ---- Committed-principle requirements -------------------------
 
@@ -489,6 +750,27 @@ package SeleniteConfigurations {
             subject params = parameters;
         }
         satisfy steadyStateTarget by parameters;
+
+        requirement byProductsUsedAtScale : AllByProductsUsedAtScale {
+            doc /* Wave 4B: SEL-REQ-005 gets its subject, the L1 O2 depot. */
+            subject depot = l1OxygenDepot;
+        }
+        satisfy byProductsUsedAtScale by l1OxygenDepot;
+
+        requirement mTypePausable : AsteroidProcessingPausableThroughEclipse {
+            subject line = shackletonHub.mTypeLine;
+        }
+        satisfy mTypePausable by shackletonHub.mTypeLine;
+
+        requirement cTypePausable : AsteroidProcessingPausableThroughEclipse {
+            subject line = shackletonHub.cTypeLine;
+        }
+        satisfy cTypePausable by shackletonHub.cTypeLine;
+
+        requirement sTypePausable : AsteroidProcessingPausableThroughEclipse {
+            subject line = shackletonHub.sTypeLine;
+        }
+        satisfy sTypePausable by shackletonHub.sTypeLine;
 
         requirement zeroCrewPkt : ZeroPermanentCrewAtPkt {
             subject site = pktFactory;

@@ -5,18 +5,25 @@ package SelenitePower {
          * counts per phase are Wave 5 (VC-09 MSR count recorded).
          * Sources: SEL-POWER-001 Rev B, fleet v9 s.18, Strategy v3.1 s.12,
          * Decision Framework v4 s.7, ARCHITECTURE_BASELINE.md s.4.
-         * SEL-POWER-PKT-001 not yet written. */
+         * SEL-POWER-PKT-001 not yet written. Wave 4B (7 Nov 2026): ports
+         * typed by SeleniteInterfaces; the SPA power zone's supply to the
+         * asteroid lines goes through
+         * SeleniteInterfaces::EclipseGatedPowerSupply (ECN-023) in
+         * SeleniteConfigurations. */
 
     private import ISQ::*;
     private import ScalarValues::*;
+    private import SeleniteInterfaces::*;
     private import SelenitePhases::*;
     private import SeleniteSites::*;
     private import SI::*;
 
     abstract part def PowerAsset :> PhaseGated {
-        doc /* Base for generation and storage assets. */
+        doc /* Base for generation and storage assets. Source: fleet v9 s.18;
+             * ARCHITECTURE_BASELINE.md s.4. */
         abstract attribute location : SiteId;
         attribute ratedPower :> ISQ::power;
+        port powerOut : PowerPort;
     }
 
     part def SolarArray :> PowerAsset {
@@ -45,7 +52,9 @@ package SelenitePower {
     }
 
     part def EclipseBattery :> PowerAsset {
-        doc /* SPA eclipse battery from P4. */
+        doc /* SPA eclipse battery from P4 (VERIFY v5.0 battery rule, mirrored
+             * by SeleniteAnalysis::EclipseBatteryMass). Source: fleet v9
+             * s.18.1; Strategy v3.1 s.12.1. */
         attribute redefines introducedIn = Phase::P4;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::spa;
@@ -65,6 +74,12 @@ package SelenitePower {
         attribute redefines location = SiteId::pkt;
         attribute replacesPktFspFrom = Phase::P10;
         attribute inSituVesselsFrom = Phase::P11;
+        port fuelIn : ~ThoriumPort;
+        port processHeatOut : PowerPort {
+            doc /* MSR process heat (200-300 degC) dual-purposed for acid
+                 * baking (fleet v9 s.18.2); typed as a power port pending a
+                 * heat item at Wave 5. */
+        }
     }
 
     part def SpaThoriumMSR :> PowerAsset {
@@ -96,6 +111,7 @@ package SelenitePower {
         attribute candidateIntroductionLate = Phase::P13;
         attribute asteroidProcessingUnitsFrom = Phase::P12;
         attribute econAssumedIntroductionYear : Integer = 105;
+        port fuelIn : ~ThoriumPort;
         doc econDoc /* Transcribed from the computational authority (rule 3):
              * SELENITE_ECON_V1_3/V1_4, runner v2.1 capture 14 Sep 2026,
              * cargo_spa_msr first non-zero at Y105 (then Y125, Y140; 15 t
@@ -108,7 +124,8 @@ package SelenitePower {
 
     part def PktFspField :> PowerAsset {
         doc /* PKT fission surface power field for construction waves 1-4 (P8);
-             * superseded by the MSR fleet from P10 (unit count Wave 5). */
+             * superseded by the MSR fleet from P10 (unit count Wave 5).
+             * Source: fleet v9 s.18.2; Strategy v3.1 s.8.4. */
         attribute redefines introducedIn = Phase::P8;
         attribute redefines retiredIn = Phase::P10;
         attribute redefines location = SiteId::pkt;
@@ -132,19 +149,33 @@ package SelenitePower {
         part fsp : FissionSurfacePower;
         part eclipseBattery : EclipseBattery;
         part spaMsr : SpaThoriumMSR;
-        port psrTrunkFeed;
-        port baseBus;
+        port psrTrunkFeed : PowerPort;
+        port baseBus : PowerPort;
+        port asteroidLineSupply : PowerPort {
+            doc /* The supply end of the ECN-023 eclipse-gated interface to
+                 * each SPA asteroid line (SeleniteConfigurations). */
+        }
+        port thcl4FuelInlet : ~ThoriumPort;
+        bind thcl4FuelInlet = spaMsr.fuelIn;
+        doc aggregationDoc /* The generation assets' powerOut ports feed the
+             * zone's buses; the aggregation (array + FSP + battery + MSR per
+             * phase) is the VERIFY v5.0 power balance and is a Wave 5
+             * binding, not an interface here. */
     }
 
     part def PktPowerSystem :> PhaseGated {
         doc /* PKT power: FSP field (P8) -> thorium MSR fleet (P9+), hub
-             * charging stations for the hauler fleet. */
+             * charging stations for the hauler fleet. Source: fleet v9
+             * s.18.2; Strategy v3.1 s.8.4, s.12.2. */
         attribute redefines introducedIn = Phase::P8;
         attribute redefines retiredIn = null;
         part fspField : PktFspField;
         part referenceMsr : ThoriumMSR;
         part referenceHubStation : HubChargingStation;
-        port spineBus;
-        port thcl4FuelInlet;
+        port spineBus : PowerPort;
+        port haulerCharging : PowerPort;
+        port thcl4FuelInlet : ~ThoriumPort;
+        bind thcl4FuelInlet = referenceMsr.fuelIn;
+        bind haulerCharging = referenceHubStation.powerOut;
     }
 }
