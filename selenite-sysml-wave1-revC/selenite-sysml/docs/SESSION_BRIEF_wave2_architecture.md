@@ -1,5 +1,7 @@
 # Session Brief — Wave 2: Architecture and temporal skeleton
 
+> **Status: delivered 14 Sep 2026** — see `CHANGELOG_WAVE2.md` and `docs/MIGRATION_PLAN.md` (Wave 2).
+
 **Scope:** one session. Make the SysML v2 model structurally complete for
 all phases P0–P14+, with no quantities beyond structure-defining counts.
 Paste this into a fresh chat with `selenite-sysml-wave1-revC.zip` (or the

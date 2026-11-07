@@ -38,7 +38,7 @@ Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a bou
 | DG-8.2 | derivable | P8 | Y27 | P8 | circuits >= 100: Y28 (P8) | consistent | ECON circuits_needed >= 100 (max 2.083e+06; Y200 2.083e+06) |
 | DG-8.3 | exogenous | P8 | Y25 | P7/P8 | declared | declared | exogenous: no parameter carries the year |
 | DG-8.4 | derivable | P8 | Y26 | P8 | haulers >= 50: Y28 (P8) | consistent | ECON haulers_needed >= 50 (max 1.5e+06; Y200 1.5e+06) |
-| DG-8.5 | derivable | P8 | Y28 | P8 | REO >= 125 t/yr: Y28 (P8); circuits >= 308 (batch-design count): Y41 (P9) | consistent | ECON reo_target >= 125 (max 2.5e+06; Y200 2.5e+06) / ECON circuits_needed >= 308 (max 2.083e+06; Y200 2.083e+06) |
+| DG-8.5 | derivable | P8 | Y28 | P8 | REO >= 125 t/yr: Y28 (P8); circuits >= 105 (committed 1.2 t/yr design, SEL-ECN-026): Y28 (P8) | consistent | ECON reo_target >= 125 (max 2.5e+06; Y200 2.5e+06) / ECON circuits_needed >= 105 (max 2.083e+06; Y200 2.083e+06) |
 | DG-8.6 | exogenous | P8 | Y28 | P8 | declared | declared | exogenous: no parameter carries the year |
 | DG-8.7 | derivable | P8 | Y30 | P8 | Th(OH)4 stockpile >= 40 t: Y37 (P9) | later than declared | plan_vectors.thorium_stockpile: ratio 0.0297 t/t nominal (12.5 ppm Th, 0.92 capture); range Y36-Y39 (ratios 0.0369-0.0233) |
 | DG-8.8 | exogenous | P8 (alt P7) | Y30 | P8 | declared | declared | exogenous: no parameter carries the year |
@@ -66,7 +66,7 @@ Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a bou
 | DG-11.8 | exogenous | P11 | Y75 | P11 | Y75 (P11) | consistent | derivedYear = parameters.mTypeCaptureYear |
 | DG-12.1 | derivable | P12 | Y80 | P11/P12 | REO >= 500,000 t/yr: Y121 (P13); supply fraction >= 40%: Y141 (P14) | later than declared | ECON reo_target >= 5e+05 (max 2.5e+06; Y200 2.5e+06) / ECON supply_frac >= 0.4 (max 1; Y200 1) |
 | DG-12.2 | derivable | P12 | Y85 | P12 | MSR units >= 6,890: Y173 (P14) | later than declared | ECON msr_count >= 6,890 (max 8,334; Y200 8,334) |
-| DG-12.3 | derivable | P12 | Y85 | P12 | MD-2 cadence >= 783/day: Y141 (P14) | later than declared | ECON canisters_yr / 365 (3.5 t per canister; Y200 1,957/day; ECN-020 corrected the 2.5 Mt/yr cadence to ~1,903/day) |
+| DG-12.3 | derivable | P12 | Y85 | P12 | MD-2 cadence >= 1,903/day: Y179 (P14) | later than declared | ECON canisters_yr / 365 (3.5 t per canister; Y200 1,957/day; threshold the ECN-020 2.5 Mt/yr cadence per SEL-ECN-026, Rev D's 783/day superseded) |
 | DG-12.4 | exogenous | P12 | Y85 | P12 | Y85 (P12) | consistent | derivedYear = parameters.mTypeCaptureYear + parameters.asteroidOnlineLagYears |
 | DG-12.5 | exogenous | P12 | Y85 | P12 | Y85 (P12) | consistent | derivedYear = parameters.mTypeCaptureYear + parameters.asteroidOnlineLagYears |
 | DG-12.6 | derivable | P12 | Y90 | P12 | captured-asteroid PGM >= 36.5 t/yr: Y85 (P12) | consistent | ECON captured_asteroid_pgm >= 36.5 (max 36.5; Y200 36.5) |
@@ -109,7 +109,7 @@ Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a bou
 | shackletonHub.industrialZone.emCatcher.introducedIn | EmCatcher | P11 | DG-9.6 (P9, alt P10, Y43) | declared | - | def P11 vs gate P9/P10 |
 | shackletonHub.industrialZone.emCatcher.operationalFrom | EmCatcher | P11 | DG-9.6 (P9, alt P10, Y43) | declared | - | def P11 vs gate P9/P10 |
 | shackletonHub.crewReturnVehicle.introducedIn | CrewReturnVehicle | P4 | DG-4.1 (P4, Y7) | assumed | - | def = gate |
-| shackletonHub.powerZone.spaMsr.introducedIn | SpaThoriumMSR | unbound | DG-10.5 (P10, Y50) | Y105 (P12) | Y105 (P12) - ECON spa_msr_count first non-zero (the economics' assumption, F5) | def unbound -> gate; vector P12 vs def None |
+| shackletonHub.powerZone.spaMsr.introducedIn | SpaThoriumMSR | unbound | DG-13.4 (P13, alt P12, Y105) | Y105 (P12) | Y105 (P12) - ECON spa_msr_count first non-zero (the economics' assumption, F5) | def unbound -> gate; vector P12 vs def None |
 | shackletonHub.mTypeLine.introducedIn | MTypeProcessingLine | P12 | DG-12.4 (P12, Y85) | Y85 (P12) | Y85 (P12) - ECON captured_asteroid_pgm first non-zero | def = gate; vector = def |
 | shackletonHub.cTypeLine.introducedIn | CTypeProcessingLine | P12 | DG-13.3 (P13, alt P12, Y105) | Y105 (P12) | - | def = gate |
 | shackletonHub.sTypeLine.introducedIn | STypeProcessingLine | P13 | DG-14.3 (P14, alt P13, Y125) | Y125 (P13) | - | def = gate |
@@ -191,59 +191,58 @@ Phase of a year: inclusive windows from SelenitePhases::ProgrammeTimeline; a bou
 | W3-R1 | DG-4.3 PROBE fleet fully ISRU-fuelled: declared Y8 (P4); derived P3 - VERIFY ph.isru [28460, 170760, 313060, 512280, 1024560] vs ph.dP [19962, 39924, 66540, 99810, 199620] (P3..P7) | Gates.sysml / econ.py |
 | W3-R2 | DG-7.4 Progressive reagent substitution at SPA (10% -> 50% in-situ H2SO4, Ca(...: declared Y22 (P7); derived Y26 (P8) - ECON reagent.isru_frac(y) = min(0.98, max(0, (y-9) x 0.03)) | Gates.sysml / econ.py |
 | W3-R3 | DG-7.5: listed under P7 but its year Y15 is P6 | Gates.sysml / Phases.sysml |
-| W3-R4 | DG-8.5: its criteria split - REO >= 125 t/yr -> Y28; circuits >= 308 (batch-design count) -> Y41 | Gates.sysml / econ.py |
-| W3-R5 | DG-8.7 Thorium stockpile assessment (~40 t Th(OH)4 accumulated): declared Y30 (P8); derived Y37 (P9) - plan_vectors.thorium_stockpile: ratio 0.0297 t/t nominal (12.5 ppm Th, 0.92 capture); range Y36-Y39 (ratios 0.0369-0.0233) | Gates.sysml / econ.py |
-| W3-R6 | DG-9.4 PKT foundry at 100+ t/yr metal production (MRE + WAAM/EB welding): declared Y42 (P9); derived Y28 (P8) - ECON insitu_total >= 100 (max 1.685e+06; Y200 0) | Gates.sysml / econ.py |
-| W3-R7 | DG-9.7 Steel conveyor pilot - first 500 km trunk from Fe-Ni + MRE iron: declared Y40 (P9); derived Y66 (P11) - ECON conv_km_needed >= 500 (max 1.375e+05; Y200 1.375e+05) | Gates.sysml / econ.py |
-| W3-R8 | DG-10.1 Hauler fleet at scale - 14,881 mining-capable haulers (Na-S battery, S...: declared Y45 (P10); derived Y64 (P11) - ECON haulers_needed >= 1.488e+04 (max 1.5e+06; Y200 1.5e+06) | Gates.sysml / econ.py |
-| W3-R9 | DG-10.2 Steel conveyor network expanding - 5,000+ km, replacing hauler Tier 3...: declared Y48 (P10); derived Y84 (P12) - ECON conv_km_needed >= 5,000 (max 1.375e+05; Y200 1.375e+05) | Gates.sysml / econ.py |
-| W3-R10 | DG-10.3 PKT foundry at industrial scale - MRE cells, WAAM/EB welding, Fe-Si an...: declared Y45 (P10); derived Y41 (P9) - ECON insitu_total >= 1,000 (max 1.685e+06; Y200 0) | Gates.sysml / econ.py |
-| W3-R11 | DG-10.4 Thorium MSR fleet expansion - ~74 x 100 MWe units at PKT. Construction...: declared Y50 (P10); derived Y67 (P11) - ECON msr_count >= 74 (max 8,334; Y200 8,334) | Gates.sysml / econ.py |
-| W3-R12 | DG-10.4: its criteria split - MSR units >= 74 -> Y67; FSP field superseded: MSR installed power >= FSP installed power -> Y36 | Gates.sysml / econ.py |
-| W3-R13 | DG-10.5 SPA MSR commissioning - ThCl4 mass-driven from PKT. Enables scaled PRO...: declared Y50 (P10); derived Y105 (P12) - plan_vectors.fsp_msr_trade, incremental basis (cargo beyond the P7 as-built fleet; FSP Earth->SPA, solar Earth->SPA, MSR Earth fraction Earth->SPA, in-situ fraction PKT->SPA via MD-3): non-nuclear cargo exceeds the MSR's Earth cargo from Y105, ThCl4 from MD-3 Y43; with a-Si solar in-situ from Y60 -> Y105; as-built basis (all cargo for the year's demand, delivered hardware not sunk) -> Y43; eclipse-critical load 132-45120 kW, 1129 FSP max; ECON spa_msr_count reaches 1 at Y105 | Gates.sysml / econ.py |
-| W3-R14 | DG-11.1: its criteria split - REO >= 100,000 t/yr -> Y80; supply fraction >= 10% -> Y101 | Gates.sysml / econ.py |
-| W3-R15 | DG-11.2 Thorium MSR fleet at ~679 x 100 MWe. Annual Th consumption ~54 t/yr vs...: declared Y65 (P11); derived Y96 (P12) - ECON msr_count >= 679 (max 8,334; Y200 8,334) | Gates.sysml / econ.py |
-| W3-R16 | DG-11.3 SPA MSR commissioning - ThCl4 mass-driven from PKT. Enables scaled PGM...: declared Y70 (P11); derived Y105 (P12) - plan_vectors.fsp_msr_trade, incremental basis (cargo beyond the P7 as-built fleet; FSP Earth->SPA, solar Earth->SPA, MSR Earth fraction Earth->SPA, in-situ fraction PKT->SPA via MD-3): non-nuclear cargo exceeds the MSR's Earth cargo from Y105, ThCl4 from MD-3 Y43; with a-Si solar in-situ from Y60 -> Y105; as-built basis (all cargo for the year's demand, delivered hardware not sunk) -> Y43; eclipse-critical load 132-45120 kW, 1129 FSP max; ECON spa_msr_count reaches 1 at Y105 | Gates.sysml / econ.py |
-| W3-R17 | DG-11.5 Conveyor network scales to ~15,000 km: declared - (P11); derived Y103 (P12) - ECON conv_km_needed >= 1.5e+04 (max 1.375e+05; Y200 1.375e+05) | Gates.sysml / econ.py |
-| W3-R18 | DG-11.6 PROBE Mk III SEP commissioning + SPA->Earth mass driver for PGM export...: declared Y65 (P11); derived never - ECON molei_needed peak 357 at Y35; with the fleet v9 figure 310 the need exceeds capacity at Y31 (sensitivity only, W2-N18) | Gates.sysml / econ.py |
-| W3-R19 | DG-12.1 500,000 t/yr REO -> 40% global displacement (revised from 1,000,000 at...: declared Y80 (P12); derived Y121 (P13) - ECON reo_target >= 5e+05 (max 2.5e+06; Y200 2.5e+06) | Gates.sysml / econ.py |
-| W3-R20 | DG-12.1: its criteria split - REO >= 500,000 t/yr -> Y121; supply fraction >= 40% -> Y141 | Gates.sysml / econ.py |
-| W3-R21 | DG-12.2 Thorium MSR fleet at ~6,890 x 100 MWe (689 GW) at PKT full-scale: declared Y85 (P12); derived Y173 (P14) - ECON msr_count >= 6,890 (max 8,334; Y200 8,334) | Gates.sysml / econ.py |
-| W3-R22 | DG-12.3 PKT->Earth mass driver: scaling toward 783/day at P14+ steady state: declared Y85 (P12); derived Y141 (P14) - ECON canisters_yr / 365 (3.5 t per canister; Y200 1,957/day; ECN-020 corrected the 2.5 Mt/yr cadence to ~1,903/day) | Gates.sysml / econ.py |
-| W3-R23 | DG-13.1 1,250,000 t/yr REO - 50% of projected global demand. P13 milestone, no...: declared Y120 (P13); derived Y152 (P14) - ECON reo_target >= 1.25e+06 (max 2.5e+06; Y200 2.5e+06) | Gates.sysml / econ.py |
-| W3-R24 | DG-14.1 C-type asteroid targeting decision gate - selects target optimising fo...: declared Y95 (P13/P14); derived Y95 (P12) - derivedYear = parameters.cTypeCaptureYear; declared year Y95 is P12 by the year table | Gates.sysml / Parameters.sysml |
-| W3-R25 | DG-14.1: listed under P13 (alt P14) but its year Y95 is P12 | Gates.sysml / Phases.sysml |
-| W3-R26 | DG-13.5 Circuit Earth fraction drops from 10% to 3% - C-type carbon replaces P...: declared Y110 (P13); derived Y115 (P12) - ECON cargo_circuits / (d_circuits x circuit.mass_kg), years with new circuits only | Gates.sysml / econ.py |
-| W3-R27 | DG-13.5: listed under P13 but its year Y110 is P12 | Gates.sysml / Phases.sysml |
-| W3-R28 | DG-13.6 S-type asteroid redirect initiated - ~100 m silicaceous body. Fleet no...: declared Y115 (P13); derived Y115 (P12) - derivedYear = parameters.sTypeCaptureYear; declared year Y115 is P12 by the year table | Gates.sysml / Parameters.sysml |
-| W3-R29 | DG-13.6: listed under P13 but its year Y115 is P12 | Gates.sysml / Phases.sysml |
-| W3-R30 | DG-13.7 M-type Fe-Ni reduces hauler Earth fraction from 43% to 20% floor (avio...: declared Y120 (P13); derived never - ECON hauler Earth fraction floors at 0.33 (hauler.earth_frac 0.43 floor less the M-type bonus); never reaches 0.20 | Gates.sysml / econ.py |
-| W3-R31 | DG-14.2 S-type asteroid targeting decision gate - selects target optimising fo...: declared Y115 (P14/P13); derived Y115 (P12) - derivedYear = parameters.sTypeCaptureYear; declared year Y115 is P12 by the year table | Gates.sysml / Parameters.sysml |
-| W3-R32 | DG-14.2: listed under P14 (alt P13) but its year Y115 is P12 | Gates.sysml / Phases.sysml |
-| W3-R33 | DG-14.4 SPA MSR #2 commissioned - 100 MWe for S-type Si refinery power.: declared Y125 (P14/P13); derived Y105 (P12) - plan_vectors.fsp_msr_trade, incremental basis (cargo beyond the P7 as-built fleet; FSP Earth->SPA, solar Earth->SPA, MSR Earth fraction Earth->SPA, in-situ fraction PKT->SPA via MD-3): non-nuclear cargo exceeds the MSR's Earth cargo from Y105, ThCl4 from MD-3 Y43; with a-Si solar in-situ from Y60 -> Y105; as-built basis (all cargo for the year's demand, delivered hardware not sunk) -> Y43; eclipse-critical load 132-45120 kW, 1129 FSP max; ECON spa_msr_count reaches 2 at Y125 | Gates.sysml / econ.py |
-| W3-R34 | DG-14.5 Circuit Earth fraction drops from 3% to 0.8% - only advanced ICs remai...: declared Y130 (P14); derived Y135 (P13) - ECON cargo_circuits / (d_circuits x circuit.mass_kg) | Gates.sysml / econ.py |
-| W3-R35 | DG-14.5: listed under P14 but its year Y130 is P13 | Gates.sysml / Phases.sysml |
-| W3-R36 | DG-14.6 Earth independence assessment (DG-14.3 from ECN-019) - comprehensive a...: declared Y140 (P14); derived never - annual-flow proxy earth_cargo / (earth_cargo + insitu_total): minimum 4.8% at Y139 | Gates.sysml / econ.py |
-| W3-R37 | DG-14.7 SPA MSR #3 commissioned - scaled operations, full asteroid processing...: declared Y140 (P14); derived Y105 (P12) - plan_vectors.fsp_msr_trade, incremental basis (cargo beyond the P7 as-built fleet; FSP Earth->SPA, solar Earth->SPA, MSR Earth fraction Earth->SPA, in-situ fraction PKT->SPA via MD-3): non-nuclear cargo exceeds the MSR's Earth cargo from Y105, ThCl4 from MD-3 Y43; with a-Si solar in-situ from Y60 -> Y105; as-built basis (all cargo for the year's demand, delivered hardware not sunk) -> Y43; eclipse-critical load 132-45120 kW, 1129 FSP max; ECON spa_msr_count reaches 3 at Y140 | Gates.sysml / econ.py |
-| W3-R38 | DG-14.9 Mk III PROBE fleet reduction - all 3 asteroid captures complete by Y12...: declared Y115 (P14); derived Y125 (P13) - ECON mkiii_active falls to 300 at Y115; captures complete at Y125 (sTypeCaptureYear + lag) | Gates.sysml / econ.py |
-| W3-R39 | DG-14.9: listed under P14 but its year Y115 is P12 | Gates.sysml / Phases.sysml |
-| W3-R40 | DG-POST.1: derivable but unevaluated - tier1ResourceTonnes unbound; ECON stops at Y200 (Wave 5) | Gates.sysml / Parameters.sysml |
-| W3-R41 | DG-POST.2: derivable but unevaluated - tier2ResourceTonnes unbound (Wave 5) | Gates.sysml / Parameters.sysml |
-| W3-R42 | shackletonHub.isru.selfSufficientFrom: definition P4, vector says P3 - VERIFY ph.isru >= ph.dT | ProgrammeConfiguration.sysml / selenite-compute |
-| W3-R43 | shackletonHub.industrialZone.emCatcher.introducedIn: definition P11 but bound to DG-9.6 (P9/P10, Y43) | ProgrammeConfiguration.sysml |
-| W3-R44 | shackletonHub.industrialZone.emCatcher.operationalFrom: definition P11 but bound to DG-9.6 (P9/P10, Y43) | ProgrammeConfiguration.sysml |
-| W3-R45 | shackletonHub.powerZone.spaMsr.introducedIn: definition unbound, vector says Y105 - ECON spa_msr_count first non-zero (the economics' assumption, F5) | ProgrammeConfiguration.sysml / selenite-compute |
-| W3-R46 | shackletonHub.probeMkI.isruFuelledFrom: definition P4, vector says P3 - VERIFY ph.isru >= ph.dP (the P3 units are Earth-fuelled by policy) | ProgrammeConfiguration.sysml / selenite-compute |
-| W3-R47 | shackletonHub.probeMkIII.prospectingRoleFrom: definition P13 but bound to DG-14.9 (P14, Y115) | ProgrammeConfiguration.sysml |
-| W3-R48 | shackletonHub.probeMkIII.prospectingRoleFrom: definition P13, vector says Y115 - ECON mkiii_active falls to the 300-unit prospecting fleet | ProgrammeConfiguration.sysml / selenite-compute |
-| W3-R49 | shackletonHub.skip.introducedIn: definition P4 but bound to DG-2.2 (P2, Y5) | ProgrammeConfiguration.sysml |
-| W3-R50 | shackletonHub.dart.pktSiteConfirmationIn: definition P7 but bound to DG-6.3 (P6, Y13) | ProgrammeConfiguration.sysml |
-| W3-R51 | shackletonHub.cap.introducedIn: definition P4, vector says P6 - VERIFY ph.p_cap (CAP standby power) = [0.0, 0.0, 0.0, 1.0, 1.0] | ProgrammeConfiguration.sysml / selenite-compute |
-| W3-R52 | shackletonHub.skipHops.introducedIn: definition P4 but bound to DG-2.2 (P2, Y5) | ProgrammeConfiguration.sysml |
-| W3-R53 | shackletonHub.skipHops.operationalFrom: definition P4 but bound to DG-2.2 (P2, Y5) | ProgrammeConfiguration.sysml |
-| W3-R54 | pktFactory.siteConfirmedIn: definition P7 but bound to DG-6.3 (P6, Y13) | ProgrammeConfiguration.sysml |
-| W3-R55 | massDriverNetwork.md4.introducedIn: definition P11 but bound to DG-12.4 (P12, Y85) | ProgrammeConfiguration.sysml |
-| W3-R56 | massDriverNetwork.md4.operationalFrom: definition P11 but bound to DG-12.4 (P12, Y85) | ProgrammeConfiguration.sysml |
+| W3-R4 | DG-8.7 Thorium stockpile assessment (~40 t Th(OH)4 accumulated): declared Y30 (P8); derived Y37 (P9) - plan_vectors.thorium_stockpile: ratio 0.0297 t/t nominal (12.5 ppm Th, 0.92 capture); range Y36-Y39 (ratios 0.0369-0.0233) | Gates.sysml / econ.py |
+| W3-R5 | DG-9.4 PKT foundry at 100+ t/yr metal production (MRE + WAAM/EB welding): declared Y42 (P9); derived Y28 (P8) - ECON insitu_total >= 100 (max 1.685e+06; Y200 0) | Gates.sysml / econ.py |
+| W3-R6 | DG-9.7 Steel conveyor pilot - first 500 km trunk from Fe-Ni + MRE iron: declared Y40 (P9); derived Y66 (P11) - ECON conv_km_needed >= 500 (max 1.375e+05; Y200 1.375e+05) | Gates.sysml / econ.py |
+| W3-R7 | DG-10.1 Hauler fleet at scale - 14,881 mining-capable haulers (Na-S battery, S...: declared Y45 (P10); derived Y64 (P11) - ECON haulers_needed >= 1.488e+04 (max 1.5e+06; Y200 1.5e+06) | Gates.sysml / econ.py |
+| W3-R8 | DG-10.2 Steel conveyor network expanding - 5,000+ km, replacing hauler Tier 3...: declared Y48 (P10); derived Y84 (P12) - ECON conv_km_needed >= 5,000 (max 1.375e+05; Y200 1.375e+05) | Gates.sysml / econ.py |
+| W3-R9 | DG-10.3 PKT foundry at industrial scale - MRE cells, WAAM/EB welding, Fe-Si an...: declared Y45 (P10); derived Y41 (P9) - ECON insitu_total >= 1,000 (max 1.685e+06; Y200 0) | Gates.sysml / econ.py |
+| W3-R10 | DG-10.4 Thorium MSR fleet expansion - ~74 x 100 MWe units at PKT. Construction...: declared Y50 (P10); derived Y67 (P11) - ECON msr_count >= 74 (max 8,334; Y200 8,334) | Gates.sysml / econ.py |
+| W3-R11 | DG-10.4: its criteria split - MSR units >= 74 -> Y67; FSP field superseded: MSR installed power >= FSP installed power -> Y36 | Gates.sysml / econ.py |
+| W3-R12 | DG-10.5 SPA MSR commissioning - ThCl4 mass-driven from PKT. Enables scaled PRO...: declared Y50 (P10); derived Y105 (P12) - plan_vectors.fsp_msr_trade, incremental basis (cargo beyond the P7 as-built fleet; FSP Earth->SPA, solar Earth->SPA, MSR Earth fraction Earth->SPA, in-situ fraction PKT->SPA via MD-3): non-nuclear cargo exceeds the MSR's Earth cargo from Y105, ThCl4 from MD-3 Y43; with a-Si solar in-situ from Y60 -> Y105; as-built basis (all cargo for the year's demand, delivered hardware not sunk) -> Y43; eclipse-critical load 132-45120 kW, 1129 FSP max; ECON spa_msr_count reaches 1 at Y105 | Gates.sysml / econ.py |
+| W3-R13 | DG-11.1: its criteria split - REO >= 100,000 t/yr -> Y80; supply fraction >= 10% -> Y101 | Gates.sysml / econ.py |
+| W3-R14 | DG-11.2 Thorium MSR fleet at ~679 x 100 MWe. Annual Th consumption ~54 t/yr vs...: declared Y65 (P11); derived Y96 (P12) - ECON msr_count >= 679 (max 8,334; Y200 8,334) | Gates.sysml / econ.py |
+| W3-R15 | DG-11.3 SPA MSR commissioning - ThCl4 mass-driven from PKT. Enables scaled PGM...: declared Y70 (P11); derived Y105 (P12) - plan_vectors.fsp_msr_trade, incremental basis (cargo beyond the P7 as-built fleet; FSP Earth->SPA, solar Earth->SPA, MSR Earth fraction Earth->SPA, in-situ fraction PKT->SPA via MD-3): non-nuclear cargo exceeds the MSR's Earth cargo from Y105, ThCl4 from MD-3 Y43; with a-Si solar in-situ from Y60 -> Y105; as-built basis (all cargo for the year's demand, delivered hardware not sunk) -> Y43; eclipse-critical load 132-45120 kW, 1129 FSP max; ECON spa_msr_count reaches 1 at Y105 | Gates.sysml / econ.py |
+| W3-R16 | DG-11.5 Conveyor network scales to ~15,000 km: declared - (P11); derived Y103 (P12) - ECON conv_km_needed >= 1.5e+04 (max 1.375e+05; Y200 1.375e+05) | Gates.sysml / econ.py |
+| W3-R17 | DG-11.6 PROBE Mk III SEP commissioning + SPA->Earth mass driver for PGM export...: declared Y65 (P11); derived never - ECON molei_needed peak 357 at Y35; with the fleet v9 figure 310 the need exceeds capacity at Y31 (sensitivity only, W2-N18) | Gates.sysml / econ.py |
+| W3-R18 | DG-12.1 500,000 t/yr REO -> 40% global displacement (revised from 1,000,000 at...: declared Y80 (P12); derived Y121 (P13) - ECON reo_target >= 5e+05 (max 2.5e+06; Y200 2.5e+06) | Gates.sysml / econ.py |
+| W3-R19 | DG-12.1: its criteria split - REO >= 500,000 t/yr -> Y121; supply fraction >= 40% -> Y141 | Gates.sysml / econ.py |
+| W3-R20 | DG-12.2 Thorium MSR fleet at ~6,890 x 100 MWe (689 GW) at PKT full-scale: declared Y85 (P12); derived Y173 (P14) - ECON msr_count >= 6,890 (max 8,334; Y200 8,334) | Gates.sysml / econ.py |
+| W3-R21 | DG-12.3 PKT->Earth mass driver: scaling toward 783/day at P14+ steady state: declared Y85 (P12); derived Y179 (P14) - ECON canisters_yr / 365 (3.5 t per canister; Y200 1,957/day; threshold the ECN-020 2.5 Mt/yr cadence per SEL-ECN-026, Rev D's 783/day superseded) | Gates.sysml / econ.py |
+| W3-R22 | DG-13.1 1,250,000 t/yr REO - 50% of projected global demand. P13 milestone, no...: declared Y120 (P13); derived Y152 (P14) - ECON reo_target >= 1.25e+06 (max 2.5e+06; Y200 2.5e+06) | Gates.sysml / econ.py |
+| W3-R23 | DG-14.1 C-type asteroid targeting decision gate - selects target optimising fo...: declared Y95 (P13/P14); derived Y95 (P12) - derivedYear = parameters.cTypeCaptureYear; declared year Y95 is P12 by the year table | Gates.sysml / Parameters.sysml |
+| W3-R24 | DG-14.1: listed under P13 (alt P14) but its year Y95 is P12 | Gates.sysml / Phases.sysml |
+| W3-R25 | DG-13.5 Circuit Earth fraction drops from 10% to 3% - C-type carbon replaces P...: declared Y110 (P13); derived Y115 (P12) - ECON cargo_circuits / (d_circuits x circuit.mass_kg), years with new circuits only | Gates.sysml / econ.py |
+| W3-R26 | DG-13.5: listed under P13 but its year Y110 is P12 | Gates.sysml / Phases.sysml |
+| W3-R27 | DG-13.6 S-type asteroid redirect initiated - ~100 m silicaceous body. Fleet no...: declared Y115 (P13); derived Y115 (P12) - derivedYear = parameters.sTypeCaptureYear; declared year Y115 is P12 by the year table | Gates.sysml / Parameters.sysml |
+| W3-R28 | DG-13.6: listed under P13 but its year Y115 is P12 | Gates.sysml / Phases.sysml |
+| W3-R29 | DG-13.7 M-type Fe-Ni reduces hauler Earth fraction from 43% to 20% floor (avio...: declared Y120 (P13); derived never - ECON hauler Earth fraction floors at 0.33 (hauler.earth_frac 0.43 floor less the M-type bonus); never reaches 0.20 | Gates.sysml / econ.py |
+| W3-R30 | DG-14.2 S-type asteroid targeting decision gate - selects target optimising fo...: declared Y115 (P14/P13); derived Y115 (P12) - derivedYear = parameters.sTypeCaptureYear; declared year Y115 is P12 by the year table | Gates.sysml / Parameters.sysml |
+| W3-R31 | DG-14.2: listed under P14 (alt P13) but its year Y115 is P12 | Gates.sysml / Phases.sysml |
+| W3-R32 | DG-14.4 SPA MSR #2 commissioned - 100 MWe for S-type Si refinery power.: declared Y125 (P14/P13); derived Y105 (P12) - plan_vectors.fsp_msr_trade, incremental basis (cargo beyond the P7 as-built fleet; FSP Earth->SPA, solar Earth->SPA, MSR Earth fraction Earth->SPA, in-situ fraction PKT->SPA via MD-3): non-nuclear cargo exceeds the MSR's Earth cargo from Y105, ThCl4 from MD-3 Y43; with a-Si solar in-situ from Y60 -> Y105; as-built basis (all cargo for the year's demand, delivered hardware not sunk) -> Y43; eclipse-critical load 132-45120 kW, 1129 FSP max; ECON spa_msr_count reaches 2 at Y125 | Gates.sysml / econ.py |
+| W3-R33 | DG-14.5 Circuit Earth fraction drops from 3% to 0.8% - only advanced ICs remai...: declared Y130 (P14); derived Y135 (P13) - ECON cargo_circuits / (d_circuits x circuit.mass_kg) | Gates.sysml / econ.py |
+| W3-R34 | DG-14.5: listed under P14 but its year Y130 is P13 | Gates.sysml / Phases.sysml |
+| W3-R35 | DG-14.6 Earth independence assessment (DG-14.3 from ECN-019) - comprehensive a...: declared Y140 (P14); derived never - annual-flow proxy earth_cargo / (earth_cargo + insitu_total): minimum 4.8% at Y139 | Gates.sysml / econ.py |
+| W3-R36 | DG-14.7 SPA MSR #3 commissioned - scaled operations, full asteroid processing...: declared Y140 (P14); derived Y105 (P12) - plan_vectors.fsp_msr_trade, incremental basis (cargo beyond the P7 as-built fleet; FSP Earth->SPA, solar Earth->SPA, MSR Earth fraction Earth->SPA, in-situ fraction PKT->SPA via MD-3): non-nuclear cargo exceeds the MSR's Earth cargo from Y105, ThCl4 from MD-3 Y43; with a-Si solar in-situ from Y60 -> Y105; as-built basis (all cargo for the year's demand, delivered hardware not sunk) -> Y43; eclipse-critical load 132-45120 kW, 1129 FSP max; ECON spa_msr_count reaches 3 at Y140 | Gates.sysml / econ.py |
+| W3-R37 | DG-14.9 Mk III PROBE fleet reduction - all 3 asteroid captures complete by Y12...: declared Y115 (P14); derived Y125 (P13) - ECON mkiii_active falls to 300 at Y115; captures complete at Y125 (sTypeCaptureYear + lag) | Gates.sysml / econ.py |
+| W3-R38 | DG-14.9: listed under P14 but its year Y115 is P12 | Gates.sysml / Phases.sysml |
+| W3-R39 | DG-POST.1: derivable but unevaluated - tier1ResourceTonnes unbound; ECON stops at Y200 (Wave 5) | Gates.sysml / Parameters.sysml |
+| W3-R40 | DG-POST.2: derivable but unevaluated - tier2ResourceTonnes unbound (Wave 5) | Gates.sysml / Parameters.sysml |
+| W3-R41 | shackletonHub.isru.selfSufficientFrom: definition P4, vector says P3 - VERIFY ph.isru >= ph.dT | ProgrammeConfiguration.sysml / selenite-compute |
+| W3-R42 | shackletonHub.industrialZone.emCatcher.introducedIn: definition P11 but bound to DG-9.6 (P9/P10, Y43) | ProgrammeConfiguration.sysml |
+| W3-R43 | shackletonHub.industrialZone.emCatcher.operationalFrom: definition P11 but bound to DG-9.6 (P9/P10, Y43) | ProgrammeConfiguration.sysml |
+| W3-R44 | shackletonHub.powerZone.spaMsr.introducedIn: definition unbound, vector says Y105 - ECON spa_msr_count first non-zero (the economics' assumption, F5) | ProgrammeConfiguration.sysml / selenite-compute |
+| W3-R45 | shackletonHub.probeMkI.isruFuelledFrom: definition P4, vector says P3 - VERIFY ph.isru >= ph.dP (the P3 units are Earth-fuelled by policy) | ProgrammeConfiguration.sysml / selenite-compute |
+| W3-R46 | shackletonHub.probeMkIII.prospectingRoleFrom: definition P13 but bound to DG-14.9 (P14, Y115) | ProgrammeConfiguration.sysml |
+| W3-R47 | shackletonHub.probeMkIII.prospectingRoleFrom: definition P13, vector says Y115 - ECON mkiii_active falls to the 300-unit prospecting fleet | ProgrammeConfiguration.sysml / selenite-compute |
+| W3-R48 | shackletonHub.skip.introducedIn: definition P4 but bound to DG-2.2 (P2, Y5) | ProgrammeConfiguration.sysml |
+| W3-R49 | shackletonHub.dart.pktSiteConfirmationIn: definition P7 but bound to DG-6.3 (P6, Y13) | ProgrammeConfiguration.sysml |
+| W3-R50 | shackletonHub.cap.introducedIn: definition P4, vector says P6 - VERIFY ph.p_cap (CAP standby power) = [0.0, 0.0, 0.0, 1.0, 1.0] | ProgrammeConfiguration.sysml / selenite-compute |
+| W3-R51 | shackletonHub.skipHops.introducedIn: definition P4 but bound to DG-2.2 (P2, Y5) | ProgrammeConfiguration.sysml |
+| W3-R52 | shackletonHub.skipHops.operationalFrom: definition P4 but bound to DG-2.2 (P2, Y5) | ProgrammeConfiguration.sysml |
+| W3-R53 | pktFactory.siteConfirmedIn: definition P7 but bound to DG-6.3 (P6, Y13) | ProgrammeConfiguration.sysml |
+| W3-R54 | massDriverNetwork.md4.introducedIn: definition P11 but bound to DG-12.4 (P12, Y85) | ProgrammeConfiguration.sysml |
+| W3-R55 | massDriverNetwork.md4.operationalFrom: definition P11 but bound to DG-12.4 (P12, Y85) | ProgrammeConfiguration.sysml |
 
 ## 4. Structural checks
 

@@ -2,8 +2,12 @@
 
 Strategy: migrate by **wave**, not by document. Each wave produces a
 validated, diagrammable model increment; `mapping/document_map.csv`
-tracks per-document status (`done | skeleton | planned | reference_only |
-superseded | out_of_scope`). Documents are never deleted — they remain
+tracks per-document status. Vocabulary in use (6 Nov 2026): `planned |
+skeleton | architected | gated | applied | delivered | generated | folded |
+heritage_only | reference_only | reference_integrator | cited_external |
+team_input | python_port | python_port_figures | excluded_until_propagated |
+out_of_scope`, plus `superseded` for a source revision kept only as history
+and `draft_awaiting_decision` for an ECN draft before Jason signs it. Documents are never deleted — they remain
 the historical record and the provenance cited in model `doc` comments.
 
 ## Wave 1 — Architecture skeleton ✅ COMPLETE (this scaffold)
@@ -121,12 +125,35 @@ questions 2–4 of the brief are answered in the ECN draft (dark fraction from
 Gläser et al. 2014; a Czochralski batch fits the sunlit window; D3 in
 scope); question 1 (the default criterion) is proposed, not decided.
 
-### Wave 4B — Behaviour, interfaces, software (original Wave 4 scope, unchanged; brief: `docs/SESSION_BRIEF_wave4b_behaviour.md`, after the verification session)
+### Verification after Wave 4A ✅ DELIVERED (6 Nov 2026; brief: `docs/SESSION_BRIEF_verification_post_wave4a.md`)
+
+An audit, not a build: the ten brief items (model integrity, provenance,
+rule 3, the gate catalogue against Rev D, configuration bindings,
+requirements, the Python layer, the scenario layer, registers versus
+documents, the document map and families) recorded as pass or finding
+V-N1 … V-N46 in `CHANGELOG_VERIFICATION.md`. No bound value disagrees with
+its source; determinism (n = 2,000 byte-identical) and robustness (seed 1,
+Sobol: no recommendation changes) hold; `econ_param` equals the port
+bit-for-bit. 46 observations: value-neutral fixes applied (citation strings,
+stale statuses and doc comments, 20 missing definition docs, map rows and
+package names, a stale diagram, the register's number formatting and D1
+caption); three ECNs raised — **SEL-ECN-024** (signed 6 Nov 2026: flag F3 closed, the
+hauler floor a point at the ECON 0.43), **SEL-ECN-025** (signed 6 Nov 2026:
+SPA MSR unit #1 bound to DG-13.4), **SEL-ECN-026** (signed 7 Nov 2026: DG-12.3 783 → 1,903/day
+and DG-8.5 308 → 105 circuits aligned to ECN-020 / ECN-022) — and the consolidated open-items list
+for Waves 4B and 5 (`CHANGELOG_VERIFICATION.md` §4), which both waves start
+from.
+
+### Wave 4B — Behaviour, interfaces, software (original Wave 4 scope, unchanged; brief: `docs/SESSION_BRIEF_wave4b_behaviour.md`; starts from `CHANGELOG_VERIFICATION.md` §4)
 
 Value-chain action flows (v14.1/v15/v16), ports and interfaces, SENTINEL
 states and modes, ECN-014 valve auto-close logic as state machine and
 constraints, NAV-001 fusion as a behaviour. Th/U stage waits on the preprint.
-ECN-021 enters here once its source documents are revised.
+ECN-021 enters here once its source documents are revised. Verification
+(6 Nov 2026) adds: SEL-REQ-017 (the ECN-023 sunlit duty-cycle rule on the SPA
+asteroid lines), the missing gated elements (SPA reagent pilot, PKT oxalic-acid
+line, CON-001 connector, L1 depot for SEL-REQ-005), the ECN-014 source extract,
+and the hygiene backlog (V-N3, V-N8, V-N9, V-N27) — see `CHANGELOG_VERIFICATION.md` §4.
 
 ## Wave 5 — Quantities, parametrics and the first derived timeline (after the Python port)
 

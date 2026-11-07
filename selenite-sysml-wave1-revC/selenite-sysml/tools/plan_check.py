@@ -236,7 +236,7 @@ def _(ctx):
 @evaluator("DG-8.5")
 def _(ctx):
     return (ev_threshold(ctx, "reo_target", "reoTonnesPerYearP8", "REO >= 125 t/yr")
-            + ev_threshold(ctx, "circuits_needed", "circuitsP8Complete", "circuits >= 308 (batch-design count)"))
+            + ev_threshold(ctx, "circuits_needed", "circuitsP8Complete", "circuits >= 105 (committed 1.2 t/yr design, SEL-ECN-026)"))
 
 
 @evaluator("DG-8.7")
@@ -391,8 +391,8 @@ def _(ctx):
     per_day = np.asarray(ctx.w["canisters_yr"], dtype=float) / 365.0
     t = _thr(ctx, "canistersPerDaySteadyState")
     y = ctx.first_year(per_day >= t)
-    return [Result("MD-2 cadence >= 783/day", "never" if y is None else y, None,
-                   f"ECON canisters_yr / 365 (3.5 t per canister; Y200 {per_day[-1]:,.0f}/day; ECN-020 corrected the 2.5 Mt/yr cadence to ~1,903/day)")]
+    return [Result(f"MD-2 cadence >= {t:,.0f}/day", "never" if y is None else y, None,
+                   f"ECON canisters_yr / 365 (3.5 t per canister; Y200 {per_day[-1]:,.0f}/day; threshold the ECN-020 2.5 Mt/yr cadence per SEL-ECN-026, Rev D's 783/day superseded)")]
 
 
 @evaluator("DG-12.6")

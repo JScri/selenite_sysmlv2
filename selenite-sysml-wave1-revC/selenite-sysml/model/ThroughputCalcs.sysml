@@ -296,7 +296,8 @@ package SeleniteAnalysis {
 
     calc def EclipseCriticalFraction {
         doc /* D1 derived twin of ProgrammeParameters.spaAsteroidLoadCriticalFraction
-             * (ECN-022 s.2.4, declared 1.0). The share of an asteroid-processing
+             * (ECN-022 s.2.4 declared 1.0; SEL-ECN-023, 6 Nov 2026, rebound it to
+             * the derived 0.18). The share of an asteroid-processing
              * load that must be carried through an eclipse under an operating
              * strategy: the non-pausable part in full, the pausable part at its
              * hold-load fraction, and under the hybrid strategy the stored part
@@ -353,7 +354,7 @@ package SeleniteAnalysis {
     }
 
     calc def FspUnitsForLoad {
-        doc /* VERIFY sizing: FSP units are the eclipse-critical load divided by
+        doc /* VERIFY v5.0 sizing: FSP units are the eclipse-critical load divided by
              * the unit rating, rounded up (plan_vectors.fsp_msr_trade). Written
              * as a real ratio here; the Python layer applies the ceiling. */
         in criticalLoadKw : Real;

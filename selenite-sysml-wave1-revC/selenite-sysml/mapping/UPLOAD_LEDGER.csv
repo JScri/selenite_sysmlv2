@@ -349,7 +349,7 @@ selenite_programme_scope.md,selenite_programme_scope,pre-ECN-019,DUPLICATE,B09,2
 selenite_programme_scope.md,selenite_programme_scope,pre-ECN-019,DUPLICATE,B23,2026-04-01,late march / early april,same file uploaded again
 selenite_programme_scope.md,selenite_programme_scope,pre-ECN-019,DUPLICATE,B26,2026-03-23,construction phasing subdir (dup),same file uploaded again
 Selenite_Programme_Technical_Audit__23_Claims_Flagged_Across_10_Domains.pdf,selenite_programme_technical_audit__23_claims_flagged_across_10_domains,-,REFERENCE,B16,2026-03-03,3rd march (audit = 4th),"team/course research or audit — informs, not authoritative"
-scaling_v1_3.m,selenite_scale,v1.3,AUTHORITATIVE,B04,2026-03-11,11th march batch 3,family winner
+scaling_v1_3.m,selenite_scale,v1.3,HISTORICAL,B04,2026-03-11,11th march batch 3,"family winner, reclassified HISTORICAL 8 Sep 2026: pre-ECN-019 architecture (VC-14); ported as selenite/historical/scale_v1_3.py"
 scaling_v1_2.m,selenite_scale,v1.2,HISTORICAL,B04,2026-03-11,11th march batch 3,kept for goldens/value tracing
 scaling.m,selenite_scale,-,HISTORICAL,B04,2026-03-11,11th march batch 3,kept for goldens/value tracing
 W4_T3_3_JS_Selenite_site_selection_v1.docx,selenite_site_selection,v1,AUTHORITATIVE,B20,2026-03-16,GIS site selection,family winner

@@ -45,7 +45,9 @@ package SeleniteGates {
          * - consequenceIfNotMet is the Strategy v3.1 s.16 wording where that
          *   table has a row for the gate.
          * Sources: SEL-DECISION-001 Rev D s.2, s.3, s.4, s.9, s.10.2;
-         * SEL-T1.1-STRATEGY v3.1 s.16 (and s.7.4 for DG-POST); ECN-020;
+         * SEL-T1.1-STRATEGY v3.1 s.16 (the DG-POST.1/2 criteria are its s.16
+         * trigger + consequence wording; Decision Framework s.10.2 and
+         * Strategy s.7.4 tables carry only the ids and years); ECN-020;
          * ARCHITECTURE_BASELINE.md s.1; SEL_ROBOT_FLEET_v9.md; SEL_FINAL_REPORT_v4
          * Figs. 2, 33, 34. Rev C -> Rev D changed no gate in s.2 (F1). */
 
@@ -165,7 +167,7 @@ package SeleniteGates {
         attribute redefines declaredPhase = Phase::P1;
         attribute redefines declaredYear = 2.0;
         attribute redefines prerequisites = ("DG-0.2", "RelayConstellation.existsFrom");
-        attribute redefines gatedElements = ("CrewedHub.existsFrom", "StarshipCargoLink.operationalFrom", "ProbeScout.introducedIn", "Survey.introducedIn");
+        attribute redefines gatedElements = ("CrewedHub.existsFrom", "StarshipCargoLink.introducedIn", "StarshipCargoLink.operationalFrom", "ProbeScout.introducedIn", "Survey.introducedIn");
     }
 
     part def DgTwoOne :> TestOutcomeGate {
@@ -197,7 +199,7 @@ package SeleniteGates {
         attribute redefines declaredPhase = Phase::P2;
         attribute redefines declaredYear = 5.0;
         attribute redefines prerequisites = ("DG-2.1", "IsruPlant.introducedIn");
-        attribute redefines gatedElements = ("Skip.introducedIn", "SkipHopLink.operationalFrom");
+        attribute redefines gatedElements = ("Skip.introducedIn", "SkipHopLink.introducedIn", "SkipHopLink.operationalFrom");
         attribute redefines consequenceIfNotMet = "SKIP delayed; P3/P4 slip (Strategy v3.1 s.16 'ISRU verification (Y5.5)')";
     }
 
@@ -320,7 +322,7 @@ package SeleniteGates {
         attribute redefines declaredPhase = Phase::P5;
         attribute redefines declaredYear = 10.0;
         attribute redefines prerequisites = ("DG-5.2");
-        attribute redefines gatedElements = ("StarshipReturnLink.operationalFrom");
+        attribute redefines gatedElements = ("StarshipReturnLink.introducedIn", "StarshipReturnLink.operationalFrom");
     }
 
     // =====================================================================
@@ -387,8 +389,9 @@ package SeleniteGates {
         doc /* PKT commitment gate. Decision Framework Rev D: "DG-7.1 (Y20): PKT
              * base commitment - requires DART XRF from >=3 PKT sites confirming
              * >=200 ppm REE + 5-circuit processing facility producing >=0.4 t/yr
-             * REO". Fleet v9 s.20.3 words it "PKT commitment (DG-7.1)" with
-             * "> 500 ppm" - the Decision Framework s.10.2 resolves that as
+             * REO". Fleet v9 s.20.3 words it "PKT commitment (DG-7.1)"; the
+             * scaling page W5_T4_4_JS_scaling_P7_P14.html and final report
+             * Fig. 2 say "> 500 ppm" - the Decision Framework s.10.2 resolves that as
              * ">=200 ppm, target >500 ppm". The DART half is a test outcome
              * (DG-6.3) assumed true; the throughput half is ECON reo_target
              * (0.4 t/yr is the Y25 knot, i.e. the P7/P8 boundary, not Y20). */
@@ -479,7 +482,7 @@ package SeleniteGates {
         attribute redefines declaredPhase = Phase::P8;
         attribute redefines declaredYear = 25.0;
         attribute redefines prerequisites = ("DG-7.1", "MassDriverDemonstrator.introducedIn");
-        attribute redefines gatedElements = ("MassDriverMd1.operationalFrom", "MassDriverNetwork.introducedIn", "InterSiteCargoCanister");
+        attribute redefines gatedElements = ("MassDriverMd1.introducedIn", "MassDriverMd1.operationalFrom", "MassDriverNetwork.introducedIn", "InterSiteCargoCanister");
         attribute econYbcoCargoYears : Integer [0..*] = (22, 23);
     }
 
@@ -494,7 +497,7 @@ package SeleniteGates {
         attribute redefines declaredPhase = Phase::P8;
         attribute redefines declaredYear = 25.0;
         attribute redefines prerequisites = ("DG-7.1");
-        attribute redefines gatedElements = ("AutonomousFactory.existsFrom", "PktRelaySatellite.existsFrom", "PktLandingZone.introducedIn", "HaulerRevB.introducedIn", "HaulerRoadNetwork.operationalFrom", "PktFspField.introducedIn", "PktPowerSystem.introducedIn", "HubChargingStation.introducedIn", "PktProcessingSpine.introducedIn", "Sinter.pktFrom", "ArmC.pktFrom", "SentinelRover.pktFrom", "Dart.pktBasedFrom", "StarshipCargoLink.pktDeliveriesFrom", "SentinelEdgeTier.pktSupervisedFromSpaFrom");
+        attribute redefines gatedElements = ("AutonomousFactory.existsFrom", "PktRelaySatellite.existsFrom", "PktLandingZone.introducedIn", "HaulerRevB.introducedIn", "HaulerRoadNetwork.introducedIn", "HaulerRoadNetwork.operationalFrom", "PktFspField.introducedIn", "PktPowerSystem.introducedIn", "HubChargingStation.introducedIn", "PktProcessingSpine.introducedIn", "Sinter.pktFrom", "ArmC.pktFrom", "SentinelRover.pktFrom", "Dart.pktBasedFrom", "StarshipCargoLink.pktDeliveriesFrom", "SentinelEdgeTier.pktSupervisedFromSpaFrom");
     }
 
     part def DgEightTwo :> DerivableGate {
@@ -543,7 +546,8 @@ package SeleniteGates {
              * circuit count is design-dependent: 308 x 0.4 t/yr (batch) = 123
              * t/yr, while the committed 1.2 t/yr circuit needs 105 (ECON
              * circuits_needed at Y28). The Decision Framework's P8 count is
-             * therefore the batch-design figure (W3-N3). Both calcs attached. */
+             * therefore the batch-design figure (W3-N3); SEL-ECN-026 (6 Nov 2026)
+             * set GateThresholds.circuitsP8Complete to 105. Both calcs attached. */
         attribute redefines gateId = "DG-8.5";
         attribute redefines criterion = "308 processing circuits complete; 125 t/yr REO";
         attribute redefines criterionAsModelled = "ReoOutputGate: ECON reo_target >= GateThresholds.reoTonnesPerYearP8; CircuitCountGate: circuits_needed >= GateThresholds.circuitsP8Complete";
@@ -565,17 +569,18 @@ package SeleniteGates {
         attribute redefines declaredPhase = Phase::P8;
         attribute redefines declaredYear = 28.0;
         attribute redefines prerequisites = ("DG-8.1", "DG-8.2");
-        attribute redefines gatedElements = ("PktTemporaryCrewHab.introducedIn", "Foundry.introducedIn (pilot)", "DG-8.8", "DG-8.9");
+        attribute redefines gatedElements = ("PktTemporaryCrewHab.introducedIn", "AutonomousFactory.temporaryCrewOnlyIn", "Foundry.introducedIn (pilot)", "DG-8.8", "DG-8.9");
     }
 
     part def DgEightSeven :> DerivableGate {
         doc /* "DG-8.7 (Y30): Thorium stockpile assessment (~40 t Th(OH)4
-             * accumulated)". No thorium vector in the Python layer:
-             * unevaluated until Wave 5 (ProgrammeParameters.
-             * thoriumHydroxideStockpileByYear). */
+             * accumulated)". Evaluated since 19 Sep 2026 on
+             * plan_vectors.thorium_stockpile (cumulative ECON reo_target x
+             * ProgrammeParameters.thoriumToReoMassRatio, ~0.030 t/t, ECN-022
+             * s.2.2): 40 t at Y37 (Y36-39 over the ratio range). */
         attribute redefines gateId = "DG-8.7";
         attribute redefines criterion = "Thorium stockpile assessment (~40 t Th(OH)4 accumulated)";
-        attribute redefines criterionAsModelled = "ThoriumStockpileGate: cumulative Th(OH)4 >= GateThresholds.thoriumStockpileTonnes - no vector (unevaluated)";
+        attribute redefines criterionAsModelled = "ThoriumStockpileGate: plan_vectors.thorium_stockpile (cumulative ECON reo_target x thoriumToReoMassRatio) >= GateThresholds.thoriumStockpileTonnes";
         attribute redefines declaredPhase = Phase::P8;
         attribute redefines declaredYear = 30.0;
         attribute redefines prerequisites = ("DG-7.2");
@@ -650,7 +655,7 @@ package SeleniteGates {
         attribute redefines declaredPhase = Phase::P9;
         attribute redefines declaredYear = 35.0;
         attribute redefines prerequisites = ("DG-8.0", "DG-8.X", "DG-8.8");
-        attribute redefines gatedElements = ("MassDriverMd2.operationalFrom", "ReoExportCanister", "Skip.retiredIn", "SkipHopLink.retiredIn");
+        attribute redefines gatedElements = ("MassDriverMd2.introducedIn", "MassDriverMd2.operationalFrom", "ReoExportCanister", "Skip.retiredIn", "SkipHopLink.retiredIn");
         attribute redefines consequenceIfNotMet = "Full parachute (+$26B/yr vs minimal chute) (Strategy v3.1 s.16)";
         attribute canisterRecoveryOptionSelected : String [0..1];
         attribute canisterRecoveryOptionEconAssumed : String = "1b minimal drag chute - ECON v1.3 can.earth_kg = 28 kg";
@@ -659,7 +664,7 @@ package SeleniteGates {
 
     part def DgNineTwo :> DerivableGate {
         doc /* "DG-9.2 (Y38): Hauler fleet scaling at PKT - 1,000+ haulers
-             * operational". ECON haulers_needed >= 1,000 (Y45). */
+             * operational". ECON haulers_needed >= 1,000 (Y44). */
         attribute redefines gateId = "DG-9.2";
         attribute redefines criterion = "Hauler fleet scaling at PKT - 1,000+ haulers operational";
         attribute redefines criterionAsModelled = "HaulerFleetGate: ECON haulers_needed >= GateThresholds.haulersP9";
@@ -675,7 +680,7 @@ package SeleniteGates {
              * Thorium MSR first power - if BR >1.0 confirmed, commit to fleet
              * expansion"; fleet v9 s.18.2; final report Fig. 33 P9 "First MSR(s)
              * commissioned (DG-9.3)". Jason 14 Sep 2026: PKT first MSR is P9.
-             * ECON msr_count first non-zero at Y38 (agrees with P9). */
+             * ECON msr_count first non-zero at Y36 (agrees with P9). */
         attribute redefines gateId = "DG-9.3";
         attribute redefines criterion = "Thorium MSR first power - if BR >1.0 confirmed, commit to fleet expansion";
         attribute redefines criterionAsModelled = "BreedingRatioGate: confirmed BR on ThCl4 fuel > GateThresholds.breedingRatioMinimum";
@@ -726,7 +731,7 @@ package SeleniteGates {
         attribute redefines declaredPhaseAlternate = Phase::P10;
         attribute redefines declaredYear = 43.0;
         attribute redefines prerequisites = ("DG-9.1");
-        attribute redefines gatedElements = ("MassDriverMd3.operationalFrom", "EmCatcher.operationalFrom (receiver)", "ThCl4Canister", "DG-10.5");
+        attribute redefines gatedElements = ("MassDriverMd3.introducedIn", "MassDriverMd3.operationalFrom", "EmCatcher.introducedIn", "EmCatcher.operationalFrom (receiver)", "ThCl4Canister", "DG-10.5");
         attribute econYbcoCargoYears : Integer [0..*] = (43);
     }
 
@@ -742,7 +747,7 @@ package SeleniteGates {
         attribute redefines declaredPhase = Phase::P9;
         attribute redefines declaredYear = 40.0;
         attribute redefines prerequisites = ("DG-9.4");
-        attribute redefines gatedElements = ("SteelApronConveyor.operationalFrom", "ConveyorNetwork.introducedIn");
+        attribute redefines gatedElements = ("SteelApronConveyor.introducedIn", "SteelApronConveyor.operationalFrom", "ConveyorNetwork.introducedIn");
         calc lengthCheck : ConveyorLengthGate;
     }
 
@@ -752,7 +757,7 @@ package SeleniteGates {
 
     part def DgTenOne :> DerivableGate {
         doc /* "DG-10.1 (Y45): Hauler fleet at scale - 14,881 mining-capable
-             * haulers". ECON haulers_needed >= 14,881 (~Y63); VC-08 records
+             * haulers". ECON haulers_needed >= 14,881 (Y64); VC-08 records
              * that the 14,881 series is SCALE v1.3. */
         attribute redefines gateId = "DG-10.1";
         attribute redefines criterion = "Hauler fleet at scale - 14,881 mining-capable haulers (Na-S battery, SRM motors, bucket/blade, ~57% in-situ)";
@@ -824,16 +829,19 @@ package SeleniteGates {
              * SpaMsrIntroductionGate and not transcribed; the ECON v2.1
              * golden's cargo_spa_msr / spa_msr_count vectors record what the
              * economics assumed (first unit Y105, see CHANGELOG_WAVE3.md).
-             * declaredPhase keeps the earliest label as the candidate. The SPA
-             * demand vector beyond P7 is not in the Python layer yet:
-             * unevaluated at Wave 3. */
+             * declaredPhase keeps the earliest label as the candidate.
+             * Evaluated since 19 Sep 2026 as the FSP-versus-MSR cargo-mass
+             * trade (plan_vectors.fsp_msr_trade, ECN-022 s.2.3): first unit
+             * Y105 (P12). ECN-022 s.2.3 supersedes DG-10.5 and DG-11.3 as
+             * commissioning gates; DG-13.4 stands as unit #1, and SEL-ECN-025
+             * (6 Nov 2026) moved the SpaThoriumMSR.introducedIn binding there. */
         attribute redefines gateId = "DG-10.5";
         attribute redefines criterion = "SPA MSR commissioning - ThCl4 mass-driven from PKT. Enables scaled PROBE/PGM ops.";
-        attribute redefines criterionAsModelled = "SpaMsrIntroductionGate: SPA demand > solar + FSP + battery capability, ThCl4 supply available (MD-3), MSR deployable at the crewed base - no SPA demand vector beyond P7 (unevaluated); ECON spa_msr_count first unit Y105";
+        attribute redefines criterionAsModelled = "SpaMsrIntroductionGate via plan_vectors.fsp_msr_trade: non-nuclear Earth cargo (FSP for the eclipse-critical load + solar for the day load, incremental to the P7 fleet) > SPA MSR Earth cargo, with ThCl4 available (MD-3, DG-9.6) - first unit Y105; ECON spa_msr_count first unit Y105";
         attribute redefines declaredPhase = Phase::P10;
         attribute redefines declaredYear = 50.0;
         attribute redefines prerequisites = ("MassDriverMd3.operationalFrom", "DG-9.3", "DG-9.6");
-        attribute redefines gatedElements = ("SpaThoriumMSR.introducedIn");
+        attribute redefines gatedElements = ("SpaThoriumMSR.introducedIn (superseded owner; bound to DG-13.4 since SEL-ECN-025)");
         attribute econAssumedIntroductionYear : Integer = 105;
         calc introductionCheck : SpaMsrIntroductionGate;
     }
@@ -844,8 +852,8 @@ package SeleniteGates {
 
     part def DgElevenOne :> DerivableGate {
         doc /* "DG-11.1 (Y60): 100,000 t/yr REO -> market impact assessment".
-             * ECON reo_target reaches 100,000 at Y80 (P12) and supply_frac
-             * reaches 0.10 at Y100: the economics' ramp is one knot later than
+             * ECON reo_target reaches 100,000 at Y80 (P11/P12) and supply_frac
+             * reaches 0.10 at Y101: the economics' ramp is one knot later than
              * the Decision Framework's REO gates (W3-N4). */
         attribute redefines gateId = "DG-11.1";
         attribute redefines criterion = "100,000 t/yr REO -> market impact assessment";
@@ -874,10 +882,11 @@ package SeleniteGates {
     part def DgElevenThree :> DerivableGate {
         doc /* "DG-11.3 (Y70): SPA MSR commissioning - ThCl4 mass-driven from
              * PKT. Enables scaled PGM processing." The second of the five SPA
-             * MSR gates (W2-N20, F5); same calc as DG-10.5. */
+             * MSR gates (W2-N20, F5); same calc as DG-10.5. Superseded as a
+             * commissioning gate by ECN-022 s.2.3 (DG-13.4 stands as unit #1). */
         attribute redefines gateId = "DG-11.3";
         attribute redefines criterion = "SPA MSR commissioning - ThCl4 mass-driven from PKT. Enables scaled PGM processing.";
-        attribute redefines criterionAsModelled = "SpaMsrIntroductionGate (as DG-10.5) - unevaluated; ECON spa_msr_count first unit Y105";
+        attribute redefines criterionAsModelled = "SpaMsrIntroductionGate (as DG-10.5, plan_vectors.fsp_msr_trade) - first unit Y105; ECON spa_msr_count first unit Y105";
         attribute redefines declaredPhase = Phase::P11;
         attribute redefines declaredYear = 70.0;
         attribute redefines prerequisites = ("DG-9.6");
@@ -922,12 +931,12 @@ package SeleniteGates {
              * ECON peak of 357 never forces it; (b) MD-4 is triggered when PGM
              * concentrate exceeds ~100 t/yr (ECON total_pgm peaks near 52
              * t/yr, so the trigger as written is never met on the current
-             * economics - W3-N2). ECN (Jason, 19 Sep 2026): MD-4 is bound to
+             * economics - W3-N2). SEL-ECN-022 s.2.1 (Jason, 19 Sep 2026): MD-4 is bound to
              * DG-12.4 (M-type arrival) in the configuration instead of this
              * trigger; the calc stays so the register keeps reporting the
              * trigger against the PGM vector. */
         attribute redefines gateId = "DG-11.6";
-        attribute redefines criterion = "PROBE Mk III SEP commissioning + SPA->Earth mass driver for PGM exports. Mk III: ion propulsion, ~1,200 kg dry, never lands on the Moon; ejects 10 t Fe-Ni/PGM payload canisters from LLO to the EM catcher at SPA (~1,680 m/s); electromagnetic anchoring on M-type Fe-Ni; build-out ~86 Mk III/yr from Y60-Y80 -> ~1,714 units, reducing to ~300 after all asteroid captures complete (Y115+); Mk I/II phasedown 260->50 (Y60-Y80), then ->30 (Y85+). SPA->Earth mass driver triggered when PGM concentrate volume exceeds ~100 t/yr.";
+        attribute redefines criterion = "PROBE Mk III SEP commissioning + SPA->Earth mass driver for PGM exports. Mk III architecture: Ion propulsion (xenon/argon). ~1,200 kg dry. Never lands on the Moon - stays in orbit permanently. Ejects 10 t Fe-Ni/PGM payload canisters from LLO on ballistic deorbit trajectory. EM catcher at SPA receives at ~1,680 m/s (same YBCO coil technology as mass drivers, run in reverse). Electromagnetic anchoring on M-type asteroid Fe-Ni surface. No harpoons, no drills. Heritage: Northrop Grumman MEV-1 (2020). Canister: Fe-Ni shell (ferromagnetic, compatible with EM braking) + small cold-gas kick motor (~5-10 kg) for trajectory shaping. Build-out: ~86 Mk III/yr from Y60-Y80 -> ~1,714 units for bulk operations. Reduces to ~300 after all asteroid captures complete (Y115+, prospecting only). 0.5 missions/yr per unit. Mk I/II phasedown: 260->50 (Y60-Y80), then ->30 (Y85+). Decommissioned units salvaged at SPA - Fe-Ni frames, motors, electronics recycled (~184 t recovered). SPA->Earth mass driver triggered when PGM concentrate volume exceeds ~100 t/yr. Key driver: iridium demand for PEM electrolysers projected at 34+ t/yr by 2040 vs current global production of 7.5-9 t/yr. ~60 t YBCO for 4th mass driver.";
         attribute redefines criterionAsModelled = "MkIiiTransitionGate: ECON molei_needed > ProgrammeParameters.psrMoleICapacityUnits; PgmExportDriverGate: ECON total_pgm > GateThresholds.pgmExportTriggerTonnesPerYear";
         attribute redefines declaredPhase = Phase::P11;
         attribute redefines declaredYear = 65.0;
@@ -969,8 +978,8 @@ package SeleniteGates {
 
     part def DgTwelveOne :> DerivableGate {
         doc /* "DG-12.1 (Y80): 500,000 t/yr REO -> 40% global displacement".
-             * ECON reo_target reaches 500,000 at Y120 and supply_frac 0.40 at
-             * Y140; the same document's P12 end-state puts "~500,000 t/yr" at
+             * ECON reo_target reaches 500,000 at Y121 and supply_frac 0.40 at
+             * Y141; the same document's P12 end-state puts "~500,000 t/yr" at
              * ~Y120 (W3-N4: internal inconsistency in the Decision Framework). */
         attribute redefines gateId = "DG-12.1";
         attribute redefines criterion = "500,000 t/yr REO -> 40% global displacement (revised from 1,000,000 at Rev B - build-out extended to 2.5 Mt/yr at Y180)";
@@ -985,7 +994,7 @@ package SeleniteGates {
 
     part def DgTwelveTwo :> DerivableGate {
         doc /* "DG-12.2 (Y85): Thorium MSR fleet at ~6,890 x 100 MWe (689 GW) at
-             * PKT full-scale". ECON msr_count >= 6,890 at ~Y172 (P14); VC-09
+             * PKT full-scale". ECON msr_count >= 6,890 at Y173 (P14); VC-09
              * (8,334 at Y200). */
         attribute redefines gateId = "DG-12.2";
         attribute redefines criterion = "Thorium MSR fleet at ~6,890 x 100 MWe (689 GW) at PKT full-scale";
@@ -1001,8 +1010,9 @@ package SeleniteGates {
         doc /* "DG-12.3 (Y85): PKT->Earth mass driver: scaling toward 783/day
              * at P14+ steady state". ECN-020 s.4 corrects 783/day (the stale
              * 1.0 Mt/yr figure) to ~1,903/day at 2.5 Mt/yr; the Rev D gate
-             * text was not updated (W3-N6). Evaluated as written on ECON
-             * canisters_yr / 365 (ECON uses 3.5 t per canister, W3-N7). */
+             * text was not updated (W3-N6). SEL-ECN-026 (6 Nov 2026) set
+             * GateThresholds.canistersPerDaySteadyState to 1,903; evaluated on ECON
+             * canisters_yr / 365 (ECON uses 3.5 t per canister, W3-N7 / VC-22). */
         attribute redefines gateId = "DG-12.3";
         attribute redefines criterion = "PKT->Earth mass driver: scaling toward 783/day at P14+ steady state";
         attribute redefines criterionAsModelled = "CanisterCadenceGate: ECON canisters_yr / 365 >= GateThresholds.canistersPerDaySteadyState";
@@ -1018,7 +1028,7 @@ package SeleniteGates {
              * mTypeCaptureYear + asteroidOnlineLagYears in the configuration.
              * ECON captured_asteroid_pgm is non-zero from Y85 (agrees). The DRO
              * node, the first Laser Ablation Truss, the M-type line and - by
-             * ECN (Jason, 19 Sep 2026, W3-N2) - MD-4 SPA->Earth bind here:
+             * SEL-ECN-022 s.2.1 (Jason, 19 Sep 2026, W3-N2) - MD-4 SPA->Earth bind here:
              * the PGM export stream becomes bulk only once the captured
              * asteroid is being ablated. */
         attribute redefines gateId = "DG-12.4";
@@ -1026,7 +1036,7 @@ package SeleniteGates {
         attribute redefines declaredPhase = Phase::P12;
         attribute redefines declaredYear = 85.0;
         attribute redefines prerequisites = ("DG-11.8");
-        attribute redefines gatedElements = ("DroStation.existsFrom", "LaserAblationTruss.introducedIn", "MTypeProcessingLine.introducedIn", "MassDriverMd4.operationalFrom (ECN 19 Sep 2026)", "PgmExportCanister", "StarshipReturnLink.retiredIn (via MD-4)", "DG-12.5");
+        attribute redefines gatedElements = ("DroStation.existsFrom", "LaserAblationTruss.introducedIn", "MTypeProcessingLine.introducedIn", "MassDriverMd4.introducedIn (ECN 19 Sep 2026)", "MassDriverMd4.operationalFrom (ECN 19 Sep 2026)", "PgmExportCanister", "StarshipReturnLink.retiredIn (via MD-4)", "DG-12.5");
     }
 
     part def DgTwelveFive :> ExogenousGate {
@@ -1038,7 +1048,7 @@ package SeleniteGates {
         attribute redefines declaredPhase = Phase::P12;
         attribute redefines declaredYear = 85.0;
         attribute redefines prerequisites = ("DG-12.4", "EmCatcher.operationalFrom");
-        attribute redefines gatedElements = ("MassDriverMd5.operationalFrom", "ConcentrateCanister");
+        attribute redefines gatedElements = ("MassDriverMd5.introducedIn", "MassDriverMd5.operationalFrom", "ConcentrateCanister");
     }
 
     part def DgTwelveSix :> DerivableGate {
@@ -1072,8 +1082,8 @@ package SeleniteGates {
 
     part def DgThirteenOne :> DerivableGate {
         doc /* "DG-13.1 (Y120): 1,250,000 t/yr REO - 50% of projected global
-             * demand". ECON reo_target reaches 1.25 Mt at ~Y151 (P14) and
-             * supply_frac 0.50 at ~Y151. */
+             * demand". ECON reo_target reaches 1.25 Mt at Y152 (P14) and
+             * supply_frac 0.50 at Y152. */
         attribute redefines gateId = "DG-13.1";
         attribute redefines criterion = "1,250,000 t/yr REO - 50% of projected global demand. P13 milestone, not final target. Programme proceeds to 2.5 Mt/yr.";
         attribute redefines criterionAsModelled = "ReoOutputGate: ECON reo_target >= GateThresholds.reoTonnesPerYearP13; MarketShareGate: supply_frac >= GateThresholds.displacementFractionP13";
@@ -1145,7 +1155,7 @@ package SeleniteGates {
              * Y105). Same calc as DG-10.5. Y105 is P12 by the year table. */
         attribute redefines gateId = "DG-13.4";
         attribute redefines criterion = "SPA MSR #1 commissioned - 50 MWe, ThCl4 fuel from PKT->SPA mass driver. Powers C-type processing.";
-        attribute redefines criterionAsModelled = "SpaMsrIntroductionGate (unit #1) - unevaluated; ECON spa_msr_count = 1 from Y105";
+        attribute redefines criterionAsModelled = "SpaMsrIntroductionGate (unit #1, plan_vectors.fsp_msr_trade) - Y105; ECON spa_msr_count = 1 from Y105";
         attribute redefines declaredPhase = Phase::P13;
         attribute redefines declaredPhaseAlternate = Phase::P12;
         attribute redefines declaredYear = 105.0;
@@ -1223,7 +1233,7 @@ package SeleniteGates {
              * commissioned at SPA" (Czochralski Si, Cu electrolysis). The
              * Earth-independence assessment was DG-14.3 in ECN-019 and is
              * DG-14.6 in Rev D ("DG-14.6 (Y140): Earth independence assessment
-             * (DG-14.3 from ECN-019)"); fleet v9 App. C and Strategy v3.1
+             * (DG-14.3 from ECN-019)"); fleet v9 s.20.3 and Strategy v3.1
              * s.16 still use the ECN-019 number while Strategy s.15.1 uses
              * DG-14.6 - the Strategy is internally inconsistent. Rev D
              * numbering is carried; the alias is on DG-14.6.formerGateId.
@@ -1235,7 +1245,7 @@ package SeleniteGates {
         attribute redefines declaredPhase = Phase::P14;
         attribute redefines declaredPhaseAlternate = Phase::P13;
         attribute redefines declaredYear = 125.0;
-        attribute redefines prerequisites = ("DG-13.6", "DG-12.5");
+        attribute redefines prerequisites = ("DG-13.6", "DG-13.3", "DG-12.5");
         attribute redefines gatedElements = ("STypeProcessingLine.introducedIn");
     }
 
@@ -1245,7 +1255,7 @@ package SeleniteGates {
              * Y125. Y125 is P13 by the year table. */
         attribute redefines gateId = "DG-14.4";
         attribute redefines criterion = "SPA MSR #2 commissioned - 100 MWe for S-type Si refinery power.";
-        attribute redefines criterionAsModelled = "SpaMsrIntroductionGate (unit #2) - unevaluated; ECON spa_msr_count = 2 from Y125";
+        attribute redefines criterionAsModelled = "SpaMsrIntroductionGate (unit #2, plan_vectors.fsp_msr_trade) - the trade is first justified Y105; ECON spa_msr_count = 2 from Y125";
         attribute redefines declaredPhase = Phase::P14;
         attribute redefines declaredPhaseAlternate = Phase::P13;
         attribute redefines declaredYear = 125.0;
@@ -1278,9 +1288,9 @@ package SeleniteGates {
              * in the year (annual flow, not cumulative infrastructure mass);
              * on that proxy the target is not met in any year to Y200
              * (W3-N1). The alias DG-14.3 (ECN-019 numbering, still used by
-             * fleet v9 App. C and Strategy v3.1 s.16) is recorded. */
+             * fleet v9 s.20.3 and Strategy v3.1 s.16) is recorded. */
         attribute redefines gateId = "DG-14.6";
-        attribute redefines formerGateId = "DG-14.3 (ECN-019 numbering; fleet v9 App. C; Strategy v3.1 s.16)";
+        attribute redefines formerGateId = "DG-14.3 (ECN-019 numbering; fleet v9 s.20.3; Strategy v3.1 s.16)";
         attribute redefines criterion = "Earth independence assessment (DG-14.3 from ECN-019) - comprehensive audit of remaining Earth dependencies. Target: <0.5% of total infrastructure mass from Earth.";
         attribute redefines criterionAsModelled = "EarthIndependenceGate: ECON earth_cargo < GateThresholds.earthDependencyMaximumFraction x (earth_cargo + insitu_total) (annual-flow proxy)";
         attribute redefines declaredPhase = Phase::P14;
@@ -1297,7 +1307,7 @@ package SeleniteGates {
              * spa_msr_count = 3 from Y140. */
         attribute redefines gateId = "DG-14.7";
         attribute redefines criterion = "SPA MSR #3 commissioned - scaled operations, full asteroid processing hub.";
-        attribute redefines criterionAsModelled = "SpaMsrIntroductionGate (unit #3) - unevaluated; ECON spa_msr_count = 3 from Y140";
+        attribute redefines criterionAsModelled = "SpaMsrIntroductionGate (unit #3, plan_vectors.fsp_msr_trade) - the trade is first justified Y105; ECON spa_msr_count = 3 from Y140";
         attribute redefines declaredPhase = Phase::P14;
         attribute redefines declaredYear = 140.0;
         attribute redefines prerequisites = ("DG-14.4");
@@ -1344,7 +1354,8 @@ package SeleniteGates {
 
     part def DgPostOne :> DerivableGate {
         doc /* Tiered depth mining at PKT (Decision Framework Rev D s.10.2 and
-             * Strategy v3.1 s.7.4): "DG-POST.1 (~Y280+): Tier 1 surface
+             * Strategy v3.1 s.7.4 tiers; criterion wording Strategy v3.1
+             * s.16): "DG-POST.1 (~Y280+): Tier 1 surface
              * regolith approaching depletion at active sites -> commit hauler
              * ripper/breaker attachments + relay depots for Tier 2 (20-100 m)".
              * ARCHITECTURE_BASELINE.md s.4 relay depots "later phases". Y280 is
@@ -1360,7 +1371,7 @@ package SeleniteGates {
         attribute redefines declaredYear = 280.0;
         attribute redefines prerequisites = ("DG-14.8");
         attribute redefines gatedElements = ("RelayDepot.introducedIn", "HaulerRevB (ripper/breaker front end)");
-        attribute redefines consequenceIfNotMet = "Commit hauler ripper/breaker attachments + relay depots for Tier 2 (20-100 m) (Strategy v3.1 s.16 wording of the trigger)";
+        attribute redefines consequenceIfNotMet = "Commit hauler ripper/breaker attachments + relay depots for Tier 2 (20-100 m) (Strategy v3.1 s.16 'consequence' column)";
         calc depletionCheck : TierDepletionGate;
     }
 
@@ -1376,6 +1387,7 @@ package SeleniteGates {
         attribute redefines declaredYear = 380.0;
         attribute redefines prerequisites = ("DG-POST.1");
         attribute redefines gatedElements = ("RelayDepot (series depots)", "HaulerRevB (heavy breaker)");
+        attribute redefines consequenceIfNotMet = "Commit heavy breaker units + sintered ramp network for Tier 3 (100-200 m) (Strategy v3.1 s.16 'consequence' column)";
         calc depletionCheck : TierDepletionGate;
     }
 

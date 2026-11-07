@@ -1,6 +1,6 @@
 # Session Brief — Wave 4A: Scenarios, uncertainty and decision analysis
 
-> **Status: delivered 6 Nov 2026 (`CHANGELOG_WAVE4A.md`, PR open);**
+> **Status: delivered 6 Nov 2026 (`CHANGELOG_WAVE4A.md`, PR #9 merged; SEL-ECN-023 signed, PR #10);**
 > kick-off 20 Sep 2026. Wave 4 is split: **4A** is this
 > brief; **4B** (behaviour, interfaces, software) is the original Wave 4 scope
 > in `docs/MIGRATION_PLAN.md`, unchanged, for a separate session. Note for

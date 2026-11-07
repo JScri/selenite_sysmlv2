@@ -22,8 +22,8 @@ package SeleniteScenarios {
          * is an existing Low / High pair or a cited source - otherwise the
          * entry is a point at nominal with its range unbound and the register
          * says so; the wave produces recommendations and draft ECNs, never a
-         * rebinding of a committed parameter (ECN-022 stands until Jason signs
-         * ECN-023). Source: docs/SESSION_BRIEF_wave4_scenarios.md; rules 3, 5b,
+         * rebinding of a committed parameter (ECN-022 s.2.4 stood until Jason
+         * signed SEL-ECN-023 on 6 Nov 2026). Source: docs/SESSION_BRIEF_wave4_scenarios.md; rules 3, 5b,
          * 5c and 5d of CLAUDE_SYSML_CONTEXT.md. */
 
     private import AnalysisTooling::*;
@@ -64,18 +64,30 @@ package SeleniteScenarios {
     }
 
     attribute def UniformReal :> UncertainReal {
+        doc /* Uniform on [low, high] (Wave 4A brief s.3;
+             * selenite.scenarios.sample inverse-CDF marginal). No register
+             * entry uses it at delivery. */
         attribute redefines distribution = DistributionKind::uniform;
     }
 
     attribute def TriangularReal :> UncertainReal {
+        doc /* Triangular on low / nominal / high - the register's default
+             * for a sourced range (CHANGELOG_WAVE4A s.1 "ECON tornado as
+             * ranges"; selenite.scenarios.sample). */
         attribute redefines distribution = DistributionKind::triangular;
     }
 
     attribute def PertReal :> UncertainReal {
+        doc /* PERT (beta) on low / nominal / high (Wave 4A brief s.3;
+             * selenite.scenarios.sample). No register entry uses it at
+             * delivery. */
         attribute redefines distribution = DistributionKind::pert;
     }
 
     attribute def LogNormalReal :> UncertainReal {
+        doc /* Log-normal about nominal (Wave 4A brief s.3;
+             * selenite.scenarios.sample). No register entry uses it at
+             * delivery. */
         attribute redefines distribution = DistributionKind::logNormal;
     }
 
@@ -106,13 +118,13 @@ package SeleniteScenarios {
             attribute redefines nominal = parameters.thoriumGradePpm;
             attribute redefines low = parameters.thoriumGradePpmLow;
             attribute redefines high = parameters.thoriumGradePpmHigh;
-            attribute redefines source = "ECN-022 s.2.2; fleet v9 s.11; Lawrence et al. 2000, 2003";
+            attribute redefines source = "ECN-022 s.2.2; fleet v9 s.8; Lawrence et al. 2000, 2003";
         }
         attribute acidBakeThoriumCapture : TriangularReal {
             attribute redefines nominal = parameters.acidBakeThoriumCapture;
             attribute redefines low = parameters.acidBakeThoriumCaptureLow;
             attribute redefines high = parameters.acidBakeThoriumCaptureHigh;
-            attribute redefines source = "ECN-022 s.2.2; DG-7.2 (~90-95 % of Th into ThP2O7)";
+            attribute redefines source = "ECN-022 s.2.2; Strategy v3.1 s.8.2 (~90-95 % of Th into ThP2O7); DG-7.2 mechanism";
         }
 
         // ---- SPA eclipse operating strategy (D1) ----------------------------
@@ -184,7 +196,7 @@ package SeleniteScenarios {
         }
         attribute msrEarthFractionFloor : PointReal {
             attribute redefines nominal = parameters.msrEarthFractionFloor;
-            attribute redefines source = "ECON v1.3 msr.earth_frac floor 0.3 from Y80; DF s.15.2; range unbound";
+            attribute redefines source = "ECON v1.3 msr.earth_frac floor 0.3 from Y80; Strategy v3.1 s.15.2 / DF Rev D P14 Earth-fraction table; range unbound";
         }
 
         // ---- Programme-wide economics (ECON v1.4 tornado) -------------------
@@ -276,11 +288,15 @@ package SeleniteScenarios {
             attribute redefines nominal = parameters.mkIiiTestPassProbability;
             attribute redefines source = "DG-11.6 ion-SEP / EM-catcher validation; probability uninformative 0.5; range unbound";
         }
-        attribute haulerEarthFractionFloor : DiscreteReal {
+        attribute haulerEarthFractionFloor : PointReal {
+            doc /* SEL-ECN-024 (Jason, 6 Nov 2026, option 2a): flag F3 closed by
+                 * the Wave 2 F2 diff - the 92 % figure is the superseded
+                 * SEL-HAULER-001 Rev A column, not a current candidate - so the
+                 * entry is a point at the ECON floor (rule 5d: no range without a
+                 * source). The 0.08 stays recorded in ProgrammeParameters as a
+                 * historical candidate, not sampled. */
             attribute redefines nominal = parameters.haulerEarthFractionFloorEcon;
-            attribute redefines low = parameters.haulerEarthFractionFloorFleetV9;
-            attribute redefines high = parameters.haulerEarthFractionFloorEcon;
-            attribute redefines source = "F3: ECON 0.43 (~57 % in-situ) vs fleet v9 92 % in-situ (0.08); equal weights";
+            attribute redefines source = "F3 closed by SEL-ECN-024: ECON v1.3 floor 0.43 (~57 % in-situ, fleet v9 s.10.1); 92 % is the superseded Rev A column (CHANGELOG_WAVE2 s.0); range unbound";
         }
     }
 
@@ -325,36 +341,55 @@ package SeleniteScenarios {
     }
 
     part def SpaPowerOption :> DecisionOption {
+        doc /* D2 alternatives add the SPA MSR first-unit year and P(MSR
+             * before Y105) (SEL-ECN-022 s.2.3;
+             * selenite.scenarios.trades.evaluate_d2). */
         #moe attribute spaMsrFirstYear : Real;
         #moe attribute probabilityMsrBeforeY105 : Real;
     }
 
     part def CanisterRecoveryOption :> DecisionOption {
+        doc /* D3 alternatives (DG-9.1 options 1a / 1b / 2, Decision
+             * Framework Rev D s.9) add the annual Earth-import cost and the
+             * Earth content per canister
+             * (selenite.scenarios.trades.evaluate_d3). */
         #moe attribute annualEarthImportCostUsdB : Real;
         attribute earthContentKgPerCanister : Real;
     }
 
     part def CircuitDesignOption :> DecisionOption {
+        doc /* D4 alternatives (Decision Framework Rev D s.4 circuit designs)
+             * add the circuits needed and the PKT power
+             * (selenite.scenarios.trades.evaluate_d4). */
         #moe attribute circuitsNeeded : Real;
         #moe attribute pktPowerGw : Real;
     }
 
     part def MdFourTimingOption :> DecisionOption {
+        doc /* D5 measures: the MD-4 year and P(operational by Y85)
+             * (SEL-ECN-022 s.2.1; selenite.scenarios.trades.evaluate_d5). */
         #moe attribute mdFourYear : Real;
         #moe attribute probabilityOperationalByY85 : Real;
     }
 
     part def ThoriumSizingOption :> DecisionOption {
+        doc /* D6 measures: the DG-8.7 year and Th(OH)4 accumulated at Y43
+             * (SEL-ECN-022 s.2.2; selenite.scenarios.trades.evaluate_d6). */
         #moe attribute dgEightSevenYear : Real;
         #moe attribute thoriumHydroxideAtY43Tonnes : Real;
     }
 
     part def MkIiiTriggerOption :> DecisionOption {
+        doc /* D7 alternatives add P(capacity-forced) and the Mk III fleet
+             * Earth mass (SEL-ECN-022 s.2.6, W2-N18;
+             * selenite.scenarios.trades.evaluate_d7). */
         #moe attribute probabilityCapacityForced : Real;
         #moe attribute mkIiiFleetEarthMassTonnes : Real;
     }
 
     part def HaulerPolicyOption :> DecisionOption {
+        doc /* D8 alternatives add P(DG-13.7 met by Y120) and the hauler
+             * Earth mass (F3; selenite.scenarios.trades.evaluate_d8). */
         #moe attribute probabilityDgThirteenSevenMetByY120 : Real;
         #moe attribute haulerEarthMassTonnes : Real;
     }
@@ -390,14 +425,17 @@ package SeleniteScenarios {
              * only if the power-intensive work cannot be scheduled outside the
              * eclipse (Jason, 19 Sep 2026). ECN-022 s.2.4 bound the fraction at
              * 1.0; the fraction is an operating strategy, and its value falls
-             * out of this trade: the register shows the declared 1.0 beside the
-             * derived twin (EclipseCriticalFraction) of every alternative. A
+             * out of this trade: SEL-ECN-023 (signed 6 Nov 2026) selected the
+             * sunlit duty cycle and rebound it to the derived 0.18; the register
+             * shows the declared value beside the derived twin
+             * (EclipseCriticalFraction) of every alternative. A
              * here-and-now design choice; the FSP-versus-MSR count is the
              * recourse (plan_vectors.fsp_msr_trade per sample). PKT is out of
              * D1: its 14-day night is why it is MSR-powered (Strategy s.12.2). */
         variant part carryThroughEclipse : EclipseStrategyOption {
-            doc /* A: all asteroid loads eclipse-critical - ECN-022 s.2.4 as bound
-                 * (spaAsteroidLoadCriticalFraction = 1.0). FSP sized to the whole
+            doc /* A: all asteroid loads eclipse-critical - ECN-022 s.2.4 as it stood
+                 * (spaAsteroidLoadCriticalFraction = 1.0; superseded by SEL-ECN-023,
+                 * 6 Nov 2026). FSP sized to the whole
                  * load in the non-nuclear alternative; no oversize, no loss. */
             attribute redefines source = "ECN-022 s.2.4 (declared assumption)";
         }
@@ -661,6 +699,9 @@ package SeleniteScenarios {
     }
 
     analysis def SpaPowerTrade :> TradeStudy {
+        doc /* D2 trade study under the default criterion
+             * (ProgrammeParameters.decisionCriterion); evaluator
+             * selenite.scenarios.trades.evaluate_d2 (CHANGELOG_WAVE4A s.3). */
         subject options : SpaPowerOption[*];
         objective : MinimizeObjective {
             calc :>> fn {
@@ -675,6 +716,9 @@ package SeleniteScenarios {
     }
 
     analysis def CanisterRecoveryTrade :> TradeStudy {
+        doc /* D3 trade study under the default criterion; evaluator
+             * selenite.scenarios.trades.evaluate_d3 with the impact-survival
+             * test as the recourse (CHANGELOG_WAVE4A s.3). */
         subject options : CanisterRecoveryOption[*];
         objective : MinimizeObjective {
             calc :>> fn {
@@ -689,6 +733,8 @@ package SeleniteScenarios {
     }
 
     analysis def CircuitDesignTrade :> TradeStudy {
+        doc /* D4 trade study under the default criterion; evaluator
+             * selenite.scenarios.trades.evaluate_d4 (CHANGELOG_WAVE4A s.3). */
         subject options : CircuitDesignOption[*];
         objective : MinimizeObjective {
             calc :>> fn {
@@ -703,6 +749,8 @@ package SeleniteScenarios {
     }
 
     analysis def MdFourTimingTrade :> TradeStudy {
+        doc /* D5 trade study (a consequence, one variant); evaluator
+             * selenite.scenarios.trades.evaluate_d5 (CHANGELOG_WAVE4A s.3). */
         subject options : MdFourTimingOption[*];
         objective : MinimizeObjective {
             calc :>> fn {
@@ -717,6 +765,8 @@ package SeleniteScenarios {
     }
 
     analysis def ThoriumSizingTrade :> TradeStudy {
+        doc /* D6 trade study (a consequence, one variant); evaluator
+             * selenite.scenarios.trades.evaluate_d6 (CHANGELOG_WAVE4A s.3). */
         subject options : ThoriumSizingOption[*];
         objective : MinimizeObjective {
             calc :>> fn {
@@ -731,6 +781,8 @@ package SeleniteScenarios {
     }
 
     analysis def MkIiiTriggerTrade :> TradeStudy {
+        doc /* D7 trade study under the default criterion; evaluator
+             * selenite.scenarios.trades.evaluate_d7 (CHANGELOG_WAVE4A s.3). */
         subject options : MkIiiTriggerOption[*];
         objective : MinimizeObjective {
             calc :>> fn {
@@ -745,6 +797,8 @@ package SeleniteScenarios {
     }
 
     analysis def HaulerPolicyTrade :> TradeStudy {
+        doc /* D8 trade study under the default criterion; evaluator
+             * selenite.scenarios.trades.evaluate_d8 (CHANGELOG_WAVE4A s.3). */
         subject options : HaulerPolicyOption[*];
         objective : MinimizeObjective {
             calc :>> fn {

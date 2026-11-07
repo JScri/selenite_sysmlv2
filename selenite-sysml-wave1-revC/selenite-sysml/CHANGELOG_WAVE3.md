@@ -626,3 +626,35 @@ MSR by cargo-mass trade, first unit Y105; asteroid loads eclipse-critical,
 capacity 620) and the seven corrections Rev D needs, with the open Wave 5
 findings listed separately. Rev E is a rendering from the model at Wave 5,
 not a hand rewrite. Wave 3 closed.
+
+## Note — 6 November 2026 (verification: W3-R numbering)
+
+The W3-R row numbers cited in §3 and §6 above are those of the 15 September
+register (55 rows). The 19 September regeneration (DG-8.7 and the SPA MSR
+gates evaluated, the DG-13.4 row dropped as consistent, the two MD-4 rows
+added; 56 rows) moved every row from W3-R24 onward down by one: read W3-R43
+as W3-R42 (ISRU self-sufficiency), W3-R44/45 as W3-R43/44 (EM catcher),
+W3-R47 as W3-R46 (PROBE ISRU fuelling), W3-R48/49 as W3-R47/48 (Mk III
+prospecting role) and W3-R52 as W3-R51 (CAP). W3-R7 and W3-R18 are unchanged.
+The current numbering is `docs/PLAN_REGISTER.md` §3.
+
+## Note — 6 November 2026 (SEL-ECN-025: SPA MSR unit #1 binding)
+
+§3 row `SpaThoriumMSR.introducedIn | unbound (F5) | C | DG-10.5` now reads
+DG-13.4: SEL-ECN-025 (Jason, 6 Nov 2026, option 2a) moved the binding to the
+unit-#1 gate that ECN-022 §2.3 left standing; DG-10.5 and DG-11.3 remain in
+the catalogue as superseded commissioning gates evaluating the same trade.
+
+## Note — 7 November 2026 (SEL-ECN-026: W3-N3 and W3-N6 closed)
+
+SEL-ECN-026 (Jason, option 2a) aligned the two thresholds Wave 3 carried
+"as written": `GateThresholds.circuitsP8Complete` 308 → 105 (the committed
+1.2 t/yr circuit, W3-N3) and `canistersPerDaySteadyState` 783 → 1,903
+(ECN-020 §4, W3-N6). ECN-022 §3.1 / §3.2 are now applied in the model; the
+Rev D text itself is still a Rev E rendering item. In the register DG-8.5's
+circuit criterion now derives Y28 (consistent) and DG-12.3 derives Y179 (P14,
+"later than declared") in place of Y141. Dropping the DG-8.5 split row
+(formerly W3-R4) moves every W3-R row from there down by one again (55 rows):
+read the 19 September numbers cited above minus one from W3-R4 onward
+(e.g. the EM catcher W3-R43/44 → W3-R42/43, the CAP row W3-R51 → W3-R50, the
+MD-4 rows W3-R55/56 → W3-R54/55). `docs/PLAN_REGISTER.md` §3 is current.

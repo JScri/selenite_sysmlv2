@@ -1,8 +1,12 @@
 # Selenite — Document Families and Precedence (consolidated 8 Sep 2026)
 
 Generated from `build_ledger.py` over the 408 files uploaded across 26 dated
-batches. Full per-file detail is in `UPLOAD_LEDGER.csv`; per-family winners in
-`DOCUMENT_FAMILIES.csv`. The batch→date mapping came from Jason's upload
+batches, then hand-corrected for F2 on 14 Sep 2026 (`sel_robot_fleet` winner
+`v9.md`, `v9-1.docx` HISTORICAL); re-running the script overwrites that
+correction, so both CSVs are maintained by hand from that date. Full per-file
+detail is in `UPLOAD_LEDGER.csv`; per-family winners in `DOCUMENT_FAMILIES.csv`.
+Repo-authored records (ECN-022, -023, -024, the registers and the session
+briefs) are indexed in `document_map.csv`, not in the upload ledger. The batch→date mapping came from Jason's upload
 labels and exists nowhere else, which is why this was written down first.
 
 ## Precedence rule (agreed)
@@ -77,7 +81,7 @@ architecture (see `VALUE_CONFLICTS.md` VC-14).
 | Conveyor | `SEL-CONVEYOR-001_RevA.docx` |
 
 **Tier 4 — facilities and infrastructure**
-HAB-001 Rev D · HAB-WALL-XSECTION-001 · FP-HAB-001 Rev B · ECLSS-001 Rev B ·
+HAB-001 Rev D (updated) · HAB-WALL-XSECTION-001 · FP-HAB-001 Rev B · ECLSS-001 Rev B ·
 ECLSS-002 Rev B · ECLSS-SCALING-001 Rev B · ISRU-001 Rev D (updated) · IZ-001
 Rev B · ELZ-001 Rev A · POWER-001 Rev B · PIPE-001 Rev A · CON-001 Rev B
 (updated) · PROC-001 Rev B · PROC-PKT-001 Rev B · REAGENT-001 Rev A · FAB-001
@@ -90,7 +94,7 @@ Rev A · Base Floor Plan v2.1 · LH₂ transport v4 · EVA contingency (correcte
 -020, -022 (Wave 3 gate decisions, `docs/SEL-ECN-022_DecisionFramework_Wave3.md`),
 **-023** (Wave 4A, `docs/SEL-ECN-023_draft_EclipseOperatingStrategy.md`, signed
 6 Nov 2026: the sunlit duty cycle as the SPA asteroid-processing operating
-rule, `spaAsteroidLoadCriticalFraction` 1.0 → 0.18; supersedes ECN-022 §2.4). ECN-015/-016/-017 exist only as folder names and the fleet ECN-016
+rule, `spaAsteroidLoadCriticalFraction` 1.0 → 0.18; supersedes ECN-022 §2.4), **-024** (verification, `docs/SEL-ECN-024_draft_HaulerInSituFractionCandidates.md`, signed 6 Nov 2026, option 2a: flag F3 closed, the hauler floor a point at the ECON 0.43), **-025** (`docs/SEL-ECN-025_draft_SpaMsrUnitOneBinding.md`, signed 6 Nov 2026, option 2a: SPA MSR unit #1 bound to DG-13.4), **-026** (`docs/SEL-ECN-026_draft_RevDThresholdsCarriedVerbatim.md`, signed 7 Nov 2026, option 2a: DG-12.3 783 → 1,903/day and DG-8.5 308 → 105 circuits aligned to ECN-020 / ECN-022). ECN-015/-016/-017 exist only as folder names and the fleet ECN-016
 amendment doc; their content is folded into fleet v9 and Hauler/Catapult Rev B.
 
 ## Excluded / out of scope
@@ -109,7 +113,7 @@ amendment doc; their content is folded into fleet v9 and Hauler/Catapult Rev B.
 |---|---|---|
 | F1 | Is `SELENITE_DECISION_FRAMEWORK_v4.md` the document referred to as "Rev D" in earlier sessions? **Confirmed 14 Sep 2026:** its header reads "SEL-DECISION-001 Rev D"; v3 is Rev C. Diff v3→v4 (both now in `docs/`): only the "Changes from" paragraph, §10.2 (PKT base positioning principle table, resource adequacy 220–660 Mt / 88–264 yr, tiered depth mining Tier 1–3 with DG-POST.1 ~Y280+ and DG-POST.2 ~Y380+), the "Beyond Y200" paragraph (400–1,300 yr reserve replacing "millions of years"), open item 4 wording, and open items 13–14 added. **No gate in §2 changed between the two revisions.** | Yes — resolved |
 | F2 | **Diffed 14 Sep 2026 (Wave 2).** `v9-1.docx` is internally titled v9.0, was created 15 minutes *before* `v9.docx` (docx metadata 13:12 vs 13:27, 5 Apr 2026), is the shortest of the three copies (237 / 295 / 730 extracted lines) and contains **no ECN-020 content** (no §16 mass driver network, no parallel tracks, no 523 t, no 694,444/yr; document history ends at v9/ECN-019). `v9.md` is the only copy carrying ECN-020 §16, PROBE-Scout §2.1, the Mk II retrofit §4.2, ISRU §12, crater access §13 incl. CAP, power §18 and IZ §19. Detail in `CHANGELOG_WAVE2.md`. | **`v9.md` wins; `v9-1.docx` reclassified HISTORICAL** (precedence rule 1 misfired on a filename that was never a revision label). Jason to confirm. |
-| F3 | Hauler in-situ fraction: fleet v9 / hauler brief say **92 %**; the update-session prompts and strategy items say **~57 %**. | Model as an attribute with both values flagged; do not pick |
+| F3 | Hauler in-situ fraction: fleet v9 / hauler brief say **92 %**; the update-session prompts and strategy items say **~57 %**. | **Closed 6 Nov 2026 by SEL-ECN-024 (option 2a):** the 92 % is the superseded SEL-HAULER-001 Rev A column (F2 diff, Wave 2); fleet v9 s.10.1 itself says ~57 %. The register entry is a point at the ECON floor 0.43; 0.08 kept as a historical candidate, not sampled. DG-13.7's 20 % floor stays a Wave 5 item (W3-N5) |
 | F4 | MOLE-I peak and decline: **~355 at P12** (hauler brief, scope material-flow) vs **320→~50 during P11** (scope P11) vs **~355 (P10)** (final report Fig. 29) vs ECON v1.3 357 at Y35 (VC-07). Which phase does the Mk III–driven drop occur in? | Attribute per phase, conflict recorded |
 | F5 | SPA MSR: **commissioned at P10 (DG-10.5)** in scope P10 vs **SPA MSR #1 at P13** in scope P13. Tally 14 Sep 2026: P10 has four supports (scope P10, DG-10.x numbering, fleet v9 §18.1 P10 row "from Y50", fleet v9 App. C P10 row, MD-3 ThCl₄ link at P10); P13 has two (scope P13, fleet v9 §18.1 unit list Y105/Y125/Y140 sized to asteroid loads). | **Demand-gated (Jason, 14 Sep 2026).** `introducedIn` unbound; gate modelled as `SeleniteAnalysis::SpaMsrIntroductionGate` (demand vs non-MSR capability vs ThCl₄ supply vs feasibility), evaluated at Wave 5. Final report v4 carries both readings (Fig. 33 P10 "commissioned DG-10.5"; Fig. 34 P13 "#1", P14 "#2/#3") and Decision Framework Rev D carries three commissioning gates (W2-N20). **ECON v1.3/v1.4 golden (runner v2.1, 14 Sep 2026): `cargo_spa_msr` is first non-zero at Y105, then Y125 and Y140 — the economics assumed the #1/#2/#3 series, not Y50 or Y70.** Recorded as `SpaThoriumMSR.econAssumedIntroductionYear = 105`; `introducedIn` stays demand-gated. |
 | F6 | Scope P11 says "SPA→Earth mass driver (MD-3)"; ECN-020 defines MD-3 = PKT→SPA, MD-4 = SPA→Earth. | ECN-020 numbering wins; scope label is stale |
@@ -117,7 +121,7 @@ amendment doc; their content is folded into fleet v9 and Hauler/Catapult Rev B.
 | F8 | Audit AUD-001…012 (MOLE-S 350 vs ~205 kg; SINTER 2,200 vs ~1,418 kg; SKIP 350 vs 400 kg/hop; ISRU 1,090/1,139/1,171 kW). Do the Rev B / v9 documents resolve any? Unknown until read. | Carry into Wave 2 as a value-conflict register; ISRU 1,171 kW appears adopted in CAD-ISRU |
 | F9 | `SEL_FINAL_REPORT_v4.docx` date not given. | Treat as April 2026, post-ECN-020 |
 | F11–F14 | See `VALUE_CONFLICTS.md` VC-01…VC-14 — goldens vs documents, surfaced by the MATLAB run. | Recorded, adjudicate at Wave 5 |
-| F10 | `scaling_v1_3.m` line 584 `92%` → `92%%`; `SELENITE_AUDIT_RESOLVE.m` P_OGA_B defect. | Fix in source before Python port |
+| F10 | `scaling_v1_3.m` line 584 `92%` → `92%%`; `SELENITE_AUDIT_RESOLVE.m` P_OGA_B defect. | **Not fixed, by rule (port, 14 Sep 2026):** the sources are SHA-256-pinned to the goldens manifest and never edited; the port reproduces the line-584 truncation as written (`CHANGELOG_PORT.md` item 6) and `SELENITE_AUDIT_RESOLVE.m` is declared expected-to-fail in `RUN_GOLDENS.m` (`sabatier.m` is the working AUDIT_RESOLVE and defines `P_OGA_B`). Closed as recorded |
 
 ## Wave 2 observations (not F-flags; recorded in model `doc` comments)
 | # | Observation | Where |
@@ -157,7 +161,8 @@ W3-N1 … W3-N20 (Decision Framework gate years versus the ECON ramp, gates
 never met on current vectors, the 308-circuit batch count, the canister
 payload 3.5 vs 3.6 t, the demonstrator location, the Fig. 2 milestone proxy,
 VERIFY element vectors versus definitions) are tabled in
-`CHANGELOG_WAVE3.md` §5; the machine-generated register is
+`CHANGELOG_WAVE3.md` §5 (W3-N21 and W3-N22 in its 18 and 19 September
+addenda); the machine-generated register is
 `docs/PLAN_REGISTER.md`.
 
 ## Conflicts already resolved by the rule

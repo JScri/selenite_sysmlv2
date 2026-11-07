@@ -189,8 +189,13 @@ package SeleniteConfigurations {
             }
             part powerZone : SpaPowerZone {
                 part redefines spaMsr : SpaThoriumMSR {
-                    doc /* F5: demand-gated through DG-10.5 (SpaMsrIntroductionGate). */
-                    attribute redefines introducedIn = gates.dgTenFive.derivedPhase;
+                    doc /* F5: demand-gated (SpaMsrIntroductionGate). SEL-ECN-025
+                         * (Jason, 6 Nov 2026, option 2a): unit #1 is DG-13.4, the
+                         * ECN-022 s.2.3 carry-through; DG-10.5 and DG-11.3 are
+                         * superseded as commissioning gates and stay in the
+                         * catalogue evaluating the same trade. Wave 3 bound this
+                         * to DG-10.5. */
+                    attribute redefines introducedIn = gates.dgThirteenFour.derivedPhase;
                 }
             }
             part processingFacility : SpaProcessingFacility {
@@ -434,7 +439,7 @@ package SeleniteConfigurations {
                 attribute redefines operationalFrom = gates.dgNineSix.derivedPhase;
             }
             part redefines md4 : MassDriverMd4 {
-                doc /* ECN (Jason, 19 Sep 2026): MD-4 is bound to the M-type
+                doc /* SEL-ECN-022 s.2.1 (Jason, 19 Sep 2026): MD-4 is bound to the M-type
                      * arrival (DG-12.4), not to the DG-11.6 PGM-volume trigger,
                      * which the programme's own PGM production never reaches
                      * (W3-N2). The Starship returns therefore retire at the

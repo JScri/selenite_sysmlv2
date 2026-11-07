@@ -159,10 +159,10 @@ selenite_programme__engineering_specifications_for_an_autonomous_lunar_base,Sele
 selenite_programme_overview,selenite_programme_overview.html,-,2026-04-20,1,,AUTHORITATIVE
 selenite_programme_scope,selenite_programme_scope.md,ECN-019 rewrite,2026-04-12,4,pre-ECN-019,AUTHORITATIVE
 selenite_programme_technical_audit__23_claims_flagged_across_10_domains,Selenite_Programme_Technical_Audit__23_Claims_Flagged_Across_10_Domains.pdf,-,2026-03-03,1,,REFERENCE
-selenite_scale,scaling_v1_3.m,v1.3,2026-03-11,3,- v1.2,AUTHORITATIVE
+selenite_scale,scaling_v1_3.m,v1.3,2026-03-11,3,- v1.2,HISTORICAL
 selenite_site_selection,W4_T3_3_JS_Selenite_site_selection_v1.docx,v1,2026-03-16,2,,AUTHORITATIVE
 selenite_timeline_condensed,selenite_timeline_condensed.html,-,2026-04-20,2,,AUTHORITATIVE
-selenite_value_chain,selenite_value_chain_v16.html,v16,2026-04-12,7,v13 v14 v14.1 v15 v7,AUTHORITATIVE
+selenite_value_chain,selenite_value_chain_v16.html,v16,2026-04-12,7,v13 v14 v7 (v14.1 and v15 current: scope split),AUTHORITATIVE
 selenite_value_chain_v1_static,selenite_value_chain_v1_static.svg,-,2026-03-01,1,,FIGURE
 selenite_verify,SELENITE_VERIFY_v5_0.m,v5.0,2026-03-11,12,- v2 v3 v4 v4.1 v4.2 v4.3 v4.4 v4.5,AUTHORITATIVE
 selenite_visualize,SELENITE_VISUALIZE_v3_3.m,v3.3,2026-03-11,4,v3 v3.2,AUTHORITATIVE
