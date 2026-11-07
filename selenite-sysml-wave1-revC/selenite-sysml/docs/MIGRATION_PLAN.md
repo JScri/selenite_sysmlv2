@@ -183,6 +183,10 @@ N27). No value rebound, no ECN raised. Observations W4B-N1 … N28; open items i
 `CHANGELOG_WAVE4B.md` §8; the Wave 5 brief is
 `docs/SESSION_BRIEF_wave5_quantities.md`.
 
+## Verification after Wave 4B (planned 7 Nov 2026; brief: `docs/SESSION_BRIEF_verification_post_wave4b.md`)
+
+Audit of the merged Wave 4B state before Wave 5 starts: integrity, interfaces, behaviour-mirrors-the-documents, rule 3, provenance, gates and requirements (SEL-REQ-018, SEL-ECN-027), the Python and scenario layers, the registers, the sources and map, and a scope check of the Wave 6 backlog. Findings V2-N1 …; value-changing findings as SEL-ECN-028 onward.
+
 ## Wave 6 — Control behaviour from the primary sources (planned 7 Nov 2026)
 
 The behaviour backlog the Wave 4B addendum's completeness critic listed
