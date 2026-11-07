@@ -167,11 +167,16 @@ the MOLE-I operating states; SEL-REQ-017 satisfied on the three asteroid
 lines; SEL-REQ-005 on the new `L1OxygenDepot`; `SpaReagentPilot`,
 `OxalicAcidLine`, `SpaPgmHydromet` and the CON-001 bayonet connector added
 and bound (plan register 89 → 94 bindings, fixture re-cut);
-`tools/connect_check.py` (W4B-N2) in CI; 25 diagrams. None of the wave's
-primary sources is in the repository (W4B-N1): modelled from fleet v9,
-Strategy v3.1, Decision Framework Rev D and ECN-020 with TODOs naming the
-files; triggers the documents do not give stay unbound (W4B-N7). No value
-rebound, no ECN raised. Observations W4B-N1 … N17; open items in
+`tools/connect_check.py` (W4B-N2) in CI; 32 diagrams. The wave was
+first modelled without its primary sources (W4B-N1) from fleet v9, Strategy
+v3.1, Decision Framework Rev D and ECN-020; the same-day addendum
+(`CHANGELOG_WAVE4B.md` §9) committed the sources Jason supplied to `docs/`
+and `docs/sources/`, closed the TODOs, bound the triggers they give (ECN-012
+dump sequence, ECN-014 returns, no-contact mode, PLC / UHF switchover, tether
+port breakers, bayonet engagement, construction tap hop, CAP mission with
+SPE abort), moved the polar fix to the substation (ECN-013 §3.2) and left
+two triggers unbound where the sources are silent (W4B-N21, N22). No value
+rebound, no ECN raised. Observations W4B-N1 … N22; open items in
 `CHANGELOG_WAVE4B.md` §8; the Wave 5 brief is
 `docs/SESSION_BRIEF_wave5_quantities.md`.
 

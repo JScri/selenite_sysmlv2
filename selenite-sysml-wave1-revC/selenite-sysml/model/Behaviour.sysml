@@ -27,12 +27,19 @@ package SeleniteBehaviour {
          * SEL-T1.1-STRATEGY v3.1 s.1, s.2.4, s.5.1, s.6, s.8.2, s.10.1, s.11.1,
          * s.13; SEL-DECISION-001 Rev D s.3.2 (the three Fe-Ni flows), s.10.1;
          * SEL-ECN-020 s.2, s.4; ARCHITECTURE_BASELINE.md s.5-s.6. The value
-         * chain family winners selenite_value_chain_v14_1.html (P0-P7),
-         * v15.html (P7-P12) and v16.html (P13+) are NOT in the repository
-         * (UPLOAD_LEDGER.csv entries only): the streams are modelled from the
-         * documents above and each stream's doc names the value-chain file
-         * that would confirm or extend it (TODO). SEL-REQ-005's L1 depot
-         * stream has no repository source at all (W4B-N4). */
+         * chain family winners docs/selenite_value_chain_v14_1.html (P0-P7),
+         * v15.html (P7-P12) and v16.html (P13+) are in docs/ since the 7 Nov
+         * 2026 addendum; read against the streams they confirm the topology
+         * and add three conflicts recorded in CHANGELOG_WAVE4B.md s.9
+         * (W4B-N20: v14.1 labels the Starship return "P7-P8" while its own
+         * Phase 2 panel has the first export batch at M116 / Y10 and the model
+         * binds DG-5.4; v15 carries the pre-ECN-020 "~303 t YBCO" and
+         * "MD-3 (P10)" against ECN-019 s.18.1 Y43 P9-P10 and the model's
+         * DG-9.6; v16 sends S-type Si / Cu "to PKT via MD-3" although MD-3 is
+         * PKT -> SPA in ECN-019 s.18.1 and the model carries them on MD-1).
+         * Nothing in the streams changed. SEL-REQ-005's L1 depot stream has
+         * no repository source (W4B-N4 / W4B-N18: ECN-019 Rev C does not name
+         * it either). */
 
     private import ScalarValues::*;
     private import SeleniteInterfaces::*;
@@ -378,9 +385,10 @@ package SeleniteBehaviour {
              * pump -> rim ISRU (VEX, PEM electrolysis, cryocooler, farm) ->
              * IZ fuelling and the habitat O2 line. P3 uses the tramway for
              * icy regolith before the pipeline (fleet v9 s.13.2). Source:
-             * fleet v9 s.4.1, s.12, s.13; Strategy v3.1 s.1, s.5.1, s.13.
-             * TODO: selenite_value_chain_v14_1.html (P0-P7 winner, not in the
-             * repository) would confirm the P3 tramway branch. */
+             * fleet v9 s.4.1, s.12, s.13; Strategy v3.1 s.1, s.5.1, s.13;
+             * docs/selenite_value_chain_v14_1.html (PSR ice -> ISRU plant ->
+             * LH2 / LOX; the P3 tramway branch is fleet v9's, the value chain
+             * does not draw it). */
         attribute redefines introducedIn = Phase::P3;
         attribute redefines retiredIn = null;
         out item propellant : Propellant;
@@ -432,8 +440,10 @@ package SeleniteBehaviour {
              * batch is beneficiated concentrate (MilestoneSet m6 "KREEP REE
              * concentrate"). The stream ends with the SKIP retirement (P9,
              * DG-9.1 through MD-2's own phase). Source: fleet v9 s.7, s.14;
-             * Strategy v3.1 s.6, s.10; ARCHITECTURE_BASELINE.md s.1 (P5, P7).
-             * TODO: selenite_value_chain_v14_1.html (not in the repository). */
+             * Strategy v3.1 s.6, s.10; ARCHITECTURE_BASELINE.md s.1 (P5, P7);
+             * docs/selenite_value_chain_v14_1.html (SKIP hops P4-P9, "REO +
+             * PGM concentrate, Starship return (P7-P8)" - W4B-N20, the model
+             * keeps DG-5.4). */
         attribute redefines introducedIn = Phase::P4;
         attribute redefines retiredIn = Phase::P9;
         in item propellant : Propellant;
@@ -469,9 +479,9 @@ package SeleniteBehaviour {
              * by-product is lofted on MD-2 to the L1 depot (SEL-REQ-005; no
              * repository source, W4B-N4). Th(OH)4 leaves to ThoriumToMsrFuel.
              * Source: fleet v9 s.10-11, s.14, s.16; Strategy v3.1 s.7, s.9,
-             * s.10; ECN-020 s.2.1, s.4; Decision Framework Rev D s.9. TODO:
-             * selenite_value_chain_v15.html (P7-P12 winner, not in the
-             * repository). */
+             * s.10; ECN-020 s.2.1, s.4; Decision Framework Rev D s.9;
+             * docs/selenite_value_chain_v15.html (MD-2 REO P9; pre-ECN-020
+             * YBCO total, W4B-N20). */
         attribute redefines introducedIn = Phase::P8;
         attribute redefines retiredIn = null;
         in item acid : SulfuricAcid;
@@ -517,8 +527,9 @@ package SeleniteBehaviour {
              * ThCl4 is mass-driven PKT -> SPA on MD-3 (P9/P10, DG-9.6) for the
              * SPA MSR. SPA's own Th(OH)4 (P7 facility) goes to PKT on MD-1
              * (fleet v9 s.16). Source: Strategy v3.1 s.8.2-8.4; fleet v9
-             * s.16; Decision Framework Rev D P8-P9 gates. TODO:
-             * selenite_value_chain_v15.html. */
+             * s.16; Decision Framework Rev D P8-P9 gates;
+             * docs/selenite_value_chain_v15.html (MD-3 ThCl4 "P10" - W4B-N20,
+             * the model keeps DG-9.6). */
         attribute redefines introducedIn = Phase::P8;
         attribute redefines retiredIn = null;
         in item thoriumFromPkt : ThoriumHydroxide;
@@ -568,8 +579,10 @@ package SeleniteBehaviour {
              * mass-driven SPA -> PKT on MD-1 to the foundry. From P11 the
              * Mk III ejects canisters from LLO to the EM catcher instead of
              * landing. Source: Decision Framework Rev D s.3.2 (both flows);
-             * fleet v9 s.2.2-2.5, s.19; Strategy v3.1 s.2.4. TODO:
-             * selenite_value_chain_v14_1.html and v15.html. */
+             * fleet v9 s.2.2-2.5, s.19; Strategy v3.1 s.2.4;
+             * docs/selenite_value_chain_v14_1.html (PROBE Mk I ore return,
+             * ISRU-fuelled from P4) and v15.html (Mk III canisters to the EM
+             * catcher, MD-4 PGM P11). */
         attribute redefines introducedIn = Phase::P3;
         attribute redefines retiredIn = null;
         in item propellant : Propellant;
@@ -624,8 +637,10 @@ package SeleniteBehaviour {
              * where circuit fabrication needs them (PTFE, Si, Cu) and C-type
              * water into the ISRU chain. Source: Decision Framework Rev D
              * s.3.2 (captured flow), s.10.1; fleet v9 s.17.2-17.3, s.16;
-             * Strategy v3.1 s.11.1. TODO: selenite_value_chain_v16.html (P13+
-             * winner, not in the repository). */
+             * Strategy v3.1 s.11.1; docs/selenite_value_chain_v16.html (M-type
+             * online Y85 P12, C-type Y105 P13, S-type Y125 P14, all processing
+             * at SPA, MD-5 concentrate DRO -> SPA; its "Si / Cu to PKT via
+             * MD-3" is W4B-N20 - the model keeps MD-1). */
         attribute redefines introducedIn = Phase::P12;
         attribute redefines retiredIn = null;
         out item pgm : PgmConcentrate;
@@ -679,8 +694,9 @@ package SeleniteBehaviour {
              * this stream is the cargo leg itself with the PKT reagent plant's
              * day-one supply from SPA (DG-8.3 "85 % self-sufficiency from day
              * one" implies the balance arrives). Source: ECN-020 s.2.2; fleet
-             * v9 s.16; Decision Framework Rev D DG-8.3. TODO:
-             * selenite_value_chain_v15.html. */
+             * v9 s.16; Decision Framework Rev D DG-8.3;
+             * docs/selenite_value_chain_v15.html ("MD-1 Propellant + Reagent
+             * (P8)"). */
         attribute redefines introducedIn = Phase::P8;
         attribute redefines retiredIn = null;
         in item propellant : Propellant;

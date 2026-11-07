@@ -18,11 +18,12 @@ layer `selenite-compute/`. First commit: set this banner to "started
 ## 0. What Wave 4B left for this wave (7 Nov 2026)
 
 - **Counts at start-up.** 18 model files; `tools/validate.sh` exit 0, zero
-  hints; `tools/connect_check.py` 746 endpoints resolved; `pytest
+  hints; `tools/connect_check.py` 796 endpoints resolved; `pytest
   selenite-compute` 1,565 passed, 33 skipped; `plan_check --quiet` exit 0
   with 94 element bindings and the default output byte-identical to
   `selenite-compute/tests/fixtures/plan_check_stdout_wave3.txt` (re-cut 7 Nov
-  2026); `scenario_check --n 200 --quiet` exit 0; 25 diagrams.
+  2026; unchanged by the addendum); `scenario_check --n 200 --quiet` exit 0;
+  32 diagrams.
 - **Unbound by design, for this wave to bind:** every `ratedPower`,
   `dryMass`, `peakPower`, `throughputTonnesPerYear` and
   `holdLoadFraction.nominal`; the ECN-014 monitor thresholds and timings
@@ -30,22 +31,33 @@ layer `selenite-compute/`. First commit: set this banner to "started
   these are document constants with no Python source, so this wave needs a
   rule for them: a `DocumentConstants` block in `Parameters.sysml` with the
   citation per value, or an ECN that makes them committed parameters);
-  `NavigationFusion.fusionRateHz`; the MOLE-I `preHeatTankFraction`; the
+  `NavigationFusion.fusionRateHz`; the MOLE-I `preHeatTankFraction`,
+  `tankFullFraction` and `purgeHoldMinutes` (ECN-012 §3.3.2: 90 %, full, 3
+  min); `SentinelSystem.noContactThresholdHours` (SW-SENTINEL §12.2: 24 hr);
+  `Cap.floorWorkLimitHours` (CAP-001 §2: 2 h design target) — all document
+  constants under the W4B-N6 rule; the
   `EclipseGatedPowerSupply` interface attributes once `holdLoadFraction` has
   a source (W4A-N3); the stream quantities (masses, rates per phase) on the
   `SeleniteBehaviour` action parameters, from `econ.workspace()` and
   `verify` vectors.
 - **Elements this wave may re-source:** `L1OxygenDepot` and the MD-2 O2 loft
-  (W4B-N4 — no repository document names them; ECN-019 Rev C needed);
+  (W4B-N4 / W4B-N18 — no repository document names them, and ECN-019 Rev C,
+  now in `docs/`, gives MD-2 the single purpose "REO canisters"; Jason's
+  call whether SEL-REQ-005 stands);
   `SpaPgmHydromet` (W4B-N5, bound to DG-5.4 from Decision Framework s.10.1 /
   s.3.2 and M6); the SENTINEL first phase (W4B-N8); the SPA P7 Th(OH)4
   destination before MD-1 (W4B-N9).
-- **Transitions with unbound triggers (W4B-N7)** stay unbound until
-  SEL-SW-SENTINEL-001 Rev B and SEL-SW-MOLEI-001 Rev D are in `docs/`; if
-  Jason adds the missing Wave 4B winners (value chain v14.1 / v15 / v16,
-  SW-SENTINEL, SW-MOLEI, SW-SUB, NAV-001, CON-001, ECN-013, ISRU-001 Rev D
-  + CAD-ISRU ECN-014, EVA contingency — W4B-N1), this wave closes the TODOs
-  that name them before binding anything that depends on them.
+- **Transitions with unbound triggers (W4B-N7) — mostly closed by the
+  addendum.** The Wave 4B winners are in `docs/` since 7 Nov 2026 and the
+  triggers they give are bound (`CHANGELOG_WAVE4B.md` §9). Two stay unbound
+  because the sources are silent: the SENTINEL mode transitions
+  `toLocalAi` / `backToPlan` (W4B-N21 — the documents carry an authority
+  model, not a mode table; a Wave 5 option is to retire the three-mode
+  machine in favour of `AuthorityLevel`) and the MOLE-I `offsetOnResistance` drill-resistance offset (W4B-N22,
+  re-stated after verification: the cell-complete depth rule of NAV-001
+  §3.2 is bound). W4B-N18 (ECN-019 Rev C names no L1 O2 depot)
+  and W4B-N19 / N20 (SENTINEL first phase, value-chain conflicts) are
+  questions for Jason, not bindings.
 - **`prerequisites` / `gatedElements` promotion (W4B-N12)** is this wave's
   call: if promoted, use one `connection` usage per edge with `attribute
   kind : PrerequisiteKind` (`direct | via | partial | chained`) so DG-7.1

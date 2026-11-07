@@ -17,7 +17,9 @@ steady state (~Y180). Baseline: **ECN-019 Rev C + ECN-020**.
 value chain as typed action flows (`model/Behaviour.sysml`), typed ports and
 an interface on every connection (`model/Interfaces.sysml`), SENTINEL and the
 ECN-014 valve auto-close as state machines, NAV-001 fusion as a behaviour,
-SEL-REQ-017, `tools/connect_check.py`; next is Wave 5
+SEL-REQ-017, `tools/connect_check.py`; same-day addendum: the wave's primary
+sources are in `docs/` and `docs/sources/` and the behaviour they give is
+bound (`CHANGELOG_WAVE4B.md` §9); next is Wave 5
 (`docs/SESSION_BRIEF_wave5_quantities.md`).** Wave 4A (6 Nov 2026,
 `CHANGELOG_WAVE4A.md`) delivered the decision catalogue D1–D8 and the
 uncertainty register in `model/Scenarios.sysml`, the stochastic decision

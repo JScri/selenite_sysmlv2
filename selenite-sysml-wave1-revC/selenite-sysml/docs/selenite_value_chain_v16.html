@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selenite — Value Chain v16 (P13+ Diversified Asteroids)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{--bg:#040810;--surf:#0a1420;--bdr:#122030;--txt:#b8d4ea;--hi:#e4f0f9;--dim:#2a4a68;--lo:#1a2e44;
+    --earth:#4a9ae8;--spa:#48c878;--pkt:#e8a84a;--mtype:#e84a8a;--ctype:#4ae8e8;--stype:#a84ae8;--dro:#e8e84a;--md:#a84ae8}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:'Barlow',sans-serif;padding:32px 20px 48px;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+  .container{max-width:1200px;width:100%}
+  header{text-align:center;margin-bottom:16px}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+  h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:28px;color:var(--hi)}
+  .sub{font-size:12px;color:var(--dim);margin-top:4px}
+  svg{width:100%;height:auto;display:block;margin:12px 0}
+  .node-box{rx:8;ry:8;stroke-width:2}
+  .node-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;text-anchor:middle;dominant-baseline:central}
+  .node-sub{font-family:'Barlow',sans-serif;font-weight:400;font-size:9px;text-anchor:middle;fill:#7a9ab8}
+  .flow-line{stroke-width:1.5;fill:none}
+  .flow-label{font-family:'JetBrains Mono',monospace;font-size:8px;text-anchor:middle;dominant-baseline:central}
+  .md-label{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:9px;text-anchor:middle;fill:var(--md)}
+  .phase-badge{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:500}
+
+  .cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px}
+  .card{background:var(--surf);border:1px solid var(--bdr);border-radius:8px;padding:14px 16px;position:relative}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:8px 8px 0 0}
+  .card-m::before{background:var(--mtype)} .card-c::before{background:var(--ctype)} .card-s::before{background:var(--stype)}
+  .card h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;margin-bottom:6px;letter-spacing:0.5px}
+  .card p{font-size:11px;line-height:1.55;color:var(--txt);margin-bottom:4px}
+  .card b{color:var(--hi)}
+  .card .phase{font-family:'JetBrains Mono',monospace;font-size:9px;margin-bottom:4px}
+
+  .summary{margin-top:16px;background:var(--surf);border:1px solid var(--bdr);border-radius:8px;padding:16px 20px}
+  .summary h2{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;color:var(--hi);margin-bottom:8px}
+  .summary p{font-size:12px;line-height:1.6;margin-bottom:6px}
+  .summary b{color:var(--hi)}
+
+  .legend{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;padding:14px 0 6px;border-top:1px solid var(--bdr);margin-top:16px}
+  .legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--dim)}
+  .legend-dot{width:10px;height:10px;border-radius:50%}
+  footer{text-align:center;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--lo);margin-top:12px;letter-spacing:1px}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+  <div class="eyebrow">Selenite Programme · Value Chain v16</div>
+  <h1>Full Programme Value Chain — P13+ Diversified Asteroids</h1>
+  <div class="sub">M-type (Y75/Y85) · C-type (Y95/Y105) · S-type (Y115/Y125) · DRO processing · Earth independence by P14</div>
+</header>
+
+<svg viewBox="0 0 1100 580" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="5" orient="auto"><path d="M0,0 L10,4 L0,8 Z" fill="#5a7a98"/></marker>
+    <marker id="arr-md" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="5" orient="auto"><path d="M0,0 L10,4 L0,8 Z" fill="var(--md)"/></marker>
+  </defs>
+
+  <!-- EARTH -->
+  <g transform="translate(100,290)">
+    <rect class="node-box" x="-60" y="-30" width="120" height="60" fill="#0c1828" stroke="var(--earth)"/>
+    <text class="node-title" y="-8" fill="var(--earth)">EARTH</text>
+    <text class="node-sub" y="8">Market · SX plants</text>
+    <text class="node-sub" y="20">~750 t/yr reagents</text>
+  </g>
+
+  <!-- SPA -->
+  <g transform="translate(420,290)">
+    <rect class="node-box" x="-80" y="-35" width="160" height="70" fill="#0c1828" stroke="var(--spa)"/>
+    <text class="node-title" y="-14" fill="var(--spa)">SPA SHACKLETON</text>
+    <text class="node-sub" y="2">Asteroid processing hub</text>
+    <text class="node-sub" y="14">M/C/S-type hydromet</text>
+    <text class="node-sub" y="26">EM catcher · Command</text>
+  </g>
+
+  <!-- PKT -->
+  <g transform="translate(420,500)">
+    <rect class="node-box" x="-75" y="-28" width="150" height="56" fill="#0c1828" stroke="var(--pkt)"/>
+    <text class="node-title" y="-8" fill="var(--pkt)">PKT PROCELLARUM</text>
+    <text class="node-sub" y="6">~2.08M circuits · 2.5 Mt/yr REO</text>
+    <text class="node-sub" y="18">688.7 GW MSR · ~1.5M haulers</text>
+  </g>
+
+  <!-- DRO -->
+  <g transform="translate(750,120)">
+    <rect class="node-box" x="-70" y="-32" width="140" height="64" fill="#0c1828" stroke="var(--dro)"/>
+    <text class="node-title" y="-12" fill="var(--dro)">DRO STATION</text>
+    <text class="node-sub" y="4">Captured asteroids</text>
+    <text class="node-sub" y="16">Laser Ablation Truss</text>
+    <text class="node-sub" y="28">350 MW · 1,000 t/day</text>
+  </g>
+
+  <!-- M-type asteroid -->
+  <g transform="translate(950,50)">
+    <rect class="node-box" x="-55" y="-22" width="110" height="44" fill="#0c1828" stroke="var(--mtype)"/>
+    <text class="node-title" y="-4" fill="var(--mtype)">M-TYPE</text>
+    <text class="node-sub" y="10">Fe-Ni · PGM</text>
+  </g>
+
+  <!-- C-type asteroid -->
+  <g transform="translate(1000,160)">
+    <rect class="node-box" x="-55" y="-22" width="110" height="44" fill="#0c1828" stroke="var(--ctype)"/>
+    <text class="node-title" y="-4" fill="var(--ctype)">C-TYPE</text>
+    <text class="node-sub" y="10">H₂O · Organics</text>
+  </g>
+
+  <!-- S-type asteroid -->
+  <g transform="translate(1000,260)">
+    <rect class="node-box" x="-55" y="-22" width="110" height="44" fill="#0c1828" stroke="var(--stype)"/>
+    <text class="node-title" y="-4" fill="var(--stype)">S-TYPE</text>
+    <text class="node-sub" y="10">Si · Cu</text>
+  </g>
+
+  <!-- FLOWS -->
+  <!-- Redirect tugs to DRO -->
+  <path class="flow-line" d="M895,50 L820,95" stroke="var(--mtype)" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+  <text class="phase-badge" x="870" y="65" fill="var(--mtype)">Y75 redirect</text>
+
+  <path class="flow-line" d="M945,160 L820,140" stroke="var(--ctype)" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+  <text class="phase-badge" x="900" y="145" fill="var(--ctype)">Y95 redirect</text>
+
+  <path class="flow-line" d="M945,260 L820,170" stroke="var(--stype)" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+  <text class="phase-badge" x="910" y="225" fill="var(--stype)">Y115 redirect</text>
+
+  <!-- DRO → SPA (MD-5) -->
+  <path class="flow-line" d="M680,140 L505,270" stroke="var(--md)" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arr-md)"/>
+  <text class="md-label" x="610" y="195">MD-5 concentrate</text>
+  <text class="flow-label" x="610" y="208" fill="var(--dim)">DRO→SPA (P12)</text>
+
+  <!-- SPA → Earth (MD-4) -->
+  <path class="flow-line" d="M340,280 L165,280" stroke="var(--md)" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arr-md)"/>
+  <text class="md-label" x="252" y="272">MD-4 PGM exports (P11)</text>
+
+  <!-- PKT → Earth (MD-2) -->
+  <path class="flow-line" d="M345,490 L155,320" stroke="var(--md)" stroke-width="2.5" stroke-dasharray="3,3" marker-end="url(#arr-md)"/>
+  <text class="md-label" x="225" y="395">MD-2 REO</text>
+  <text class="flow-label" x="225" y="408" fill="var(--dim)">~695k/yr at P14</text>
+
+  <!-- SPA ↔ PKT (MD-1/MD-3) -->
+  <path class="flow-line" d="M400,330 L400,468" stroke="var(--md)" stroke-dasharray="3,3" marker-end="url(#arr-md)"/>
+  <text class="md-label" x="385" y="400" transform="rotate(-90,385,400)">MD-1 (P8)</text>
+  <path class="flow-line" d="M440,468 L440,330" stroke="var(--md)" stroke-dasharray="3,3" marker-end="url(#arr-md)"/>
+  <text class="md-label" x="458" y="400" transform="rotate(90,458,400)">MD-3 ThCl₄ (P10)</text>
+
+  <!-- Earth → SPA (diminishing) -->
+  <path class="flow-line" d="M160,275 L340,275" stroke="var(--earth)" stroke-dasharray="8,6" opacity="0.3"/>
+  <text class="flow-label" x="252" y="265" fill="var(--earth)" opacity="0.4">Avionics only (<1%)</text>
+
+  <!-- SPA → PKT (processed asteroid products) -->
+  <path class="flow-line" d="M480,325 L480,468" stroke="var(--spa)" stroke-dasharray="4,3" opacity="0.5" marker-end="url(#arr)"/>
+  <text class="flow-label" x="500" y="440" fill="var(--spa)" font-size="7">Si/Cu → PKT foundry</text>
+
+  <!-- Processing labels at SPA -->
+  <g transform="translate(560,370)">
+    <rect rx="4" x="-70" y="-28" width="140" height="56" fill="#0c1828" stroke="var(--spa)" stroke-width="1" opacity="0.5"/>
+    <text class="node-sub" y="-14" fill="var(--mtype)" font-size="8" text-anchor="middle">M-type: PGM hydromet (Y85)</text>
+    <text class="node-sub" y="-2" fill="var(--ctype)" font-size="8" text-anchor="middle">C-type: Pyrolysis+F-T (Y105)</text>
+    <text class="node-sub" y="10" fill="var(--stype)" font-size="8" text-anchor="middle">S-type: Czochralski Si (Y125)</text>
+    <text class="node-sub" y="22" fill="var(--dim)" font-size="7" text-anchor="middle">All processing at SPA</text>
+  </g>
+
+  <!-- Earth frac trajectory -->
+  <g transform="translate(100,450)">
+    <rect rx="4" x="-65" y="-20" width="130" height="40" fill="#0c1828" stroke="var(--earth)" stroke-width="1" opacity="0.4"/>
+    <text class="node-sub" y="-6" fill="var(--earth)" font-size="9" text-anchor="middle">Earth frac trajectory</text>
+    <text class="node-sub" y="6" fill="var(--dim)" font-size="8" text-anchor="middle">100%→10%→3%→0.8%→<0.5%</text>
+    <text class="node-sub" y="16" fill="var(--dim)" font-size="7" text-anchor="middle">P8 → P10 → post-C → post-S → P14+</text>
+  </g>
+</svg>
+
+<div class="cards">
+  <div class="card card-m">
+    <h3 style="color:var(--mtype)">M-type Asteroid</h3>
+    <div class="phase" style="color:var(--mtype)">Redirect Y75 · Online Y85 (P12)</div>
+    <p><b>Products:</b> Fe-Ni structural metal + PGM (Pt, Pd, Rh, Ir). 36.5 t/yr PGM from first capture. Ir for H₂ economy PEM electrolysers.</p>
+    <p><b>Processing at SPA:</b> Magnetic separation → chlorination → selective precipitation. PGM to Earth via MD-4.</p>
+    <p><b>Enables:</b> Fe-Ni for PKT foundry (hauler hoppers, conveyor pans, Earth-return canister shells). Bulk structural independence from Earth.</p>
+  </div>
+  <div class="card card-c">
+    <h3 style="color:var(--ctype)">C-type Asteroid</h3>
+    <div class="phase" style="color:var(--ctype)">Redirect Y95 · Online Y105 (P13)</div>
+    <p><b>Products:</b> Water ice + CO₂ + organics. Propellant independence from PSR ice (MOLE-I →~50). MLI blankets preserve subsurface ice at DRO.</p>
+    <p><b>Processing at SPA:</b> Pyrolysis 400–600°C → water electrolysis + Fischer-Tropsch (CO+H₂ → hydrocarbons).</p>
+    <p><b>Enables:</b> Organic chemistry (polymers, reagent synthesis). Circuit Earth frac drops 10%→3%. Propellant self-sufficiency.</p>
+  </div>
+  <div class="card card-s">
+    <h3 style="color:var(--stype)">S-type Asteroid</h3>
+    <div class="phase" style="color:var(--stype)">Redirect Y115 · Online Y125 (P14)</div>
+    <p><b>Products:</b> Silicon (semiconductor wafers) + Copper (motor windings, electronics). The final Earth dependency closure.</p>
+    <p><b>Processing at SPA:</b> Czochralski crystal pulling (~1,700°C) for Si boules. Cu electrolytic refining to >99.9%. Products to PKT via MD-3.</p>
+    <p><b>Enables:</b> In-situ control electronics + Cu wire for SRM motors. Circuit Earth frac →0.8%. Earth independence gate DG-14.6.</p>
+  </div>
+</div>
+
+<div class="summary">
+  <h2>P14+ Steady State — Earth Independence</h2>
+  <p><b>2,500,000 t/yr REO</b> — full replacement of terrestrial REE mining. <b>+$121.8B/yr net surplus</b> from Y181. <b>182 Mt CO₂/yr avoided.</b> Programme cost $21.3T; BCR 0.50 (200-yr) / 2.06 (annual steady state). Earth mass dependency <0.5% (avionics, specialty catalysts).</p>
+  <p>Each asteroid type enables the next: M-type Fe-Ni for C-type processing infrastructure → C-type organics for S-type chemistry → S-type Si/Cu for electronics independence. The <b>Laser Ablation Truss</b> at DRO (350 MW, 1,000 t/day, spiral surface ablation) processes captured asteroids continuously. Processed concentrate mass-driven DRO→SPA via MD-5.</p>
+  <p>Decommissioned MOLE-I <b>Pu-238 RTGs stockpiled</b> for deep-space missions. SPA becomes cislunar launch hub: propellant depot, mass driver network, low-gravity manufacturing. Programme infrastructure becomes permanent foundation for lunar-based space industry.</p>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--earth)"></div>Earth</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--spa)"></div>SPA</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--pkt)"></div>PKT</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--dro)"></div>DRO Station</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--mtype)"></div>M-type</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--ctype)"></div>C-type</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--stype)"></div>S-type</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--md)"></div>Mass Driver</div>
+</div>
+
+<footer>selenite_value_chain_v16.html · ECN-019 Rev C · P13+ Diversified Asteroids · 200-year scope · April 2026</footer>
+</div>
+</body>
+</html>

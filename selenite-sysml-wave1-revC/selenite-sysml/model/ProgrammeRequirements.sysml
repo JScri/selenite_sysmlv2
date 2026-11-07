@@ -4,8 +4,9 @@ package SeleniteRequirements {
          * ProgrammeContext subjects; Wave 3 (15 Sep 2026) binds them to
          * checkable subjects where a model attribute exists and adds
          * SEL-REQ-007..016 from ECN-019 Rev C (cited through SEL-T1.1-STRATEGY
-         * v3.1, which integrates it in its body text - ECN-019 itself is not
-         * in the repository), SEL-ECN-020 and SEL-DECISION-001 Rev D. Every
+         * v3.1, which integrates it in its body text; ECN-019 Rev C itself
+         * is in docs/ since the 7 Nov 2026 addendum), SEL-ECN-020 and
+         * SEL-DECISION-001 Rev D. Every
          * requirement with a require constraint is machine-checkable on the
          * instance tree in SeleniteConfigurations, where the satisfy links
          * live. Wave 4B (7 Nov 2026): SEL-REQ-005's subject is the L1 O2
@@ -66,8 +67,10 @@ package SeleniteRequirements {
              * to the L1 fuel depot via MD-2, not vented or dumped. Source as
              * carried since Wave 1: "Strategy v3.1, Decision Framework Rev D"
              * - W4B-N4 (Wave 4B): neither document, nor fleet v9 nor ECN-020,
-             * names the depot or the O2 loft; the committed source is ECN-019
-             * Rev C, not in the repository. Subject since Wave 4B: the
+             * names the depot or the O2 loft; W4B-N18 (addendum): ECN-019 Rev
+             * C, now in docs/, does not either (MD-2 is "REO canisters" PKT ->
+             * Earth, s.18.1). The requirement is kept as written and the
+             * depot's provenance is a question for Jason. Subject since Wave 4B: the
              * SeleniteSites::L1OxygenDepot element, which exists from the
              * phase MD-2 is operational; the O2 stream is the MD-2 loft branch
              * of SeleniteBehaviour::PktKreepToEarth. The constraint checks

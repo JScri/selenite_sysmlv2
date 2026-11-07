@@ -44,7 +44,9 @@ package SeleniteConfigurations {
          * O2 depot (existsFrom derived from MD-2's phase) - these are the
          * bindings that change the plan register this wave. The ECN-023
          * operating rule is the EclipseGatedPowerSupply interface on each
-         * asteroid line and SEL-REQ-017, satisfied below. */
+         * asteroid line and SEL-REQ-017, satisfied below. Addendum (7 Nov
+         * 2026): the CAP's guide cable and floor power tap interfaces; no
+         * binding changed, so the plan register is byte-identical. */
 
     private import ScalarValues::*;
     private import SeleniteBehaviour::*;
@@ -398,6 +400,10 @@ package SeleniteConfigurations {
             interface constructionRadioMkII : ConstructionRadioLink connect psrNetwork.moleIConstructionRadio to moleIMkII.constructionRadio;
             interface drillProductToTramway : IcyRegolithTransfer connect moleIMkI.drillProduct to psrNetwork.tramwayFloorLoad;
         }
+        // Addendum 7 Nov 2026: the CAP on its guide cable and on the CLP floor
+        // docking pad power tap (SEL-CAP-001 Rev A updated s.2-3, s.5)
+        interface capOnGuideCable : GuideCableLink connect shackletonPsrFloor.psrNetwork.capGuideCable.floorDockingPad to shackletonHub.cap.guideCable;
+        interface capFloorPower : BayonetCoupling connect shackletonPsrFloor.psrNetwork.clp.capDockingPadTap.socket to shackletonHub.cap.floorPowerUmbilical;
 
         // rim <-> floor: trunk power down, water and P3 tramway regolith up
         interface psrTrunkPower : PowerBus connect shackletonHub.powerZone.psrTrunkFeed to shackletonPsrFloor.psrNetwork.rimPowerFeed;

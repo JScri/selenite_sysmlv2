@@ -275,7 +275,7 @@ new elements.
 `molei_operating_states`. The interconnection view grew with the interface
 usages (720 kB).
 
-### 6. Observations W4B-N1 … W4B-N17 (recorded, not resolved)
+### 6. Observations W4B-N1 … W4B-N17 (recorded, not resolved; W4B-N18 … N26 in §9.4–9.5)
 
 | # | Observation | Where |
 |---|---|---|
@@ -337,3 +337,153 @@ and where is it written?), **W4B-N8** (SENTINEL's first phase, P2 or P3),
 **W4B-N6** (the rule for binding document constants that have no Python
 source), and whether the missing Wave 4B winners can be added to `docs/` so
 the TODOs can close.
+
+## Addendum — 7 November 2026, same PR: the primary sources arrive
+
+```
+CHANGE LOG — 7 November 2026 (Wave 4B addendum: sources committed, behaviour
+       bound from them)
+Scope: Jason supplied every primary source the wave had modelled without
+       (W4B-N1). Fold-in on the same branch before merge, as proposed: commit
+       the sources, close the TODOs that named them, bind the transitions
+       they give, record what they contradict. No committed parameter
+       rebound, no decision changed, no ECN raised (SEL-ECN-027 still free).
+Baseline in:  wave4b-behaviour 30ae15e (the delivery above).
+Baseline out: 18 model files, exit 0, zero hints; tools/connect_check.py 796
+              endpoints resolved (746 before); plan_check exit 0 and the
+              default output byte-identical to the fixture (no binding
+              changed - the register is untouched); scenario_check exit 0;
+              pytest 1,565 passed, 33 skipped; 32 diagrams (25 + two
+              action-flow and five state-transition views); 110 document-map
+              rows (107 + 3). docs/ gains 23 originals under docs/sources/,
+              19 markdown extracts, the three value-chain html and ECN-019
+              Rev C.
+```
+
+### 9. The addendum
+
+#### 9.1 Sources committed
+
+Uploaded by Jason in six batches on 7 Nov 2026 and committed as the
+precedence rules of `docs/DOCUMENT_FAMILIES.md` put them: originals under
+`docs/sources/` (19 docx, the three value-chain html, the ECN-019 Rev C md
+as uploaded), a markdown extract of each docx in `docs/` named after the
+docx (tables flattened, figures dropped; the docx is the source of record),
+`docs/ECN-019_Programme_Wide_Design_Revision.md` (Rev C, status PROPOSED —
+confirmed from its header) and `docs/selenite_value_chain_v14_1.html` /
+`v15` / `v16` as-is. Two uploads were already in the repository and were
+byte-identical (`SELENITE_DECISION_FRAMEWORK_v4.md`, `SEL-ECN-020_…md`); one
+copy of `SEL_MOLEI_DESIGN_v5.docx` was plain text, not a docx, and the valid
+copy was kept; `SEL_SENTINEL_DESIGN_RevA_updated.docx` and
+`SEL-CAP-001_CraterAccessPod_RevA.docx` are superseded by the Rev B / Rev A
+updated winners in the same batch and are kept under `docs/sources/` mapped
+`superseded` (the CAP pair differs only in its Source Docs row). Every
+"NOT IN REPO" in `mapping/document_map.csv` is gone; the rows carry what
+each source now binds.
+
+#### 9.2 What the sources changed in the model
+
+| Element | Before the sources | From the sources |
+|---|---|---|
+| Polar fix (NAV-001 layer 1) | `ReadTetherPolarFix` on the rover from a raw `SubstationEncoderReading` sent down the tether or over the UHF link | **Computed on the substation**: `ComputeTetherPolarFix` (drum payout + DRM-040 roller angle) performed by `SubstationController` from the new `DrumSensingPort` / `DrumSensingLine`, sent down the tether PLC as `TetherFixReading` (`TetherPort.fix` replaces `.encoder`), received by `ReceiveTetherPolarFix` in `NavigationFusion` (ECN-013 §3.2; SW-MOLEI Rev D ECN-013 note; SW-SUB Rev C ECN-013 addition) |
+| Construction navigation | the encoder reading "over the UHF link" (not in any source) | `ConstructionNavigation`: tap-point count plus odometry offset; the UHF link carries position reports, power status and construction gate requests (`ConstructionRadioPort` re-typed; NAV-001 §4, ECN-013 §5) |
+| `MoleIOperatingStates` | four states, one bound guard | eight states: the ECN-012 §3.3.2 sequence as `preHeat` → `retracting` → `dumping` → `purging` with its five triggers (tank fraction, tank full, docked, drain valve closed, purge hold elapsed), `construction` for the branch's first unit (MOLE-I design v5 §8, CON-001 §3), task assignment and safe-park from SW-SENTINEL §9.1 / §13.1, arrival at the lawn-mower cell from NAV-001 §2.4; IMU reset and grid upload as entry / exit actions of `dumping` (NAV-001 §2.3–2.4) |
+| `MoleICommsStates` (new) | — | PLC on the permanent drum port, UHF on a construction tap or untethered, automatic switchover (ECN-013 §5); `plcOnlyOnPermanentTether` asserted |
+| `TetherPortStates` (new) | controller "UNMODELLED" | breakers normally open, closed on command only after the connector is seated (make-before-break), open on power loss, hold while tether paths would cross (SW-SUB Rev C §6, §7.2; NAV-001 §3.3); `breakerFailSafe` asserted |
+| `SentinelOperatingModes` | two ECN-014 escalations on a raw reading; three triggers unbound | escalation on a WARNING / EMERGENCY `AnomalyClassification`, return on `CrewDisposition` (design Rev B §4.3 steps 2, 4, 5); `toLocalAi` / `backToPlan` stay unbound (W4B-N21) |
+| `AnomalyResponseWorkflow` (new) | — | the six steps detect → classify → isolate → diagnose and recommend → respond → verify and close, performed by `SentinelSystem` and allocated to the edge and Earth tiers (design Rev B §4.3); `AnomalySeverity`, `AuthorityLevel` enums; SPA / PKT EMERGENCY scopes and the GATE no-timeout rule as attributes and `gateNeedsHumanApproval` (design §5, §8.4) |
+| `EarthContactStates` (new) | — | no-contact autonomous mode beyond the threshold (24 hr quoted, UNBOUND), GATE to local crew (P4+) or suspended (P2–P3), gate requests queued (SW-SENTINEL §12.2) |
+| PKT escalation | — | `PktEscalationTier` T0–T3 and `relayNeverInSafetyPath` asserted on `SentinelEdgeTier` (SW-SENTINEL §15.2–15.3) |
+| ECN-014 returns | `alertCleared`, `standDown`, `resolved` unbound | all three accept `AnomalyTicketClosed` — the workflow's step 6 closure after verification (design §4.3 steps 5–6; ISRU-001 Rev D §8.2 amendment for the O2 valve) |
+| `CryoIsolationValveStation` | hardwired close, spring return, limit switch | plus the passive excess-flow check valve, burst disc, two catalytic sensors + UV, valves open in normal flow (ISRU-001 Rev D §7.4 amendment; CAD-ISRU ECN-014 amendment); `deadManFailClosed` extended |
+| Habitat O2 line | double-block-and-bleed | four independent barriers with the SENTINEL-triggered fail-closed isolation valve (`o2LineFourBarriers`; ISRU-001 Rev D §8.2 amendment) |
+| `BayonetEngagementStates` (new), `ConstructionTapHop` (new) | `BayonetAdapter` / `BayonetTapSocket` with TODOs | push-and-twist engage / disengage, detent hold without power asserted (`passiveDetentHold`); the six-step tap hop allocated to the adapter from `MoleIFlightSoftware` (CON-001 Rev B updated ECN-013 Rev 2 / Rev 3) |
+| `CapMissionStates` (new) | `Cap` structural only | at rim (GATE go / no-go) → descending → docked at floor → floor ops (work limit UNBOUND, 2 h quoted) → ascending, SPE abort from every below-rim state (CAP-001 §2–3; EVA contingency §4.6, §4.8); `Cap` gains the guide-cable and floor-power ports and `dedicatedCrewRatedWinch`; `ClpJunction.capDockingPadTap` and `CrewWinch.phase1Reservations` (CAP-001 §5); two configuration interfaces (`capOnGuideCable`, `capFloorPower`) |
+| Value-chain streams | TODO naming the html | docs name the html sections; topology confirmed; conflicts W4B-N20 |
+| `L1OxygenDepot`, SEL-REQ-005, `OxygenPayload` | "source needed: ECN-019 Rev C" | ECN-019 Rev C read: it names no depot (W4B-N18); kept as the requirement states it |
+
+Rule 3 held throughout: the new UNBOUND attributes (`tankFullFraction`,
+`purgeHoldMinutes`, `noContactThresholdHours`, `floorWorkLimitHours`) quote
+their figures in the docs only and join the W4B-N6 list for Wave 5.
+`plan_check` is byte-identical because no `attribute redefines … =
+Phase::…` or gate binding was added or changed: the new part defs carry no
+phase and the configuration gained interfaces only.
+
+#### 9.3 Idioms probed (zero hints)
+
+- An enum-typed attribute with no value (`tetherConnection :
+  TetherConnectionType`) raises SSM021 like an abstract-typed port; declaring
+  it `abstract attribute` in the state def, the item def and the exhibiting
+  part clears it and the guards (`a.severity == AnomalySeverity::warning`,
+  `tetherConnection != TetherConnectionType::permanentDrumPort`) resolve.
+- `action x { in item … }` as a one-line body raises STYL007; an inline
+  action usage with a body is also opaque to `tools/connect_check.py`
+  ("has no type to descend"), so each workflow step is a typed action def.
+- `flow` from a part's performed action output to a multi-valued part's port
+  (`controller.tetherOut.fix` → `tetherDrums.tether.fix`) validates and
+  resolves.
+
+#### 9.4 Observations W4B-N18 … W4B-N23 (recorded, not resolved)
+
+| # | Observation | Where |
+|---|---|---|
+| W4B-N18 | ECN-019 Rev C (now `docs/ECN-019_Programme_Wide_Design_Revision.md`, status PROPOSED) names no L1 / EML-2 O2 depot and no O2 loft: §18.1 gives MD-2 the single purpose "REO canisters" PKT → Earth; §15.1 makes SPA itself the P14+ "propellant depot" (value chain v16 agrees). SEL-REQ-005's depot therefore rests on the requirement alone. Kept as written — W4B-N4 is now a question with its evidence complete. | `Sites.sysml`, `ProgrammeRequirements.sysml`, `Interfaces.sysml` |
+| W4B-N19 | SENTINEL first phase, more evidence for W4B-N8: SENTINEL design Rev B §7 places "2× inspection rovers" in its "P2–P3 (pre-crew)" row; its Rev A history line says "2 rovers (P3) → 4 (P7+)"; the fleet ECN-019 amendment table starts at P7 ("4+"); fleet v9 §9.2 says "2 initial (P3)". `SentinelRover.introducedIn = P2` kept. | `RobotFleet.sysml` |
+| W4B-N20 | Value-chain html against the streams: v14.1 labels the Starship return "P7–P8" while its own Phase 2 panel has the first export batch at M116 / Y10 (the model binds DG-5.4); v15 carries the pre-ECN-020 "~303 t YBCO" (W3-N7 territory) and "MD-3 ThCl₄ (P10)" against ECN-019 §18.1 Y43 P9–P10 and the model's DG-9.6; v16 sends S-type Si / Cu "to PKT via MD-3" although MD-3 is PKT → SPA in ECN-019 §18.1 and the model carries them on MD-1. Nothing in the streams changed. | `Behaviour.sysml` |
+| W4B-N21 | Neither SW-SENTINEL Rev B nor SENTINEL design Rev B carries a three-mode table: the modes are a baseline construct (ARCHITECTURE_BASELINE.md §7); the documents' behaviour is the five-level authority model and the anomaly workflow, now modelled beside the modes. `toLocalAi` / `backToPlan` stay unbound; Wave 5 may retire the mode machine in favour of `AuthorityLevel`. | `Software.sysml` |
+| W4B-N22 | First recorded as "NAV-001 gives no cell-completion rule"; the verification (§9.5) found it in §3.2 (excavate to depth, retract, advance 2 m) and `moveOn` is bound on the depth. What stays unbound is the lateral offset on unexpected drill resistance (§2.2, no criterion). | `Software.sysml` |
+| W4B-N23 | Three H₂ thresholds in three contexts, recorded for the W4B-N6 rule: SENTINEL design §4.3 WARNING "H₂ detected at > 10 ppm"; ECN-014 (fleet v9 §9.2, ISRU-001 Rev D §7.4) 100 ppm alert / 1,000 ppm auto-close at the valve stations; SW-SENTINEL §5 P0 EMERGENCY at 4 % LEL (40,000 ppm) with re-power at < 100 ppm. Different sensors and zones, not a conflict — but the binding rule must keep them apart. | `Software.sysml` docs |
+
+#### 9.5 Adversarial verification
+
+Every binding of the addendum was put to an adversarial reviewer with the
+model element and the source sections, briefed to refute (eleven reviewers,
+one per binding group, plus a completeness critic; the workflow transcript
+is session material, the outcomes are here). Verdicts applied in this
+commit (the first seven):
+
+| Group | Verdict | Applied |
+|---|---|---|
+| ECN-012 dump sequence | overreach | pre-heat is not a pause: `arriveAtCellPreHeating` / `moveOnPreHeating` added so cells advance while the heater is on; `drainPipeHeaterOn` attribute; IMU-reset and grid-upload docs carry both NAV-001 phrasings (reset on retraction when taut vs at the dock; upload "after each dump" vs "within the dump window"); NAV-001 citations corrected (§2.1 proximity sensors, §3.1 grid, §3.2 strategy); ECN-012 §3.3.3 contradiction recorded (**W4B-N24**) |
+| MOLE-I roles | misread | `moveOn` **is** in the source — NAV-001 §3.2 "excavates to depth … retracts the drill, advances 2 m": bound on `cellDrillDepthMm >= cellTargetDepthMm` (target UNBOUND, 400 mm quoted); W4B-N22 re-stated as the lateral-offset criterion of §2.2 (`offsetOnResistance`, unbound); `takeConstructionRole` made UNBOUND (an ordinal rule, not a command) |
+| PLC / UHF switchover | overreach | a paraphrase presented as a quotation replaced by the real sentences; the untethered leg attributed to MOLE-I design v5 §4.8 and marked "not said to be automatic"; start-up mode noted as unstated; the `commsPath` attribute and enum dropped, the constraint now asserts the documented fact (`plcAvailableOffPermanentTether = false`) |
+| Polar fix on the substation | supported | accuracy figures removed from the doc (left to the source), citations split by claim (computation ECN-013 §3.2, transmission SW-MOLEI Rev D §8.2, encoders NAV-001 §2.1, hardware SW-SUB Rev C); `succession tetherFix then fuse` dropped (the fix is low-rate and taut-only, fusion runs on odometry + IMU between fixes, the flow stays); `PowerStatusReport` added so the three UHF payloads NAV-001 §4 names each have an item; the downlink "command" noted as implied |
+| Substation ports | misread | make-before-break is the **branch connector** row of SW-SUB Rev C §6, not the port breakers, and the MOLE-I drum tether is permanent: the `seated` state and the `DockingState` triggers removed; the breaker closes on the allocation command and opens on power loss or tether retraction (opening event UNBOUND); which connector the port breakers wait on is not stated (**W4B-N25**); the §3.3 hold's location noted as unstated |
+| SENTINEL workflow and authority | overreach | the mode escalations restored to the Wave 4B ECN-014 form (`accept SensorReading`) with the severity-based candidate recorded, not bound — no document equates the three modes with the §4.3 severities or the tiers; `humanResolution` UNBOUND again (step 5 gives the disposition, not the return to plan); `respond` allocated to both the Earth and edge tiers; "MSR scram" → the source's "MSR emergency shutdown (control rod drop)" |
+| No-contact mode, PKT tiers | overreach | three wordings of the no-contact rule recorded (SW §12.2 transfer-or-suspend by phase; design §3.7 suspend, crew may approve locally; design §9 transfer, no threshold — **W4B-N26**); T0–T3 wording aligned to §15.3; the §8.2 "Tier 1 / Tier 2" naming clash noted; queueing a `do action` |
+
+The remaining four groups (ECN-014 returns on the ticket closing; valve
+hardware; bayonet / CAP; the W4B-N18–N20 quotations) and the completeness
+critic were still running at this commit; their verdicts and fixes follow in
+the next commit on this branch.
+
+| # | Observation (from the verification) | Where |
+|---|---|---|
+| W4B-N24 | ECN-012 §3.3.3 "the heater only runs during non-drilling phases (retraction and dump)" against its own §3.3.2 step 1 "continues drilling for final ~4.5 hours of fill" and ISRU-001 Rev D step D "Drilling continues normally". Modelled as the steps say; recorded. | `Software.sysml` |
+| W4B-N25 | SW-SUB Rev C §6 states make-before-break for the branch connector (the substation's input socket) and "same spec" for the construction tap; the per-port breakers "close on command" by docking status (§7.2) with no connector named. The MOLE-I tether is permanent, so a dump docking is not a plug-in. Recorded. | `Software.sysml` |
+| W4B-N26 | The no-contact rule in three wordings (SW-SENTINEL §12.2; SENTINEL design §3.7; design §9). The machine follows §12.2; the others are recorded in its doc. | `Software.sysml` |
+
+#### 9.6 Map and doc updates
+
+`mapping/document_map.csv`: every row of a committed source re-worded to
+name its extract and what it binds (SW-SUB-001 `skeleton` →
+`behaviour_modelled`; SEL_SENTINEL_DESIGN, CAP-001, EVA contingency,
+CON-001 → `behaviour_modelled`; ECN-012 → wave 4B), three rows added
+(fleet ECN-019 amendment `folded`, SENTINEL design Rev A+ and CAP-001 Rev A
+`superseded`). `docs/DOCUMENT_FAMILIES.md`: the "Primary sources in the
+repository" section. `docs/CLAUDE_SYSML_CONTEXT.md` §8, `docs/MIGRATION_PLAN.md`,
+`docs/HUMAN_QUICKSTART.md` (32 views), both READMEs, the Wave 4B brief
+banner and the Wave 5 brief §0 (counts, the W4B-N6 list, W4B-N7 mostly
+closed, W4B-N18) updated. `tools/render_diagrams.sh` renders the seven new
+views (`anomaly_workflow_action_flow`, `construction_tap_hop_action_flow`,
+`earth_contact_states`, `molei_comms_states`, `bayonet_engagement_states`,
+`tether_port_states`, `cap_mission_states`).
+
+#### 9.7 Open for Jason (addendum)
+
+W4B-N4 / N18 (does SEL-REQ-005's L1 O2 depot stand, now that ECN-019 Rev C
+is read and does not carry it?), W4B-N8 / N19 (SENTINEL's first phase),
+W4B-N20 (should the value-chain html be re-cut to ECN-020 — YBCO, MD-3 phase,
+MD-3 direction?), W4B-N21 (retire the three-mode machine?), W4B-N6 / N23
+(the document-constant rule, with the three H₂ thresholds as its test
+case). None changes a bound value.

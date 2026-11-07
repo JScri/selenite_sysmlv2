@@ -16,7 +16,13 @@ package SelenitePsrNetwork {
          * crew access); the CON-001 bayonet tap sockets and the ECN-013 UHF
          * construction link added; the MOLE-I side of the tether and the
          * bayonet adapter are in SeleniteFleet::MoleI. Boundary ports are
-         * delegated to the internal parts with 'bind'. */
+         * delegated to the internal parts with 'bind'. Addendum (7 Nov
+         * 2026): the sources are in docs/; the tether drum carries a sensing
+         * port (payout + DRM-040 encoder) into the controller, which computes
+         * the polar fix the drum sends down the tether (ECN-013 s.3.2); the
+         * CLP carries the CAP floor docking pad power tap (CAP-001 s.5);
+         * construction tap counts per branch and the SATS / substation tap
+         * are documented, not multiplied (rule 3). */
 
     private import ScalarValues::*;
     private import SeleniteInterfaces::*;
@@ -43,12 +49,22 @@ package SelenitePsrNetwork {
 
     part def CrewWinch :> PsrNetworkElement {
         doc /* IW-CAP crew-rated winch for the Crater Access Pod, dedicated guide
-             * cable, anchors reserved at P1. Operational P4 with the CAP.
-             * Source: SEL-CAP-001 Rev A updated; fleet v9 s.13.5. */
+             * cable, redundant braking, independent of all MOLE-I and
+             * infrastructure winches. Operational P4 with the CAP. Phase 1
+             * reservations (SEL-CAP-001 Rev A updated s.5; SEL-CON-001 Rev B
+             * updated, CAP reservations): guide cable anchor sockets along the
+             * wall route, the rim winch pad (SINTER-built), the floor docking
+             * pad with power tap (SelenitePsrNetwork::ClpJunction), and a
+             * lateral cable routing corridor. Source: SEL-CAP-001 Rev A
+             * updated s.3, s.5; fleet v9 s.13.5. */
         attribute redefines introducedIn = Phase::P4;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::spa;
         attribute anchorsReservedFrom = Phase::P1;
+        attribute phase1Reservations = (
+            "guide cable anchor sockets", "rim winch pad",
+            "floor docking pad with power tap", "lateral cable routing corridor"
+        );
     }
 
     part def CapGuideCable :> PsrNetworkElement {
@@ -117,6 +133,13 @@ package SelenitePsrNetwork {
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::psrFloor;
         part trunkPump : TrunkPump;
+        part capDockingPadTap : BayonetTapSocket {
+            doc /* CAP floor docking pad: flat Ti anchor plate adjacent to the
+                 * SATS+WEB with a 1,000 VDC bayonet power tap socket, installed
+                 * during Stage A by the construction MOLE-I (Phase 1
+                 * reservation). Source: SEL-CAP-001 Rev A updated s.5;
+                 * SEL-CON-001 Rev B updated, CAP Phase 1 reservations item 3. */
+        }
         port trunkCableIn : ~PowerPort;
         port spineOut : PowerPort;
         port trunkPipeIn : ~WaterPort;
@@ -148,14 +171,20 @@ package SelenitePsrNetwork {
     }
 
     part def BayonetTapSocket {
-        doc /* A standardised 20 mm bayonet tap socket (construction tap, SATS
-             * tap, branch cable tap, substation tap) that the MOLE-I motorised
-             * adapter engages with a 90 deg twist-lock and holds on a passive
-             * detent (ECN-013 R2 via fleet v9 s.4.1). The SEL-CON-001 Rev B
-             * updated connector element the document map carried as planned
-             * (V-N7); created at Wave 4B. TODO: SEL-CON-001 Rev B updated is
-             * not in the repository - engagement sequence, socket count per
-             * element and electrical rating await it. */
+        doc /* A standardised 20 mm bayonet tap socket with two L-slot pins
+             * (construction tap on the branch cable every 100 m with its
+             * retraction spool, the SATS construction tap, the substation
+             * construction tap SEL-SUB-BUS-030, the CAP floor docking pad tap)
+             * that the MOLE-I motorised adapter engages push-and-twist and
+             * holds on a passive detent. The SEL-CON-001 Rev B updated
+             * connector element (V-N7); the engagement sequence is
+             * SeleniteSoftware::BayonetEngagementStates. The branch connector
+             * is make-before-break: the solenoid closes after the connector is
+             * fully seated (SEL-SW-SUB-001 Rev C s.6). Socket counts (~9
+             * spools per 450 m branch) and the 1,000 VDC rating stay in the
+             * source (rule 3). Source: SEL-CON-001 Rev B updated s.3.1 and
+             * ECN-013 Rev 2 / Rev 3 and CAP reservations; SEL-SW-SUB-001 Rev
+             * C s.6, ECN-013 Rev 3 part; fleet v9 s.4.1. */
         port socket : BayonetTapPort;
     }
 
@@ -203,15 +232,24 @@ package SelenitePsrNetwork {
         bind waterOut = waterManifold.branchPipeOut;
         bind constructionRadio = controller.constructionRadio;
         bind supervision = controller.supervision;
+        // ECN-013 s.3.2: drum sensing into the controller, the computed fix
+        // back out on the drum's tether port
+        interface drumSensing : DrumSensingLine connect tetherDrums.sensing to controller.drumSensing;
+        flow controller.tetherOut.fix to tetherDrums.tether.fix;
     }
 
     part def TetherDrum {
         doc /* Constant-tension MOLE-I tether drum with cable-drum heater (on the
-             * substation, not the rover). The drum end of the tether link
-             * carries power and the DRM-040 encoder fix to the rover, water
-             * batches and telemetry back. Source: fleet v9 s.4.1, s.13.4;
-             * SEL_SUBSTATION_DESIGN_v4. */
+             * substation, not the rover), 50 N tension loop, payout encoder,
+             * and the DRM-040 two-axis angle encoder on the guide roller
+             * (ECN-013). The drum end of the tether link carries power and
+             * the controller-computed polar fix to the rover, water batches
+             * and telemetry back; the sensing port carries payout and roller
+             * angle to the controller. Source: SEL-SW-SUB-001 Rev C s.5 and
+             * ECN-013 addition; SEL-NAV-001 Rev A s.2.1; fleet v9 s.4.1,
+             * s.13.4; SEL_SUBSTATION_DESIGN_v4. */
         port tether : TetherPort;
+        port sensing : DrumSensingPort;
     }
 
     part def WaterManifold {

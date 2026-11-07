@@ -20,14 +20,28 @@ package SeleniteSoftware {
          * (100 / 1,000 ppm, 5 bar, 60 s, 3 s, 10 ppm for 5 min, 3 bar, 10 min;
          * O2 200 kPa, 2x flow) are quoted in the docs from fleet v9 s.9.2 and
          * bound at Wave 5.
-         * Sources IN the repository: SEL_ROBOT_FLEET_v9.md s.4.1 (NAV-001,
-         * ECN-012 drain sequence, ECN-013 adapter), s.9.2 (the ECN-014
-         * extract, the only ECN-014 text in the repository - V-N19), s.10.1
-         * (hauler navigation), s.13.4; SEL-T1.1-STRATEGY v3.1 s.4.2, s.5.1;
-         * ARCHITECTURE_BASELINE.md s.7. Sources NOT in the repository (ledger
-         * entries only; each use carries a TODO): SEL-SW-SENTINEL-001 Rev B
-         * (ECN-014 folded in), SEL_SENTINEL_DESIGN_RevB, SEL-NAV-001 Rev A,
-         * SEL-SW-MOLEI-001 Rev D, SEL-SW-SUB-001 Rev C, ECN-013 v1. */
+         * Addendum (7 Nov 2026, same wave, W4B-N18 onward): the primary
+         * sources are now in docs/ (markdown extracts; originals under
+         * docs/sources/): SEL-SW-SENTINEL-001 Rev B, SEL_SENTINEL_DESIGN Rev
+         * B, SEL-NAV-001 Rev A, SEL-SW-MOLEI-001 Rev D, SEL-SW-SUB-001 Rev C,
+         * SEL-CON-001 Rev B updated, SEL-ECN-012, SEL-ECN-013, SEL-ISRU-001
+         * Rev D updated, updated_SEL-CAD-ISRU-001, SEL-CAP-001 Rev A updated,
+         * SEL_EVA_CONTINGENCY corrected. From them: the ECN-012 dump sequence
+         * triggers, the NAV-001 dock-cycle resets and grid upload, the
+         * SENTINEL anomaly workflow, authority levels, no-contact mode and
+         * PKT escalation tiers, the ECN-014 clear / stand-down / resolved
+         * triggers (the anomaly ticket closing at workflow step 6), the
+         * substation port allocation and breaker logic, the polar fix
+         * computed on the substation (correcting the Wave 4B rover-side
+         * ReadTetherPolarFix), construction navigation by tap count, the
+         * PLC / UHF switchover, the bayonet engagement, the construction tap
+         * hop and the CAP mission sequence with its SPE abort. Still UNBOUND
+         * after the sources: the three SENTINEL mode transitions (the
+         * documents carry an authority model, not a mode table - W4B-N21) and
+         * the MOLE-I "cell exhausted" criterion (NAV-001 is silent). Earlier
+         * sources: SEL_ROBOT_FLEET_v9.md s.4.1, s.9.2 (ECN-014 extract),
+         * s.10.1, s.13.4; SEL-T1.1-STRATEGY v3.1 s.4.2, s.5.1;
+         * ARCHITECTURE_BASELINE.md s.7. */
 
     private import ScalarValues::*;
     private import SeleniteInterfaces::*;
@@ -35,8 +49,11 @@ package SeleniteSoftware {
     private import SeleniteSites::*;
 
     enum def SupervisionMode {
-        doc /* The three SENTINEL operating modes. Source: SEL-SW-SENTINEL-001
-             * Rev B (not in the repository), ARCHITECTURE_BASELINE.md s.7. */
+        doc /* The three SENTINEL operating modes of ARCHITECTURE_BASELINE.md
+             * s.7. SEL-SW-SENTINEL-001 Rev B and SEL_SENTINEL_DESIGN Rev B
+             * (docs/) do not name them: they carry the five-level authority
+             * model (AuthorityLevel) and the anomaly severities
+             * (AnomalySeverity) instead - W4B-N21. */
         preProgrammedExecution;
         localAiWithinSafeParameters;
         exceptionFlaggingToHumans;
@@ -72,6 +89,84 @@ package SeleniteSoftware {
         alert;
         tier2;
         tier1Emergency;
+    }
+
+    enum def AuthorityLevel {
+        doc /* SENTINEL authority model: MONITOR (no state change), RECOMMEND
+             * (no execution until a human approves), EXECUTE (pre-approved
+             * routine actions, crew may override), GATE (hard prerequisite
+             * needing explicit human approval, no timeout), EMERGENCY (the
+             * only autonomous irreversible action: fire, depressurisation,
+             * explosive H2 at SPA; PKT adds MSR emergency shutdown by control
+             * rod drop, conveyor emergency stop and mass driver abort).
+             * Source: SEL_SENTINEL_DESIGN Rev B s.5, s.8.4. */
+        monitor;
+        recommend;
+        execute;
+        gate;
+        emergency;
+    }
+
+    enum def AnomalySeverity {
+        doc /* Anomaly workflow step 2 classification: ADVISORY (drifting
+             * within limits, log only), CAUTION (at limit or single-sensor,
+             * cross-check), WARNING (confirmed, isolate and report URGENT),
+             * EMERGENCY (life-safety, autonomous response). Source:
+             * SEL_SENTINEL_DESIGN Rev B s.4.3. */
+        advisory;
+        caution;
+        warning;
+        emergency;
+    }
+
+    enum def PktEscalationTier {
+        doc /* PKT node exception escalation to the SPA Ops Hub: T0 local
+             * (logged, not uplinked unless requested), T1 advisory (contained,
+             * uplinked in the next data packet - 60 s in the source, not
+             * modelled), T2 alert (subsystem isolated, uplinked immediately
+             * with full trace, crew guidance requested), T3 emergency (P0
+             * autonomous response, immediate notification, adjacent nodes
+             * notified for sector absorption). Source: SEL-SW-SENTINEL-001
+             * Rev B s.15.3. Naming: SEL_SENTINEL_DESIGN Rev B s.8.2 speaks of
+             * "Tier 1 or Tier 2 alert classification" where s.15.3 defines
+             * T0-T3 (recorded, not resolved). */
+        t0Local;
+        t1Advisory;
+        t2Alert;
+        t3Emergency;
+    }
+
+    enum def TetherConnectionType {
+        doc /* What the MOLE-I is plugged into: its permanent substation drum
+             * port (PLC comms), a construction tap on a temporary tether (UHF
+             * comms, no PLC handshake), or nothing (battery transit, UHF).
+             * Source: SEL-ECN-013 s.5; SEL_MOLEI_DESIGN v5 s.4.7-4.8. */
+        permanentDrumPort;
+        constructionTap;
+        untethered;
+    }
+
+    // ---- Software data items local to this package ----
+
+    item def AnomalyClassification :> DataItem {
+        doc /* The severity SENTINEL assigns at anomaly workflow step 2 (and
+             * re-assigns on escalation at step 6). Source: SEL_SENTINEL_DESIGN
+             * Rev B s.4.3. */
+        abstract attribute severity : AnomalySeverity;
+    }
+
+    item def AnomalyTicketClosed :> DataItem {
+        doc /* Anomaly workflow step 6: after the corrective action SENTINEL
+             * re-inspects, confirms the anomaly resolved and closes the ticket
+             * in the maintenance database. It is the trigger every ECN-014
+             * machine returns on (alert clear, Tier 1 stand-down, O2 line
+             * resolved). Source: SEL_SENTINEL_DESIGN Rev B s.4.3 step 6. */
+    }
+
+    item def CrewDisposition :> DataItem {
+        doc /* Anomaly workflow step 5: crew or Earth mission control approves,
+             * modifies or rejects the recommended action. Source:
+             * SEL_SENTINEL_DESIGN Rev B s.4.3 step 5. */
     }
 
     abstract part def SoftwareElement :> PhaseGated {
@@ -118,13 +213,17 @@ package SeleniteSoftware {
     }
 
     state def SentinelOperatingModes {
-        doc /* The three SENTINEL modes as states. The repository documents
-             * name the modes (ARCHITECTURE_BASELINE.md s.7) and one escalation
-             * path - an ECN-014 auto-close notifies the Ops Hub and raises a
-             * Tier 2 / Tier 1 alert (fleet v9 s.9.2), which is exception
-             * flagging to humans. Every other transition is declared with its
-             * trigger UNBOUND: the mode table is in SEL-SW-SENTINEL-001 Rev B,
-             * which is not in the repository (TODO). */
+        doc /* The three SENTINEL modes as states (ARCHITECTURE_BASELINE.md
+             * s.7). Addendum (7 Nov 2026): SEL-SW-SENTINEL-001 Rev B and
+             * SEL_SENTINEL_DESIGN Rev B are in docs/ and carry no mode table
+             * (W4B-N21) - their behaviour is the authority model
+             * (AuthorityLevel), the anomaly workflow (AnomalyResponseWorkflow)
+             * and the no-contact mode (EarthContactStates). No document
+             * equates the modes with the anomaly severities or the ECN-014
+             * tiers, so the escalation transitions keep their Wave 4B form
+             * (the ECN-014 Ops Hub notification on a reading, fleet v9 s.9.2)
+             * with the candidate trigger recorded, and all five transitions
+             * stay UNBOUND where the sources are silent (W4B-N21). */
         entry; then preProgrammedExecution;
         state preProgrammedExecution {
             doc /* Executing the uploaded plan. */
@@ -138,13 +237,14 @@ package SeleniteSoftware {
         transition toLocalAi
             first preProgrammedExecution
             then localAiWithinSafeParameters {
-            doc /* Trigger UNBOUND: SEL-SW-SENTINEL-001 Rev B mode table (not
-                 * in the repository). */
+            doc /* Trigger UNBOUND (W4B-N21): neither SEL-SW-SENTINEL-001 Rev B
+                 * nor SEL_SENTINEL_DESIGN Rev B describes a mode change; the
+                 * EXECUTE authority level covers both states. */
         }
         transition backToPlan
             first localAiWithinSafeParameters
             then preProgrammedExecution {
-            doc /* Trigger UNBOUND: SEL-SW-SENTINEL-001 Rev B. */
+            doc /* Trigger UNBOUND (W4B-N21), as toLocalAi. */
         }
         transition faultPatternEscalation
             first localAiWithinSafeParameters
@@ -152,7 +252,13 @@ package SeleniteSoftware {
             then exceptionFlaggingToHumans {
             doc /* ECN-014 via fleet v9 s.9.2: an alert or auto-close is an Ops
                  * Hub notification (Tier 2 / Tier 1 emergency) - the one
-                 * documented escalation. */
+                 * documented escalation. Candidate trigger, NOT bound:
+                 * SEL_SENTINEL_DESIGN Rev B s.4.3 step 4 reports every severity
+                 * to humans (ADVISORY / CAUTION displayed and downlinked,
+                 * WARNING URGENT, EMERGENCY post-facto) and SEL-SW-SENTINEL-001
+                 * Rev B s.15.3 escalates by tier; no document equates the
+                 * ECN-014 tiers with the s.4.3 severities or the modes
+                 * (W4B-N21). */
         }
         transition planExceptionEscalation
             first preProgrammedExecution
@@ -163,9 +269,114 @@ package SeleniteSoftware {
         transition humanResolution
             first exceptionFlaggingToHumans
             then preProgrammedExecution {
-            doc /* Trigger UNBOUND: the human disposition that returns SENTINEL
-                 * to its plan - SEL-SW-SENTINEL-001 Rev B. */
+            doc /* Trigger UNBOUND (W4B-N21): SEL_SENTINEL_DESIGN Rev B s.4.3
+                 * step 5 gives the crew / Earth disposition (approve, modify,
+                 * reject), but no document says it returns SENTINEL to its
+                 * plan, nor to which mode; the step 6 loop may re-raise. The
+                 * disposition itself is RespondToAnomaly in the workflow. */
         }
+    }
+
+    state def EarthContactStates {
+        doc /* SENTINEL no-contact autonomous mode: Earth comms lost beyond the
+             * no-contact threshold (24 hr in the source, UNBOUND here, rule 3)
+             * -> all EXECUTE functions continue; GATE functions transfer to
+             * the local crew from P4, and are SUSPENDED while there is no crew
+             * (P2-P3: no departures, no heavy lifts, no reactor restarts);
+             * production continues on the last schedule and every gate
+             * request is queued for human review on restoration. Source:
+             * SEL-SW-SENTINEL-001 Rev B s.12.2. Three wordings recorded, not
+             * resolved (W4B-N26): SEL_SENTINEL_DESIGN Rev B s.3.7 carries the
+             * same > 24 hr threshold but says only GATE functions (departure
+             * approvals, structural clearance) are suspended until comms are
+             * restored and that crew on site (P4+) can approve gates locally;
+             * design s.9 (X-band link failure row) says GATE transfers to the
+             * local crew with no threshold stated. The inContact wording is
+             * design s.7 (P2-P3 and P4 rows). */
+        attribute earthCommsLossHours : Real;
+        attribute noContactThresholdHours : Real;
+        attribute earthCommsLost : Boolean;
+        entry; then inContact;
+        state inContact {
+            doc /* Earth link up; GATE functions held by Earth (P2-P3) or the
+                 * local crew with Earth backup (P4+). */
+        }
+        state noContactAutonomous {
+            doc /* EXECUTE continues; GATE to local crew (P4+) or suspended
+                 * (P2-P3); gate requests queued. */
+            do action queueGateRequestsForHumanReview;
+        }
+        transition commsLostBeyondThreshold
+            first inContact
+            if earthCommsLossHours > noContactThresholdHours
+            then noContactAutonomous {
+            doc /* "If Earth comms lost >24 hr" (s.12.2) - threshold UNBOUND. */
+        }
+        transition commsRestored
+            first noContactAutonomous
+            if not earthCommsLost
+            then inContact {
+            doc /* Queued gate requests go to human review on restoration. */
+        }
+    }
+
+    action def DetectAnomaly {
+        doc /* Step 1: a reading exceeds a threshold or trend analysis predicts
+             * a breach within the look-ahead (SEL_SENTINEL_DESIGN Rev B s.4.3). */
+        in item reading : SensorReading;
+    }
+
+    action def ClassifyAnomaly {
+        doc /* Step 2: severity assignment (SEL_SENTINEL_DESIGN Rev B s.4.3). */
+        out item classification : AnomalyClassification;
+    }
+
+    action def RespondToAnomaly {
+        doc /* Step 5: the human disposition (SEL_SENTINEL_DESIGN Rev B s.4.3). */
+        in item disposition : CrewDisposition;
+    }
+
+    action def VerifyAndCloseAnomaly {
+        doc /* Step 6: re-inspect, confirm, close the ticket; escalate if the
+             * anomaly persists (SEL_SENTINEL_DESIGN Rev B s.4.3). */
+        out item closure : AnomalyTicketClosed;
+    }
+
+    action def AnomalyResponseWorkflow {
+        doc /* The six-step SENTINEL anomaly workflow for every anomaly type:
+             * detect (threshold or 24 hr trend prediction) -> classify
+             * (AnomalySeverity) -> isolate (WARNING and EMERGENCY only:
+             * pipeline valve closure, hatch closure, geofence expansion,
+             * breaker trip - autonomous, no human approval) -> diagnose and
+             * recommend (correlation against the fault pattern catalogue) ->
+             * respond (crew / Earth disposition; EMERGENCY response has
+             * already executed) -> verify and close (re-inspect, close the
+             * ticket; if the anomaly persists, escalate one severity and
+             * repeat from isolate - the loop is in the doc, not drawn). The
+             * isolate step is a pass-through below WARNING. Times (30 s
+             * valve, 10 s hatch, 24 hr corrective action) stay in the source
+             * (rule 3). Source: SEL_SENTINEL_DESIGN Rev B s.4.3;
+             * SEL-SW-SENTINEL-001 Rev B s.13 (fault patterns, correlation). */
+        in item reading : SensorReading;
+        out item classification : AnomalyClassification;
+        out item closure : AnomalyTicketClosed;
+        action detect : DetectAnomaly;
+        action classify : ClassifyAnomaly;
+        action isolate;
+        action diagnoseAndRecommend;
+        action respond : RespondToAnomaly;
+        action verifyAndClose : VerifyAndCloseAnomaly;
+        flow reading to detect.reading;
+        flow classify.classification to classification;
+        flow verifyAndClose.closure to closure;
+        first start;
+        succession start then detect;
+        succession detect then classify;
+        succession classify then isolate;
+        succession isolate then diagnoseAndRecommend;
+        succession diagnoseAndRecommend then respond;
+        succession respond then verifyAndClose;
+        succession verifyAndClose then done;
     }
 
     part def EarthOpsHubTier :> SoftwareElement {
@@ -186,9 +397,10 @@ package SeleniteSoftware {
         doc /* Tier 2: SENTINEL base AI commander at the edge. Runs on SPA
              * Ops Hub compute from P4; a PKT instance from P8 is supervised
              * from SPA over the 0.5 s relay link. Exhibits the supervision
-             * location machine. Software spec: SEL-SW-SENTINEL-001 Rev B (not
-             * in the repository). Rover hardware is SeleniteFleet::SentinelRover
-             * - a separate element. */
+             * location machine; the PKT design principle and escalation tiers
+             * below. Software spec: SEL-SW-SENTINEL-001 Rev B (docs/; s.2
+             * partitions, s.15 PKT node architecture). Rover hardware is
+             * SeleniteFleet::SentinelRover - a separate element. */
         attribute redefines introducedIn = Phase::P2;
         attribute redefines retiredIn = null;
         attribute redefines hostedOn = "SPA Ops Hub (P4+); PKT edge node (P8+)";
@@ -198,11 +410,25 @@ package SeleniteSoftware {
         attribute pktSupervisedFromSpaFrom = Phase::P8;
         attribute supervisionNodeEarly = SiteId::earth;
         attribute supervisionNodeSteady = SiteId::spa;
+        attribute pktSafetyCriticalDecisionsLocal : Boolean = true;
+        attribute relaySatelliteInSafetyCriticalPath : Boolean = false;
+        attribute pktEscalationTiers = (
+            PktEscalationTier::t0Local, PktEscalationTier::t1Advisory,
+            PktEscalationTier::t2Alert, PktEscalationTier::t3Emergency
+        );
         port uplink : SupervisionPort;
         port spaHost : SupervisionPort;
         port pktSupervision : ~SupervisionPort;
         port fleetSupervision : ~SupervisionPort;
         exhibit state location : SupervisionLocation;
+        assert constraint relayNeverInSafetyPath {
+            doc /* SEL-SW-SENTINEL-001 Rev B s.15.2 design principle: any
+                 * decision that must complete in under a second is handled in
+                 * the local PKT node with hardwired actuator connections; the
+                 * relay satellite is never in the critical path. */
+            pktSafetyCriticalDecisionsLocal == true
+                and relaySatelliteInSafetyCriticalPath == false
+        }
     }
 
     part def FleetTier :> SoftwareElement {
@@ -222,8 +448,16 @@ package SeleniteSoftware {
         doc /* The SENTINEL supervision system as a whole: three tiers linked
              * by SupervisionLink interfaces, three modes exhibited as a state
              * machine, with the ECN-014 valve monitoring functions attached.
-             * Source: SEL-SW-SENTINEL-001 Rev B (not in the repository);
-             * ARCHITECTURE_BASELINE.md s.7; fleet v9 s.9.2. */
+             * Addendum (7 Nov 2026): the five authority levels, the SPA
+             * EMERGENCY scope (fire, depressurisation, explosive H2 - the only
+             * autonomous irreversible actions; design s.5) and the PKT
+             * additions (design s.8.4), the anomaly workflow performed here and
+             * the no-contact mode exhibited. Partition map, database schema,
+             * control loops and the ~206 + ~150 fault patterns stay in the
+             * source (SEL-SW-SENTINEL-001 Rev B s.2-s.13, s.15.4) as Wave 5
+             * data. Source: SEL-SW-SENTINEL-001 Rev B; SEL_SENTINEL_DESIGN Rev
+             * B s.4.3, s.5, s.8.4, s.9; ARCHITECTURE_BASELINE.md s.7; fleet v9
+             * s.9.2. */
         attribute redefines introducedIn = Phase::P2;
         attribute redefines retiredIn = null;
         attribute redefines hostedOn = "distributed across tiers";
@@ -232,6 +466,16 @@ package SeleniteSoftware {
             SupervisionMode::localAiWithinSafeParameters,
             SupervisionMode::exceptionFlaggingToHumans
         );
+        attribute authorityLevels = (
+            AuthorityLevel::monitor, AuthorityLevel::recommend,
+            AuthorityLevel::execute, AuthorityLevel::gate, AuthorityLevel::emergency
+        );
+        attribute spaEmergencyScope = ("fire", "rapid depressurisation", "explosive H2 concentration");
+        attribute pktEmergencyScopeAdds = ("MSR emergency shutdown", "conveyor emergency stop", "mass driver abort");
+        attribute gateHasNoTimeout : Boolean = true;
+        attribute earthCommsLossHours : Real;
+        attribute noContactThresholdHours : Real;
+        attribute earthCommsLost : Boolean;
 
         part earthOpsHub : EarthOpsHubTier;
         part edge : SentinelEdgeTier;
@@ -253,6 +497,24 @@ package SeleniteSoftware {
         interface edgeToFleet : SupervisionLink connect fleetTier.uplink to edge.fleetSupervision;
 
         exhibit state modes : SentinelOperatingModes;
+        exhibit state earthContact : EarthContactStates {
+            :>> earthCommsLossHours = earthCommsLossHours;
+            :>> noContactThresholdHours = noContactThresholdHours;
+            :>> earthCommsLost = earthCommsLost;
+        }
+        perform action anomalyWorkflow : AnomalyResponseWorkflow;
+        allocate anomalyWorkflow.detect to edge;
+        allocate anomalyWorkflow.classify to edge;
+        allocate anomalyWorkflow.isolate to edge;
+        allocate anomalyWorkflow.diagnoseAndRecommend to edge;
+        allocate anomalyWorkflow.respond to earthOpsHub;
+        allocate anomalyWorkflow.respond to edge;
+        allocate anomalyWorkflow.verifyAndClose to edge;
+        assert constraint gateNeedsHumanApproval {
+            doc /* SEL_SENTINEL_DESIGN Rev B s.5: a GATE remains closed until
+                 * approved - no timeout, SENTINEL cannot bypass it. */
+            gateHasNoTimeout == true
+        }
     }
 
     // =====================================================================
@@ -402,10 +664,13 @@ package SeleniteSoftware {
         }
         transition alertCleared
             first alert
+            accept AnomalyTicketClosed
             then open {
-            doc /* Trigger UNBOUND: the ECN-014 table gives no clearing
-                 * condition for an alert that does not escalate. Source needed:
-                 * SEL-SW-SENTINEL-001 Rev B (not in the repository). */
+            doc /* Bound 7 Nov 2026: an alert that does not escalate clears when
+                 * the anomaly workflow verifies it resolved and closes the
+                 * ticket (step 6); until then the Ops Hub notification stands.
+                 * The ECN-014 table itself gives no clearing condition.
+                 * Source: SEL_SENTINEL_DESIGN Rev B s.4.3 step 6. */
         }
     }
 
@@ -432,9 +697,15 @@ package SeleniteSoftware {
         }
         transition standDown
             first tier1Emergency
+            accept AnomalyTicketClosed
             then normal {
-            doc /* Trigger UNBOUND: no stand-down criterion in fleet v9 s.9.2.
-                 * Source needed: SEL-SW-SENTINEL-001 Rev B. */
+            doc /* Bound 7 Nov 2026: an EMERGENCY response has already executed;
+                 * the crew assesses damage and plans recovery (step 5), and
+                 * the function stands down when SENTINEL verifies the anomaly
+                 * resolved and closes the ticket (step 6). Each station then
+                 * still needs its own crew re-open. Source: SEL_SENTINEL_DESIGN
+                 * Rev B s.4.3 steps 5-6; SEL-SW-SENTINEL-001 Rev B s.5
+                 * (crew-directed recovery column). */
         }
     }
 
@@ -471,10 +742,13 @@ package SeleniteSoftware {
         }
         transition resolved
             first autoClosed
+            accept AnomalyTicketClosed
             then open {
-            doc /* Trigger UNBOUND: "until resolved" - no re-open criterion in
-                 * the repository documents. Source needed: SEL-SW-SENTINEL-001
-                 * Rev B. */
+            doc /* Bound 7 Nov 2026: "until resolved" is the anomaly workflow's
+                 * step 6 closure after the corrective action on the
+                 * SENTINEL-triggered fail-closed isolation valve (ISRU-001 Rev
+                 * D updated s.8.2 amendment). Source: SEL_SENTINEL_DESIGN Rev B
+                 * s.4.3 step 6; SEL-ISRU-001 Rev D updated s.8.2. */
         }
     }
 
@@ -498,8 +772,14 @@ package SeleniteSoftware {
              * stay UNBOUND (rule 3): fleet v9 s.9.2 gives 100 ppm alert, 1,000
              * ppm auto-close, 5 bar, 60 s dead-man, closure within 3 s, re-open
              * at H2 < 10 ppm for 5 min, pressure < 3 bar, no UV for 10 min.
-             * Source: ECN-014 extract in fleet v9 s.9.2; SEL-SW-SENTINEL-001
-             * Rev B (not in the repository - TODO). */
+             * Source: ECN-014 extract in fleet v9 s.9.2; SEL-ISRU-001 Rev D
+             * updated s.7.4 amendment (two catalytic sensors at 10 ppm, UV
+             * flame detector, auto-close at 1,000 ppm H2 or UV flame or
+             * pressure > 5 bar or comms loss > 60 s - the same figures);
+             * updated_SEL-CAD-ISRU-001 ECN-014 amendment (station geometry).
+             * The ECN-014 patterns are #201-#206 in the SEL-SW-SENTINEL-001
+             * Rev B fault management system (s.13, "~200 patterns + 6 ECN-014
+             * valve patterns", s.15.4). */
         part sensors : ValveStationSensorSet;
         port stationSensorInput : ~SensorPort;
         port hardwiredCloseSignal : HardwiredClosePort;
@@ -549,9 +829,10 @@ package SeleniteSoftware {
     part def ValveStateTable {
         doc /* VALVE_STATE database table, the 11th table of the SENTINEL
              * schema (one row per monitored valve, rolling retention; 8 rows,
-             * 10 Hz cryo / 1 Hz O2, 90-day retention in the source). Schema as
-             * attached CSV when SEL-SW-SENTINEL-001 Rev B is in the repository
-             * (TODO). Source: ECN-014 extract, fleet v9 s.9.2. */
+             * 10 Hz cryo / 1 Hz O2, 90-day retention in the source). The
+             * ten-table schema it extends is SEL-SW-SENTINEL-001 Rev B s.4
+             * (docs/); table contents are Wave 5 data. Source: ECN-014 extract,
+             * fleet v9 s.9.2. */
         attribute tableOrdinal : Integer = 11;
     }
 
@@ -559,9 +840,11 @@ package SeleniteSoftware {
         doc /* Fault pattern library; ECN-014 adds patterns #201-#206 (H2 leak,
              * overpressure, UV flame, O2 overpressure, O2 high flow, comms
              * timeout), each a transition in the state machines above. The
-             * full pattern table (206 patterns, ARCHITECTURE_BASELINE.md s.7)
-             * is in SEL-SW-SENTINEL-001 Rev B (not in the repository - TODO
-             * attached CSV). Source: fleet v9 s.9.2. */
+             * full pattern table (~200 SPA patterns in six categories plus
+             * the six ECN-014 patterns, ~150 PKT patterns, DAG correlation
+             * engine with ~500 / ~300 causal edges) is SEL-SW-SENTINEL-001 Rev
+             * B s.13 and s.15.4 (docs/); pattern counts are Wave 5 data.
+             * Source: fleet v9 s.9.2; SEL-SW-SENTINEL-001 Rev B s.13. */
         attribute ecn014PatternRangeStart : Integer = 201;
         attribute ecn014PatternRangeEnd : Integer = 206;
         attribute ecn014Patterns = (
@@ -621,14 +904,33 @@ package SeleniteSoftware {
     // NAV-001: MOLE-I three-layer navigation fusion
     // =====================================================================
 
-    action def ReadTetherPolarFix {
-        doc /* NAV-001 layer 1: the polar fix from the tether drum payout range
-             * and the DRM-040 two-axis angle encoder on the substation guide
-             * roller (fleet v9 s.4.1: +/- 0.5 m at 200 m, quoted not bound).
-             * The encoder reading comes from the substation - over the tether
-             * when tethered, over the UHF construction link when not. */
+    action def ComputeTetherPolarFix {
+        doc /* NAV-001 layer 1, computed ON THE SUBSTATION: range from the
+             * drum payout encoder, bearing from the DRM-040 two-axis angle
+             * encoder on the guide roller; the port allocation controller
+             * calculates the polar fix for each MOLE-I, sends it down the
+             * tether PLC and relays it to SENTINEL. Accuracies (range and
+             * azimuth resolutions, the cross-track error growing with range)
+             * stay in the source (rule 3). Degraded when the tether is slack;
+             * the final docking approach uses the rear proximity sensors.
+             * Corrected 7 Nov 2026 from the Wave 4B rover-side
+             * ReadTetherPolarFix. Source: computation on the controller
+             * SEL-ECN-013 s.3.2; transmission over the PLC SEL-SW-MOLEI-001
+             * Rev D s.8.2 ECN-013 note; drum payout and roller encoders
+             * SEL-NAV-001 Rev A s.2.1; encoder hardware SEL-SW-SUB-001 Rev C
+             * ECN-013 addition. */
+        in item payout : DrumPayoutReading;
         in item encoder : SubstationEncoderReading;
         out item fix : TetherFixReading;
+    }
+
+    action def ReceiveTetherPolarFix {
+        doc /* The rover's end of layer 1: the navigation firmware receives the
+             * polar fix (range + bearing) from the substation over the PLC.
+             * Source: SEL-SW-MOLEI-001 Rev D ECN-013 note (s.8.2 firmware
+             * addition); SEL-NAV-001 Rev A s.2.1. */
+        in item fix : TetherFixReading;
+        out item fixOut : TetherFixReading;
     }
 
     action def ReadWheelOdometry {
@@ -637,14 +939,18 @@ package SeleniteSoftware {
     }
 
     action def ReadImu {
-        doc /* NAV-001 layer 3: the MEMS IMU inside the WEB (fleet v9 s.4.1). */
+        doc /* NAV-001 layer 3: the MEMS IMU inside the WEB (SEL-MI-NAV-001),
+             * drift reset at each dock cycle (SEL-NAV-001 Rev A s.2.3; fleet
+             * v9 s.4.1). */
         out item imu : ImuReading;
     }
 
     action def KalmanUpdate {
-        doc /* The Kalman fusion step on the existing MOLE-I PLC (fleet v9
-             * s.4.1: 10 Hz, quoted not bound). Filter model and noise
-             * matrices: SEL-NAV-001 Rev A (not in the repository - TODO). */
+        doc /* The Kalman fusion step on the existing MOLE-I PLC (SEL-NAV-001
+             * Rev A s.2.4: 10 Hz, +/- 0.5 m steady state - quoted not bound).
+             * The filter's noise matrices are not stated in Rev A (verification
+             * action 3 of SEL-ECN-013 s.6 is the simulation that would set
+             * them). */
         in item fix : TetherFixReading;
         in item odometry : OdometryReading;
         in item imu : ImuReading;
@@ -652,29 +958,54 @@ package SeleniteSoftware {
     }
 
     action def UpdateDrillGrid {
-        doc /* Mark the drilled cell in the per-sector workspace grid in
-             * non-volatile flash (fleet v9 s.4.1). */
+        doc /* Mark the drilled cell (status, depth, yield, timestamp) in the
+             * per-sector workspace grid in non-volatile flash; the grid is
+             * uploaded to the substation over the PLC after each dump cycle
+             * and relayed to SENTINEL (SEL-NAV-001 Rev A s.2.4, s.3; fleet v9
+             * s.4.1). */
         in item estimate : PositionEstimate;
         out item update : DrillGridUpdate;
     }
 
+    action def ConstructionNavigation {
+        doc /* NAV-001 s.4 construction navigation: on a temporary 100 m tether
+             * at the construction taps there is no polar fix; position is the
+             * tap-point count along the branch plus the odometry offset from
+             * the current tap, reported over the UHF link with power status
+             * and construction gate requests (human approval for each
+             * irreversible step). Source: SEL-NAV-001 Rev A s.4; SEL-ECN-013
+             * s.5; SEL-CON-001 Rev B updated s.3.1 (taps every 100 m, power
+             * only). */
+        in item odometry : OdometryReading;
+        out item estimate : PositionEstimate;
+        out item gateRequest : ConstructionGateRequest;
+        out item powerStatus : PowerStatusReport;
+        attribute tapPointCount : Integer;
+    }
+
     action def NavigationFusion {
-        doc /* SEL-NAV-001 Rev A fusion as an action flow: the three layers are
-             * read in parallel, fused, and the estimate marks the drill grid.
-             * Rates and accuracies stay in the docs (rule 3). Allocated in
-             * MoleINavigation to the sensing parts and the Kalman filter on
-             * the PLC. */
-        in item encoder : SubstationEncoderReading;
+        doc /* SEL-NAV-001 Rev A s.2.4 fusion as an action flow: the polar fix
+             * (absolute, low rate, available only when the tether is taut)
+             * arrives from the substation, odometry and IMU are read every
+             * cycle, the filter fuses what it has - so the fix feeds the
+             * filter by flow without a succession, and fusion runs on
+             * odometry + IMU between fixes - and the estimate marks the drill
+             * grid. The grid mark is per drill position (s.3.2), not per
+             * filter cycle; the succession to markGrid is the data path, its
+             * cadence is in the source. Rates and accuracies stay in the docs
+             * (rule 3). Allocated in MoleINavigation to the sensing parts and
+             * the Kalman filter on the PLC. */
+        in item fix : TetherFixReading;
         out item estimate : PositionEstimate;
         out item gridUpdate : DrillGridUpdate;
         attribute fusionRateHz : Real;
-        action tetherFix : ReadTetherPolarFix;
+        action tetherFix : ReceiveTetherPolarFix;
         action odometry : ReadWheelOdometry;
         action imu : ReadImu;
         action fuse : KalmanUpdate;
         action markGrid : UpdateDrillGrid;
-        flow encoder to tetherFix.encoder;
-        flow tetherFix.fix to fuse.fix;
+        flow fix to tetherFix.fix;
+        flow tetherFix.fixOut to fuse.fix;
         flow odometry.odometry to fuse.odometry;
         flow imu.imu to fuse.imu;
         flow fuse.estimate to estimate;
@@ -684,7 +1015,6 @@ package SeleniteSoftware {
         succession start then tetherFix;
         succession start then odometry;
         succession start then imu;
-        succession tetherFix then fuse;
         succession odometry then fuse;
         succession imu then fuse;
         succession fuse then markGrid;
@@ -692,40 +1022,47 @@ package SeleniteSoftware {
     }
 
     part def TetherPolarFix {
-        doc /* NAV-001 layer 1: tether drum payout range + two-axis angle
-             * encoder on the substation guide roller. Source: ECN-013,
-             * SEL-NAV-001 Rev A (neither in the repository); fleet v9 s.4.1. */
+        doc /* NAV-001 layer 1 on the rover: the receiver of the polar fix the
+             * substation computes from drum payout and the DRM-040 roller
+             * encoder. Source: SEL-NAV-001 Rev A s.2.1; SEL-ECN-013 s.3;
+             * fleet v9 s.4.1. */
     }
 
     part def WheelOdometry {
-        doc /* NAV-001 layer 2: six existing wheel encoders. Source: SEL-NAV-001
-             * Rev A; fleet v9 s.4.1. */
+        doc /* NAV-001 layer 2: six wheel encoders and six steering sensors
+             * (existing hardware; 2-5 % drift quoted). Source: SEL-NAV-001 Rev
+             * A s.2.2; fleet v9 s.4.1. */
     }
 
     part def MemsImu {
-        doc /* NAV-001 layer 3: MEMS IMU inside the WEB (SEL-MI-NAV-001). Source:
-             * SEL-NAV-001 Rev A; fleet v9 s.4.1. */
+        doc /* NAV-001 layer 3: MEMS 6-DOF IMU inside the WEB (SEL-MI-NAV-001,
+             * SPI to the PLC), reset at each dock cycle. Source: SEL-NAV-001
+             * Rev A s.2.3; SEL-ECN-013 s.3.1; fleet v9 s.4.1. */
     }
 
     part def KalmanFusion {
-        doc /* NAV-001 fusion filter on the existing MOLE-I PLC; performs the
-             * KalmanUpdate step of NavigationFusion. Source: SEL-NAV-001 Rev A
-             * (not in the repository); fleet v9 s.4.1. */
+        doc /* NAV-001 fusion filter on the existing MOLE-I PLC (firmware,
+             * no hardware addition); performs the KalmanUpdate step of
+             * NavigationFusion. Source: SEL-NAV-001 Rev A s.2.4; SEL-SW-MOLEI-
+             * 001 Rev D ECN-013 note; fleet v9 s.4.1. */
     }
 
     part def DrillGridMap {
         doc /* NAV-001 workspace drill grid per sector (polar grid of radial x
-             * angular bins) in non-volatile flash; enables gap-free systematic
-             * mining over the service life. Cell count (3,600 per sector in
-             * fleet v9 s.4.1) is a Wave 5 value. Source: SEL-NAV-001 Rev A;
-             * fleet v9 s.4.1. */
+             * angular bins) in non-volatile flash; enables gap-free lawn-mower
+             * drilling over the service life; uploaded to the substation after
+             * each dump and relayed to SENTINEL. Cell count (3,600 per sector)
+             * is a Wave 5 value. Source: SEL-NAV-001 Rev A s.2.4, s.3; fleet
+             * v9 s.4.1. */
     }
 
     part def UhfConstructionLink {
-        doc /* UHF link used during PSR network construction (NAV-001 / ECN-013
-             * RF construction): the encoder reading of the polar fix reaches an
-             * untethered rover over it. Source: ECN-013 v1 (not in the
-             * repository - TODO); ARCHITECTURE_BASELINE.md s.7. */
+        doc /* The rover's 20 W UHF radio (SEL-MI-COM-001) as the primary comms
+             * path during construction on temporary tethers, to the nearest
+             * substation or spine junction relay and on to SENTINEL; carries
+             * position reports, power status and construction gate requests
+             * (NAV-001 s.4), not the polar fix. Source: SEL-ECN-013 s.5;
+             * SEL-NAV-001 Rev A s.4; ARCHITECTURE_BASELINE.md s.7. */
         port radio : ~ConstructionRadioPort;
     }
 
@@ -734,10 +1071,13 @@ package SeleniteSoftware {
              * fix + wheel odometry + IMU, Kalman-fused) with the drill grid
              * map and UHF construction link. Structural subsystem of MOLE-I
              * (see SeleniteFleet::MoleI). Wave 4B: performs NavigationFusion,
-             * allocated to its parts; the encoder reading arrives over the
-             * tether (operation) or the UHF construction link (construction) -
-             * the one place the navigation depends on ECN-013's RF
-             * construction provision. */
+             * allocated to its parts. Addendum (7 Nov 2026): the polar fix
+             * arrives over the tether only (computed by the substation
+             * controller, ECN-013 s.3.2); during construction the rover
+             * navigates by tap count plus odometry (ConstructionNavigation)
+             * and reports position over the UHF link (NAV-001 s.4) - the
+             * Wave 4B "encoder over UHF" flow was not in the source and is
+             * removed. */
         attribute redefines introducedIn = Phase::P3;
         attribute redefines retiredIn = null;
         attribute redefines hostedOn = "MOLE-I PLC inside WEB";
@@ -749,13 +1089,18 @@ package SeleniteSoftware {
         part constructionLink : UhfConstructionLink;
         port tetherData : ~TetherPort;
         perform action navigate : NavigationFusion;
+        perform action navigateDuringConstruction : ConstructionNavigation;
         allocate navigate.tetherFix to tetherFix;
         allocate navigate.odometry to odometry;
         allocate navigate.imu to imu;
         allocate navigate.fuse to fusion;
         allocate navigate.markGrid to drillGrid;
-        flow tetherData.encoder to navigate.encoder;
-        flow constructionLink.radio.encoder to navigate.encoder;
+        allocate navigateDuringConstruction to odometry;
+        flow tetherData.fix to navigate.fix;
+        flow navigate.odometry.odometry to navigateDuringConstruction.odometry;
+        flow navigateDuringConstruction.estimate to constructionLink.radio.positionReport;
+        flow navigateDuringConstruction.gateRequest to constructionLink.radio.gateRequest;
+        flow navigateDuringConstruction.powerStatus to constructionLink.radio.powerStatus;
     }
 
     // =====================================================================
@@ -763,96 +1108,592 @@ package SeleniteSoftware {
     // =====================================================================
 
     state def MoleIOperatingStates {
-        doc /* MOLE-I operating states the repository documents describe (fleet
-             * v9 s.4.1): transit on battery, drill operations with the
-             * mini-VEX, the ECN-012 batch dump sequence (pre-heat at the tank
-             * fraction, heater on through retraction, dump and purge) and
-             * standby on WEB keep-alive. The dump is entered when the tank
-             * reaches the pre-heat fraction (quoted 90 %, UNBOUND); every
-             * other trigger is UNBOUND - the mode and drill sequencing logic is
-             * SEL-SW-MOLEI-001 Rev D, not in the repository (TODO). */
+        doc /* MOLE-I operating states from the sources now in docs/: standby
+             * on WEB keep-alive; battery transit; the construction role the
+             * first unit on each branch takes before permanent drilling
+             * (SEL_MOLEI_DESIGN v5 s.8; SEL-CON-001 Rev B updated s.3);
+             * drilling at a grid cell; and the ECN-012 dump cycle as its own
+             * states - pre-heat (drilling continues, drain pipe heater on from
+             * the pre-heat tank fraction), retraction to the substation with
+             * the heater on, the dump once docked, and the purge after the
+             * drain valve closes (SEL-ECN-012 s.3.3.2 steps 1-5; SEL-ISRU-001
+             * Rev D updated s.6.1 step F). Triggers bound where the source
+             * states them; the fractions, the purge hold and the cell target
+             * depth (90 %, full, 3 min, 400 mm) stay UNBOUND attributes of the
+             * exhibiting software (rule 3). The cell is left when the drill
+             * has excavated to its target depth (SEL-NAV-001 Rev A s.3.2: "to
+             * depth ... retracts the drill, advances 2 m to the next
+             * position"; the per-cell depth field is s.3.1) - W4B-N22 is
+             * therefore bound; the lateral offset on unexpected drill
+             * resistance (s.2.2) has no stated criterion and stays UNBOUND.
+             * Pre-heat is not a pause: ECN-012 step 1 and ISRU-001 step D say
+             * drilling continues, so the cell advance is also modelled from
+             * preHeat (W4B-N24 records ECN-012 s.3.3.3's contrary "heater only
+             * runs during non-drilling phases"). Safe-park is the SENTINEL
+             * fault response for a robot (SEL-SW-SENTINEL-001 Rev B s.13.1);
+             * task assignment is the fleet scheduler's per-robot output
+             * (s.9.1); the construction role is an ordinal rule (the branch's
+             * first unit), not a command, so its trigger is UNBOUND. */
         attribute tankFillFraction : Real;
         attribute preHeatTankFraction : Real;
+        attribute tankFullFraction : Real;
+        attribute purgeElapsedMinutes : Real;
+        attribute purgeHoldMinutes : Real;
+        attribute cellDrillDepthMm : Real;
+        attribute cellTargetDepthMm : Real;
+        attribute drainValveClosed : Boolean;
+        attribute drainPipeHeaterOn : Boolean;
+        attribute atSelectedCell : Boolean;
+        attribute taskAssigned : Boolean;
+        attribute branchBuildOutComplete : Boolean;
+        attribute safeParkCommanded : Boolean;
         entry; then standby;
         state standby {
-            doc /* WEB keep-alive only. */
+            doc /* WEB keep-alive only (the WEB heater never switches off -
+                 * SEL_MOLEI_DESIGN v5 s.4.1). */
         }
         state transit {
-            doc /* Battery transit between cells (tether paid out). */
+            doc /* Battery transit: CLP to the assigned substation, or between
+                 * cells with the tether paid out (SEL_MOLEI_DESIGN v5 s.4.6,
+                 * s.8). */
+        }
+        state construction {
+            doc /* The branch's first unit as construction unit: cable / pipe
+                 * pulling, stake driving, mast tilt-up, substation towing, on
+                 * temporary tethers at the construction taps (SEL-CON-001 Rev B
+                 * updated s.3; ConstructionTapHop). */
         }
         state drilling {
-            doc /* Rotary-percussive drill and mini-VEX at a grid cell. */
+            doc /* Rotary-percussive drill and mini-VEX at a grid cell
+                 * (lawn-mower order over the sector grid, SEL-NAV-001 Rev A
+                 * s.3.1-3.2). */
         }
-        state batchDump {
-            doc /* ECN-012 rear-nozzle dump to the substation manifold:
-                 * pre-heat, heater on, retraction, dump, purge. */
+        state preHeat {
+            doc /* ECN-012 step 1: drain pipe trace heater on (drainPipeHeaterOn
+                 * true from here to the end of the purge); drilling continues
+                 * for the final fill, cell advances included. */
+            entry action switchDrainPipeHeaterOn;
+        }
+        state retracting {
+            doc /* ECN-012 step 2: reverse toward the substation, drum reels
+                 * in, heater stays on. */
+        }
+        state dumping {
+            doc /* ECN-012 step 3: docked, drain valve open, gravity dump into
+                 * the funnel. NAV-001 s.2.3: the IMU heading is reset to the
+                 * polar-derived heading at each dock cycle (the correction
+                 * itself starts on retraction when the tether goes taut -
+                 * placed on dock entry here, the retraction reading recorded);
+                 * s.3.1: the grid is uploaded to the substation over the PLC
+                 * after each dump cycle ("fits within the 15-min dump window"
+                 * - both phrasings recorded; modelled as the exit action). */
+            entry action resetImuAtDock;
+            entry action openDrainValve;
+            exit action uploadDrillGridToSubstation;
+        }
+        state purging {
+            doc /* ECN-012 step 4 / ISRU-001 step F: heater holds after the
+                 * valve closes until the pipe is clear, then off; no level
+                 * feedback - the hold time is deterministic. */
+            exit action switchDrainPipeHeaterOff;
         }
         transition leaveStandby
             first standby
+            accept SupervisionCommand
+            if taskAssigned
             then transit {
-            doc /* Trigger UNBOUND: SEL-SW-MOLEI-001 Rev D. */
+            doc /* Fleet scheduler task assignment (task id, waypoints) received
+                 * in the rover's TDMA slot. Source: SEL-SW-SENTINEL-001 Rev B
+                 * s.9.1; SEL_MOLEI_DESIGN v5 s.8 (transit to the assigned
+                 * substation). */
+        }
+        transition takeConstructionRole
+            first transit
+            then construction {
+            doc /* Trigger UNBOUND: the sources give an ordinal rule, not a
+                 * command - "The first MOLE-I on each branch doubles as the
+                 * construction unit" (SEL_MOLEI_DESIGN v5 s.8; SEL-CON-001 Rev B
+                 * updated s.3), and at P4+ a unit is "temporarily borrowed
+                 * from drilling" (SEL-CON-001 s.7); no document names who or
+                 * what commands the role (SW-SENTINEL s.9.1 lists no MOLE-I
+                 * construction task). */
+        }
+        transition constructionDone
+            first construction
+            if branchBuildOutComplete
+            then transit {
+            doc /* "... before transitioning to permanent drilling operations"
+                 * (SEL_MOLEI_DESIGN v5 s.8); the branch gates of SEL-CON-001
+                 * Rev B updated s.6 (GATE 2 substation installed, GATE 3 fleet
+                 * operational) are the human approvals on the way. */
         }
         transition arriveAtCell
             first transit
+            accept PositionEstimate
+            if atSelectedCell and not drainPipeHeaterOn
             then drilling {
-            doc /* Trigger UNBOUND (the drill-grid cell selection):
-                 * SEL-SW-MOLEI-001 Rev D. */
+            doc /* The fused estimate places the rover at the next undrilled
+                 * cell of the lawn-mower sequence (SEL-NAV-001 Rev A s.3.2). */
+        }
+        transition arriveAtCellPreHeating
+            first transit
+            accept PositionEstimate
+            if atSelectedCell and drainPipeHeaterOn
+            then preHeat {
+            doc /* The same arrival rule while the ECN-012 pre-heat is running
+                 * (drilling continues through the final fill, step 1). */
+        }
+        transition moveOnPreHeating
+            first preHeat
+            if cellDrillDepthMm >= cellTargetDepthMm
+            then transit {
+            doc /* The cell-complete rule of moveOn during pre-heat: ECN-012
+                 * step 1 "continues drilling for final ~4.5 hours of fill" and
+                 * NAV-001 s.3.2 (~1 hour per position) mean cells are advanced
+                 * while the heater is on. */
         }
         transition tankAtPreHeatFraction
             first drilling
             if tankFillFraction >= preHeatTankFraction
-            then batchDump {
-            doc /* ECN-012 via fleet v9 s.4.1: "pre-heat at 90 % tank". */
+            then preHeat {
+            doc /* ECN-012 step 1: "tank level >= 90 %" (fraction UNBOUND). */
         }
-        transition dumpComplete
-            first batchDump
-            then drilling {
-            doc /* Trigger UNBOUND (purge complete): SEL-SW-MOLEI-001 Rev D. */
+        transition tankFull
+            first preHeat
+            if tankFillFraction >= tankFullFraction
+            then retracting {
+            doc /* ECN-012 step 2: "tank full" (fraction UNBOUND). */
+        }
+        transition dockedAtSubstation
+            first retracting
+            accept d : DockingState
+            if d.docked
+            then dumping {
+            doc /* ECN-012 step 3: "docked at substation"; the final approach is
+                 * on the rear proximity sensors (SEL-NAV-001 Rev A s.2.1). */
+        }
+        transition drainValveCloses
+            first dumping
+            if drainValveClosed
+            then purging {
+            doc /* ECN-012 step 4: "drain valve closes". */
+        }
+        transition purgeComplete
+            first purging
+            if purgeElapsedMinutes >= purgeHoldMinutes
+            then transit {
+            doc /* ECN-012 step 5: after the hold the pipe is clear and the
+                 * rover drives forward to resume drilling (hold UNBOUND, 3 min
+                 * quoted). */
         }
         transition moveOn
             first drilling
+            if cellDrillDepthMm >= cellTargetDepthMm
             then transit {
-            doc /* Trigger UNBOUND (cell exhausted): SEL-SW-MOLEI-001 Rev D. */
+            doc /* SEL-NAV-001 Rev A s.3.2: "excavates to depth (400 mm
+                 * extension ...), retracts the drill, advances 2 m to the next
+                 * position" - the target depth is UNBOUND (400 mm quoted; the
+                 * Mk I bit extension of SEL_MOLEI_DESIGN v5 s.4.3). */
         }
-        transition toStandby
+        transition offsetOnResistance
+            first drilling
+            then transit {
+            doc /* Trigger UNBOUND: SEL-NAV-001 Rev A s.2.2 "if the drill
+                 * encounters unexpected resistance, the rover reverses and
+                 * offsets laterally" - the resistance criterion is not given. */
+        }
+        transition safePark
             first transit
+            accept SupervisionCommand
+            if safeParkCommanded
             then standby {
-            doc /* Trigger UNBOUND: SEL-SW-MOLEI-001 Rev D. */
+            doc /* SENTINEL robot-fleet fault response "EXECUTE: safe-park the
+                 * robot" (SEL-SW-SENTINEL-001 Rev B s.13.1); a dead unit sits
+                 * in place and the substation retracts its tether
+                 * (SEL_MOLEI_DESIGN v5 s.9 Tier 1). */
         }
     }
 
+    state def MoleICommsStates {
+        doc /* ECN-013 Change C: the WEB avionics switch comms by tether
+             * connection type - permanent drum port = power-line carrier,
+             * construction tap = UHF (no PLC handshake on a temporary tether);
+             * untethered transit is also on the UHF backup (SEL_MOLEI_DESIGN
+             * v5 s.4.8). Source: SEL-ECN-013 s.5; SEL_MOLEI_DESIGN v5 s.4.7-
+             * 4.8. */
+        abstract attribute tetherConnection : TetherConnectionType;
+        entry; then powerLineCarrier;
+        state powerLineCarrier {
+            doc /* PLC on the permanent tether: dump coordination and telemetry
+                 * (SEL_MOLEI_DESIGN v5 s.4.7), the polar fix (SEL-SW-MOLEI-001
+                 * Rev D s.8.2 ECN-013 note), the grid upload (NAV-001 s.3.1). */
+        }
+        state uhfRadio {
+            doc /* 20 W UHF to the substation relay mesh and on to SENTINEL. */
+        }
+        transition toUhf
+            first powerLineCarrier
+            if tetherConnection != TetherConnectionType::permanentDrumPort
+            then uhfRadio {
+            doc /* ECN-013 s.5: the avionics "automatically switches comms from
+                 * PLC mode to UHF mode" when the rover unplugs from the drum
+                 * port and plugs into a construction tap; the untethered leg
+                 * is SEL_MOLEI_DESIGN v5 s.4.8 "RF relay for off-tether
+                 * situations (transit, construction work with temporary
+                 * tether)" - the sources do not say that leg is automatic. The
+                 * start-up mode is in no source; powerLineCarrier is the
+                 * modelling default and this guard corrects it on entry. */
+        }
+        transition backToPlc
+            first uhfRadio
+            if tetherConnection == TetherConnectionType::permanentDrumPort
+            then powerLineCarrier {
+            doc /* "On return to the permanent tether, it switches back to PLC." */
+        }
+    }
+
+    state def BayonetEngagementStates {
+        doc /* The motorised bayonet adapter SEL-MI-CON-001 in a tap socket:
+             * push-and-twist engage by the DC motor, passive detent hold with
+             * zero power, motor again to disengage. The 0.5 s cycle and 2 W
+             * stay in the source (rule 3). Source: SEL-CON-001 Rev B updated
+             * (ECN-013 Rev 2 "Construction MOLE-I interface"); SEL_MOLEI_DESIGN
+             * v5 ECN-013 Rev 2. */
+        attribute engageCommanded : Boolean;
+        attribute disengageCommanded : Boolean;
+        entry; then disengaged;
+        state disengaged {
+            doc /* Plug clear of the socket. */
+        }
+        state engaged {
+            doc /* Twist-locked; detent holds without power; power flows on
+                 * the BayonetCoupling. */
+        }
+        transition engage
+            first disengaged
+            if engageCommanded
+            then engaged {
+            doc /* Push-and-twist by the DC motor. On the socket side SEL-SW-
+                 * SUB-001 Rev C s.6 states make-before-break ("solenoid closes
+                 * AFTER connector fully seated") for the branch connector and
+                 * "same spec" for the construction tap; whether the tap's
+                 * supply follows that protocol is not stated. */
+        }
+        transition disengage
+            first engaged
+            if disengageCommanded
+            then disengaged {
+            doc /* Motor reverses the twist; the spool retracts the tether
+                 * (SEL-CON-001 Rev B updated, ECN-013 Rev 3 step 5). */
+        }
+    }
+
+    action def ConstructionTapHop {
+        doc /* SEL-CON-001 Rev B updated, ECN-013 Rev 3 operational sequence:
+             * (2) the construction MOLE-I arrives at a tap and engages the
+             * bayonet plug via the motorised adapter; (3)-(4) it works the 100
+             * m section while the spring spool pays out and retracts the
+             * tether; (5) when the section is complete it disengages and
+             * drives to the next tap on battery; the spool retracts the
+             * tether. Comms are UHF throughout (MoleICommsStates). Hop energy
+             * and spool tension stay in the source (rule 3). */
+        action arriveAtTap;
+        action engagePlug;
+        action workSection;
+        action disengagePlug;
+        action hopOnBatteryToNextTap;
+        first start;
+        succession start then arriveAtTap;
+        succession arriveAtTap then engagePlug;
+        succession engagePlug then workSection;
+        succession workSection then disengagePlug;
+        succession disengagePlug then hopOnBatteryToNextTap;
+        succession hopOnBatteryToNextTap then done;
+    }
+
     part def MoleIFlightSoftware :> SoftwareElement {
-        doc /* SEL-SW-MOLEI-001 Rev D: MOLE-I on-board software hosting NAV-001.
-             * Wave 4B: exhibits MoleIOperatingStates (the documented states,
-             * triggers unbound where the Rev D document - not in the
-             * repository - is needed); performs the navigation through its
-             * subsystem. Source: SEL-SW-MOLEI-001 Rev D (TODO); fleet v9
-             * s.4.1. */
+        doc /* SEL-SW-MOLEI-001 Rev D is the SolidWorks modelling sequence for
+             * the rover (its software content is the firmware notes: pipe
+             * heater relay at the tank threshold, Kalman filter and PLC fix
+             * receipt, bayonet adapter drive). The on-board behaviour comes
+             * from SEL-ECN-012, SEL-ECN-013, SEL_MOLEI_DESIGN v5 and SEL-NAV-
+             * 001 Rev A: exhibits MoleIOperatingStates and MoleICommsStates,
+             * performs the navigation through its subsystem and the
+             * construction tap hop. Source: SEL-SW-MOLEI-001 Rev D s.8.2 and
+             * ECN-013 notes; SEL-ECN-012 s.3.3; SEL-ECN-013 s.5; SEL_MOLEI_
+             * DESIGN v5 s.4.7-4.8, s.8-9; fleet v9 s.4.1. */
         attribute redefines introducedIn = Phase::P3;
         attribute redefines retiredIn = null;
         attribute redefines hostedOn = "MOLE-I PLC inside WEB";
         part navigation : MoleINavigation;
         attribute tankFillFraction : Real;
         attribute preHeatTankFraction : Real;
+        attribute tankFullFraction : Real;
+        attribute purgeElapsedMinutes : Real;
+        attribute purgeHoldMinutes : Real;
+        attribute drainValveClosed : Boolean;
+        attribute atSelectedCell : Boolean;
+        attribute cellDrillDepthMm : Real;
+        attribute cellTargetDepthMm : Real;
+        attribute drainPipeHeaterOn : Boolean;
+        attribute taskAssigned : Boolean;
+        attribute branchBuildOutComplete : Boolean;
+        attribute safeParkCommanded : Boolean;
+        abstract attribute tetherConnection : TetherConnectionType;
+        attribute plcAvailableOffPermanentTether : Boolean = false;
         port supervision : SupervisionPort;
         exhibit state operatingState : MoleIOperatingStates {
             :>> tankFillFraction = tankFillFraction;
             :>> preHeatTankFraction = preHeatTankFraction;
+            :>> tankFullFraction = tankFullFraction;
+            :>> purgeElapsedMinutes = purgeElapsedMinutes;
+            :>> purgeHoldMinutes = purgeHoldMinutes;
+            :>> drainValveClosed = drainValveClosed;
+            :>> atSelectedCell = atSelectedCell;
+            :>> cellDrillDepthMm = cellDrillDepthMm;
+            :>> cellTargetDepthMm = cellTargetDepthMm;
+            :>> drainPipeHeaterOn = drainPipeHeaterOn;
+            :>> taskAssigned = taskAssigned;
+            :>> branchBuildOutComplete = branchBuildOutComplete;
+            :>> safeParkCommanded = safeParkCommanded;
+        }
+        exhibit state commsState : MoleICommsStates {
+            :>> tetherConnection = tetherConnection;
+        }
+        perform action constructionTapHop : ConstructionTapHop;
+        assert constraint plcOnlyOnPermanentTether {
+            doc /* ECN-013 s.5: "PLC comms are unavailable on temporary
+                 * construction tethers."; SEL_MOLEI_DESIGN v5 ECN-013 Rev 3:
+                 * "PLC is NOT available on construction tethers". The
+                 * switchover itself is MoleICommsStates. */
+            plcAvailableOffPermanentTether == false
+        }
+    }
+
+    state def TetherPortStates {
+        doc /* One substation tether port under the port allocation controller
+             * (SEL-SW-SUB-001 Rev C s.6 "Normally open; close on command from
+             * port allocation controller. Fail-safe: power loss = breaker
+             * opens", s.7.2 "Allocates power to tether ports based on MOLE-I
+             * docking status"; SEL-NAV-001 Rev A s.3.3 "the port allocation
+             * controller holds that unit until the path is clear"). The
+             * MOLE-I drum tether is permanent (SEL_MOLEI_DESIGN v5 s.1, s.4.7),
+             * so the port is not plugged by a dump docking: the breaker closes
+             * on the controller's allocation command and opens on power loss
+             * or when the tether is retracted (a dead unit, MOLEI v5 s.9 Tier
+             * 1 - the opening event is not stated, UNBOUND). The
+             * make-before-break protocol of s.6 is on the Branch connector
+             * row (the substation's own bayonet input socket), not the port
+             * breakers - which connector the port breakers wait on is not
+             * stated (W4B-N25, recorded). The source does not say the s.3.3
+             * hold acts through the port breaker; it is placed here for want
+             * of a stated location (recorded). */
+        attribute allocationGranted : Boolean;
+        attribute busPowerLost : Boolean;
+        attribute tetherPathsWouldCross : Boolean;
+        entry; then breakerOpen;
+        state breakerOpen {
+            doc /* Normally open: port unallocated, tether retracted, or power
+                 * lost. */
+        }
+        state energised {
+            doc /* Breaker closed; 1,000 VDC on the tether; PLC up. */
+        }
+        state held {
+            doc /* Energised but the advancing unit is held until the path is
+                 * clear (NAV-001 s.3.3); SENTINEL monitors fleet-wide, the
+                 * port allocation controller applies the hold. */
+        }
+        transition energise
+            first breakerOpen
+            if allocationGranted
+            then energised {
+            doc /* "Close on command from port allocation controller" (SEL-SW-
+                 * SUB-001 Rev C s.6), by docking status (s.7.2). */
+        }
+        transition holdForCrossing
+            first energised
+            if tetherPathsWouldCross
+            then held {
+            doc /* NAV-001 s.3.3 port allocation: hold the unit if the tether
+                 * paths would cross. */
+        }
+        transition releaseHold
+            first held
+            if not tetherPathsWouldCross
+            then energised {
+            doc /* Conflict cleared. */
+        }
+        transition tetherRetracted
+            first energised
+            then breakerOpen {
+            doc /* Trigger UNBOUND: s.7.2 "based on MOLE-I docking status" does
+                 * not define the opening event; SEL_MOLEI_DESIGN v5 s.9 Tier 1
+                 * says only "Sub-station retracts tether". */
+        }
+        transition powerLossOpens
+            first energised
+            if busPowerLost
+            then breakerOpen {
+            doc /* "Fail-safe: power loss = breaker opens" (SEL-SW-SUB-001 Rev C
+                 * s.6). */
+        }
+        transition powerLossOpensHeld
+            first held
+            if busPowerLost
+            then breakerOpen {
+            doc /* The same fail-safe from the held state. */
         }
     }
 
     part def SubstationController :> SoftwareElement {
-        doc /* SEL-SW-SUB-001 Rev C: substation (SATS+WEB) controller - tether
-             * drum tension, WEB thermal setpoint, water manifold pump,
-             * MOLE-I port allocation. Wave 4B: ports typed (supervision up to
-             * the edge, the UHF construction link to untethered rovers); the
-             * control behaviour stays UNMODELLED because SEL-SW-SUB-001 Rev C
-             * is not in the repository (TODO) and fleet v9 s.13.4 gives the
-             * functions, not their logic. */
+        doc /* SEL-SW-SUB-001 Rev C: the substation WEB port allocation
+             * controller (PLC-based) - allocates power to tether ports by
+             * docking status through the normally-open solenoid breakers
+             * (s.6, s.7.2), coordinates the MOLE-I dump cycles and relays
+             * telemetry over the PLC modem on each tether (s.9), reads the
+             * DRM-040 angle encoders and computes the polar fix for each
+             * MOLE-I (ECN-013 addition; SEL-ECN-013 s.3.2), holds a unit whose
+             * tether path would cross another's (SEL-NAV-001 Rev A s.3.3) and
+             * uplinks over the UHF relay to adjacent nodes and the spine (s.9).
+             * Addendum (7 Nov 2026): exhibits TetherPortStates and performs
+             * ComputeTetherPolarFix; the drum tension loop, WEB thermostat and
+             * transfer pump are hardware control loops and stay in the source.
+             * Source: SEL-SW-SUB-001 Rev C s.6, s.7.2, s.9 and ECN-013
+             * additions; SEL-NAV-001 Rev A s.3.3; fleet v9 s.13.4. */
         attribute redefines introducedIn = Phase::P3;
         attribute redefines retiredIn = null;
         attribute redefines hostedOn = "substation WEB PLC";
+        attribute allocationGranted : Boolean;
+        attribute busPowerLost : Boolean;
+        attribute tetherPathsWouldCross : Boolean;
+        attribute breakersNormallyOpen : Boolean = true;
+        attribute breakerOpensOnPowerLoss : Boolean = true;
+        attribute branchConnectorMakeBeforeBreak : Boolean = true;
         port supervision : SupervisionPort;
         port constructionRadio : ConstructionRadioPort;
+        port drumSensing : ~DrumSensingPort;
+        port tetherOut : TetherPort;
+        perform action computeFix : ComputeTetherPolarFix;
+        flow drumSensing.payout to computeFix.payout;
+        flow drumSensing.encoder to computeFix.encoder;
+        flow computeFix.fix to tetherOut.fix;
+        exhibit state portState : TetherPortStates {
+            :>> allocationGranted = allocationGranted;
+            :>> busPowerLost = busPowerLost;
+            :>> tetherPathsWouldCross = tetherPathsWouldCross;
+        }
+        assert constraint breakerFailSafe {
+            doc /* SEL-SW-SUB-001 Rev C s.6, Breakers row: "Normally open; close
+                 * on command from port allocation controller. Fail-safe: power
+                 * loss = breaker opens."; Branch connector row: "Make-before-
+                 * break protocol (solenoid closes AFTER connector fully
+                 * seated)". */
+            breakersNormallyOpen == true
+                and breakerOpensOnPowerLoss == true
+                and branchConnectorMakeBeforeBreak == true
+        }
+    }
+
+    // =====================================================================
+    // CAP mission sequence (SEL-CAP-001 Rev A updated; EVA contingency)
+    // =====================================================================
+
+    state def CapMissionStates {
+        doc /* The Crater Access Pod mission as SEL-CAP-001 Rev A updated s.2
+             * states it: pre-descent at the rim (seal, life support, comms,
+             * suits stowed, SPE forecast clear; GATE go / no-go from mission
+             * control), descent on the dedicated guide cable, docking at the
+             * floor pad adjacent to the SATS / CLP (trunk power tap), floor
+             * operations in 40 K-rated suits with the pod as shelter under a
+             * hard work limit, ingress, ascent. The standing abort protocol
+             * of the corrected EVA contingency s.4.8 ascends immediately on
+             * any SPE forecast from any state below the rim. The work limit
+             * (2 h design target), speeds and times stay in the source (rule
+             * 3). Source: SEL-CAP-001 Rev A updated s.2-3; SEL_EVA_CONTINGENCY
+             * corrected s.4.5-4.8, s.5; fleet v9 s.13.5. */
+        attribute floorWorkLimitHours : Real;
+        attribute floorWorkElapsedHours : Real;
+        attribute goForDescent : Boolean;
+        attribute ingressComplete : Boolean;
+        entry; then atRim;
+        state atRim {
+            doc /* Pre-descent checks and the mission-control GATE. */
+        }
+        state descending {
+            doc /* On the guide cable; crew in IVA suits; UHF to the surface. */
+        }
+        state dockedAtFloor {
+            doc /* Docked at the floor pad, on trunk power; suit donning. */
+        }
+        state floorOps {
+            doc /* Crew outside in 40 K-rated suits; pod pressurised as
+                 * shelter and abort refuge. */
+        }
+        state ascending {
+            doc /* Return transit; also the abort state. */
+        }
+        transition goNoGo
+            first atRim
+            accept GatePassed
+            if goForDescent
+            then descending {
+            doc /* "GATE: Go / No-Go from mission control" after the SPE
+                 * forecast check (SEL-CAP-001 s.2 pre-descent). A mission
+                 * gate, not a decision gate of SeleniteGates. */
+        }
+        transition dockAtFloor
+            first descending
+            accept d : DockingState
+            if d.docked
+            then dockedAtFloor {
+            doc /* "CAP docks at floor station" (s.2 arrival). */
+        }
+        transition egress
+            first dockedAtFloor
+            then floorOps {
+            doc /* Suits donned inside the pod; egress through the EVA hatch
+                 * (s.2 arrival / floor ops). */
+        }
+        transition ingress
+            first floorOps
+            if ingressComplete
+            then ascending {
+            doc /* Crew back in the pod, suits doffed, equipment stowed, then
+                 * ascent (s.2 ingress / ascent). */
+        }
+        transition workLimitReached
+            first floorOps
+            if floorWorkElapsedHours >= floorWorkLimitHours
+            then ascending {
+            doc /* "2-hour hard limit (xEMU thermal design point)" - a design
+                 * target, not a tested result (EVA contingency s.2.1); limit
+                 * UNBOUND. */
+        }
+        transition speAbortDescending
+            first descending
+            accept SpeForecast
+            then ascending {
+            doc /* Standing abort protocol: immediate ascent on any SPE forecast
+                 * (EVA contingency corrected s.4.8). */
+        }
+        transition speAbortDocked
+            first dockedAtFloor
+            accept SpeForecast
+            then ascending {
+            doc /* The same abort from the floor pad. */
+        }
+        transition speAbortFloorOps
+            first floorOps
+            accept SpeForecast
+            then ascending {
+            doc /* The same abort during floor operations (crew retreat to the
+                 * pod, then ascent). */
+        }
+        transition backAtRim
+            first ascending
+            then atRim {
+            doc /* Arrival at the rim station. */
+        }
     }
 }

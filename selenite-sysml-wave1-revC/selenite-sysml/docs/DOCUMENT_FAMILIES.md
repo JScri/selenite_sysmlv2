@@ -97,6 +97,26 @@ Rev A · Base Floor Plan v2.1 · LH₂ transport v4 · EVA contingency (correcte
 rule, `spaAsteroidLoadCriticalFraction` 1.0 → 0.18; supersedes ECN-022 §2.4), **-024** (verification, `docs/SEL-ECN-024_draft_HaulerInSituFractionCandidates.md`, signed 6 Nov 2026, option 2a: flag F3 closed, the hauler floor a point at the ECON 0.43), **-025** (`docs/SEL-ECN-025_draft_SpaMsrUnitOneBinding.md`, signed 6 Nov 2026, option 2a: SPA MSR unit #1 bound to DG-13.4), **-026** (`docs/SEL-ECN-026_draft_RevDThresholdsCarriedVerbatim.md`, signed 7 Nov 2026, option 2a: DG-12.3 783 → 1,903/day and DG-8.5 308 → 105 circuits aligned to ECN-020 / ECN-022). ECN-015/-016/-017 exist only as folder names and the fleet ECN-016
 amendment doc; their content is folded into fleet v9 and Hauler/Catapult Rev B.
 
+## Primary sources in the repository (7 Nov 2026, Wave 4B addendum)
+
+Until 7 Nov 2026 the repository held only the markdown winners (fleet v9,
+Strategy v3.1, Decision Framework v4, ECN-020 … 026, final report). Jason then
+supplied the Wave 4B winners and they were committed: the originals under
+`docs/sources/` (19 docx, 3 value-chain html, the ECN-019 Rev C md as
+uploaded) and a markdown extract of each docx in `docs/` named after the
+docx (`docs/SEL-SW-SENTINEL-001_RevB.md` …), plus
+`docs/ECN-019_Programme_Wide_Design_Revision.md` and the three
+`docs/selenite_value_chain_v*.html` as-is. The docx stays the source of
+record; the extract is for grep and citation (tables flattened, no figures).
+Superseded copies that arrived in the same batch (SENTINEL design Rev A+,
+CAP-001 Rev A) are kept under `docs/sources/` with their extracts and mapped
+`superseded`. One uploaded MOLE-I design v5 copy was not a docx (plain text)
+and was not kept. The document map carries the per-file status; the
+addendum's observations are W4B-N18 … N22 in `CHANGELOG_WAVE4B.md` §9
+(ECN-019 Rev C names no L1 O2 depot; the value-chain conflicts; the SENTINEL
+first-phase evidence; no SENTINEL mode table; the MOLE-I drill-resistance
+offset rule).
+
 ## Excluded / out of scope
 - `SEL-ECN-021_PKT_ProcessWater.md` — source recovered 14 Sep 2026, now in
   `docs/`. Still **excluded from the baseline** pending its five source-document

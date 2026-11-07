@@ -17,11 +17,15 @@ package SeleniteInterfaces {
          * material flow); SEL-T1.1-STRATEGY v3.1 s.2.4, s.5.1 (O2 line), s.8.2
          * (ThCl4), s.10.1 (flowsheet), s.11.1; SEL-DECISION-001 Rev D s.3.2
          * (Fe-Ni flows), s.10.1; SEL-ECN-023 s.3 (operating rule);
-         * ARCHITECTURE_BASELINE.md s.5-s.7. The winners SEL-SW-SENTINEL-001
-         * Rev B, SEL-NAV-001 Rev A, SEL-CON-001 Rev B updated and the value
-         * chain v14.1 / v15 / v16 are NOT in the repository (UPLOAD_LEDGER.csv
-         * entries only); where a definition rests on them it says so with a
-         * TODO naming the file. */
+         * ARCHITECTURE_BASELINE.md s.5-s.7. Addendum (7 Nov 2026, same
+         * wave): the winners SEL-SW-SENTINEL-001 Rev B, SEL-NAV-001 Rev A,
+         * SEL-CON-001 Rev B updated, SEL-SW-SUB-001 Rev C, ECN-013 and the
+         * value chain v14.1 / v15 / v16 are in docs/ (markdown extracts,
+         * originals under docs/sources/); the tether port now carries the
+         * substation-computed polar fix (ECN-013 s.3.2), the construction
+         * radio carries position reports and gate requests, not an encoder
+         * reading (NAV-001 s.4), and the drum sensing port, docking state,
+         * construction gate request and SPE forecast items are added. */
 
     private import ScalarValues::*;
 
@@ -234,15 +238,19 @@ package SeleniteInterfaces {
 
     item def OxygenPayload :> CanisterPayload {
         doc /* O2 by-product lofted on MD-2 to the L1 depot (SEL-REQ-005; the
-             * SeleniteTransport::MassDriverMd2 doc). TODO: the depot and this
-             * stream are named only by SEL-REQ-005 (Wave 1) - no repository
-             * document carries them (W4B-N4); source needed: ECN-019 Rev C. */
+             * SeleniteTransport::MassDriverMd2 doc). W4B-N4 / W4B-N18: the
+             * depot and this stream are named only by SEL-REQ-005 (Wave 1);
+             * no repository document carries them, and ECN-019 Rev C (in
+             * docs/ since 7 Nov 2026) gives MD-2 the purpose "REO canisters"
+             * PKT -> Earth (s.18.1) with no O2 loft. Kept as the requirement
+             * states it; a question for Jason. */
         item oxygen : Oxygen;
     }
 
     item def CrewTransit :> Material {
         doc /* Crew in the Crater Access Pod on the guide cable (SEL-CAP-001
-             * Rev A updated; fleet v9 s.13.5). */
+             * Rev A updated s.2; fleet v9 s.13.5). The mission sequence is
+             * SeleniteSoftware::CapMissionStates. */
     }
 
     item def LoweredAsset :> Material {
@@ -335,13 +343,16 @@ package SeleniteInterfaces {
     }
 
     item def TetherFixReading :> DataItem {
-        doc /* NAV-001 layer 1: drum payout range and two-axis roller angle
-             * from the substation (fleet v9 s.4.1). */
+        doc /* NAV-001 layer 1: the polar fix (range from drum payout, bearing
+             * from the DRM-040 roller angle) computed on the substation and
+             * sent to the rover over the tether PLC; degraded when the tether
+             * is slack (SEL-NAV-001 Rev A s.2.1-2.2; ECN-013 s.3.2). */
     }
 
     item def SubstationEncoderReading :> DataItem {
         doc /* The DRM-040 two-axis angle encoder on the substation guide
-             * roller, read on the substation and sent to the rover (fleet v9
+             * roller, read by the port allocation controller, which computes
+             * the polar fix (SEL-NAV-001 Rev A s.2.1; ECN-013 s.3.2; fleet v9
              * s.4.1). */
     }
 
@@ -360,6 +371,38 @@ package SeleniteInterfaces {
     item def DrillGridUpdate :> DataItem {
         doc /* A drilled-cell mark in the per-sector drill grid (fleet v9
              * s.4.1). */
+    }
+
+    item def DrumPayoutReading :> DataItem {
+        doc /* Tether drum payout length from the drum encoder: the range leg of
+             * the polar fix, computed on the substation (SEL-NAV-001 Rev A
+             * s.2.1; ECN-013 s.3.2). */
+    }
+
+    item def DockingState :> DataItem {
+        doc /* Rover docked at a substation cradle (rear proximity sensors for
+             * the final approach, SEL-NAV-001 Rev A s.2.1; the funnel capture
+             * cone, SEL-ECN-012 s.4.2) - the trigger of the dump; also the
+             * CAP at its floor pad (SEL-CAP-001 Rev A updated s.2). */
+        attribute docked : Boolean;
+    }
+
+    item def PowerStatusReport :> DataItem {
+        doc /* The construction MOLE-I's power status (temporary tether
+             * voltage) reported over the UHF link (SEL-NAV-001 Rev A s.4). */
+    }
+
+    item def ConstructionGateRequest :> DataItem {
+        doc /* A construction gate request from the construction MOLE-I over
+             * the UHF link: human approval for each irreversible construction
+             * step (SEL-NAV-001 Rev A s.4; SEL-CON-001 Rev B s.6 gates). */
+    }
+
+    item def SpeForecast :> DataItem {
+        doc /* A solar particle event forecast - the trigger of the CAP standing
+             * abort protocol (SEL_EVA_CONTINGENCY corrected s.4.8; SEL-CAP-001
+             * Rev A updated s.3). Warning time ranges from minutes to hours and
+             * is not bound. */
     }
 
     // =====================================================================
@@ -478,33 +521,55 @@ package SeleniteInterfaces {
     }
 
     port def TetherPort {
-        doc /* Substation tether drum side: power and the encoder reading to
-             * the rover, water and telemetry back (fleet v9 s.4.1, s.13.4).
-             * The rover's tether receptacle is '~TetherPort'. */
+        doc /* Substation tether drum side: power and the tether polar fix to
+             * the rover over the power-line carrier, water and telemetry back
+             * (fleet v9 s.4.1, s.13.4). The fix is computed on the substation
+             * from drum payout and the DRM-040 angle encoder and sent as range
+             * + bearing (ECN-013 s.3.2; SEL-SW-MOLEI-001 Rev D ECN-013 note)
+             * - corrected 7 Nov 2026 from "encoder reading to the rover". The
+             * rover's tether receptacle is '~TetherPort'. */
         out item power : ElectricalPower;
-        out item encoder : SubstationEncoderReading;
+        out item fix : TetherFixReading;
         in item water : Water;
         in item telemetry : SupervisionTelemetry;
     }
 
     port def BayonetTapPort {
         doc /* A tap socket (construction tap, SATS tap, branch cable tap,
-             * substation tap - standardised 20 mm bayonet profile, ECN-013
-             * R2 via fleet v9 s.4.1); the rover's motorised adapter
-             * (SEL-MI-CON-001) is '~BayonetTapPort'. TODO: SEL-CON-001 Rev B
-             * updated is not in the repository. */
+             * substation tap, CAP floor docking pad - standardised 20 mm
+             * bayonet profile with two L-slot pins, ECN-013 R2 / R3); the
+             * rover's motorised adapter (SEL-MI-CON-001) is '~BayonetTapPort'.
+             * Source: SEL-CON-001 Rev B updated (ECN-013 R2, R3 and CAP
+             * reservations); SEL-CAP-001 Rev A updated s.5; fleet v9 s.4.1. */
         out item power : ElectricalPower;
     }
 
     port def ConstructionRadioPort {
-        doc /* UHF construction link, network side: encoder readings and
-             * commands to an untethered rover, telemetry back (ECN-013 RF
-             * construction; ARCHITECTURE_BASELINE.md s.7 "UHF during
-             * construction"). TODO: SEL-NAV-001 Rev A and ECN-013 are not in
-             * the repository. */
-        out item encoder : SubstationEncoderReading;
+        doc /* UHF construction link, network side (the nearest operational
+             * substation or spine junction relay): commands and construction
+             * gate approvals to the construction MOLE-I on a temporary tether
+             * (the approvals are implied by NAV-001 s.4 "human approval for
+             * irreversible steps"; no explicit downlink traffic is stated);
+             * position reports, power status and construction gate requests
+             * back - the three payloads NAV-001 s.4 names (ECN-013 s.5 for
+             * the relay path). Corrected 7 Nov 2026: no encoder reading
+             * travels on it - construction navigation is tap-point count plus
+             * odometry (NAV-001 s.4), so the polar fix is not available off
+             * the permanent tether. */
         out item command : SupervisionCommand;
         in item telemetry : SupervisionTelemetry;
+        in item positionReport : PositionEstimate;
+        in item powerStatus : PowerStatusReport;
+        in item gateRequest : ConstructionGateRequest;
+    }
+
+    port def DrumSensingPort {
+        doc /* Tether drum sensing into the substation controller: the drum
+             * payout encoder and the DRM-040 two-axis angle encoder on the
+             * guide roller (SEL-NAV-001 Rev A s.2.1; SEL-SW-SUB-001 Rev C
+             * ECN-013 addition). The controller's input is '~DrumSensingPort'. */
+        out item payout : DrumPayoutReading;
+        out item encoder : SubstationEncoderReading;
     }
 
     port def GuideCablePort {
@@ -699,22 +764,26 @@ package SeleniteInterfaces {
     }
 
     interface def TetherLink {
-        doc /* Substation drum to MOLE-I: power and the encoder fix down the
-             * tether, water batches and telemetry back (fleet v9 s.4.1,
-             * s.13.4). */
+        doc /* Substation drum to MOLE-I: power and the substation-computed
+             * polar fix down the tether (PLC), water batches and telemetry
+             * back (fleet v9 s.4.1, s.13.4; ECN-013 s.3.2). */
         end drum : TetherPort;
         end rover : ~TetherPort;
         flow drum.power to rover.power;
-        flow drum.encoder to rover.encoder;
+        flow drum.fix to rover.fix;
         flow rover.water to drum.water;
         flow rover.telemetry to drum.telemetry;
     }
 
     interface def BayonetCoupling {
-        doc /* SEL-CON-001 / ECN-013 R2 bayonet engagement: the rover's
-             * motorised adapter in a tap socket, 90 deg twist-lock, passive
-             * detent hold (fleet v9 s.4.1). TODO: SEL-CON-001 Rev B updated is
-             * not in the repository - engagement sequence not modelled. */
+        doc /* SEL-CON-001 Rev B updated (ECN-013 R2 / R3) bayonet engagement:
+             * the rover's motorised adapter in a tap socket, push-and-twist by
+             * a DC motor for the engage / disengage cycle, passive detent hold
+             * with zero power. The engagement sequence is
+             * SeleniteSoftware::BayonetEngagementStates, exhibited by
+             * SeleniteFleet::BayonetAdapter; the tap-to-tap construction hop
+             * is SeleniteSoftware::ConstructionTapHop. Source: SEL-CON-001 Rev
+             * B updated s.3 and ECN-013 R2 / R3 amendments; fleet v9 s.4.1. */
         end socket : BayonetTapPort;
         end adapter : ~BayonetTapPort;
         flow socket.power to adapter.power;
@@ -726,9 +795,20 @@ package SeleniteInterfaces {
              * construction). */
         end network : ConstructionRadioPort;
         end rover : ~ConstructionRadioPort;
-        flow network.encoder to rover.encoder;
         flow network.command to rover.command;
         flow rover.telemetry to network.telemetry;
+        flow rover.positionReport to network.positionReport;
+        flow rover.powerStatus to network.powerStatus;
+        flow rover.gateRequest to network.gateRequest;
+    }
+
+    interface def DrumSensingLine {
+        doc /* Tether drum sensing to the substation controller (SEL-SW-SUB-001
+             * Rev C s.7.2, ECN-013 addition). */
+        end drum : DrumSensingPort;
+        end controller : ~DrumSensingPort;
+        flow drum.payout to controller.payout;
+        flow drum.encoder to controller.encoder;
     }
 
     interface def GuideCableLink {

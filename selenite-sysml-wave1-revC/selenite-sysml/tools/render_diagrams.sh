@@ -43,4 +43,12 @@ render model/Software.sysml stv diagrams/sentinel_modes_states.svg "SeleniteSoft
 render model/Software.sysml stv diagrams/cryo_valve_station_states.svg "SeleniteSoftware::CryoValveStationStates"
 render model/Software.sysml stv diagrams/o2_supply_line_states.svg "SeleniteSoftware::O2SupplyLineStates"
 render model/Software.sysml stv diagrams/molei_operating_states.svg "SeleniteSoftware::MoleIOperatingStates"
+# ---- Wave 4B addendum (7 Nov 2026): behaviour bound from the sources now in docs/ ----
+render model/Software.sysml afv diagrams/anomaly_workflow_action_flow.svg "SeleniteSoftware::AnomalyResponseWorkflow"
+render model/Software.sysml afv diagrams/construction_tap_hop_action_flow.svg "SeleniteSoftware::ConstructionTapHop"
+render model/Software.sysml stv diagrams/earth_contact_states.svg "SeleniteSoftware::EarthContactStates"
+render model/Software.sysml stv diagrams/molei_comms_states.svg "SeleniteSoftware::MoleICommsStates"
+render model/Software.sysml stv diagrams/bayonet_engagement_states.svg "SeleniteSoftware::BayonetEngagementStates"
+render model/Software.sysml stv diagrams/tether_port_states.svg "SeleniteSoftware::TetherPortStates"
+render model/Software.sysml stv diagrams/cap_mission_states.svg "SeleniteSoftware::CapMissionStates"
 echo "Diagrams written to diagrams/"

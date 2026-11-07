@@ -44,11 +44,27 @@ package SeleniteHabitat {
         part referenceModule : HabModule;
         port o2SupplyLine : ~OxygenPort {
             doc /* Low-pressure stainless O2 line with double-block-and-bleed
-                 * isolation (Strategy v3.1 s.5.1); monitored and auto-closed
-                 * per ECN-014 (SeleniteSoftware::O2SupplyLineMonitoringFunction). */
+                 * isolation at hab entry (Strategy v3.1 s.5.1; HAB-001 s.10)
+                 * and, per the ECN-014 amendment, a dome-loaded fail-closed
+                 * regulator at the ISRU exit, a relief valve venting to vacuum,
+                 * a SENTINEL-triggered fail-closed isolation valve and a check
+                 * valve at hab entry against reverse flow - four independent
+                 * barriers between the PEM output and the hab atmosphere (set
+                 * points stay in the source, rule 3). Monitored and
+                 * auto-closed by SeleniteSoftware::O2SupplyLineMonitoringFunction.
+                 * Source: SEL-ISRU-001 Rev D updated s.8.2 (ECN-014 amendment);
+                 * updated_SEL-CAD-ISRU-001 Rev A ECN-014 amendment
+                 * (SEL-ISRU-REG-001). */
         }
         port o2LineSensors : SensorPort;
         port o2LineAutoClose : ~HardwiredClosePort;
+        attribute o2LineIndependentBarriers : Integer = 4;
+        attribute o2IsolationValveFailClosed : Boolean = true;
+        assert constraint o2LineFourBarriers {
+            doc /* "The combined system provides four independent barriers"
+                 * (SEL-ISRU-001 Rev D updated s.8.2). */
+            o2LineIndependentBarriers == 4 and o2IsolationValveFailClosed == true
+        }
     }
 
     part def Eclss :> Facility {
@@ -110,9 +126,19 @@ package SeleniteHabitat {
              * hardwired 24 VDC close line, limit switches, ECN-014 sensor set.
              * Monitored by SeleniteSoftware::CryoValveMonitoringFunction, whose
              * state machine commands it; the hardware facts ECN-014 fixes are
-             * asserted here (Wave 4B). Source: ECN-014 extract in fleet v9
-             * s.9.2 and s.12.4; updated_SEL-CAD-ISRU-001 Rev A (ECN-014
-             * amendment, not in the repository - TODO). */
+             * asserted here (Wave 4B). Addendum (7 Nov 2026) from the sources
+             * now in docs/: each station is a pneumatically actuated cryogenic
+             * ball valve (fail-closed, GN2 actuator + spring return) plus a
+             * passive excess-flow check valve that trips on its own at a
+             * multiple of normal flow, a burst disc on the ISRU-end stations
+             * venting to vacuum through a directed nozzle, two catalytic H2
+             * sensors and a UV flame detector, in a sintered shelter; the
+             * valves stay open in normal continuous flow. Closure times,
+             * trip ratios and set pressures stay in the source (rule 3).
+             * Source: ECN-014 extract in fleet v9 s.9.2 and s.12.4;
+             * SEL-ISRU-001 Rev D updated s.7.4 (ECN-014 amendment);
+             * updated_SEL-CAD-ISRU-001 Rev A ECN-014 amendment (valve station
+             * geometry, SEL-ISRU-VLV-001 / -002). */
         port sensorOutput : SensorPort;
         port hardwiredCloseInput : ~HardwiredClosePort;
         port limitSwitchOutput : LimitSwitchPort;
@@ -120,14 +146,19 @@ package SeleniteHabitat {
         attribute closeCommandHardwired : Boolean = true;
         attribute closeCommandOverFieldbus : Boolean = false;
         attribute closureConfirmedByLimitSwitch : Boolean = true;
+        attribute passiveExcessFlowCheckValve : Boolean = true;
+        attribute openInNormalContinuousFlow : Boolean = true;
         abstract attribute positionOnLossOfSignal : ValvePosition;
         assert constraint deadManFailClosed {
             doc /* ECN-014: loss of the hardwired signal fails the valves
-                 * closed by spring return; the close path is never a fieldbus. */
+                 * closed by spring return; the close path is never a fieldbus;
+                 * a passive excess-flow check valve backs the active close
+                 * (ISRU-001 Rev D updated s.7.4). */
             springReturnFailClosed == true
                 and closeCommandHardwired == true
                 and closeCommandOverFieldbus == false
                 and closureConfirmedByLimitSwitch == true
+                and passiveExcessFlowCheckValve == true
         }
     }
 

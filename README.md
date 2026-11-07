@@ -13,7 +13,7 @@ steady state (~Y180). Baseline: **ECN-019 Rev C + ECN-020**.
 > PROC-001, ISRU-001, MTL Guide and Strategy. The model must not adopt
 > ECN-021 content until those source documents are revised.
 
-**State (7 Nov 2026):** Wave 4B delivered (`CHANGELOG_WAVE4B.md`: behaviour, interfaces and software — typed action flows, an interface on every connection, SENTINEL / ECN-014 state machines, NAV-001 fusion, SEL-REQ-017; Wave 5 brief drafted); Wave 4A delivered
+**State (7 Nov 2026):** Wave 4B delivered (`CHANGELOG_WAVE4B.md`: behaviour, interfaces and software — typed action flows, an interface on every connection, SENTINEL / ECN-014 state machines, NAV-001 fusion, SEL-REQ-017; same-day addendum: the wave's primary sources committed to `docs/` and `docs/sources/` and their behaviour bound, §9 there; Wave 5 brief drafted); Wave 4A delivered
 (`selenite-sysml-wave1-revC/selenite-sysml/CHANGELOG_WAVE4A.md`) and
 SEL-ECN-023 signed and applied; the post-Wave-4A verification session
 (`CHANGELOG_VERIFICATION.md`, SEL-ECN-024 … 026 signed and applied) audits that state; Wave 4B

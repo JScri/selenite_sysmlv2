@@ -257,12 +257,22 @@ auto-close state machines with the dead-man logic asserted, NAV-001 fusion
 allocated to the MOLE-I software, SEL-REQ-017 (ECN-023 rule) satisfied on the
 three asteroid lines, SEL-REQ-005 on the new L1 O2 depot, the "TODO Wave 4"
 gated elements created and bound (plan register 94 bindings),
-`tools/connect_check.py` in CI, 25 diagrams. None of the wave's primary
-sources is in the repository (W4B-N1): modelled from the repository documents
-with TODOs; transitions the documents do not give stay unbound (W4B-N7); no
-value rebound, no ECN raised; W4B-N1 … N17 and the open items are in the
-changelog; next is Wave 5 (`docs/SESSION_BRIEF_wave5_quantities.md`). The
-document_map status vocabulary gains `behaviour_modelled`. Previous state:
+`tools/connect_check.py` in CI, 32 diagrams. **Addendum, same day
+(`CHANGELOG_WAVE4B.md` §9):** Jason supplied the wave's primary sources
+(SW-SENTINEL Rev B, SENTINEL design Rev B, NAV-001, SW-MOLEI Rev D, SW-SUB
+Rev C, CON-001 Rev B, ECN-012, ECN-013, ISRU-001 Rev D + CAD-ISRU, CAP-001,
+EVA contingency, value chain v14.1 / v15 / v16, ECN-019 Rev C); they are in
+`docs/` (markdown extracts, originals under `docs/sources/`), the TODOs that
+named them are closed, the transitions they give are bound (ECN-012 dump
+sequence, ECN-014 returns on the anomaly ticket closing, no-contact mode,
+PLC / UHF switchover, bayonet engagement, tether port breakers, CAP mission
+with SPE abort), the polar fix moved to the substation (ECN-013 §3.2) and
+the register stayed byte-identical. Still unbound: the SENTINEL mode
+transitions (no mode table in the sources, W4B-N21) and the MOLE-I
+drill-resistance offset (W4B-N22). No value rebound, no ECN raised; W4B-N1 …
+N22 and the open items are in the changelog; next is Wave 5
+(`docs/SESSION_BRIEF_wave5_quantities.md`). The document_map status
+vocabulary gains `behaviour_modelled`. Previous state:
 **Verification after Wave 4A delivered (6 Nov
 2026, `CHANGELOG_VERIFICATION.md`)**: the ten-item audit of the model after
 Waves 1–3, the port, Wave 4A and SEL-ECN-023 — V-N1 … V-N46, every bound

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selenite — Value Chain v15 (Dual-Site Architecture)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{--bg:#040810;--surf:#0a1420;--bdr:#122030;--txt:#b8d4ea;--hi:#e4f0f9;--dim:#2a4a68;--lo:#1a2e44;
+    --earth:#4a9ae8;--spa:#48c878;--pkt:#e8a84a;--ast:#e84a8a;--md:#a84ae8}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:'Barlow',sans-serif;padding:32px 20px 48px;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+  .container{max-width:1100px;width:100%}
+  header{text-align:center;margin-bottom:20px}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+  h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:28px;color:var(--hi);letter-spacing:1px}
+  .sub{font-size:12px;color:var(--dim);margin-top:4px}
+  svg{width:100%;height:auto;display:block;margin:12px 0}
+  .node{cursor:pointer;transition:filter .2s}.node:hover{filter:brightness(1.3)}
+  .node-box{rx:8;ry:8;stroke-width:2}
+  .node-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;text-anchor:middle;dominant-baseline:central}
+  .node-sub{font-family:'Barlow',sans-serif;font-weight:400;font-size:10px;text-anchor:middle;fill:#7a9ab8}
+  .flow-line{stroke-width:2;fill:none;marker-end:url(#arrow)}
+  .flow-label{font-family:'JetBrains Mono',monospace;font-size:9px;text-anchor:middle;dominant-baseline:central}
+  .md-label{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:10px;text-anchor:middle;fill:var(--md)}
+  .section{margin-top:16px;background:var(--surf);border:1px solid var(--bdr);border-radius:8px;padding:16px 20px}
+  .section h2{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;color:var(--hi);margin-bottom:8px;letter-spacing:0.5px}
+  .section p{font-size:12px;line-height:1.6;color:var(--txt);margin-bottom:6px}
+  .section b{color:var(--hi)}
+  .legend{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;padding:14px 0 6px;border-top:1px solid var(--bdr);margin-top:16px}
+  .legend-item{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--dim)}
+  .legend-dot{width:10px;height:10px;border-radius:50%}
+  footer{text-align:center;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--lo);margin-top:12px;letter-spacing:1px}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+  <div class="eyebrow">Selenite Programme · Value Chain v15</div>
+  <h1>Earth – Moon (SPA + PKT) – Asteroid Value Chain</h1>
+  <div class="sub">Dual-site architecture · P7–P12 · Mass driver logistics · Split processing</div>
+</header>
+
+<svg viewBox="0 0 1000 520" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="8" markerHeight="6" orient="auto"><path d="M0,0 L10,4 L0,8 Z" fill="#5a7a98"/></marker>
+    <marker id="arrow-md" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="8" markerHeight="6" orient="auto"><path d="M0,0 L10,4 L0,8 Z" fill="#a84ae8"/></marker>
+  </defs>
+
+  <!-- EARTH node -->
+  <g class="node" transform="translate(140,80)">
+    <rect class="node-box" x="-70" y="-35" width="140" height="70" fill="#0c1828" stroke="var(--earth)"/>
+    <text class="node-title" y="-8" fill="var(--earth)">EARTH</text>
+    <text class="node-sub" y="10">Launch origin · Market</text>
+    <text class="node-sub" y="22">Individual SX</text>
+  </g>
+
+  <!-- SPA node -->
+  <g class="node" transform="translate(500,80)">
+    <rect class="node-box" x="-90" y="-35" width="180" height="70" fill="#0c1828" stroke="var(--spa)"/>
+    <text class="node-title" y="-12" fill="var(--spa)">SPA SHACKLETON</text>
+    <text class="node-sub" y="4">Crewed hub · 20 crew</text>
+    <text class="node-sub" y="16">Asteroid processing · Command</text>
+    <text class="node-sub" y="28">ISRU propellant · 5 KREEP circuits</text>
+  </g>
+
+  <!-- PKT node -->
+  <g class="node" transform="translate(500,380)">
+    <rect class="node-box" x="-90" y="-40" width="180" height="80" fill="#0c1828" stroke="var(--pkt)"/>
+    <text class="node-title" y="-16" fill="var(--pkt)">PKT PROCELLARUM</text>
+    <text class="node-sub" y="0">Autonomous factory · 0 crew</text>
+    <text class="node-sub" y="12">~2.08M processing circuits</text>
+    <text class="node-sub" y="24">Haulers · Conveyors · MSR power</text>
+    <text class="node-sub" y="36">Distributed foundry network</text>
+  </g>
+
+  <!-- ASTEROID node -->
+  <g class="node" transform="translate(860,80)">
+    <rect class="node-box" x="-70" y="-35" width="140" height="70" fill="#0c1828" stroke="var(--ast)"/>
+    <text class="node-title" y="-8" fill="var(--ast)">NEA ASTEROIDS</text>
+    <text class="node-sub" y="10">M-type: PGM + Fe-Ni</text>
+    <text class="node-sub" y="22">PROBE Mk I/II/III</text>
+  </g>
+
+  <!-- FLOWS -->
+  <!-- Earth → SPA (cargo, crew) -->
+  <path class="flow-line" d="M210,70 L400,70" stroke="var(--earth)" stroke-dasharray="6,4"/>
+  <text class="flow-label" x="305" y="60" fill="var(--earth)">Cargo · Crew · Avionics</text>
+
+  <!-- SPA → Earth (PGM via MD-4) -->
+  <path class="flow-line" d="M400,100 L210,100" stroke="var(--md)" stroke-dasharray="3,3" marker-end="url(#arrow-md)"/>
+  <text class="md-label" x="305" y="112">MD-4 PGM (P11)</text>
+
+  <!-- SPA ↔ Asteroids -->
+  <path class="flow-line" d="M595,65 L785,65" stroke="var(--ast)" marker-end="url(#arrow)"/>
+  <text class="flow-label" x="690" y="55" fill="var(--ast)">PROBE Mk I/II/III →</text>
+  <path class="flow-line" d="M785,95 L595,95" stroke="var(--spa)" stroke-dasharray="4,3"/>
+  <text class="flow-label" x="690" y="110" fill="var(--spa)">← Ni-Fe/PGM ore return</text>
+
+  <!-- SPA → PKT (MD-1) -->
+  <path class="flow-line" d="M460,120 L460,335" stroke="var(--md)" stroke-dasharray="3,3" marker-end="url(#arrow-md)"/>
+  <text class="md-label" x="445" y="200" transform="rotate(-90,445,200)">MD-1 Propellant+Reagent (P8)</text>
+
+  <!-- PKT → SPA (MD-3) -->
+  <path class="flow-line" d="M540,335 L540,120" stroke="var(--md)" stroke-dasharray="3,3" marker-end="url(#arrow-md)"/>
+  <text class="md-label" x="558" y="200" transform="rotate(90,558,200)">MD-3 ThCl₄ fuel (P10)</text>
+
+  <!-- PKT → Earth (MD-2) -->
+  <path class="flow-line" d="M408,375 L200,160" stroke="var(--md)" stroke-width="3" stroke-dasharray="3,3" marker-end="url(#arrow-md)"/>
+  <text class="md-label" x="280" y="255">MD-2 REO (P9)</text>
+  <text class="flow-label" x="280" y="268" fill="var(--dim)">~695k launches/yr at P14</text>
+
+  <!-- Earth → PKT (cargo) -->
+  <path class="flow-line" d="M160,120 L410,350" stroke="var(--earth)" stroke-dasharray="8,6" opacity="0.4"/>
+  <text class="flow-label" x="260" y="220" fill="var(--earth)" opacity="0.5">Starship cargo (P8)</text>
+
+  <!-- Internal PKT flows -->
+  <g transform="translate(740,420)">
+    <rect rx="4" x="-55" y="-18" width="110" height="36" fill="#0c1828" stroke="var(--pkt)" stroke-width="1" opacity="0.6"/>
+    <text class="node-sub" y="-4" fill="var(--pkt)" font-size="9" text-anchor="middle">KREEP regolith</text>
+    <text class="node-sub" y="8" fill="var(--dim)" font-size="8" text-anchor="middle">Hauler → Conveyor → Spine</text>
+  </g>
+  <path class="flow-line" d="M685,420 L595,400" stroke="var(--pkt)" opacity="0.5" stroke-dasharray="4,3"/>
+
+  <!-- SPA internal annotation -->
+  <g transform="translate(700,170)">
+    <rect rx="4" x="-65" y="-16" width="130" height="32" fill="#0c1828" stroke="var(--spa)" stroke-width="1" opacity="0.6"/>
+    <text class="node-sub" y="-2" fill="var(--spa)" font-size="9" text-anchor="middle">EM Catcher at SPA</text>
+    <text class="node-sub" y="10" fill="var(--dim)" font-size="8" text-anchor="middle">Mk III canisters + MD-3/5</text>
+  </g>
+
+  <!-- MSR annotation -->
+  <g transform="translate(320,440)">
+    <rect rx="4" x="-55" y="-14" width="110" height="28" fill="#0c1828" stroke="#e8c44a" stroke-width="1" opacity="0.6"/>
+    <text class="node-sub" y="0" fill="#e8c44a" font-size="9" text-anchor="middle">~6,890 Thorium MSR</text>
+    <text class="node-sub" y="10" fill="var(--dim)" font-size="8" text-anchor="middle">688.7 GW at P14</text>
+  </g>
+  <path d="M375,440 L410,420" stroke="#e8c44a" stroke-width="1" opacity="0.4"/>
+</svg>
+
+<div class="section">
+  <h2>Dual-Site Split Value Chain (ECN-019 Rev C)</h2>
+  <p><b>SPA Shackleton</b> proves KREEP chemistry (5 circuits, P6–P9) and serves as the permanent asteroid processing hub. All M-type PGM hydromet, C-type pyrolysis, and S-type Czochralski processing occurs at SPA. PROBE fleet (Mk I/II/III) bases permanently at SPA. Mk III canisters arrive via EM catcher (never dock at IZ).</p>
+  <p><b>PKT Procellarum</b> handles all production-scale KREEP processing from P8 onward. Zero permanent crew. ~2.08M optimised circuits at P14 steady state (1.2 t/yr, 400 kW each). Hauler Rev B for mining (1.5M at P14), steel apron conveyors for Tier 3 transport (~87,500 km). Thorium MSR power from KREEP waste (ThCl₄).</p>
+  <p><b>5 mass drivers</b> link the nodes electromagnetically: MD-1 SPA→PKT (propellant/reagent), MD-2 PKT→Earth (REO), MD-3 PKT→SPA (ThCl₄ for SPA MSR), MD-4 SPA→Earth (PGM), MD-5 DRO→SPA (asteroid concentrate). Total YBCO: ~303 t lifetime.</p>
+  <p><b>8-step zero-carbon flowsheet:</b> D2EHPA eliminated. Group separation on Moon (LREE via (NH₄)₂SO₄, HREE via H₃PO₄). Individual SX on Earth. In-situ H₂SO₄ from troilite, Ca(OH)₂ from quickite. Earth reagent: ~750 t/yr (was ~6.9 Mt/yr pre-ECN-019).</p>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--earth)"></div>Earth</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--spa)"></div>SPA Shackleton</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--pkt)"></div>PKT Procellarum</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--ast)"></div>NEA Asteroids</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--md)"></div>Mass Driver</div>
+</div>
+
+<footer>selenite_value_chain_v15.html · ECN-019 Rev C · Dual-site P7–P12 · SEL_ROBOT_FLEET v9 · April 2026</footer>
+</div>
+</body>
+</html>

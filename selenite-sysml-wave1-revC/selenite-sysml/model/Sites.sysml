@@ -125,8 +125,14 @@ package SeleniteSites {
              * no repository document names this depot - not Strategy v3.1, not
              * Decision Framework Rev D, not fleet v9, not ECN-020; the Wave 1
              * requirement cites "Strategy v3.1, Decision Framework Rev D" and
-             * neither carries it. Source needed: ECN-019 Rev C (not in the
-             * repository). TODO naming the depot document when it exists. */
+             * neither carries it. W4B-N18 (7 Nov 2026): ECN-019 Rev C
+             * (docs/ECN-019_Programme_Wide_Design_Revision.md, status
+             * PROPOSED) does not name an L1 / EML-2 depot or an O2 loft
+             * either - its s.18.1 gives MD-2 the single purpose "REO
+             * canisters" PKT -> Earth, and its s.15.1 names SPA as the
+             * "propellant depot" of the P14+ cislunar launch hub (value chain
+             * v16 says the same). The depot therefore rests on SEL-REQ-005
+             * alone; kept as the requirement states it and raised to Jason. */
         attribute redefines nodeId = SiteId::l1Depot;
         port oxygenReceipt : ~CanisterPort;
     }

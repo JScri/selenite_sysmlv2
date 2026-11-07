@@ -12,7 +12,12 @@ package SeleniteFleet {
          * (SeleniteInterfaces) on the classes that carry material or are
          * fuelled, supervision ports on every asset (SENTINEL fleet tier), the
          * MOLE-I tether receptacle, bayonet adapter (CON-001) and UHF
-         * construction link. */
+         * construction link. Addendum (7 Nov 2026): the sources are in
+         * docs/; the bayonet adapter exhibits its engagement machine, the
+         * MOLE-I allocates the construction tap hop, the CAP exhibits its
+         * mission sequence with the SPE abort and takes floor power from the
+         * CLP docking pad tap, the SENTINEL rover doc records the extra
+         * first-phase evidence (W4B-N19). */
 
     private import ISQ::*;
     private import ScalarValues::*;
@@ -151,28 +156,48 @@ package SeleniteFleet {
         part bayonetAdapter : BayonetAdapter;
         port tetherReceptacle : ~TetherPort {
             doc /* The rover end of the substation tether: 1,000 VDC power and
-                 * the encoder fix in, water batches and telemetry out (fleet
-                 * v9 s.4.1). */
+                 * the substation-computed polar fix in over the PLC, water
+                 * batches and telemetry out (fleet v9 s.4.1; SEL-ECN-013
+                 * s.3.2). */
         }
         port constructionRadio : ~ConstructionRadioPort {
-            doc /* UHF link used while the rover is untethered during PSR
-                 * network construction (ECN-013 RF construction). */
+            doc /* The 20 W UHF radio as primary comms while on a temporary
+                 * construction tether or untethered: position reports and
+                 * construction gate requests up, commands down (SEL-ECN-013
+                 * s.5; SEL-NAV-001 Rev A s.4). */
         }
         port drillProduct : IcyRegolithPort {
             doc /* Icy regolith to the P3 tramway containers before the
                  * mini-VEX water path carries everything (fleet v9 s.13.2). */
         }
         bind constructionRadio = flightSoftware.navigation.constructionLink.radio;
+        bind tetherReceptacle = flightSoftware.navigation.tetherData;
+        allocate flightSoftware.constructionTapHop.engagePlug to bayonetAdapter;
+        allocate flightSoftware.constructionTapHop.disengagePlug to bayonetAdapter;
     }
 
     part def BayonetAdapter {
         doc /* Motorised bayonet adapter SEL-MI-CON-001 on the chassis
-             * underside: 28 V DC motor inside the WEB, 90 deg twist-lock into
-             * any standardised tap socket, passive detent hold (ECN-013 R2 via
-             * fleet v9 s.4.1; Strategy v3.1 s.4.2). The CON-001 connector
-             * element (V-N7). TODO: SEL-CON-001 Rev B updated is not in the
-             * repository. */
+             * underside, rear quadrant: DC motor inside the WEB driving an
+             * actuator rod through the WEB wall to a two-pin L-slot plug;
+             * push-and-twist engage / disengage, passive detent hold with
+             * zero power. The CON-001 connector element (V-N7); exhibits
+             * SeleniteSoftware::BayonetEngagementStates. Source: SEL-CON-001
+             * Rev B updated (ECN-013 Rev 2 / Rev 3); SEL_MOLEI_DESIGN v5
+             * ECN-013 Rev 2; fleet v9 s.4.1; Strategy v3.1 s.4.2. */
+        attribute engageCommanded : Boolean;
+        attribute disengageCommanded : Boolean;
+        attribute detentHoldsWithoutPower : Boolean = true;
         port plug : ~BayonetTapPort;
+        exhibit state engagement : BayonetEngagementStates {
+            :>> engageCommanded = engageCommanded;
+            :>> disengageCommanded = disengageCommanded;
+        }
+        assert constraint passiveDetentHold {
+            doc /* "Passive detent holds connection with zero power"
+                 * (SEL-CON-001 Rev B updated, ECN-013 Rev 2). */
+            detentHoldsWithoutPower == true
+        }
     }
 
     part def MoleIMkI :> MoleI {
@@ -271,8 +296,13 @@ package SeleniteFleet {
              * detection, ECN-014 valve-station sensing. Two at SPA from P2,
              * PKT complement from P8 scaling with circuit count. The SENTINEL
              * supervision software is SeleniteSoftware::SentinelSystem - a
-             * separate element. Source: SEL_SENTINEL_DESIGN_RevB, fleet v9
-             * s.9.2. */
+             * separate element. W4B-N8 / W4B-N19 (recorded, not resolved):
+             * fleet v9 s.9.2 says "2 initial (P3) -> 4 (P6+)"; SEL_SENTINEL_
+             * DESIGN Rev B s.7 places "2x inspection rovers" in its "P2-P3
+             * (pre-crew)" row and its Rev A history line says "2 rovers (P3)
+             * -> 4 (P7+)"; the fleet ECN-019 amendment table starts at P7
+             * ("4+"). P2 (baseline s.3) is kept. Source: SEL_SENTINEL_DESIGN
+             * Rev B s.2.2, s.7, s.10; fleet v9 s.9.2. */
         attribute redefines introducedIn = Phase::P2;
         attribute redefines retiredIn = null;
         attribute redefines homeSite = (SiteId::spa, SiteId::pkt);
@@ -332,13 +362,45 @@ package SeleniteFleet {
              * there is no crew to descend before P4. Does not solve floor EVA
              * thermal limits. The final report (Fig. 3) also uses "CAP" for the
              * crew access points at rim and floor - see SelenitePsrNetwork.
-             * Source: SEL-CAP-001 Rev A updated, fleet v9 s.13.5. */
+             * Addendum (7 Nov 2026): exhibits SeleniteSoftware::CapMissionStates
+             * (descent, floor docking, floor operations under the work limit,
+             * ascent, SPE abort); floor power is a 1,000 VDC tap from the
+             * SATS / CLP trunk at the docking pad (CAP-001 s.3 "Power (floor
+             * ops)", s.5); the winch is crew-rated and mechanically
+             * independent of every MOLE-I and infrastructure winch (CAP-001
+             * s.3 "Winch"; EVA contingency corrected s.4.6). Dual use before
+             * crew arrival as an unpressurised cargo frame on the same guide
+             * cable (CAP-001 s.7) is recorded, not modelled. Source:
+             * SEL-CAP-001 Rev A updated s.2-3, s.5-7; SEL_EVA_CONTINGENCY
+             * corrected s.4-6; fleet v9 s.13.5. */
         attribute redefines introducedIn = Phase::P4;
         attribute redefines retiredIn = null;
         attribute redefines homeSite = (SiteId::spa, SiteId::psrFloor);
         attribute redefines canEnterPsr = true;
         attribute redefines countedInOperationalFleet = false;
         attribute anchorsReservedFrom = Phase::P1;
+        attribute floorWorkLimitHours : Real;
+        attribute floorWorkElapsedHours : Real;
+        attribute goForDescent : Boolean;
+        attribute ingressComplete : Boolean;
+        attribute winchCrewRated : Boolean = true;
+        attribute winchIndependentOfMoleIInfrastructure : Boolean = true;
+        port guideCable : ~GuideCablePort;
+        port floorPowerUmbilical : ~BayonetTapPort;
+        exhibit state mission : CapMissionStates {
+            :>> floorWorkLimitHours = floorWorkLimitHours;
+            :>> floorWorkElapsedHours = floorWorkElapsedHours;
+            :>> goForDescent = goForDescent;
+            :>> ingressComplete = ingressComplete;
+        }
+        assert constraint dedicatedCrewRatedWinch {
+            doc /* "Completely independent dedicated winch: separate cable,
+                 * separate mounting structure, separate power feed ... nothing
+                 * in its mechanical chain touches the MOLE-I infrastructure"
+                 * (EVA contingency corrected s.4.6); "crew-rated" (CAP-001
+                 * s.3). */
+            winchCrewRated == true and winchIndependentOfMoleIInfrastructure == true
+        }
     }
 
     // ---- PKT surface fleet --------------------------------------------
