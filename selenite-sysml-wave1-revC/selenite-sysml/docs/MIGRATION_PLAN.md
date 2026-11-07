@@ -139,8 +139,8 @@ stale statuses and doc comments, 20 missing definition docs, map rows and
 package names, a stale diagram, the register's number formatting and D1
 caption); three ECNs raised — **SEL-ECN-024** (signed 6 Nov 2026: flag F3 closed, the
 hauler floor a point at the ECON 0.43), **SEL-ECN-025** (signed 6 Nov 2026:
-SPA MSR unit #1 bound to DG-13.4), **SEL-ECN-026** (DRAFT: DG-12.3 783/day and
-DG-8.5 308 circuits carried verbatim from Rev D) — and the consolidated open-items list
+SPA MSR unit #1 bound to DG-13.4), **SEL-ECN-026** (signed 7 Nov 2026: DG-12.3 783 → 1,903/day
+and DG-8.5 308 → 105 circuits aligned to ECN-020 / ECN-022) — and the consolidated open-items list
 for Waves 4B and 5 (`CHANGELOG_VERIFICATION.md` §4), which both waves start
 from.
 

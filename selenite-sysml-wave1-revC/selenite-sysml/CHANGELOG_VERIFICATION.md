@@ -319,17 +319,17 @@ byte-identical to `docs/`; spelling clean after the one fix.
 - **`CHANGELOG_WAVE4A.md`** — V-N31. **`CHANGELOG_WAVE3.md`** — V-N32 note. **`docs/SESSION_BRIEF_wave4_scenarios.md`** — V-N35; **`…wave2_architecture.md`** — status banner; **`…verification_post_wave4a.md`** — delivered.
 - **`README.md`** (root), **`selenite-sysml-wave1-revC/selenite-sysml/README.md`**, **`selenite-compute/README.md`**, **`docs/HUMAN_QUICKSTART.md`** — V-N44.
 
-## 3. ECNs raised (SEL-ECN-024 and 025 signed and applied in the same session; SEL-ECN-026 remains a draft)
+## 3. ECNs raised (SEL-ECN-024 and 025 signed 6 Nov, SEL-ECN-026 signed 7 Nov 2026; all three applied)
 
 | ECN | Question | Value / decision at stake |
 |---|---|---|
 | SEL-ECN-024 — **SIGNED, option 2a (Jason, 6 Nov 2026), applied** | Flag F3 closed (92 % is the superseded Rev A column); the D8 register entry is a point at the ECON floor 0.43 (`PointReal`, range unbound); 0.08 kept as a historical candidate, not sampled. | Register: 17 sampled entries, 15 points; D8 evaluated on the ECON floor (`econFloor` vs `targetFloor` no longer a sampling tie); scenario register regenerated |
 | SEL-ECN-025 — **SIGNED, option 2a (Jason, 6 Nov 2026), applied** | `shackletonHub.powerZone.spaMsr.introducedIn` rebound to `gates.dgThirteenFour.derivedPhase` (ECN-022 §2.3 carry-through); DG-10.5 / DG-11.3 stay as superseded gates. | Plan register element row "bound to DG-13.4 (P13/P12, Y105)" — derived year unchanged; `tests/fixtures/plan_check_stdout_wave3.txt` re-cut |
-| SEL-ECN-026 | Align `canistersPerDaySteadyState` (783 → 1,903) and `circuitsP8Complete` (308 → 105, or drop) to ECN-020 / ECN-022, or keep Rev D's figures until Rev E. | two `GateThresholds`; DG-12.3 (Y141) and DG-8.5 (circuits Y41) derived years |
+| SEL-ECN-026 — **SIGNED, option 2a (Jason, 7 Nov 2026), applied** | `canistersPerDaySteadyState` 783 → 1,903 and `circuitsP8Complete` 308 → 105, aligned to ECN-020 §4 / ECN-022 §3.1–3.2; W3-N3 and W3-N6 closed. | Plan register: DG-8.5 circuit criterion and DG-12.3 derived years move (see §7); plan_check fixture re-cut; scenario register unaffected (it reads neither threshold) |
 
 ## 4. Consolidated open-items list for Waves 4B and 5 (the state they start from)
 
-### Needs Jason's decision now (SEL-ECN-026 above, plus)
+### Needs Jason's decision now
 
 1. **Default decision criterion** (Wave 4A open question 1): `decisionCriterion = expectedEarthMassWithSlipChance`, `chanceConstraintThreshold = 0.8` are still PROPOSED; every D1–D8 lead recommendation follows it.
 2. **`spaMsrAvailabilityProbability`** 1.0 (range unbound): a sourced probability for the thorium line settles the D1 insurance case (break-even 0.995) and D2's first-MSR year.
@@ -390,6 +390,23 @@ regenerated — one element row changes, derived year still Y105 — and the
 plan_check fixture re-cut; `CHANGELOG_WAVE3.md` §3 note). SEL-ECN-026 (Rev D
 thresholds 783/day and 308 circuits) remains a draft. Validate exit 0, zero
 hints; pytest 1,565 passed, 33 skipped; plan_check and scenario_check exit 0;
+diagrams re-rendered.
+
+## 8. Addendum — 7 November 2026 (SEL-ECN-026 signed)
+
+Decision (Jason, 7 Nov 2026): option 2a. Applied: `GateThresholds.
+canistersPerDaySteadyState` 783 → 1,903 and `circuitsP8Complete` 308 → 105
+(`Parameters.sysml` t123 / t85 docs state the ECN-020 / ECN-022 basis), the
+DG-8.5 / DG-12.3 docs and the plan_check row labels, `docs/PLAN_REGISTER.md`
+regenerated and the fixture re-cut: DG-8.5's circuit criterion now derives
+Y28 (consistent; the W3-R4 split row is gone) and DG-12.3 derives **Y179**
+(P14, later than declared) in place of Y141 on Rev D's cadence. W3-N3 and
+W3-N6 closed; ECN-022 §3.1 / §3.2 applied in the model. The scenario layer
+reads neither threshold, so `docs/SCENARIO_REGISTER.md` is unchanged. The
+W3-R numbers quoted in §1 of this changelog are those of the 6 Nov register
+(56 rows); from W3-R4 onward they now read one lower (55 rows), as the
+`CHANGELOG_WAVE3.md` 7 Nov note explains. Validate exit 0, zero hints;
+pytest 1,565 passed, 33 skipped; plan_check and scenario_check exit 0;
 diagrams re-rendered.
 
 ## 6. Map updates

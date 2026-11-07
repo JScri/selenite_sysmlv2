@@ -2,7 +2,7 @@
 
 **Reference:** `model/Parameters.sysml` `GateThresholds.canistersPerDaySteadyState = 783.0` (doc t123) and `GateThresholds.circuitsP8Complete = 308.0` (doc t85); `model/Gates.sysml` DG-12.3, DG-8.5; SEL-ECN-020 §4; SEL-ECN-022 §3.1 and §3.2; `docs/PLAN_REGISTER.md` rows DG-8.5 (W3-R4) and DG-12.3 (W3-R22); W3-N3, W3-N6; `CHANGELOG_VERIFICATION.md` (V-N, item 9)
 
-**Date:** 6 November 2026 | **Status:** **DRAFT — for Jason's decision; not applied.** | **Author:** verification session for Jason (Systems Engineering Lead)
+**Date:** 6 November 2026 | **Status:** **SIGNED and APPLIED (Jason, 7 Nov 2026): option 2a.** `GateThresholds.canistersPerDaySteadyState` 783 → 1,903; `GateThresholds.circuitsP8Complete` 308 → 105 (the `CircuitCountGate` calc kept); `docs/PLAN_REGISTER.md` regenerated and the plan_check fixture re-cut. The file keeps its draft name for the document map. | **Author:** verification session for Jason (Systems Engineering Lead)
 
 ---
 
@@ -44,4 +44,10 @@ ECN-022 §3 lists both as corrections for Rev E of the document, but the *model 
 
 ---
 
-*— End of SEL-ECN-026 (DRAFT) —*
+## 6. Decision (Jason, 7 November 2026)
+
+**Option 2a adopted and applied:** both thresholds aligned to the baseline in `model/Parameters.sysml` (t123 1,903 with the ECN-020 basis and the 1,957/day ECON figure noted; t85 105 with the `CircuitCountGate` calc kept), the DG-8.5 / DG-12.3 docs and the plan_check row labels updated, `docs/PLAN_REGISTER.md` regenerated and `tests/fixtures/plan_check_stdout_wave3.txt` re-cut, W3-N3 / W3-N6 closed by addendum in `CHANGELOG_WAVE3.md`, ECN-022 §3.1 / §3.2 marked applied in the model. Option 2c (derive the cadence from the canister payload) stays open until VC-22 is adjudicated. The scenario layer does not read either threshold, so `docs/SCENARIO_REGISTER.md` is unchanged.
+
+---
+
+*— End of SEL-ECN-026 — signed 7 Nov 2026 (option 2a applied) —*

@@ -581,11 +581,13 @@ package SeleniteParameters {
         attribute haulersFirstTranche : Real = 50.0;
         doc t84 /* DG-8.4 "First 50 haulers operational at PKT". */
 
-        attribute circuitsP8Complete : Real = 308.0;
+        attribute circuitsP8Complete : Real = 105.0;
         attribute reoTonnesPerYearP8 : Real = 125.0;
-        doc t85 /* DG-8.5 "308 processing circuits complete; 125 t/yr REO". 308 x
-             * 0.4 t/yr (batch) = 123 t/yr; with the committed 1.2 t/yr circuit
-             * ECON needs 105 circuits for 125 t/yr (W3-N3). */
+        doc t85 /* DG-8.5 "308 processing circuits complete; 125 t/yr REO". Rev D's
+             * 308 is the batch-design count (308 x 0.4 t/yr = 123 t/yr); SEL-ECN-026
+             * (Jason, 6 Nov 2026, option 2a) aligned the threshold to the committed
+             * 1.2 t/yr circuit (DG-8.X, SEL-REQ-015): 105 circuits for 125 t/yr
+             * (ECON circuits_needed at Y28; ECN-022 s.3.1, W3-N3 closed). */
 
         attribute thoriumStockpileTonnes : Real = 40.0;
         doc t87 /* DG-8.7 "~40 t Th(OH)4 accumulated". */
@@ -641,11 +643,14 @@ package SeleniteParameters {
         doc t122 /* DG-12.2 "~6,890 x 100 MWe" (VC-09: ECON gives 8,334 at
              * Y200). */
 
-        attribute canistersPerDaySteadyState : Real = 783.0;
-        doc t123 /* DG-12.3 "783/day at P14+ steady state". ECN-020 s.4
-             * identifies 783/day as the stale 1.0 Mt/yr figure and corrects
-             * the 2.5 Mt/yr cadence to ~1,903/day; the Decision Framework Rev D
-             * gate text was not updated (W3-N6). Threshold carried as written. */
+        attribute canistersPerDaySteadyState : Real = 1903.0;
+        doc t123 /* DG-12.3 "783/day at P14+ steady state". Rev D's 783/day is the
+             * stale 1.0 Mt/yr cadence (285,715/yr); SEL-ECN-026 (Jason, 6 Nov 2026,
+             * option 2a) aligned the threshold to ECN-020 s.4: ~694,444 canisters/yr
+             * at 2.5 Mt/yr and 3.6 t = ~1,903/day (ECN-022 s.3.2, W3-N6 closed).
+             * ECON's own cadence at 3.5 t per canister is 1,957/day at Y200 (VC-22);
+             * option 2c (derive the cadence from reoPayloadPerCanisterTonnes) waits
+             * on the VC-22 adjudication. */
 
         attribute mTypePgmTonnesPerYear : Real = 36.5;
         doc t126 /* DG-12.6 "36.5 t/yr PGM". ECON captured_asteroid_pgm = 36.5

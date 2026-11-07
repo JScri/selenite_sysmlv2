@@ -546,7 +546,8 @@ package SeleniteGates {
              * circuit count is design-dependent: 308 x 0.4 t/yr (batch) = 123
              * t/yr, while the committed 1.2 t/yr circuit needs 105 (ECON
              * circuits_needed at Y28). The Decision Framework's P8 count is
-             * therefore the batch-design figure (W3-N3). Both calcs attached. */
+             * therefore the batch-design figure (W3-N3); SEL-ECN-026 (6 Nov 2026)
+             * set GateThresholds.circuitsP8Complete to 105. Both calcs attached. */
         attribute redefines gateId = "DG-8.5";
         attribute redefines criterion = "308 processing circuits complete; 125 t/yr REO";
         attribute redefines criterionAsModelled = "ReoOutputGate: ECON reo_target >= GateThresholds.reoTonnesPerYearP8; CircuitCountGate: circuits_needed >= GateThresholds.circuitsP8Complete";
@@ -1009,8 +1010,9 @@ package SeleniteGates {
         doc /* "DG-12.3 (Y85): PKT->Earth mass driver: scaling toward 783/day
              * at P14+ steady state". ECN-020 s.4 corrects 783/day (the stale
              * 1.0 Mt/yr figure) to ~1,903/day at 2.5 Mt/yr; the Rev D gate
-             * text was not updated (W3-N6). Evaluated as written on ECON
-             * canisters_yr / 365 (ECON uses 3.5 t per canister, W3-N7). */
+             * text was not updated (W3-N6). SEL-ECN-026 (6 Nov 2026) set
+             * GateThresholds.canistersPerDaySteadyState to 1,903; evaluated on ECON
+             * canisters_yr / 365 (ECON uses 3.5 t per canister, W3-N7 / VC-22). */
         attribute redefines gateId = "DG-12.3";
         attribute redefines criterion = "PKT->Earth mass driver: scaling toward 783/day at P14+ steady state";
         attribute redefines criterionAsModelled = "CanisterCadenceGate: ECON canisters_yr / 365 >= GateThresholds.canistersPerDaySteadyState";

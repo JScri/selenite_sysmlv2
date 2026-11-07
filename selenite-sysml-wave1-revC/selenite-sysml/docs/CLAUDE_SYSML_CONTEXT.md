@@ -222,8 +222,9 @@ Waves 1–3, the port, Wave 4A and SEL-ECN-023 — V-N1 … V-N46, every bound
 value supported by its source, determinism and robustness of the scenario
 register confirmed, value-neutral fixes applied, three ECNs raised
 (SEL-ECN-024 signed: flag F3 closed, hauler floor a point at the ECON 0.43;
-SEL-ECN-025 signed: SPA MSR unit #1 bound to DG-13.4; SEL-ECN-026 DRAFT:
-Rev D thresholds 783/day and 308 circuits, awaiting Jason), and the
+SEL-ECN-025 signed: SPA MSR unit #1 bound to DG-13.4; SEL-ECN-026 signed 7 Nov
+2026: Rev D thresholds 783/day → 1,903 and 308 → 105 circuits aligned to
+ECN-020 / ECN-022), and the
 consolidated open-items list (§4 there) that Wave 4B and Wave 5 start from.
 Rules unchanged; two conventions made explicit: the fleet authority
 `SEL_ROBOT_FLEET_v9.md` has no appendix (cite s.20.3, not "App. C"), and
