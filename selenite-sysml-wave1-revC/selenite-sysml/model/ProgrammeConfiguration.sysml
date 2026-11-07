@@ -192,6 +192,9 @@ package SeleniteConfigurations {
             part lifeSupport : Eclss {
                 attribute redefines introducedIn = gates.dgFourTwo.derivedPhase;
             }
+            part oxygenStore : ByProductOxygenStore {
+                doc /* SPA by-product oxygen store (SEL-ECN-027). */
+            }
             part isru : IsruPlant {
                 attribute redefines selfSufficientFrom = gates.dgFourThree.derivedPhase;
             }
@@ -321,6 +324,7 @@ package SeleniteConfigurations {
             // ISRU chain: propellant to the IZ and the fuelled fleet, O2 to the habitat
             interface isruToIz : PropellantTransfer connect isru.propellantToIz to industrialZone.propellantFromIsru;
             interface isruOxygenToHabitat : OxygenTransfer connect isru.oxygenToHabitat to habComplex.o2SupplyLine;
+            interface isruOxygenToStore : OxygenTransfer connect isru.oxygenToHabitat to oxygenStore.oxygenIn;
             interface collarFuelsProbeMkI : PropellantTransfer connect industrialZone.dockingCollars.propellantToProbe to probeMkI.propellantIn;
             interface collarFuelsProbeMkII : PropellantTransfer connect industrialZone.dockingCollars.propellantToProbe to probeMkII.propellantIn;
             interface farmFuelsSkip : PropellantTransfer connect isru.propellantToIz to skip.propellantIn;
@@ -434,9 +438,13 @@ package SeleniteConfigurations {
                  * fleet v9) vs 8,334 (ECON v1.3 Y200). Both recorded; not
                  * adjudicated until Wave 5. */
 
+            part oxygenStore : ByProductOxygenStore {
+                doc /* PKT by-product oxygen store (SEL-ECN-027; ECON s.8.4). */
+            }
             part processingSpine : PktProcessingSpine {
                 attribute redefines introducedIn = gates.dgEightOne.derivedPhase;
             }
+            interface spineOxygenToStore : OxygenTransfer connect processingSpine.byProductOxygen to oxygenStore.oxygenIn;
             part reagentPlant : ReagentPlant {
                 attribute redefines introducedIn = gates.dgEightThree.derivedPhase;
                 part redefines oxalicAcidLine : OxalicAcidLine {
@@ -769,6 +777,16 @@ package SeleniteConfigurations {
             subject depot = l1OxygenDepot;
         }
         satisfy byProductsUsedAtScale by l1OxygenDepot;
+
+        requirement spaOxygenStored : ExcessOxygenStoredBeforeDumping {
+            subject store = shackletonHub.oxygenStore;
+        }
+        satisfy spaOxygenStored by shackletonHub.oxygenStore;
+
+        requirement pktOxygenStored : ExcessOxygenStoredBeforeDumping {
+            subject store = pktFactory.oxygenStore;
+        }
+        satisfy pktOxygenStored by pktFactory.oxygenStore;
 
         requirement mTypePausable : AsteroidProcessingPausableThroughEclipse {
             subject line = shackletonHub.mTypeLine;

@@ -78,8 +78,13 @@ layer `selenite-compute/`. First commit: set this banner to "started
   and load-shedding order, geofence and scheduler rules, the GATE catalogue
   and structural clearance sweep, ISRU interlocks, PKT node behaviour,
   MOLE-I / substation detail, construction and commissioning sequences,
-  prospecting gates). It is a behaviour wave of its own (Wave 4C) or a
-  Wave 5 side task; nothing there binds a quantity.
+  prospecting gates). Jason (7 Nov 2026): a future wave — Wave 6 in
+  `docs/MIGRATION_PLAN.md`; nothing there binds a quantity.
+- **SEL-ECN-027 (signed 7 Nov 2026) hands this wave two tasks:** the
+  feasible by-product oxygen storage capacity at each base under its space
+  constraints (`ByProductOxygenStore.storageCapacity`), and the oxygen
+  balance — the uses that keep the circuit closed so that dumping is the
+  last resort — from which the depot's phase (W4B-N27) can be settled.
 - **A stream register (W4B-N15)** is optional: the performed streams bind
   their phase to their performer with `:>>` and plan_check does not list
   them; a `--streams` table would show each stream's performer-derived phase

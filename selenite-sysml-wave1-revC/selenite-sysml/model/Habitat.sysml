@@ -208,6 +208,29 @@ package SeleniteHabitat {
         interface farmOxygenToHab : OxygenTransfer connect propellantFarm.oxygenToHabitat to oxygenToHabitat;
     }
 
+    part def ByProductOxygenStore {
+        doc /* Base-side store for process by-product oxygen (electrolysis O2
+             * beyond the habitat and propellant draw at SPA; the KREEP
+             * processing by-product at PKT). SEL-ECN-027 (Jason, 7 Nov 2026):
+             * dump as little as possible - excess is stored, and only when
+             * storage is exhausted is oxygen dumped; the feasible capacity
+             * under the base's space constraints is a Wave 5 quantity
+             * (storageCapacity UNBOUND), and the closed-circuit uses of the
+             * oxygen (habitat ECLSS, LOX for the depot and the IZ farm, process
+             * oxidant) are the Wave 5 balance task. Source: SEL-ECN-027;
+             * SEL-ECON-001 Rev A revised s.8.4 ("initially vented or stored"
+             * - the stored branch is now the rule); SEL-REQ-005 / -018. */
+        attribute storageCapacity : Real;
+        attribute excessStored : Boolean = true;
+        attribute dumpOnlyWhenStorageExhausted : Boolean = true;
+        port oxygenIn : ~OxygenPort;
+        port oxygenOut : OxygenPort;
+        assert constraint storeBeforeDump {
+            doc /* SEL-ECN-027: store excess, dump only when storage is used up. */
+            excessStored == true and dumpOnlyWhenStorageExhausted == true
+        }
+    }
+
     part def DockingCollar {
         doc /* PROBE docking collar: horizontal cylinder in a single linear row,
              * soft capture + conductive charging + SpaceWire. One ARM-D per

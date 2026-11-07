@@ -71,10 +71,11 @@ package SeleniteRequirements {
              * is SEL-ECON-001 Rev A revised s.8.4 (LOX canisters "launched via
              * MD-2 to an Earth-Moon L1 orbital fuel depot", P14+, DG-14.4);
              * ECN-019 Rev C names no depot (MD-2 "REO canisters", s.18.1).
-             * W4B-N27: ECON s.8.4 "this oxygen is initially vented or stored"
-             * (P8-P14) against this requirement's "not vented or dumped" -
-             * recorded, the requirement kept as written, a question for Jason.
-             * Subject since Wave 4B: the
+             * W4B-N27 resolved by SEL-ECN-027 (Jason, 7 Nov 2026): "not
+             * vented or dumped" is read as the store-before-dump policy of
+             * SEL-REQ-018 - excess oxygen is stored and dumped only when the
+             * base's storage is exhausted; the balance of uses that keeps the
+             * circuit closed is Wave 5 work. Subject since Wave 4B: the
              * SeleniteSites::L1OxygenDepot element, which exists from the
              * phase MD-2 is operational; the O2 stream is the MD-2 loft branch
              * of SeleniteBehaviour::PktKreepToEarth. The constraint checks
@@ -82,6 +83,19 @@ package SeleniteRequirements {
              * quantitative at Wave 5. */
         subject depot : L1OxygenDepot;
         require constraint { depot.nodeId == SiteId::l1Depot }
+    }
+
+    requirement def <'SEL-REQ-018'> ExcessOxygenStoredBeforeDumping {
+        doc /* SEL-ECN-027 (Jason, 7 Nov 2026): process by-product oxygen is
+             * dumped as little as possible - excess is stored at the base and
+             * dumped only when the storage capacity is used up. The feasible
+             * capacity under the base's space constraints and the uses that
+             * balance the oxygen as a closed circuit (ECLSS, LOX for the depot
+             * and the IZ farm, process oxidant) are Wave 5 quantities on the
+             * store (storageCapacity UNBOUND). Subject: each base's
+             * ByProductOxygenStore. */
+        subject store : ByProductOxygenStore;
+        require constraint { store.excessStored == true and store.dumpOnlyWhenStorageExhausted == true }
     }
 
     requirement def <'SEL-REQ-006'> OreTransportByConveyor {

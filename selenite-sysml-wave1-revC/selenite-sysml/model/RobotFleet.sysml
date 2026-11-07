@@ -301,7 +301,12 @@ package SeleniteFleet {
              * DESIGN Rev B s.7 places "2x inspection rovers" in its "P2-P3
              * (pre-crew)" row and its Rev A history line says "2 rovers (P3)
              * -> 4 (P7+)"; the fleet ECN-019 amendment table starts at P7
-             * ("4+"). P2 (baseline s.3) is kept. Source: SEL_SENTINEL_DESIGN
+             * ("4+"). Decided 7 Nov 2026 (Jason: "your call based on the rest
+             * of the model"): P2 kept - the design's own P2-P3 pre-crew row
+             * carries the two rovers, the pre-crew structural clearance
+             * (DG-3.1) needs them before P3 crew-less work ends, and P2 is
+             * consistent with SentinelSystem.introducedIn = P2; W4B-N8 / N19
+             * closed. Source: SEL_SENTINEL_DESIGN
              * Rev B s.2.2, s.7, s.10; fleet v9 s.9.2. */
         attribute redefines introducedIn = Phase::P2;
         attribute redefines retiredIn = null;

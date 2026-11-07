@@ -473,6 +473,23 @@ The completeness critic's findings, if any, are in §9.8.
 | W4B-N25 | SW-SUB Rev C §6 states make-before-break for the branch connector (the substation's input socket) and "same spec" for the construction tap; the per-port breakers "close on command" by docking status (§7.2) with no connector named. The MOLE-I tether is permanent, so a dump docking is not a plug-in. Recorded. | `Software.sysml` |
 | W4B-N26 | The no-contact rule in three wordings (SW-SENTINEL §12.2; SENTINEL design §3.7; design §9). The machine follows §12.2; the others are recorded in its doc. | `Software.sysml` |
 
+#### 9.9 Decisions, 7 Nov 2026 (Jason, on the §9.7 questions)
+
+- **By-product oxygen (W4B-N4 / N18 / N27) → SEL-ECN-027, signed and
+  applied:** dump as little as possible; store excess; dump only when the
+  storage capacity is used up; work out the feasible capacity under the
+  base's space constraints and balance the oxygen as a closed circuit
+  (Wave 5). Model: `ByProductOxygenStore` at SPA and PKT with
+  `storeBeforeDump` asserted and `storageCapacity` UNBOUND, SEL-REQ-018
+  satisfied on both, SEL-REQ-005 read as the policy, the PKT spine's
+  by-product oxygen port. The depot's phase stays open for Wave 5.
+- **SENTINEL first phase (W4B-N8 / N19):** left to the model — P2 kept
+  (the design's own P2–P3 pre-crew row, the pre-crew structural clearance,
+  `SentinelSystem.introducedIn = P2`); closed.
+- **The §9.8 backlog:** welcomed; to be modelled in a future wave (Wave 6
+  in `docs/MIGRATION_PLAN.md`).
+- PR #13 merged on these decisions.
+
 #### 9.8 Completeness critic
 
 A final reviewer read `Software.sysml` in full, the behaviour elements of

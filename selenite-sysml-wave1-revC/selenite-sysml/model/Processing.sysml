@@ -137,6 +137,11 @@ package SeleniteProcessing {
         port reoOutput : ProductPort;
         port thoriumOutput : ThoriumPort;
         port canisterDispatch : CanisterPort;
+        port byProductOxygen : OxygenPort {
+            doc /* KREEP processing liberates oxygen as a by-product; stored
+                 * before any dumping (SEL-ECN-027) and lofted as LOX on MD-2
+                 * at P14+ (SEL-ECON-001 Rev A revised s.8.4). */
+        }
         interface feedToCircuit : OreTransfer connect oreInput to referenceCircuit.oreIn;
         interface reagentToCircuit : ReagentTransfer connect reagentInput to referenceCircuit.reagentIn;
         interface circuitReoOut : ProductTransfer connect referenceCircuit.reoOut to reoOutput;

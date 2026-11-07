@@ -183,6 +183,17 @@ N27). No value rebound, no ECN raised. Observations W4B-N1 … N28; open items i
 `CHANGELOG_WAVE4B.md` §8; the Wave 5 brief is
 `docs/SESSION_BRIEF_wave5_quantities.md`.
 
+## Wave 6 — Control behaviour from the primary sources (planned 7 Nov 2026)
+
+The behaviour backlog the Wave 4B addendum's completeness critic listed
+(`CHANGELOG_WAVE4B.md` §9.8): SENTINEL emergency responses and platform
+states, the eclipse sequence and load-shedding order, geofence and
+scheduler rules, the GATE catalogue and structural clearance sweep, ISRU
+interlocks, PKT node behaviour, MOLE-I / substation detail, construction and
+commissioning sequences, prospecting gates. Jason, 7 Nov 2026: the brief is
+not exhaustive; model it in a future wave. Same rules as Wave 4B (behaviour
+mirrors the documents, no quantities typed, conflicts recorded).
+
 ## Wave 5 — Quantities, parametrics and the first derived timeline (after the Python port; brief: `docs/SESSION_BRIEF_wave5_quantities.md`, drafted 7 Nov 2026)
 
 Adds to the original scope: the planner's first full run (every derivable
