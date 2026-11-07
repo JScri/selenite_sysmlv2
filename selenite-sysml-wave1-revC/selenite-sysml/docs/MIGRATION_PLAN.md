@@ -2,8 +2,8 @@
 
 Strategy: migrate by **wave**, not by document. Each wave produces a
 validated, diagrammable model increment; `mapping/document_map.csv`
-tracks per-document status. Vocabulary in use (6 Nov 2026): `planned |
-skeleton | architected | gated | applied | delivered | generated | folded |
+tracks per-document status. Vocabulary in use (7 Nov 2026): `planned |
+skeleton | architected | behaviour_modelled | gated | applied | delivered | generated | folded |
 heritage_only | reference_only | reference_integrator | cited_external |
 team_input | python_port | python_port_figures | excluded_until_propagated |
 out_of_scope`, plus `superseded` for a source revision kept only as history
@@ -144,7 +144,7 @@ and DG-8.5 308 → 105 circuits aligned to ECN-020 / ECN-022) — and the consol
 for Waves 4B and 5 (`CHANGELOG_VERIFICATION.md` §4), which both waves start
 from.
 
-### Wave 4B — Behaviour, interfaces, software (original Wave 4 scope, unchanged; brief: `docs/SESSION_BRIEF_wave4b_behaviour.md`; starts from `CHANGELOG_VERIFICATION.md` §4)
+### Wave 4B — Behaviour, interfaces, software ✅ DELIVERED (7 Nov 2026; brief: `docs/SESSION_BRIEF_wave4b_behaviour.md`; started from `CHANGELOG_VERIFICATION.md` §4)
 
 Value-chain action flows (v14.1/v15/v16), ports and interfaces, SENTINEL
 states and modes, ECN-014 valve auto-close logic as state machine and
@@ -155,7 +155,27 @@ asteroid lines), the missing gated elements (SPA reagent pilot, PKT oxalic-acid
 line, CON-001 connector, L1 depot for SEL-REQ-005), the ECN-014 source extract,
 and the hygiene backlog (V-N3, V-N8, V-N9, V-N27) — see `CHANGELOG_VERIFICATION.md` §4.
 
-## Wave 5 — Quantities, parametrics and the first derived timeline (after the Python port)
+Delivered 7 Nov 2026 — see `CHANGELOG_WAVE4B.md`. New packages
+`SeleniteInterfaces` (58 items, 24 port defs, 25 interface defs, the
+ECN-023 `EclipseGatedPowerSupply` constraint) and `SeleniteBehaviour` (seven
+phase-gated material streams as typed action flows, performed and allocated
+in the configuration); every port typed and every connection an interface
+(105 in the configuration); SENTINEL supervision location and modes, the
+ECN-014 cryo-valve and O2-line auto-close with the dead-man logic asserted,
+NAV-001 fusion allocated to the MOLE-I software with the ECN-013 UHF link,
+the MOLE-I operating states; SEL-REQ-017 satisfied on the three asteroid
+lines; SEL-REQ-005 on the new `L1OxygenDepot`; `SpaReagentPilot`,
+`OxalicAcidLine`, `SpaPgmHydromet` and the CON-001 bayonet connector added
+and bound (plan register 89 → 94 bindings, fixture re-cut);
+`tools/connect_check.py` (W4B-N2) in CI; 25 diagrams. None of the wave's
+primary sources is in the repository (W4B-N1): modelled from fleet v9,
+Strategy v3.1, Decision Framework Rev D and ECN-020 with TODOs naming the
+files; triggers the documents do not give stay unbound (W4B-N7). No value
+rebound, no ECN raised. Observations W4B-N1 … N17; open items in
+`CHANGELOG_WAVE4B.md` §8; the Wave 5 brief is
+`docs/SESSION_BRIEF_wave5_quantities.md`.
+
+## Wave 5 — Quantities, parametrics and the first derived timeline (after the Python port; brief: `docs/SESSION_BRIEF_wave5_quantities.md`, drafted 7 Nov 2026)
 
 Adds to the original scope: the planner's first full run (every derivable
 gate evaluated on Python vectors, `derivedPhase` bound, phase year windows

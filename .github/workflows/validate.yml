@@ -23,6 +23,11 @@ jobs:
         run: npm install -g sysml-validate@0.36.0 sysml-diagram@0.42.0
       - name: Validate model
         run: sysml-validate model --workspace . --all --format github
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Connection endpoints resolve (Wave 4B, W4B-N2)
+        run: python3 tools/connect_check.py
       - name: Render diagrams
         run: bash tools/render_diagrams.sh
       - name: Upload diagrams

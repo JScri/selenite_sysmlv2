@@ -192,7 +192,8 @@ package SeleniteHabitat {
              * enumerated multiplicity. Mk III PROBEs never dock here. A
              * provisional non-pressurised collar arrives with Cargo Launch 1
              * (P1) for PROBE-Scout data receipt before the IZ proper (final
-             * report Fig. 26). */
+             * report Fig. 26).
+             * Source: SEL-IZ-001 Rev B; fleet v9 s.19; ARCHITECTURE_BASELINE.md s.4. */
         attribute redefines introducedIn = Phase::P3;
         attribute redefines retiredIn = null;
         attribute redefines location = SiteId::spa;

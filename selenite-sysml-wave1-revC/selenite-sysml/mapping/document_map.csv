@@ -18,7 +18,9 @@ SELENITE_DECISION_FRAMEWORK_v3_historical.md,v3 (Rev C),1,-,-,-,superseded,"sele
 selenite_extended_timeline_v3_revised.html,v3+,1,SelenitePhases,model/Phases.sysml,2,architected,selenite_extended_timeline — in docs/ from 18 Sep 2026
 selenite_programme_scope.md,ECN-019 rewrite,1,SeleniteProgramme,model/SeleniteProgramme.sysml,2,architected,selenite_programme_scope
 W4_T3_3_JS_Selenite_site_selection_v1.docx,v1,1,SeleniteSites,model/Sites.sysml,2,architected,selenite_site_selection
-selenite_value_chain_v16.html,v16,1,SeleniteProcessing,model/Processing.sysml,4B,planned,selenite_value_chain
+selenite_value_chain_v16.html,v16,1,SeleniteBehaviour;SeleniteInterfaces,model/Behaviour.sysml,4B,behaviour_modelled,"selenite_value_chain — P13+ scope (captured-asteroid streams) modelled at Wave 4B from fleet v9 s.17.3, Decision Framework Rev D s.3.2 / s.10.1; the file itself is NOT IN REPO (W4B-N1), TODO in SeleniteBehaviour::CapturedAsteroidToProducts"
+selenite_value_chain_v14_1.html,v14.1,1,SeleniteBehaviour;SeleniteInterfaces,model/Behaviour.sysml,4B,behaviour_modelled,"selenite_value_chain — P0-P7 scope (PSR ice -> propellant, SPA KREEP -> export, PROBE ore) modelled at Wave 4B from fleet v9, Strategy v3.1, Decision Framework Rev D; file NOT IN REPO (W4B-N1), TODO in the stream docs"
+selenite_value_chain_v15.html,v15,1,SeleniteBehaviour;SeleniteInterfaces,model/Behaviour.sysml,4B,behaviour_modelled,"selenite_value_chain — P7-P12 scope (PKT KREEP -> MD-2 -> Earth, thorium -> MSR fuel, MD-1 cargo) modelled at Wave 4B; file NOT IN REPO (W4B-N1), TODO in the stream docs"
 MOLEI_THERMAL_v1_3.m,v1.3,2,SeleniteFleet,model/RobotFleet.sysml,5,python_port,molei_thermal
 sabatier.m,-,2,SeleniteHabitat,model/Habitat.sysml,5,python_port,sabatier
 SELENITE_ECON_V1_4.m,v1.4,2,SeleniteAnalysis,model/ThroughputCalcs.sysml,5,python_port,selenite_econ — read by tools/plan_check.py for the derivable gates (Wave 3)
@@ -30,24 +32,24 @@ SEL-CATAPULT-001_RevB.docx,Rev B,3,SeleniteTransport,model/Transport.sysml,2,her
 SEL-CONVEYOR-001_RevA.docx,Rev A,3,SeleniteTransport,model/Transport.sysml,2,architected,sel-conveyor-001
 SEL-HAULER-001_RevB.docx,Rev B,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel-hauler-001
 SEL-MOLEI-MkII-001_RevA.docx,Rev A,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel-molei-mkii-001
-SEL-NAV-001_MOLEI_Navigation_RevA.docx,Rev A,3,SeleniteSoftware,model/Software.sysml,4B,skeleton,sel-nav-001
+SEL-NAV-001_MOLEI_Navigation_RevA.docx,Rev A,3,SeleniteSoftware,model/Software.sysml,4B,behaviour_modelled,"sel-nav-001 — NavigationFusion action flow allocated to MoleINavigation (Wave 4B) from fleet v9 s.4.1 and Strategy v3.1 s.4.2; filter model and rates await the Rev A docx (NOT IN REPO, W4B-N1)"
 SEL-PROBE-MkII-001_RevA.docx,Rev A,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel-probe-mkii-001
 SEL-PROBE-MkIII-001_RevA.docx,Rev A,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel-probe-mkiii-001
-SEL-SW-MOLEI-001_RevD.docx,Rev D,3,SeleniteSoftware,model/Software.sysml,4B,skeleton,sel-sw-molei-001
-SEL-SW-SENTINEL-001_RevB.docx,Rev B,3,SeleniteSoftware,model/Software.sysml,4B,skeleton,sel-sw-sentinel-001
-SEL-SW-SUB-001_RevC.docx,Rev C,3,SeleniteSoftware,model/Software.sysml,4B,skeleton,sel-sw-sub-001
+SEL-SW-MOLEI-001_RevD.docx,Rev D,3,SeleniteSoftware,model/Software.sysml,4B,behaviour_modelled,"sel-sw-molei-001 — MoleIOperatingStates (Wave 4B: standby / transit / drilling / batch dump, ECN-012 pre-heat guard; other triggers UNBOUND, W4B-N7); the Rev D docx is NOT IN REPO (W4B-N1)"
+SEL-SW-SENTINEL-001_RevB.docx,Rev B,3,SeleniteSoftware,model/Software.sysml,4B,behaviour_modelled,"sel-sw-sentinel-001 — SupervisionLocation, SentinelOperatingModes, the ECN-014 CryoValveStationStates / CryoMonitoringFunctionStates / O2SupplyLineStates (Wave 4B) from the ECN-014 extract in fleet v9 s.9.2; mode table, alert clear, stand-down and the pattern / VALVE_STATE tables await the Rev B docx (NOT IN REPO, V-N19 / W4B-N1 / W4B-N7)"
+SEL-SW-SUB-001_RevC.docx,Rev C,3,SeleniteSoftware,model/Software.sysml,4B,skeleton,"sel-sw-sub-001 — Wave 4B typed the controller's ports (supervision, UHF construction link); the control logic stays unmodelled until the Rev C docx is in docs/ (NOT IN REPO, W4B-N1)"
 SEL_ARM_DESIGN_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel_arm_design
 SEL_DART_DESIGN_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel_dart_design
 SEL_HARVEST_DESIGN_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel_harvest_design
 SEL_MOLEI_DESIGN_v5.docx,v5,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel_molei_design
 SEL_MOLES_DESIGN_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel_moles_design
 SEL_PROBE_DESIGN_RevB.docx,Rev B,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel_probe_design
-SEL_SENTINEL_DESIGN_RevB.docx,Rev B,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel_sentinel_design
+SEL_SENTINEL_DESIGN_RevB.docx,Rev B,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,"sel_sentinel_design — rover hardware; W4B-N8 records fleet v9 s.9.2 ""2 initial (P3)"" against the model's P2"
 SEL_SINTER_DESIGN_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel_sinter_design
 SEL_SKIP_DESIGN_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel_skip_design
 SEL_SUBSTATION_DESIGN_v4.docx,v4,3,SelenitePsrNetwork,model/PsrNetwork.sysml,2,architected,sel_substation_design
 SEL_SURVEY_DESIGN_RevA_updated.docx,Rev A+,3,SeleniteFleet,model/RobotFleet.sysml,2,architected,sel_survey_design
-SEL-CON-001_RevB_updated.docx,Rev B+,4,SelenitePsrNetwork,model/PsrNetwork.sysml,4B,planned,"sel-con-001 — cited in the SelenitePsrNetwork package doc and the MoleI doc (bayonet adapter) only; connector element at Wave 4B (verification, 6 Nov 2026)"
+SEL-CON-001_RevB_updated.docx,Rev B+,4,SelenitePsrNetwork,model/PsrNetwork.sysml,4B,architected,"sel-con-001 — BayonetTapSocket (PsrNetwork), BayonetAdapter (MoleI) and the BayonetCoupling interface added at Wave 4B (V-N7); engagement sequence and socket counts await the Rev B docx (NOT IN REPO, W4B-N1)"
 SEL-ECLSS-001_RevB.docx,Rev B,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-eclss-001
 SEL-ECLSS-002_RevB.docx,Rev B,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-eclss-002
 SEL-ECLSS-SCALING-001_RevB.docx,Rev B,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-eclss-scaling-001
@@ -56,14 +58,14 @@ SEL-FAB-001_RevA.docx,Rev A,4,SeleniteProcessing,model/Processing.sysml,2,archit
 SEL-FP-HAB-001_RevB.html,Rev B,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-fp-hab-001
 updated_SEL-HAB-001_RevD.docx,Rev D+,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-hab-001
 SEL-HAB-WALL-XSECTION-001_1.html,-,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-hab-wall-xsection-001
-SEL-ISRU-001_RevD_updated.docx,Rev D+,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-isru-001
+SEL-ISRU-001_RevD_updated.docx,Rev D+,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-isru-001 — ISRU chain interfaces and the four ECN-014 cryo valve stations with asserted fail-closed logic (Wave 4B); the Rev D docx and the CAD-ISRU ECN-014 amendment are NOT IN REPO (W4B-N1)
 SEL-IZ-001_RevB.docx,Rev B,4,SeleniteHabitat,model/Habitat.sysml,2,architected,sel-iz-001
 SEL-PIPE-001_RevA.docx,Rev A,4,SelenitePsrNetwork,model/PsrNetwork.sysml,2,architected,sel-pipe-001
 SEL-POWER-001_RevB.docx,Rev B,4,SelenitePower,model/Power.sysml,2,architected,sel-power-001
 SEL-PROC-001_RevB.docx,Rev B,4,SeleniteProcessing,model/Processing.sysml,2,architected,sel-proc-001
 SEL-PROC-PKT-001_RevB.docx,Rev B,4,SeleniteProcessing,model/Processing.sysml,2,architected,sel-proc-pkt-001
 SEL-REAGENT-001_RevA.docx,Rev A,4,SeleniteProcessing,model/Processing.sysml,2,architected,sel-reagent-001
-SEL_EVA_CONTINGENCY_CORRECTED.docx,-+,4,SeleniteHabitat,model/Habitat.sysml,4,planned,sel_eva_contingency
+SEL_EVA_CONTINGENCY_CORRECTED.docx,-+,4,SeleniteHabitat,model/Habitat.sysml,4B,planned,"sel_eva_contingency — Wave 4B owns it (procedural behaviour: CAP descent, floor EVA limits; W4B-N13); NOT IN REPO, nothing modelled; TODO when the file is in docs/"
 Selenite_Base_Floor_Plan_v2_1.pdf,v2.1,4,SeleniteHabitat,model/Habitat.sysml,2,reference_only,selenite_base_floor_plan
 selenite_lh2_transport_v4.pdf,v4,4,SeleniteTransport,model/Transport.sysml,2,architected,"selenite_lh2_transport — StarshipReturnLink from P5, retirement derived from MD-4 (W2-N15); read via final report Fig. 54 (SEL-TRANSPORT-001C)"
 SEL-CAD-AC-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-ac-001
@@ -83,23 +85,24 @@ SEL-CAD-SK-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-sk-001
 SEL-CAD-SN-001_RevA.docx,Rev A,5,-,-,2,reference_only,sel-cad-sn-001
 ECN-018_InSitu_Reagent_Fabrication_PGM.md,-,6,SeleniteProcessing,model/Processing.sysml,2,folded,ecn-018
 SEL-ECN-012_DrainPipeReroute_v1.docx,v1,6,SelenitePsrNetwork,model/PsrNetwork.sysml,2,folded,sel-ecn-012
-SEL-ECN-013_Navigation_ARMfix_RFconstruction_v1.docx,v1,6,SeleniteSoftware,model/Software.sysml,4B,folded,sel-ecn-013
+SEL-ECN-013_Navigation_ARMfix_RFconstruction_v1.docx,v1,6,SeleniteSoftware,model/Software.sysml,4B,folded,"sel-ecn-013 — NAV-001 layers, SATS+WEB, bayonet adapter, spools folded into fleet v9; the UHF construction link is UhfConstructionLink / ConstructionRadioLink (Wave 4B); the v1 docx is NOT IN REPO (W4B-N1)"
 W7_T6_5_VL_EnvironmentalCostComparison,v1,-,-,-,-,team_input,"Vincent — Bayan Obo vs Selenite environmental table, 13 refs; recovered 14 Sep 2026"
 Phase1_Economic_Evaluation_(team),-,-,-,-,5,team_input,"Phase 1 base setup US$51-73B, ISS analogue; basis differs from SEL-ECON-001 — see VC-18"
 W5_T4_4_JS_milestone_reference.html,MTL v8.5,1,SeleniteGates,model/Gates.sysml,3,gated,"team input W5_T4_4 — milestones M0-M8 (MilestoneSet) from this reference, 18 Sep 2026"
-W5_T4_4_JS_scaling_P7_P14.html,-,1,SelenitePhases,model/Phases.sysml,2,reference_only,"team input W5_T4_4 — P7-P14+ scaling cards; in docs/ from 18 Sep 2026"
-W5_T4_3_JS_fleet_specs_summary.html,-,3,SeleniteFleet,model/RobotFleet.sysml,2,reference_only,"team input W5_T4_3 — fleet specs summary; in docs/ from 18 Sep 2026"
+W5_T4_4_JS_scaling_P7_P14.html,-,1,SelenitePhases,model/Phases.sysml,2,reference_only,team input W5_T4_4 — P7-P14+ scaling cards; in docs/ from 18 Sep 2026
+W5_T4_3_JS_fleet_specs_summary.html,-,3,SeleniteFleet,model/RobotFleet.sysml,2,reference_only,team input W5_T4_3 — fleet specs summary; in docs/ from 18 Sep 2026
 SEL-ECN-022_DecisionFramework_Wave3.md,-,6,SeleniteGates;SeleniteParameters,model/Gates.sysml,3,applied,"ecn-022 — Wave 3 gate decisions and Rev D corrections (19 Sep 2026); applied in the model, Rev E is a Wave 5 rendering"
 SESSION_BRIEF_wave2_architecture.md,-,1,-,-,2,delivered,"wave 2 brief — delivered 14 Sep 2026: architecture and temporal skeleton, phase idiom, F2 resolved by diff (CHANGELOG_WAVE2.md)"
 SESSION_BRIEF_wave3_gates.md,-,1,SeleniteGates;SeleniteRequirements,model/Gates.sysml,3,delivered,"wave 3 brief — delivered 15 Sep 2026, closed 19 Sep 2026 with SEL-ECN-022: 81 gates, SEL-REQ-007..016, tools/plan_check.py, docs/PLAN_REGISTER.md (CHANGELOG_WAVE3.md)"
-SESSION_BRIEF_python_port.md,-,2,-,selenite-compute/,-,delivered,"python port brief — delivered 14 Sep 2026: selenite-compute/ reproduces the runner v2.1 goldens (CHANGELOG_PORT.md); byte-identical copy at the git root"
+SESSION_BRIEF_python_port.md,-,2,-,selenite-compute/,-,delivered,python port brief — delivered 14 Sep 2026: selenite-compute/ reproduces the runner v2.1 goldens (CHANGELOG_PORT.md); byte-identical copy at the git root
 SESSION_BRIEF_wave4_scenarios.md,-,1,SeleniteScenarios,model/Scenarios.sysml,4A,delivered,"wave 4A brief (20 Sep 2026) — delivered 6 Nov 2026: decision catalogue D1-D8, uncertainty register, trade studies, selenite/scenarios/, tools/scenario_check.py, docs/SCENARIO_REGISTER.md"
 SEL-ECN-023_draft_EclipseOperatingStrategy.md,signed,6,SeleniteScenarios;SeleniteParameters,model/Scenarios.sysml,4A,applied,"ecn-023 — SPA eclipse operating strategy (D1): sunlit duty cycle, spaAsteroidLoadCriticalFraction 1.0 -> 0.18; signed and applied 6 Nov 2026, supersedes ECN-022 s.2.4"
-PLAN_REGISTER.md,generated,-,SeleniteGates,docs/PLAN_REGISTER.md,3,generated,"tools/plan_check.py --markdown (derived-versus-declared register: 81 gates, 89 element bindings; default output byte-identical, a test diffs it); CI regenerates it in the compute job"
+PLAN_REGISTER.md,generated,-,SeleniteGates,docs/PLAN_REGISTER.md,3,generated,"tools/plan_check.py --markdown (derived-versus-declared register: 81 gates, 94 element bindings (Wave 4B: SpaReagentPilot x2, SpaPgmHydromet, OxalicAcidLine, L1OxygenDepot); default output byte-identical, a test diffs it); CI regenerates it in the compute job"
 SCENARIO_REGISTER.md,generated,-,SeleniteScenarios,docs/SCENARIO_REGISTER.md,4A,generated,"tools/scenario_check.py --markdown (n = 2,000, seed 20260920); CI regenerates at n = 500"
 Glaeser_et_al_2014_Icarus_243 (journal article),2014,1,SeleniteParameters,model/Parameters.sysml,4A,cited_external,"Glaeser et al. 2014, Icarus 243 78-90 / EPSC 2014-136: 77.1-88.0 % average illumination at the Shackleton-rim and Connecting Ridge sites, longest darkness 3-5 days — binds spaDarkFractionLow/High and spaLongestEclipseHoursHigh; not in repo"
 SESSION_BRIEF_verification_post_wave4a.md,-,1,-,-,V,delivered,"verification brief (6 Nov 2026) — delivered 6 Nov 2026: audit of the model after Wave 4A / ECN-023 (CHANGELOG_VERIFICATION.md, V-N1..46, SEL-ECN-024..026 signed and applied, open items for Waves 4B and 5)"
-SESSION_BRIEF_wave4b_behaviour.md,-,1,SeleniteSoftware;SeleniteProcessing,model/Software.sysml,4B,planned,"wave 4B brief (6 Nov 2026; amended 7 Nov 2026 with the verification carry-overs, s.0): behaviour, interfaces, software; ready to start"
+SESSION_BRIEF_wave4b_behaviour.md,-,1,SeleniteBehaviour;SeleniteInterfaces;SeleniteSoftware,model/Behaviour.sysml,4B,delivered,"wave 4B brief (6 Nov 2026; amended 7 Nov 2026 with the verification carry-overs, s.0) — delivered 7 Nov 2026: value-chain action flows, typed ports and interfaces on every connection, SENTINEL and ECN-014 state machines, NAV-001 fusion, SEL-REQ-017, the TODO gated elements (CHANGELOG_WAVE4B.md, PR open)"
 SEL-ECN-024_draft_HaulerInSituFractionCandidates.md,signed,6,SeleniteScenarios;SeleniteParameters,model/Scenarios.sysml,V,applied,"ecn-024 — hauler in-situ fraction: flag F3 closed, register entry a point at the ECON floor 0.43 (option 2a); signed and applied 6 Nov 2026"
 SEL-ECN-025_draft_SpaMsrUnitOneBinding.md,signed,6,SeleniteConfigurations;SeleniteGates,model/ProgrammeConfiguration.sysml,V,applied,"ecn-025 — SPA MSR unit #1 bound to DG-13.4 (ECN-022 s.2.3 carry-through, option 2a); signed and applied 6 Nov 2026"
 SEL-ECN-026_draft_RevDThresholdsCarriedVerbatim.md,signed,6,SeleniteParameters;SeleniteGates,model/Parameters.sysml,V,applied,"ecn-026 — GateThresholds aligned to ECN-020 / ECN-022 (DG-12.3 783 -> 1903/day, DG-8.5 308 -> 105 circuits, option 2a); signed and applied 7 Nov 2026"
+SESSION_BRIEF_wave5_quantities.md,-,1,SeleniteAnalysis;SeleniteParameters;SeleniteGates,model/Parameters.sysml,5,planned,"wave 5 brief (drafted 7 Nov 2026 at the end of Wave 4B) — quantities from the Python layer, derivedPhase bound, the document-constants rule (W4B-N6), Rev E rendering"

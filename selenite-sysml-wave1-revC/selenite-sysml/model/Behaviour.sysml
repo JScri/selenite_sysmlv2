@@ -47,7 +47,8 @@ package SeleniteBehaviour {
              * SelenitePhases idiom (abstract attributes, bound by redefinition
              * in concrete streams; rebound in the configuration to the
              * performing element's phase). retiredIn = null means the stream
-             * runs to the end of the programme. */
+             * runs to the end of the programme.
+             * Source: ARCHITECTURE_BASELINE.md s.1 modelling note (the phase idiom of SelenitePhases). */
         abstract attribute introducedIn : Phase;
         abstract attribute retiredIn : Phase [0..1];
     }
@@ -278,7 +279,8 @@ package SeleniteBehaviour {
     action def ReturnByStarship {
         doc /* SPA -> Earth concentrate in the Fe-Ni batch capsule on an ISRU-
              * fuelled Starship-class carrier, from the first export (DG-5.4)
-             * until MD-4 (SeleniteTransport::StarshipReturnLink, W2-N15). */
+             * until MD-4 (SeleniteTransport::StarshipReturnLink, W2-N15).
+             * Source: final report Fig. 54; selenite_lh2_transport v4; Jason, 14 Sep 2026. */
         in item product : ProcessProduct;
         in item propellant : Propellant;
         out item productOut : ProcessProduct;
@@ -704,7 +706,8 @@ package SeleniteBehaviour {
              * SPA reagents and thorium to the PKT streams, C-type water back
              * into the ISRU chain, by-product oxygen to the MD-2 loft).
              * Performed once in SeleniteConfigurations::seleniteProgramme and
-             * allocated there. */
+             * allocated there.
+             * Source: ARCHITECTURE_BASELINE.md s.5-s.6; Decision Framework Rev D s.3.2. */
         action psrIceToPropellant : PsrIceToPropellant;
         action spaKreepToExport : SpaKreepToExport;
         action pktKreepToEarth : PktKreepToEarth;

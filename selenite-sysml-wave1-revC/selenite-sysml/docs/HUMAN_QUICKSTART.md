@@ -47,7 +47,8 @@ discipline all work exactly as they do for code.
 ```bash
 npm install -g sysml-validate@0.36.0 sysml-diagram@0.42.0   # both pinned (W4A-N2)
 tools/validate.sh              # whole-tree validation, hints included
-tools/render_diagrams.sh       # regenerate diagrams/*.svg (seven views)
+python3 tools/connect_check.py # every connect / bind / allocate / flow endpoint resolves (W4B-N2)
+tools/render_diagrams.sh       # regenerate diagrams/*.svg (25 views)
 python3 tools/scaffold_stubs.py --report   # migration status from the CSV
 pip install -e "../../selenite-compute[test]" && pytest ../../selenite-compute   # 1,565 passed, 33 skipped
 python3 tools/plan_check.py --quiet                # derived-vs-declared register, exit 0 (--markdown docs/PLAN_REGISTER.md)
@@ -67,7 +68,11 @@ configure.
 
 - The committed `diagrams/*.svg` (dark theme) come from `sysml-diagram`
   — the programme General and Interconnection views plus the requirements,
-  fleet, software, gates and scenarios views, viewable straight from GitHub
+  fleet, software, gates and scenarios views, the Wave 4B general views
+  (interfaces, behaviour, processing, habitat, transport, PSR network,
+  power, sites), five action-flow views (value chain, three streams, NAV-001
+  fusion) and five state-transition views (supervision location, SENTINEL
+  modes, cryo valve station, O2 line, MOLE-I), viewable straight from GitHub
   mobile.
 - When you want interactive graphical/tabular editing, run
   **Eclipse SysON** (free, EPL-2.0, web-based) locally via Docker —

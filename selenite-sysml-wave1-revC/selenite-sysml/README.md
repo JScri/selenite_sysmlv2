@@ -13,15 +13,20 @@ steady state (~Y180). Baseline: **ECN-019 Rev C + ECN-020**.
 > PROC-001, ISRU-001, MTL Guide and Strategy. The model must not adopt
 > ECN-021 content until those source documents are revised.
 
-**State: Wave 4A delivered (6 Nov 2026, `CHANGELOG_WAVE4A.md`): the
-decision catalogue D1–D8 and the uncertainty register in
-`model/Scenarios.sysml`, the stochastic decision engine in
-`selenite-compute/selenite/scenarios/`, `tools/scenario_check.py` printing
-`docs/SCENARIO_REGISTER.md` in CI, and the draft
+**State: Wave 4B delivered (7 Nov 2026, `CHANGELOG_WAVE4B.md`): the
+value chain as typed action flows (`model/Behaviour.sysml`), typed ports and
+an interface on every connection (`model/Interfaces.sysml`), SENTINEL and the
+ECN-014 valve auto-close as state machines, NAV-001 fusion as a behaviour,
+SEL-REQ-017, `tools/connect_check.py`; next is Wave 5
+(`docs/SESSION_BRIEF_wave5_quantities.md`).** Wave 4A (6 Nov 2026,
+`CHANGELOG_WAVE4A.md`) delivered the decision catalogue D1–D8 and the
+uncertainty register in `model/Scenarios.sysml`, the stochastic decision
+engine in `selenite-compute/selenite/scenarios/`, `tools/scenario_check.py`
+printing `docs/SCENARIO_REGISTER.md` in CI, and
 `docs/SEL-ECN-023_draft_EclipseOperatingStrategy.md` signed 6 Nov 2026
 (duty cycle, critical fraction 0.18); the post-Wave-4A verification session
-(6 Nov 2026, `CHANGELOG_VERIFICATION.md`, SEL-ECN-024 … 026 signed and applied) audited that
-state; next is Wave 4B (behaviour, interfaces, software).** Wave 3
+(6 Nov 2026, `CHANGELOG_VERIFICATION.md`, SEL-ECN-024 … 026 signed and
+applied) audited that state. Wave 3
 (closed 19 Sep 2026, SEL-ECN-022)
 delivered gates and the derived programme plan: 81 Decision Framework gates with criteria, thresholds and calcs, every
 phase attribute classified and bound, SEL-REQ-001..016, `tools/plan_check.py`
@@ -45,7 +50,7 @@ single source of truth as migration waves complete (see
 | `docs/` | Quickstart, Claude session protocol, migration plan |
 | `mapping/document_map.csv` | Master document→model migration index |
 | `diagrams/` | Generated SVGs (regenerate via `tools/render_diagrams.sh`) |
-| `tools/` | Validation, diagram export, stub scaffolding, `plan_check.py` (plan register), `scenario_check.py` (scenario register) |
+| `tools/` | Validation, `connect_check.py` (connection endpoints, W4B-N2), diagram export, stub scaffolding, `plan_check.py` (plan register), `scenario_check.py` (scenario register) |
 | `.vscode/` | Syside extension recommendation and the `sysml/project.json` marker the diagram CLI needs |
 | `../../.github/workflows/` | CI at the git root: validate + render on every push |
 | `CHANGELOG_WAVE*.md` | ECN-style change logs per wave |

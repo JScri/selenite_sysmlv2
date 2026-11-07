@@ -109,7 +109,8 @@ package SeleniteInterfaces {
     }
 
     item def ProcessProduct :> Material {
-        doc /* A saleable or re-used product leaving a processing line. */
+        doc /* A saleable or re-used product leaving a processing line.
+             * Source: Strategy v3.1 s.10.1 step 7; Decision Framework Rev D s.3.2. */
     }
 
     item def ReoConcentrate :> ProcessProduct {
@@ -152,7 +153,8 @@ package SeleniteInterfaces {
     }
 
     item def ThoriumCompound :> Material {
-        doc /* The thorium stream from the KREEP flowsheet to MSR fuel. */
+        doc /* The thorium stream from the KREEP flowsheet to MSR fuel.
+             * Source: Strategy v3.1 s.8.2. */
     }
 
     item def ThoriumHydroxide :> ThoriumCompound {
@@ -178,7 +180,8 @@ package SeleniteInterfaces {
     }
 
     item def CalciumHydroxide :> Reagent {
-        doc /* Ca(OH)2 from anorthite, replacing NaOH (DG-7.4). */
+        doc /* Ca(OH)2 from anorthite, replacing NaOH. Source: Decision
+             * Framework Rev D DG-7.4 and s.1 transition 3. */
     }
 
     item def OxalicAcid :> Reagent {
@@ -194,7 +197,8 @@ package SeleniteInterfaces {
     item def CanisterPayload :> Material {
         doc /* What a mass driver canister or a Mk III ejection carries. The
              * canister hardware is SeleniteTransport::Canister; the payload is
-             * typed here so the launch / receive ports carry a typed item. */
+             * typed here so the launch / receive ports carry a typed item.
+             * Source: SEL-ECN-020 s.2; fleet v9 s.16. */
     }
 
     item def ReoPayload :> CanisterPayload {
@@ -243,7 +247,8 @@ package SeleniteInterfaces {
 
     item def LoweredAsset :> Material {
         doc /* A MOLE-I or SATS+WEB assembly on the descent winch cable (fleet
-             * v9 s.13.1, s.13.4). */
+             * v9 s.13.1, s.13.4).
+             * Source: fleet v9 s.13.1, s.13.4. */
     }
 
     // =====================================================================
@@ -252,7 +257,8 @@ package SeleniteInterfaces {
 
     abstract item def DataItem {
         doc /* Base for data flowing on supervision, sensor and navigation
-             * links. */
+             * links.
+             * Source: ARCHITECTURE_BASELINE.md s.7. */
     }
 
     item def SupervisionTelemetry :> DataItem {
@@ -262,7 +268,8 @@ package SeleniteInterfaces {
 
     item def SupervisionCommand :> DataItem {
         doc /* Commands down the hierarchy (Earth ops hub -> SENTINEL edge ->
-             * fleet; SPA Ops Hub -> PKT at 0.5 s from P8). */
+             * fleet; SPA Ops Hub -> PKT at 0.5 s from P8).
+             * Source: ARCHITECTURE_BASELINE.md s.7; fleet v9 s.9.2. */
     }
 
     item def SensorReading :> DataItem {
@@ -322,7 +329,8 @@ package SeleniteInterfaces {
 
     item def GatePassed :> DataItem {
         doc /* A decision-gate outcome used as a supervision-state trigger
-             * (SeleniteGates); gateId is the DG id. */
+             * (SeleniteGates); gateId is the DG id.
+             * Source: SeleniteGates (Wave 3); ARCHITECTURE_BASELINE.md s.7. */
         attribute gateId : String;
     }
 
@@ -359,59 +367,70 @@ package SeleniteInterfaces {
     // =====================================================================
 
     port def PowerPort {
-        doc /* Power supply side; a load is '~PowerPort'. */
+        doc /* Power supply side; a load is '~PowerPort'.
+             * Source: fleet v9 s.13.4, s.18. */
         out item power : ElectricalPower;
     }
 
     port def WaterPort {
-        doc /* Water out; a consumer is '~WaterPort'. */
+        doc /* Water out; a consumer is '~WaterPort'.
+             * Source: fleet v9 s.4.1, s.13.3. */
         out item water : Water;
     }
 
     port def IcyRegolithPort {
-        doc /* Icy regolith out (tramway container, drill product). */
+        doc /* Icy regolith out (tramway container, drill product).
+             * Source: fleet v9 s.13.2. */
         out item regolith : IcyRegolith;
     }
 
     port def HydrogenPort {
-        doc /* Hydrogen out (electrolyser to cryocooler). */
+        doc /* Hydrogen out (electrolyser to cryocooler).
+             * Source: fleet v9 s.12.2-12.3. */
         out item hydrogen : Hydrogen;
     }
 
     port def OxygenPort {
-        doc /* Oxygen out (electrolyser to cryocooler; farm to habitat line). */
+        doc /* Oxygen out (electrolyser to cryocooler; farm to habitat line).
+             * Source: fleet v9 s.12.2; Strategy v3.1 s.5.1, s.13. */
         out item oxygen : Oxygen;
     }
 
     port def PropellantPort {
         doc /* Propellant out; fuelled vehicles and the IZ farm inlet are
-             * '~PropellantPort'. */
+             * '~PropellantPort'.
+             * Source: fleet v9 s.12.4. */
         out item propellant : Propellant;
     }
 
     port def OrePort {
-        doc /* Ore or concentrate out; a hopper or feed inlet is '~OrePort'. */
+        doc /* Ore or concentrate out; a hopper or feed inlet is '~OrePort'.
+             * Source: fleet v9 s.10.3, s.19. */
         out item ore : OreFeed;
     }
 
     port def ReagentPort {
-        doc /* Reagent out; a circuit's reagent inlet is '~ReagentPort'. */
+        doc /* Reagent out; a circuit's reagent inlet is '~ReagentPort'.
+             * Source: SEL-REAGENT-001 Rev A. */
         out item reagent : Reagent;
     }
 
     port def ProcessStreamPort {
         doc /* Flowsheet step product; the next step's feed is
-             * '~ProcessStreamPort'. */
+             * '~ProcessStreamPort'.
+             * Source: Strategy v3.1 s.10.1. */
         out item stream : ProcessLiquor;
     }
 
     port def ProductPort {
-        doc /* Finished product out of a line. */
+        doc /* Finished product out of a line.
+             * Source: Decision Framework Rev D s.3.2. */
         out item product : ProcessProduct;
     }
 
     port def ThoriumPort {
-        doc /* Thorium compound out; an MSR fuel inlet is '~ThoriumPort'. */
+        doc /* Thorium compound out; an MSR fuel inlet is '~ThoriumPort'.
+             * Source: Strategy v3.1 s.8.2. */
         out item thorium : ThoriumCompound;
     }
 
@@ -424,32 +443,37 @@ package SeleniteInterfaces {
 
     port def CanisterPort {
         doc /* Mass driver launch side (a node's dispatch, a driver's
-             * receiver output); the receiving side is '~CanisterPort'. */
+             * receiver output); the receiving side is '~CanisterPort'.
+             * Source: SEL-ECN-020 s.2; fleet v9 s.16. */
         out item load : CanisterPayload;
     }
 
     port def SupervisionPort {
         doc /* The supervised side: telemetry out, commands in. The supervisor
-             * is '~SupervisionPort'. */
+             * is '~SupervisionPort'.
+             * Source: ARCHITECTURE_BASELINE.md s.7. */
         out item telemetry : SupervisionTelemetry;
         in item command : SupervisionCommand;
     }
 
     port def SensorPort {
         doc /* Sensor readings out of a station or line; the monitor's input
-             * is '~SensorPort'. */
+             * is '~SensorPort'.
+             * Source: ECN-014 extract, fleet v9 s.9.2. */
         out item reading : SensorReading;
     }
 
     port def HardwiredClosePort {
         doc /* The monitor's hardwired 24 VDC close output; the station's
-             * actuator input is '~HardwiredClosePort'. */
+             * actuator input is '~HardwiredClosePort'.
+             * Source: ECN-014 extract, fleet v9 s.9.2. */
         out item closeSignal : HardwiredCloseSignal;
         out item heartbeat : CommsHeartbeat;
     }
 
     port def LimitSwitchPort {
-        doc /* Limit switch state out of the station. */
+        doc /* Limit switch state out of the station.
+             * Source: ECN-014 extract, fleet v9 s.9.2. */
         out item state : LimitSwitchState;
     }
 
@@ -484,13 +508,15 @@ package SeleniteInterfaces {
     }
 
     port def GuideCablePort {
-        doc /* CAP guide cable end: the pod transits between rim and floor. */
+        doc /* CAP guide cable end: the pod transits between rim and floor.
+             * Source: SEL-CAP-001 Rev A updated; fleet v9 s.13.5. */
         out item transit : CrewTransit;
     }
 
     port def WinchCablePort {
         doc /* Descent winch cable end (rim); the floor landing is
-             * '~WinchCablePort'. */
+             * '~WinchCablePort'.
+             * Source: fleet v9 s.13.1. */
         out item asset : LoweredAsset;
     }
 
@@ -499,7 +525,8 @@ package SeleniteInterfaces {
     // =====================================================================
 
     interface def PowerBus {
-        doc /* Electrical supply to a load. */
+        doc /* Electrical supply to a load.
+             * Source: fleet v9 s.13.4, s.18. */
         end supply : PowerPort;
         end load : ~PowerPort;
         flow supply.power to load.power;
@@ -530,21 +557,24 @@ package SeleniteInterfaces {
     }
 
     interface def WaterTransfer {
-        doc /* Product water from a source to a consumer. */
+        doc /* Product water from a source to a consumer.
+             * Source: fleet v9 s.4.1, s.13.3. */
         end source : WaterPort;
         end consumer : ~WaterPort;
         flow source.water to consumer.water;
     }
 
     interface def IcyRegolithTransfer {
-        doc /* Icy regolith from the floor to the rim (P3 tramway). */
+        doc /* Icy regolith from the floor to the rim (P3 tramway).
+             * Source: fleet v9 s.13.2. */
         end source : IcyRegolithPort;
         end receiver : ~IcyRegolithPort;
         flow source.regolith to receiver.regolith;
     }
 
     interface def HydrogenTransfer {
-        doc /* Electrolyser hydrogen to the cryocooler. */
+        doc /* Electrolyser hydrogen to the cryocooler.
+             * Source: fleet v9 s.12.2-12.3. */
         end source : HydrogenPort;
         end consumer : ~HydrogenPort;
         flow source.hydrogen to consumer.hydrogen;
@@ -552,14 +582,16 @@ package SeleniteInterfaces {
 
     interface def OxygenTransfer {
         doc /* Electrolyser or farm oxygen to the cryocooler, the habitat line
-             * or the MD-2 loft. */
+             * or the MD-2 loft.
+             * Source: fleet v9 s.12.2; Strategy v3.1 s.5.1, s.13. */
         end source : OxygenPort;
         end consumer : ~OxygenPort;
         flow source.oxygen to consumer.oxygen;
     }
 
     interface def PropellantTransfer {
-        doc /* LH2 / LOX from the farm to the IZ and the fuelled vehicles. */
+        doc /* LH2 / LOX from the farm to the IZ and the fuelled vehicles.
+             * Source: fleet v9 s.12.4; Decision Framework Rev D s.3.2. */
         end source : PropellantPort;
         end consumer : ~PropellantPort;
         flow source.propellant to consumer.propellant;
@@ -567,28 +599,32 @@ package SeleniteInterfaces {
 
     interface def OreTransfer {
         doc /* Ore or concentrate to the next stage (SKIP container, hauler
-             * tip, conveyor hopper, beneficiation, circuit feed). */
+             * tip, conveyor hopper, beneficiation, circuit feed).
+             * Source: fleet v9 s.10.3, s.11, s.19. */
         end source : OrePort;
         end receiver : ~OrePort;
         flow source.ore to receiver.ore;
     }
 
     interface def ReagentTransfer {
-        doc /* Reagent plant to circuit. */
+        doc /* Reagent plant to circuit.
+             * Source: SEL-REAGENT-001 Rev A. */
         end source : ReagentPort;
         end consumer : ~ReagentPort;
         flow source.reagent to consumer.reagent;
     }
 
     interface def ProcessStreamLink {
-        doc /* One flowsheet step to the next. */
+        doc /* One flowsheet step to the next.
+             * Source: Strategy v3.1 s.10.1. */
         end upstream : ProcessStreamPort;
         end downstream : ~ProcessStreamPort;
         flow upstream.stream to downstream.stream;
     }
 
     interface def ProductTransfer {
-        doc /* A line's product to its export or re-use point. */
+        doc /* A line's product to its export or re-use point.
+             * Source: Decision Framework Rev D s.3.2. */
         end source : ProductPort;
         end receiver : ~ProductPort;
         flow source.product to receiver.product;
@@ -596,7 +632,8 @@ package SeleniteInterfaces {
 
     interface def ThoriumTransfer {
         doc /* Th(OH)4 / ThCl4 from the flowsheet to the fuel inlet or the
-             * MD-3 canister. */
+             * MD-3 canister.
+             * Source: Strategy v3.1 s.8.2; fleet v9 s.16. */
         end source : ThoriumPort;
         end consumer : ~ThoriumPort;
         flow source.thorium to consumer.thorium;
@@ -696,14 +733,16 @@ package SeleniteInterfaces {
 
     interface def GuideCableLink {
         doc /* CAP guide cable between the rim anchor and the floor docking
-             * pad. */
+             * pad.
+             * Source: SEL-CAP-001 Rev A updated; fleet v9 s.13.5. */
         end rim : GuideCablePort;
         end floor : ~GuideCablePort;
         flow rim.transit to floor.transit;
     }
 
     interface def WinchCableLink {
-        doc /* Descent winch cable from the rim anchor to the floor. */
+        doc /* Descent winch cable from the rim anchor to the floor.
+             * Source: fleet v9 s.13.1. */
         end rim : WinchCablePort;
         end floor : ~WinchCablePort;
         flow rim.asset to floor.asset;
